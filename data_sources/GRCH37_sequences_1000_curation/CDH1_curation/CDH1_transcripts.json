@@ -1,0 +1,24 @@
+{
+    "Reference_sequences": {
+        "CDH1": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:16:68770128:68870451:1",
+            "Locus_range": "1001:99324",
+            "is_join_complement": false,
+            "LRG_id": "301",
+            "Ensembl_id": "ENSG00000039068.14",
+            "mRNA": {
+                "CDH1-261769(MANE_Select)": "ENST00000261769.5",
+                "CDH1-422392": "ENST00000422392.2",
+                "CDH1-561751": "ENST00000561751.1",
+                "CDH1-566510": "ENST00000566510.1",
+                "CDH1-566612": "ENST00000566612.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "CDH1-261769(MANE_Select)"
+            }
+        }
+    }
+}

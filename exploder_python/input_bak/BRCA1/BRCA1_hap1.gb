@@ -1,0 +1,38 @@
+LOCUS       17 0 bp DNA HTG 19-AUG-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh38 partial sequence 43043295..43171245 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:17:43043295:43171245:1
+VERSION     chromosome:GRCh38:17:43043295:43171245:1
+COMMENT     /consequence annotation by Replicon Genetics from public domain sources Mar-2021
+FEATURES             Location/Qualifiers
+     source          1..127951
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..126951)
+                     /gene=ENSG00000012048.24
+                     /locus_tag="BRCA1"
+                     /note="BRCA1 DNA repair associated [Source:HGNC
+                     Symbol;Acc:HGNC:1100]"
+
+     variation       125197..125197
+                     /replace="T/-"
+                     /db_xref="dbSNP:rs1409504537"
+                     /consequence="dbSNP:upstream_transcript_variant,intron_variant"
+
+     variation       125198..125198
+                     /replace="G/A"
+                     /db_xref="dbSNP:rs1597950091"
+                     /consequence="dbSNP:upstream_transcript_variant,intron_variant"
+
+     variation       125211..125211
+                     /replace="T/G"
+                     /db_xref="dbSNP:rs35194535"
+                     /consequence="dbSNP:upstream_transcript_variant,intron_variant"
+
+     variation       125213..125213
+                     /replace="G/C"
+                     /db_xref="dbSNP:rs897480676"
+                     /consequence="dbSNP:intron_variant,upstream_transcript_variant"
+
+ORIGIN
+//

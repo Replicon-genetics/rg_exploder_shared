@@ -1,0 +1,16 @@
+LOCUS       13 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 13 GRCh38 partial sequence 32314086..32401268 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:13:32314086:32401268:1
+VERSION     chromosome:GRCh38:13:32314086:32401268:1
+FEATURES             Location/Qualifiers
+     source          1..87183
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..86183
+                     /gene=ENSG00000139618.17
+                     /locus_tag="BRCA2"
+                     /note="BRCA2 DNA repair associated [Source:HGNC
+                     Symbol;Acc:HGNC:1101]"
+ORIGIN
+//

@@ -1,0 +1,24 @@
+{
+    "Reference_sequences": {
+        "BRIP1": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "17-AUG-2022",
+            "Region": "GRCh37:17:59757627:59941882:1",
+            "Locus_range": "1001:183256",
+            "is_join_complement": true,
+            "LRG_id": "300",
+            "Ensembl_id": "ENSG00000136492.4",
+            "mRNA": {
+                "BRIP1-259008(MANE_Select)": "ENST00000259008.2",
+                "BRIP1-577598": "ENST00000577598.1",
+                "BRIP1-577913": "ENST00000577913.1",
+                "BRIP1-579028": "ENST00000579028.1",
+                "BRIP1-584322": "ENST00000584322.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "BRIP1-259008(MANE_Select)"
+            }
+        }
+    }
+}

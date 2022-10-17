@@ -1,0 +1,28 @@
+{
+    "Reference_sequences": {
+        "RAD51B": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh38:14:67818779:68731218:1",
+            "Locus_range": "1001:911440",
+            "is_join_complement": false,
+            "LRG_id": "0000",
+            "Ensembl_id": "ENSG00000182185.19",
+            "mRNA": {
+                "RAD51B-471583(MANE_Select)": "ENST00000471583.6",
+                "RAD51B-390683": "ENST00000390683.7",
+                "RAD51B-479335": "ENST00000479335.5",
+                "RAD51B-485181": "ENST00000485181.5",
+                "RAD51B-487270": "ENST00000487270.5",
+                "RAD51B-487861": "ENST00000487861.5",
+                "RAD51B-488612": "ENST00000488612.5",
+                "RAD51B-553334": "ENST00000553334.1",
+                "RAD51B-554575": "ENST00000554575.2"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "RAD51B-471583(MANE_Select)"
+            }
+        }
+    }
+}

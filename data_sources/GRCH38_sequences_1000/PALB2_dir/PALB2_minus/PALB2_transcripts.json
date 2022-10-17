@@ -1,0 +1,24 @@
+{
+    "Reference_sequences": {
+        "PALB2": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "28-FEB-2022",
+            "Region": "GRCh38:16:23602160:23642310:-1",
+            "Locus_range": "1001:39151",
+            "is_join_complement": false,
+            "LRG_id": "308",
+            "Ensembl_id": "ENSG00000083093.10",
+            "mRNA": {
+                "PALB2-261584(MANE_Select)": "ENST00000261584.9",
+                "PALB2-561514": "ENST00000561514.1",
+                "PALB2-565038": "ENST00000565038.1",
+                "PALB2-566069": "ENST00000566069.5",
+                "PALB2-568219": "ENST00000568219.5"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "PALB2-261584(MANE_Select)"
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+LOCUS       17 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh37 partial sequence 37616764..37722160 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:17:37616764:37722160:1
+VERSION     chromosome:GRCh37:17:37616764:37722160:1
+FEATURES             Location/Qualifiers
+     source          1..105397
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..104397
+                     /gene=ENSG00000167258.9
+                     /locus_tag="CDK12"
+                     /note="cyclin-dependent kinase 12 [Source:HGNC
+                     Symbol;Acc:24224]"
+ORIGIN
+//

@@ -1,0 +1,20 @@
+{
+    "Reference_sequences": {
+        "PTEN": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:10:89621870:89732687:1",
+            "Locus_range": "1001:109818",
+            "is_join_complement": false,
+            "LRG_id": "311",
+            "Ensembl_id": "ENSG00000171862.5",
+            "mRNA": {
+                "PTEN-371953": "ENST00000371953.3"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "PTEN-380152(MANE_Select)"
+            }
+        }
+    }
+}

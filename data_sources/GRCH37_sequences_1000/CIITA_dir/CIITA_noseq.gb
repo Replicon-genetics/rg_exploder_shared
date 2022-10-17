@@ -1,0 +1,16 @@
+LOCUS       16 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence 10970055..11027079 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:16:10970055:11027079:1
+VERSION     chromosome:GRCh37:16:10970055:11027079:1
+FEATURES             Location/Qualifiers
+     source          1..57025
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..56025
+                     /gene=ENSG00000179583.13
+                     /locus_tag="CIITA"
+                     /note="class II, major histocompatibility complex,
+                     transactivator [Source:HGNC Symbol;Acc:7067]"
+ORIGIN
+//

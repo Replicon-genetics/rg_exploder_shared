@@ -1,0 +1,15 @@
+LOCUS       17 0 bp DNA HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh37 partial sequence 33425811..33449541 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:17:33425811:33449541:1
+VERSION     chromosome:GRCh37:17:33425811:33449541:1
+FEATURES             Location/Qualifiers
+     source          1..23731
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..22731)
+                     /gene=ENSG00000185379.16
+                     /locus_tag="RAD51D"
+                     /note="RAD51 paralog D [Source:HGNC Symbol;Acc:9823]"
+ORIGIN
+//

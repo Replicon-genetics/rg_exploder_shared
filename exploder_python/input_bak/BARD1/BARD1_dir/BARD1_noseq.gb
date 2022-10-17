@@ -1,0 +1,16 @@
+LOCUS       2 0 bp DNA HTG 19-AUG-2022
+DEFINITION  Homo sapiens chromosome 2 GRCh38 partial sequence 214724646..214810683 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:2:214724646:214810683:1
+VERSION     chromosome:GRCh38:2:214724646:214810683:1
+FEATURES             Location/Qualifiers
+     source          1..86038
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..85038)
+                     /gene=ENSG00000138376.11
+                     /locus_tag="BARD1"
+                     /note="BRCA1 associated RING domain 1 [Source:HGNC
+                     Symbol;Acc:HGNC:952]"
+ORIGIN
+//

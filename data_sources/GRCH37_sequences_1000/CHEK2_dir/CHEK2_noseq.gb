@@ -1,0 +1,15 @@
+LOCUS       22 0 bp DNA HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 22 GRCh37 partial sequence 29082731..29139410 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:22:29082731:29139410:1
+VERSION     chromosome:GRCh37:22:29082731:29139410:1
+FEATURES             Location/Qualifiers
+     source          1..56680
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..55680)
+                     /gene=ENSG00000183765.16
+                     /locus_tag="CHEK2"
+                     /note="checkpoint kinase 2 [Source:HGNC Symbol;Acc:16627]"
+ORIGIN
+//

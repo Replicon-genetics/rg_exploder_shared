@@ -1,0 +1,16 @@
+LOCUS       10 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 10 GRCh38 partial sequence 87861638..87972930 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:10:87861638:87972930:1
+VERSION     chromosome:GRCh38:10:87861638:87972930:1
+FEATURES             Location/Qualifiers
+     source          1..111293
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..110293
+                     /gene=ENSG00000171862.12
+                     /locus_tag="PTEN"
+                     /note="phosphatase and tensin homolog [Source:HGNC
+                     Symbol;Acc:HGNC:9588]"
+ORIGIN
+//

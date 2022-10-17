@@ -1,0 +1,16 @@
+LOCUS       2 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 2 GRCh37 partial sequence 47571297..47615740 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:2:47571297:47615740:1
+VERSION     chromosome:GRCh37:2:47571297:47615740:1
+FEATURES             Location/Qualifiers
+     source          1..44444
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..43444
+                     /gene=ENSG00000119888.6
+                     /locus_tag="EPCAM"
+                     /note="epithelial cell adhesion molecule [Source:HGNC
+                     Symbol;Acc:11529]"
+ORIGIN
+//

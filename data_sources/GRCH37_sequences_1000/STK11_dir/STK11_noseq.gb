@@ -1,0 +1,16 @@
+LOCUS       19 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 19 GRCh37 partial sequence 1188406..1229428 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:19:1188406:1229428:1
+VERSION     chromosome:GRCh37:19:1188406:1229428:1
+FEATURES             Location/Qualifiers
+     source          1..41023
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..40023
+                     /gene=ENSG00000118046.10
+                     /locus_tag="STK11"
+                     /note="serine/threonine kinase 11 [Source:HGNC
+                     Symbol;Acc:11389]"
+ORIGIN
+//

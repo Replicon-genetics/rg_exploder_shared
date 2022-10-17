@@ -1,0 +1,24 @@
+{
+    "Reference_sequences": {
+        "BRCA2": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:13:32888611:32974805:1",
+            "Locus_range": "1001:85195",
+            "is_join_complement": false,
+            "LRG_id": "293",
+            "Ensembl_id": "ENSG00000139618.10",
+            "mRNA": {
+                "BRCA2-380152(MANE_Select)": "ENST00000380152.3",
+                "BRCA2-470094": "ENST00000470094.1",
+                "BRCA2-528762": "ENST00000528762.1",
+                "BRCA2-530893": "ENST00000530893.2",
+                "BRCA2-544455": "ENST00000544455.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "BRCA2-380152(MANE_Select)"
+            }
+        }
+    }
+}

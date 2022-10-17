@@ -1,0 +1,16 @@
+LOCUS       2 0 bp DNA HTG 19-AUG-2022
+DEFINITION  Homo sapiens chromosome 2 GRCh38 partial sequence 58158243..58242410 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:2:58158243:58242410:1
+VERSION     chromosome:GRCh38:2:58158243:58242410:1
+FEATURES             Location/Qualifiers
+     source          1..84168
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..83168)
+                     /gene=ENSG00000115392.13
+                     /locus_tag="FANCL"
+                     /note="FA complementation group L [Source:HGNC
+                     Symbol;Acc:HGNC:20748]"
+ORIGIN
+//

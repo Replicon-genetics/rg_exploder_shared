@@ -1,0 +1,15 @@
+LOCUS       8 0 bp DNA HTG 19-AUG-2022
+DEFINITION  Homo sapiens chromosome 8 GRCh38 partial sequence 89923515..90004228 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:8:89923515:90004228:1
+VERSION     chromosome:GRCh38:8:89923515:90004228:1
+FEATURES             Location/Qualifiers
+     source          1..80714
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..79714)
+                     /gene=ENSG00000104320.15
+                     /locus_tag="NBN"
+                     /note="nibrin [Source:HGNC Symbol;Acc:HGNC:7652]"
+ORIGIN
+//

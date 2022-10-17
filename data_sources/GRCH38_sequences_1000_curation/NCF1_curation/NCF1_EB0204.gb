@@ -1,0 +1,23 @@
+LOCUS       7 0 bp DNA HTG 5-NOV-2021
+DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 74773462..74789876 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:7:74773462:74789876:1
+VERSION     chromosome:GRCh38:7:74773462:74789876:1
+FEATURES             Location/Qualifiers
+     source          1..16415
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            501..15915
+                     /gene=ENSG00000158517.15
+                     /locus_tag="NCF1"
+                     /note="neutrophil cytosolic factor 1 [Source:HGNC
+                     Symbol;Acc:HGNC:7660]"
+
+     variation       5897..5905
+                     /replace="TGTCCCCAC/-"
+                     /absolute_map="7:74779358..74779366"
+                     /db_xref="RG001:000025"
+                     /comment="RG:EB0204"
+
+ORIGIN
+//

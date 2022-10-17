@@ -1,0 +1,35 @@
+{
+    "Reference_sequences": {
+        "NF1": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:17:29420945:29710134:1",
+            "Locus_range": "1001:288190",
+            "is_join_complement": false,
+            "LRG_id": "214",
+            "Ensembl_id": "ENSG00000196712.12",
+            "mRNA": {
+                "NF1-358273(MANE_Select)": "ENST00000358273.4",
+                "NF1-356175": "ENST00000356175.3",
+                "NF1-417592": "ENST00000417592.2",
+                "NF1-422121": "ENST00000422121.2",
+                "NF1-431387": "ENST00000431387.4",
+                "NF1-444181": "ENST00000444181.2",
+                "NF1-456735": "ENST00000456735.2",
+                "NF1-466819": "ENST00000466819.1",
+                "NF1-468273": "ENST00000468273.1",
+                "NF1-471572": "ENST00000471572.2",
+                "NF1-479536": "ENST00000479536.2",
+                "NF1-479614": "ENST00000479614.1",
+                "NF1-489712": "ENST00000489712.2",
+                "NF1-495910": "ENST00000495910.2",
+                "NF1-579081": "ENST00000579081.1",
+                "NF1-581790": "ENST00000581790.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "NF1-358273(MANE_Select)"
+            }
+        }
+    }
+}

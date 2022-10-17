@@ -1,0 +1,35 @@
+{
+    "Reference_sequences": {
+        "RAD54L": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh38:1:46245461:46279480:1",
+            "Locus_range": "1001:33020",
+            "is_join_complement": false,
+            "LRG_id": "1414",
+            "Ensembl_id": "ENSG00000085999.13",
+            "mRNA": {
+                "RAD54L-371975(MANE_Select)": "ENST00000371975.9",
+                "RAD54L-442598": "ENST00000442598.5",
+                "RAD54L-459678": "ENST00000459678.2",
+                "RAD54L-463715": "ENST00000463715.5",
+                "RAD54L-469835": "ENST00000469835.6",
+                "RAD54L-472889": "ENST00000472889.2",
+                "RAD54L-473251": "ENST00000473251.2",
+                "RAD54L-476687": "ENST00000476687.2",
+                "RAD54L-488942": "ENST00000488942.5",
+                "RAD54L-493032": "ENST00000493032.5",
+                "RAD54L-493985": "ENST00000493985.5",
+                "RAD54L-655446": "ENST00000655446.1",
+                "RAD54L-657122": "ENST00000657122.1",
+                "RAD54L-661701": "ENST00000661701.1",
+                "RAD54L-669994": "ENST00000669994.1",
+                "RAD54L-671528": "ENST00000671528.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "RAD54L-371975(MANE_Select)"
+            }
+        }
+    }
+}

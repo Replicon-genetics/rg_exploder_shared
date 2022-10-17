@@ -1,0 +1,27 @@
+{
+    "Reference_sequences": {
+        "EGFR": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:7:55085714:55325313:1",
+            "Locus_range": "1001:238600",
+            "is_join_complement": false,
+            "LRG_id": "304",
+            "Ensembl_id": "ENSG00000146648.11",
+            "mRNA": {
+                "EGFR-275493(MANE_Select)": "ENST00000275493.2",
+                "EGFR-342916": "ENST00000342916.3",
+                "EGFR-344576": "ENST00000344576.2",
+                "EGFR-420316": "ENST00000420316.2",
+                "EGFR-442591": "ENST00000442591.1",
+                "EGFR-450046": "ENST00000450046.1",
+                "EGFR-454757": "ENST00000454757.2",
+                "EGFR-455089": "ENST00000455089.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "EGFR-275493(MANE_Select)"
+            }
+        }
+    }
+}

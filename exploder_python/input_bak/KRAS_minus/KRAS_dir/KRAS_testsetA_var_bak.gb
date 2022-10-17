@@ -1,0 +1,52 @@
+LOCUS       12 0 bp DNA HTG 20-APR-2021
+DEFINITION  Homo sapiens chromosome 12 GRCh38 partial sequence 25204746..25251436 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:12:25204746:25251436:-1
+VERSION     chromosome:GRCh38:12:25204746:25251436:-1
+FEATURES             Location/Qualifiers
+     source          1..46691
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            501..46191
+                     /gene=ENSG00000133703.13
+                     /locus_tag="KRAS"
+                     /note="KRAS proto-oncogene, GTPase [Source:HGNC
+                     Symbol;Acc:HGNC:6407]"
+
+     variation       680..680
+                     /replace="C/T"
+                     /db_xref="dbSNP:rs1272894387"
+
+     variation       660..660
+                     /replace="A/AA"
+                     /db_xref="dbSNP:rs1303313730"
+
+     variation       577..576
+                     /replace="-/GCCGCCGCCACCTTC"
+                     /db_xref="dbSNP:rs895194880"
+                     /comment="RG:edited this delins SNP to the insertion-definition of merged rs1056499889"
+
+     variation       550..561
+                     /replace="GCCGCCGCCACT/-"
+                     /db_xref="dbSNP:rs727504386"
+                     /comment="RG:edited this delins SNP to the deletion-definition only"
+
+     variation       520..520
+                     /replace="G/A"
+                     /db_xref="dbSNP:rs190218019"
+
+     variation       520..519
+                     /replace="-/GCC"
+                     /db_xref="dbSNP:rs1447882623"
+                     /comment="RG:edited this delins SNP to the insert-definition only"
+
+     variation       507..507
+                     /replace="G/A"
+                     /db_xref="dbSNP:rs1310197451"
+
+     variation       506..506
+                     /replace="A/C"
+                     /db_xref="dbSNP:rs566873674"
+
+ORIGIN
+//

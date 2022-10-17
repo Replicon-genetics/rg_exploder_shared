@@ -1,0 +1,16 @@
+LOCUS       2 0 bp DNA HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 2 GRCh37 partial sequence 58385378..58469507 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:2:58385378:58469507:1
+VERSION     chromosome:GRCh37:2:58385378:58469507:1
+FEATURES             Location/Qualifiers
+     source          1..84130
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..83130)
+                     /gene=ENSG00000115392.7
+                     /locus_tag="FANCL"
+                     /note="Fanconi anemia, complementation group L
+                     [Source:HGNC Symbol;Acc:20748]"
+ORIGIN
+//

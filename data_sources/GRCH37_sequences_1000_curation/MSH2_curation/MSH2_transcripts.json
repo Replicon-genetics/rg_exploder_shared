@@ -1,0 +1,23 @@
+{
+    "Reference_sequences": {
+        "MSH2": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:2:47629108:47790450:1",
+            "Locus_range": "1001:160343",
+            "is_join_complement": false,
+            "LRG_id": "218",
+            "Ensembl_id": "ENSG00000095002.8",
+            "mRNA": {
+                "MSH2-233146(MANE_Select)": "ENST00000233146.2",
+                "MSH2-406134": "ENST00000406134.1",
+                "MSH2-454849": "ENST00000454849.1",
+                "MSH2-543555": "ENST00000543555.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "MSH2-233146(MANE_Select)"
+            }
+        }
+    }
+}

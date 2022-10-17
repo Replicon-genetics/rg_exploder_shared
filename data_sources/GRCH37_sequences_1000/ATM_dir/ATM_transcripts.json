@@ -1,0 +1,27 @@
+{
+    "Reference_sequences": {
+        "ATM": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "1-MAR-2022",
+            "Region": "GRCh37:11:108092211:108240829:1",
+            "Locus_range": "1001:147619",
+            "is_join_complement": false,
+            "LRG_id": "135",
+            "Ensembl_id": "ENSG00000149311.13",
+            "mRNA": {
+                "ATM-278616": "ENST00000278616.4",
+                "ATM-452508": "ENST00000452508.2",
+                "ATM-527805": "ENST00000527805.1",
+                "ATM-527891": "ENST00000527891.1",
+                "ATM-529588": "ENST00000529588.1",
+                "ATM-531525": "ENST00000531525.2",
+                "ATM-532931": "ENST00000532931.1",
+                "ATM-601453": "ENST00000601453.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "ATM-675843(MANE_Select)"
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "Reference_sequences": {
+        "NCF1": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:7:74187309:74204659:1",
+            "Locus_range": "1001:16351",
+            "is_join_complement": false,
+            "LRG_id": "87",
+            "Ensembl_id": "ENSG00000158517.9",
+            "mRNA": {
+                "NCF1-289473(MANE_Select)": "ENST00000289473.4",
+                "NCF1-433458": "ENST00000433458.1",
+                "NCF1-442021": "ENST00000442021.2"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "NCF1-289473(MANE_Select)"
+            }
+        }
+    }
+}

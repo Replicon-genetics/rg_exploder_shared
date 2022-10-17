@@ -1,0 +1,24 @@
+LOCUS       1 0 bp DNA HTG 20-JUL-2021
+DEFINITION  Homo sapiens chromosome 1 GRCh38 partial sequence 33007440..33081496 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:1:33007440:33081496:-1
+VERSION     chromosome:GRCh38:1:33007440:33081496:-1
+COMMENT     /db_xref=”clinvar:18253"; annotation by Replicon Genetics Jul-2021
+FEATURES             Location/Qualifiers
+     source          1..74057
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            501..73557
+                     /gene=ENSG00000004455.17
+                     /locus_tag="AK2"
+                     /note="adenylate kinase 2 [Source:HGNC
+                     Symbol;Acc:HGNC:362]"
+
+     variation       60035..60035
+                     /replace="C/T"
+                     /db_xref="dbSNP:rs1192619329"
+                     /db_xref="clinvar:18253"
+                     /comment="RG:EB0003"
+
+ORIGIN
+//

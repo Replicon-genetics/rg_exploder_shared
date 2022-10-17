@@ -1,0 +1,31 @@
+LOCUS       7 0 bp DNA HTG 21-APR-2021
+DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 55018517..55212128 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:7:55018517:55212128:1
+VERSION     chromosome:GRCh38:7:55018517:55212128:1
+COMMENT     /consequence and /comment annotation by Replicon Genetics from public domain sources
+FEATURES             Location/Qualifiers
+     source          1..193612
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            501..193112
+                     /gene=ENSG00000146648.19
+                     /locus_tag="EGFR"
+                     /note="epidermal growth factor receptor [Source:HGNC
+                     Symbol;Acc:HGNC:3236]"
+
+     variation       155518..155518
+                     /replace="G/A"
+                     /db_xref="dbSNP:rs55959834"
+                     /consequence="dbSNP:synonymous_variant,genic_downstream_transcript_variant"
+                     /consequence="dbSNP:coding_sequence_variant"
+                     /comment=”ensembl:minor allele exon18, synonymous variant at v low freq 0.001”
+
+     variation       160011..160011
+                     /replace="G/A"
+                     /db_xref="dbSNP:rs62457092"
+                     /consequence="dbSNP:genic_downstream_transcript_variant,intron_variant"
+                     /comment=”ensembl:intron_variant 19_20 minor allele at 0.32”
+ORIGIN
+//
+

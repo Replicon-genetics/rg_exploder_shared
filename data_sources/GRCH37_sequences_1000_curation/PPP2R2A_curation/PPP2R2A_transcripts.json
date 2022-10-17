@@ -1,0 +1,28 @@
+{
+    "Reference_sequences": {
+        "PPP2R2A": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:8:26148007:26231196:1",
+            "Locus_range": "1001:82190",
+            "is_join_complement": false,
+            "LRG_id": "0000",
+            "Ensembl_id": "ENSG00000221914.4",
+            "mRNA": {
+                "PPP2R2A-380737(MANE_Select)": "ENST00000380737.3",
+                "PPP2R2A-315985": "ENST00000315985.7",
+                "PPP2R2A-518254": "ENST00000518254.1",
+                "PPP2R2A-518397": "ENST00000518397.1",
+                "PPP2R2A-520329": "ENST00000520329.1",
+                "PPP2R2A-521557": "ENST00000521557.1",
+                "PPP2R2A-522535": "ENST00000522535.1",
+                "PPP2R2A-523925": "ENST00000523925.1",
+                "PPP2R2A-524169": "ENST00000524169.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "PPP2R2A-380737(MANE_Select)"
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "Reference_sequences": {
+        "NBN": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "17-AUG-2022",
+            "Region": "GRCh37:8:90944564:91016456:1",
+            "Locus_range": "1001:70893",
+            "is_join_complement": true,
+            "LRG_id": "158",
+            "Ensembl_id": "ENSG00000104320.9",
+            "mRNA": {
+                "NBN-265433(MANE_Select)": "ENST00000265433.3",
+                "NBN-396252": "ENST00000396252.2",
+                "NBN-409330": "ENST00000409330.1",
+                "NBN-517337": "ENST00000517337.1",
+                "NBN-517772": "ENST00000517772.1",
+                "NBN-519426": "ENST00000519426.1",
+                "NBN-523444": "ENST00000523444.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "NBN-265433(MANE_Select)"
+            }
+        }
+    }
+}

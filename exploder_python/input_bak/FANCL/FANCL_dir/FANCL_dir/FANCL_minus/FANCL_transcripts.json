@@ -1,0 +1,28 @@
+{
+    "Reference_sequences": {
+        "FANCL": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "28-FEB-2022",
+            "Region": "GRCh38:2:58158243:58242372:-1",
+            "Locus_range": "1001:83130",
+            "is_join_complement": false,
+            "LRG_id": "501",
+            "Ensembl_id": "ENSG00000115392.12",
+            "mRNA": {
+                "FANCL-233741(MANE_Select)": "ENST00000233741.9",
+                "FANCL-402135": "ENST00000402135.7",
+                "FANCL-403295": "ENST00000403295.7",
+                "FANCL-403676": "ENST00000403676.5",
+                "FANCL-417361": "ENST00000417361.1",
+                "FANCL-427708": "ENST00000427708.6",
+                "FANCL-446381": "ENST00000446381.5",
+                "FANCL-449070": "ENST00000449070.5",
+                "FANCL-481670": "ENST00000481670.2"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "FANCL-233741(MANE_Select)"
+            }
+        }
+    }
+}

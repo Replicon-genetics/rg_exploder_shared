@@ -1,0 +1,16 @@
+LOCUS       17 0 bp DNA HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh37 partial sequence 59757627..59941882 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:17:59757627:59941882:1
+VERSION     chromosome:GRCh37:17:59757627:59941882:1
+FEATURES             Location/Qualifiers
+     source          1..184256
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..183256)
+                     /gene=ENSG00000136492.4
+                     /locus_tag="BRIP1"
+                     /note="BRCA1 interacting protein C-terminal helicase 1
+                     [Source:HGNC Symbol;Acc:20473]"
+ORIGIN
+//

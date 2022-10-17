@@ -1,0 +1,15 @@
+LOCUS       17 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh38 partial sequence 58691573..58736611 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:17:58691573:58736611:1
+VERSION     chromosome:GRCh38:17:58691573:58736611:1
+FEATURES             Location/Qualifiers
+     source          1..45039
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..44039
+                     /gene=ENSG00000108384.15
+                     /locus_tag="RAD51C"
+                     /note="RAD51 paralog C [Source:HGNC Symbol;Acc:HGNC:9820]"
+ORIGIN
+//

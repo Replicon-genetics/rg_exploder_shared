@@ -1,0 +1,15 @@
+LOCUS       17 0 bp DNA HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh37 partial sequence 7564097..7591856 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:17:7564097:7591856:1
+VERSION     chromosome:GRCh37:17:7564097:7591856:1
+FEATURES             Location/Qualifiers
+     source          1..27760
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..26760)
+                     /gene=ENSG00000141510.11
+                     /locus_tag="TP53"
+                     /note="tumor protein p53 [Source:HGNC Symbol;Acc:11998]"
+ORIGIN
+//

@@ -1,0 +1,25 @@
+LOCUS       16 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 16 GRCh38 partial sequence 10865222..10944021 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:16:10865222:10944021:1
+VERSION     chromosome:GRCh38:16:10865222:10944021:1
+COMMENT     /db_xref=”EB:madeup";/comment="RG:EB0106" annotation by Replicon Genetics Mar-2022
+FEATURES             Location/Qualifiers
+     source          1..78800
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..77800
+                     /gene=ENSG00000179583.20
+                     /locus_tag="CIITA"
+                     /note="class II major histocompatibility complex
+                     transactivator [Source:HGNC Symbol;Acc:HGNC:7067]"
+
+     variation       39560..39561
+                     /replace="AG/AGCTTTTGGAATA"
+                     /db_xref="RG001:000030"
+                     /db_xref=”EB:madeup"
+                     /comment="RG:EB0106"
+
+
+ORIGIN
+//

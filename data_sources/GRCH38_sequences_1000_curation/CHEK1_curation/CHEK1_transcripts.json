@@ -1,0 +1,33 @@
+{
+    "Reference_sequences": {
+        "CHEK1": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh38:11:125624163:125677255:1",
+            "Locus_range": "1001:52093",
+            "is_join_complement": false,
+            "LRG_id": "0000",
+            "Ensembl_id": "ENSG00000149554.14",
+            "mRNA": {
+                "CHEK1-438015(MANE_Select)": "ENST00000438015.7",
+                "CHEK1-278916": "ENST00000278916.8",
+                "CHEK1-427383": "ENST00000427383.6",
+                "CHEK1-428830": "ENST00000428830.6",
+                "CHEK1-524737": "ENST00000524737.6",
+                "CHEK1-525396": "ENST00000525396.5",
+                "CHEK1-526937": "ENST00000526937.5",
+                "CHEK1-527013": "ENST00000527013.6",
+                "CHEK1-531607": "ENST00000531607.5",
+                "CHEK1-532449": "ENST00000532449.6",
+                "CHEK1-532669": "ENST00000532669.5",
+                "CHEK1-534070": "ENST00000534070.5",
+                "CHEK1-534685": "ENST00000534685.5",
+                "CHEK1-544373": "ENST00000544373.5"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "CHEK1-438015(MANE_Select)"
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "Reference_sequences": {
+        "PMS2": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "28-FEB-2022",
+            "Region": "GRCh38:7:5969925:6010106:-1",
+            "Locus_range": "1001:39182",
+            "is_join_complement": false,
+            "LRG_id": "161",
+            "Ensembl_id": "ENSG00000122512.16",
+            "mRNA": {
+                "PMS2-265849(MANE_Select)": "ENST00000265849.12",
+                "PMS2-382321": "ENST00000382321.5",
+                "PMS2-441476": "ENST00000441476.6",
+                "PMS2-642292": "ENST00000642292.1",
+                "PMS2-642456": "ENST00000642456.1",
+                "PMS2-643595": "ENST00000643595.1",
+                "PMS2-644110": "ENST00000644110.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "PMS2-265849(MANE_Select)"
+            }
+        }
+    }
+}

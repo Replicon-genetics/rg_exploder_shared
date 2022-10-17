@@ -1,0 +1,16 @@
+LOCUS       7 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 55018017..55212628 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:7:55018017:55212628:1
+VERSION     chromosome:GRCh38:7:55018017:55212628:1
+FEATURES             Location/Qualifiers
+     source          1..194612
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..193612
+                     /gene=ENSG00000146648.20
+                     /locus_tag="EGFR"
+                     /note="epidermal growth factor receptor [Source:HGNC
+                     Symbol;Acc:HGNC:3236]"
+ORIGIN
+//

@@ -1,0 +1,23 @@
+{
+    "Reference_sequences": {
+        "CIITA": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:16:10970055:11027079:1",
+            "Locus_range": "1001:56025",
+            "is_join_complement": false,
+            "LRG_id": "49",
+            "Ensembl_id": "ENSG00000179583.13",
+            "mRNA": {
+                "CIITA-324288(MANE_Select)": "ENST00000324288.8",
+                "CIITA-381835": "ENST00000381835.5",
+                "CIITA-571186": "ENST00000571186.1",
+                "CIITA-576601": "ENST00000576601.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "CIITA-324288(MANE_Select)"
+            }
+        }
+    }
+}

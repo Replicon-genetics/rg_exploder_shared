@@ -1,0 +1,25 @@
+{
+    "Reference_sequences": {
+        "STK11": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh38:19:1176558:1229431:1",
+            "Locus_range": "1001:51874",
+            "is_join_complement": false,
+            "LRG_id": "319",
+            "Ensembl_id": "ENSG00000118046.17",
+            "mRNA": {
+                "STK11-326873(MANE_Select)": "ENST00000326873.12",
+                "STK11-585465": "ENST00000585465.2",
+                "STK11-585748": "ENST00000585748.2",
+                "STK11-585851": "ENST00000585851.1",
+                "STK11-593219": "ENST00000593219.5",
+                "STK11-652231": "ENST00000652231.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "STK11-326873(MANE_Select)"
+            }
+        }
+    }
+}

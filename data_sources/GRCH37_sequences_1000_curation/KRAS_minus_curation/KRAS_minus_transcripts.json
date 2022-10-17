@@ -1,0 +1,23 @@
+{
+    "Reference_sequences": {
+        "KRAS_minus": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:12:25356723:25404870:-1",
+            "Locus_range": "1001:47148",
+            "is_join_complement": false,
+            "LRG_id": "344",
+            "Ensembl_id": "ENSG00000133703.7",
+            "mRNA": {
+                "KRAS_minus-311936(MANE_Select)": "ENST00000311936.3",
+                "KRAS_minus-256078": "ENST00000256078.4",
+                "KRAS_minus-556131": "ENST00000556131.1",
+                "KRAS_minus-557334": "ENST00000557334.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "KRAS_minus-311936(MANE_Select)"
+            }
+        }
+    }
+}

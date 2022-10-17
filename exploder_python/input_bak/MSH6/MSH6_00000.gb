@@ -1,0 +1,15 @@
+LOCUS       2 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 2 GRCh38 partial sequence 47694530..47811063 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:2:47694530:47811063:1
+VERSION     chromosome:GRCh38:2:47694530:47811063:1
+FEATURES             Location/Qualifiers
+     source          1..116534
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..115534
+                     /gene=ENSG00000116062.18
+                     /locus_tag="MSH6"
+                     /note="mutS homolog 6 [Source:HGNC Symbol;Acc:HGNC:7329]"
+ORIGIN
+//

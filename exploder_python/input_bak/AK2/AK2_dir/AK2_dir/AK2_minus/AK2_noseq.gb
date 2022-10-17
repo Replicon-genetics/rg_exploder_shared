@@ -1,0 +1,16 @@
+LOCUS       1 0 bp DNA HTG 28-FEB-2022
+DEFINITION  Homo sapiens chromosome 1 GRCh38 partial sequence 33006940..33081996 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:1:33006940:33081996:-1
+VERSION     chromosome:GRCh38:1:33006940:33081996:-1
+FEATURES             Location/Qualifiers
+     source          1..75057
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..74057
+                     /gene=ENSG00000004455.17
+                     /locus_tag="AK2"
+                     /note="adenylate kinase 2 [Source:HGNC
+                     Symbol;Acc:HGNC:362]"
+ORIGIN
+//

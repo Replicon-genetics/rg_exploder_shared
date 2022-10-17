@@ -1,0 +1,94 @@
+LOCUS       17 0 bp DNA HTG 11-MAR-2021
+DEFINITION  Homo sapiens chromosome 17 GRCh38 partial sequence 43044045..43170495 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh38:17:43044045:43170495:-1
+VERSION     chromosome:GRCh38:17:43044045:43170495:-1
+COMMENT     /consequence annotation by Replicon Genetics from public domain sources
+FEATURES             Location/Qualifiers
+     source          1..126451
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            251..126201
+                     /gene=ENSG00000012048.23
+                     /locus_tag="BRCA1"
+                     /note="BRCA1 DNA repair associated [Source:HGNC
+                     Symbol;Acc:HGNC:1100]"
+
+     variation       126208..126208
+                     /replace="T/C"
+                     /db_xref="dbSNP:rs1411280595"
+                     /consequence="dbSNP:downstream_transcript_variant"
+
+     variation       126100..126100
+                     /replace="G/T"
+                     /db_xref="dbSNP:rs1304626969"
+                     /consequence="dbSNP:non_coding_transcript_variant,3_prime_UTR_variant"
+
+     variation       122870..122870
+                     /replace="A/T"
+                     /db_xref="dbSNP:rs1267019068"
+                     /consequence="dbSNP:intron_variant"
+
+     variation       122800..122800
+                     /replace="T/G"
+                     /db_xref="dbSNP:rs397509281"
+                     /consequence="dbSNP:non_coding_transcript_variant,synonymous_variant"
+                     /consequence="dbSNP:coding_sequence_variant,missense_variant"
+
+     variation       54720..54720
+                     /replace="C/T"
+                     /db_xref="dbSNP:rs1555599278"
+                     /consequence="dbSNP:intron_variant,non_coding_transcript_variant"
+                     /consequence="dbSNP:synonymous_variant,coding_sequence_variant"
+
+     variation       54712..54712
+                     /replace="C/T"
+                     /db_xref="dbSNP:rs1555599296" 
+                     /consequence="dbSNP:intron_variant"
+
+     variation       46384..46384
+                     /replace="T/C"
+                     /db_xref="dbSNP:rs777262055"
+                     /consequence="dbSNP:upstream_transcript_variant,5_prime_UTR_variant"
+                     /consequence="dbSNP:non_coding_transcript_variant"
+
+     variation       46380..46380
+                     /replace="C/T"
+                     /db_xref="dbSNP:rs569074958"
+                     /consequence="dbSNP:genic_upstream_transcript_variant"
+                     /consequence="dbSNP:upstream_transcript_variant,splice_acceptor_variant"
+
+     variation       45200..45200
+                     /replace="C/G"
+                     /db_xref="dbSNP:rs1057521869"
+                     /consequence="dbSNP:genic_upstream_transcript_variant,non_coding_transcript_variant"
+                     /consequence="dbSNP:upstream_transcript_variant,5_prime_UTR_variant"
+
+     variation       2275..2275
+                     /replace="T/C"
+                     /db_xref="dbSNP:rs1321005885"
+                     /consequence="dbSNP:intron_variant"
+
+     variation       2269..2269
+                     /replace="A/C"
+                     /db_xref="dbSNP:rs1300100629"
+                     /consequence="dbSNP:intron_variant"
+
+     variation       2268..2268
+                     /replace="C/T"
+                     /db_xref="dbSNP:rs887555188"
+                     /consequence="dbSNP:intron_variant"
+
+     variation       2260..2260
+                     /replace="G/A"
+                     /db_xref="dbSNP:rs531592442"
+                     /consequence="dbSNP:intron_variant"
+
+     variation       2245..2252
+                     /replace="ATCTATCT/ATCT"
+                     /db_xref="dbSNP:rs776777915"
+                     /consequence="dbSNP:intron_variant"
+
+ORIGIN
+//
+

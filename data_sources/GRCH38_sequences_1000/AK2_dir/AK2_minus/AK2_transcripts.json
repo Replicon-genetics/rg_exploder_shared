@@ -1,0 +1,30 @@
+{
+    "Reference_sequences": {
+        "AK2": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "28-FEB-2022",
+            "Region": "GRCh38:1:33006940:33081996:-1",
+            "Locus_range": "1001:74057",
+            "is_join_complement": false,
+            "LRG_id": "133",
+            "Ensembl_id": "ENSG00000004455.17",
+            "mRNA": {
+                "AK2-672715(MANE_Select)": "ENST00000672715.1",
+                "AK2-354858": "ENST00000354858.11",
+                "AK2-373449": "ENST00000373449.7",
+                "AK2-467905": "ENST00000467905.5",
+                "AK2-480134": "ENST00000480134.5",
+                "AK2-487289": "ENST00000487289.1",
+                "AK2-548033": "ENST00000548033.5",
+                "AK2-550338": "ENST00000550338.5",
+                "AK2-626911": "ENST00000626911.1",
+                "AK2-629371": "ENST00000629371.2",
+                "AK2-673291": "ENST00000673291.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "AK2-672715(MANE_Select)"
+            }
+        }
+    }
+}

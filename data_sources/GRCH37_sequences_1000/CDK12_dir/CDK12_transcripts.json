@@ -1,0 +1,23 @@
+{
+    "Reference_sequences": {
+        "CDK12": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:17:37616764:37722160:1",
+            "Locus_range": "1001:104397",
+            "is_join_complement": false,
+            "LRG_id": "1413",
+            "Ensembl_id": "ENSG00000167258.9",
+            "mRNA": {
+                "CDK12-447079(MANE_Select)": "ENST00000447079.4",
+                "CDK12-430627": "ENST00000430627.2",
+                "CDK12-559663": "ENST00000559663.1",
+                "CDK12-584632": "ENST00000584632.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "CDK12-447079(MANE_Select)"
+            }
+        }
+    }
+}
