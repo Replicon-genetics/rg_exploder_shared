@@ -1,5 +1,6 @@
 # Shell script to list the Ensemble downloaded GB zipped files and run the filter program 
 root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/"
+pythonroot="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/helper_python"
 datadir="GRCH37_sequences_1000"
 jsonfile="_transcripts.json"
 ensembl="_ensembl"
@@ -19,7 +20,7 @@ locus=`echo $dir  | cut -f1 -d"_"`
 cd $pw/$1/$dir
 mv ensembl.txt.gz $locus$ensembl.gz
 gunzip $locus$ensembl.gz
-python3 /Users/caryodonnell/mytools/embl_feature_filter7.py -i $locus$ensembl -a $jopt -g $gopt
+python3 $pythonroot/embl_feature_filter7.py -i $locus$ensembl -a $jopt -g $gopt
 cp -p $locus$jsonfile ../../$datadir$curation/$locus$curation/.
 done
 # Now a fix for the KRAS / KRAS_minus setup
