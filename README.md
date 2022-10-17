@@ -2,7 +2,7 @@
  
 This repository https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, shell scripts, data and metadata for the fragmentation of DNA sequences intended to emulate NGS-style sequencing reads. 
 
-The main objective of the repository is to share this with members of "The North West Genomic Laboratory Hub", specifically the team led by Dr ELeanor Baker under the terms: "We would like to offer this software code to you for free to use and modify (as you and your colleagues at the North West genomic laboratory hub deem fit) for the next 2 years from 15th Oct 2022.  If you start to use it routinely in your bioinformatics pipeline then all we ask is that you come back and tell us about it."
+The main objective of the repository is to share this with members of "The North West Genomic Laboratory Hub", specifically the team led by Dr Eleanor Baker under the terms: "We would like to offer this software code to you for free to use and modify (as you and your colleagues at the North West genomic laboratory hub deem fit) for the next 2 years from 15th Oct 2022.  If you start to use it routinely in your bioinformatics pipeline then all we ask is that you come back and tell us about it."
 
 This is the same Python code, data etc behind a Vue.js implementation at https://repliconevaluation.wordpress.com/replicon-genetics. 
 The source for building the Vue.js implementation is held at https://github.com/Replicon-genetics/rg_exploder
