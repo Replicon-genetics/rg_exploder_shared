@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="17-Oct-2022"
+#Prg_verDate="18-Oct-2022"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
@@ -18,7 +18,7 @@ import RG_exploder_io as RG_io # File input/output
 
 
 def set_config_consts():
-    global is_gui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
+    global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
     #### Revisit these three each time a data set is renewed ###
     GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
@@ -27,19 +27,22 @@ def set_config_consts():
     CustomerIDText="EBaker"
     #CustomerIDText="Public"
 
-    is_gui_browser=False  # When setting up to use the Python GUI
-    #is_gui_browser=True   # When setting up to use the Vue.js GUI
+    is_pygui_browser=False  # When setting up to use the Python GUI
+    #is_pygui_browser=True   # When setting up to use the Vue.js GUI
     #### End of: Revisit these each time a data set is renewed ####
 
     #### One-off customisation per installation ####
-    exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
+    #exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version
+    exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
 
     #### Should not need changing unless modify throughout other code ####
     global config_file_output,config_file_reference_seqs
     global rootdatadir,rootapplicationdir,roothelpscriptdir
     
-    rootdatadir="%sdata_sources"%exploder_root
-    rootapplicationdir="%sexploder_python"%exploder_root
+    #rootdatadir="%sdata_sources"%exploder_root # rg_exploder_shared version
+    rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version
+    #rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
+    rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version
     roothelpscriptdir="%shelper_scripts"%exploder_root
 
     config_file_output="input/config.json"
@@ -258,7 +261,7 @@ def set_io_defaults():
     # =================================================================
     # Setting global constants for IO
     # =================================================================
-    global infilepathroot,outfilepathroot # CONSTANTS: set filepaths for location of input and output files. Obviously better as command-line parameters or config-file setting
+    global infilepathroot,outfilepathroot,pygui_outfilepathroot # CONSTANTS: set filepaths for location of input and output files. Obviously better as command-line parameters or config-file setting
 
     global journhead,journend,readmehead,readmeend,config_json_head,config_json_end
     journhead="_001"; journend="_journal"  # CONSTANTS for output journal file
@@ -285,7 +288,8 @@ def set_io_defaults():
 def make_IOconstants():
     global IOconstants
     IOconstants = {
-        "infilepathroot":infilepathroot,"outfilepathroot":outfilepathroot,
+        "infilepathroot":"input/","outfilepathroot":"output/",
+        "pygui_outfilepathroot":pygui_outfilepathroot,
         "journhead":journhead,"journend":journend,"readmehead":readmehead,"readmeend":readmeend,
         "config_json_head":config_json_head,
         "config_json_end":config_json_end,
@@ -827,7 +831,7 @@ def set_dynamic_vars_defaults():
 # =================================================================
 if __name__ == "__main__":
 
-    global is_gui_browser,GRCH_dataset
+    global is_pygui_browser,GRCH_dataset,infilepathroot,outfilepathroot,pygui_outfilepathroot
     global rootdatadir,rootapplicationdir,roothelpscriptdir
     set_config_consts()
 
@@ -841,19 +845,17 @@ if __name__ == "__main__":
         print(" GRCH_dataset is unset or incorrect - retry!")
         exit()
 
-    if is_gui_browser:
-        outfilepathroot = "output/"
-        infilepathroot = "input/"
-    else:
+    if not is_pygui_browser:
         subprocess.run(["/bin/rm","input"])
         subprocess.run(["/bin/rm","output"])
         subprocess.run(["cd","%s"%rootapplicationdir])
         subprocess.run(["ln","-s","%s"%infilepathroot,"input"])
         subprocess.run(["ln","-s","%s"%outfilepathroot,"output"])
         subprocess.run(["sh","%s"%roothelpscriptdir,"%s"%rootapplicationdir,"%s"%infilepathroot,"%s"%outfilepathroot])
-
-    print("Created %s/output\n       soft-linked to %s"%(rootapplicationdir,outfilepathroot))
-    print("Created %s/input\n       soft-linked to %s"%(rootapplicationdir,infilepathroot))
+        print("Created %s/output\n       soft-linked to %s"%(rootapplicationdir,outfilepathroot))
+        print("Created %s/input\n       soft-linked to %s"%(rootapplicationdir,infilepathroot))
+    
+    pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
     process_file_configs_python()
-    print(" \nDid you set the following correctly before running?:\n 'is_gui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s"%(is_gui_browser,GRCH_dataset,CustomerIDText))
+    print(" \nDid you set the following correctly before running?:\n 'is_pygui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s"%(is_pygui_browser,GRCH_dataset,CustomerIDText))
