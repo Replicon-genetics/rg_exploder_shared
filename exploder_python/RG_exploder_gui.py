@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder11_gui.py"
-ProgverDate="16-Oct-2022"
+ProgverDate="17-Oct-2022"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -660,12 +660,15 @@ class source_sliders:
         self.label=tk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]), bg=bgcolours[v_index])
         self.label.grid(row=0,column=0,sticky=tk.W)
         f2 = font.Font(master1, master1.cget("font"))
-        f2.configure(underline = True)
         self.label.configure(font=f2)
-        self.label['fg']="blue"
-        self.label['cursor']="hand2"
-        ####### Extra for hyperlink
-        self.label.bind('<Button-1>', lambda e: self.haplotype_hyperLink(self.label['text']))
+        ####### Extra to make this a hyperlink to the source file
+        # However unless this is made READ only, implementing this allows user to edit the file before a runs.
+        # This is Dangerous because it wil change it permanently and changes will not have been verified
+        # Best way to control is to use the 'Create a New Variations Source' feature aka 'Builder' 
+        #f2.configure(underline = True)
+        #self.label['fg']="blue"
+        #self.label['cursor']="hand2"
+        #self.label.bind('<Button-1>', lambda e: self.haplotype_hyperLink(self.label['text']))
         #######
 
         self.entryvar=src_sliders_strvals[v_index]
