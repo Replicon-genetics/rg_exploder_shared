@@ -1163,7 +1163,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
                 else:
                     update_journal(" failed to find %s"%label)
             if not accept:
-                print("barf")
+                #print("barf")
                 update_journal(" %s definition not accepted"%label)
     # end of loop for label in RG_globals.mutlabels:
 
