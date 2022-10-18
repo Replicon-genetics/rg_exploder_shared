@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="17-Oct-2022"
+#Prg_verDate="18-Oct-2022"
 # © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
 
 import time  # Used in getime()
@@ -274,7 +274,7 @@ def set_string_configs():
 
 def set_io_configs():
     global config_in_data
-    global infilepathroot,outfilepathroot
+    global infilepathroot,outfilepathroot,pygui_outfilepathroot
     global journhead,journend,readmehead,readmeend,config_json_head,config_json_end
     global Seq_Format,Seq_IO_file_ext,Ref_file_name
     global mutlabels
@@ -282,6 +282,7 @@ def set_io_configs():
     IOconstants=config_in_data["IOconstants"]
     infilepathroot=IOconstants["infilepathroot"]
     outfilepathroot=IOconstants["outfilepathroot"]
+    pygui_outfilepathroot=IOconstants["pygui_outfilepathroot"]
     journhead=IOconstants["journhead"]
     journend=IOconstants["journend"]
     readmehead=IOconstants["readmehead"]
