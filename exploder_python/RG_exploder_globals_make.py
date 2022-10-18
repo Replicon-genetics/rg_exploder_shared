@@ -21,8 +21,8 @@ def set_config_consts():
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
     #### Revisit these three each time a data set is renewed ###
-    GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
-    #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
+    #GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
+    GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
     CustomerIDText="EBaker"
     #CustomerIDText="Public"
@@ -32,17 +32,17 @@ def set_config_consts():
     #### End of: Revisit these each time a data set is renewed ####
 
     #### One-off customisation per installation ####
-    #exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version
-    exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
+    exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version
+    #exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
 
     #### Should not need changing unless modify throughout other code ####
     global config_file_output,config_file_reference_seqs
     global rootdatadir,rootapplicationdir,roothelpscriptdir
     
-    #rootdatadir="%sdata_sources"%exploder_root # rg_exploder_shared version
-    rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version
-    #rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
-    rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version
+    rootdatadir="%sdata_sources"%exploder_root # rg_exploder_shared version
+    #rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version
+    rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
+    #rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version
     roothelpscriptdir="%shelper_scripts"%exploder_root
 
     config_file_output="input/config.json"
