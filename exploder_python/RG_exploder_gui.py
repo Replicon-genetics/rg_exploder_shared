@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder11_gui.py"
-ProgverDate="17-Oct-2022"
+ProgverDate="18-Oct-2022"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -370,7 +370,7 @@ def save_and_leave():
 def increment_run():
     global run_count,results_links, results_idx
     run_count+=1
-    thisfilepath=RG_globals.outfilepathroot+RG_globals.target_locus+"/"
+    thisfilepath=RG_globals.pygui_outfilepathroot+RG_globals.target_locus+"/" # pygui_outfilepathroot as "output/" not suitable for this, must be full path
     #results_links.append("file://%s"%RG_globals.outfilepathroot)
     i=0 ; is_new = True
     for item in results_links:
