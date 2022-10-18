@@ -47,8 +47,9 @@
         "IUPAC_codes": "ACGTRYSWKMBDHVN"
     },
     "IOconstants": {
-        "infilepathroot": "/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/exploder_input_38_1000/",
-        "outfilepathroot": "/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/exploder_output_38_1000/",
+        "infilepathroot": "input/",
+        "outfilepathroot": "output/",
+        "pygui_outfilepathroot": "/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/exploder_output_38_1000/",
         "journhead": "_001",
         "journend": "_journal",
         "readmehead": "_000",
