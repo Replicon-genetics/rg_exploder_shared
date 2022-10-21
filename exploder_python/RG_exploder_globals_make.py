@@ -29,8 +29,8 @@ def set_config_consts():
     CustomerIDText="EBaker"
     #CustomerIDText="Public"
 
-    is_pygui_browser=False  # When setting up to use the Python GUI : RG_exploder_gui.py
-    #is_pygui_browser=True   # When setting up to use the Vue.js GUI
+    is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
+    #is_pygui_browser=False   # When setting up to use the Vue.js GUI
     
     #### End of: Revisit these each time a data set is renewed ####
 
@@ -851,7 +851,7 @@ if __name__ == "__main__":
         print(" GRCH_dataset is unset or incorrect - retry!")
         exit()
 
-    if not is_pygui_browser:
+    if is_pygui_browser:
         subprocess.run(["/bin/rm","input"])
         subprocess.run(["/bin/rm","output"])
         subprocess.run(["cd","%s"%rootapplicationdir])
