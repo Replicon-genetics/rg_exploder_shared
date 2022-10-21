@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="18-Oct-2022"
+#Prg_verDate="21-Oct-2022"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
@@ -8,6 +8,7 @@
 import sys
 import json
 import subprocess
+import os
 '''
 RG module imports
 '''
@@ -18,6 +19,7 @@ import RG_exploder_io as RG_io # File input/output
 
 
 def set_config_consts():
+    global exploder_root # Probably a one-off set up
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
     #### Revisit these three each time a data set is renewed ###
@@ -27,12 +29,15 @@ def set_config_consts():
     CustomerIDText="EBaker"
     #CustomerIDText="Public"
 
-    is_pygui_browser=False  # When setting up to use the Python GUI
+    is_pygui_browser=False  # When setting up to use the Python GUI : RG_exploder_gui.py
     #is_pygui_browser=True   # When setting up to use the Vue.js GUI
+    
     #### End of: Revisit these each time a data set is renewed ####
 
-    #### One-off customisation per installation ####
-    exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version
+    #### One-off customisation per installation. Needs to be full path to support the hyperlinks to results in the Python GUI ####
+    #exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version # Do it explicitly
+    set_exploder_root="../" # Do it relative 
+    exploder_root="%s/"%os.path.abspath(set_exploder_root) # Work out the exact path
     #exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
 
     #### Should not need changing unless modify throughout other code ####
@@ -832,7 +837,7 @@ def set_dynamic_vars_defaults():
 if __name__ == "__main__":
 
     global is_pygui_browser,GRCH_dataset,infilepathroot,outfilepathroot,pygui_outfilepathroot
-    global rootdatadir,rootapplicationdir,roothelpscriptdir
+    global exploder_root,rootdatadir,rootapplicationdir,roothelpscriptdir
     set_config_consts()
 
     if GRCH_dataset == "GRCh38":
@@ -858,4 +863,4 @@ if __name__ == "__main__":
     pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
     process_file_configs_python()
-    print(" \nDid you set the following correctly before running?:\n 'is_pygui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s"%(is_pygui_browser,GRCH_dataset,CustomerIDText))
+    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_pygui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s"%(exploder_root,is_pygui_browser,GRCH_dataset,CustomerIDText))
