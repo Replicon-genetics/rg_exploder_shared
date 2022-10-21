@@ -19,7 +19,7 @@ import RG_exploder_io as RG_io # File input/output
 
 
 def set_config_consts():
-    global exploder_root # Probably a one-off set up
+    global exploder_root
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
     #### Revisit these three each time a data set is renewed ###
@@ -34,11 +34,12 @@ def set_config_consts():
     
     #### End of: Revisit these each time a data set is renewed ####
 
-    #### One-off customisation per installation. Needs to be full path to support the hyperlinks to results in the Python GUI ####
+    #### One-off customisation of set_exploder_root per installation. ####
     #exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version # Do it explicitly
-    set_exploder_root="../" # Do it relative 
-    exploder_root="%s/"%os.path.abspath(set_exploder_root) # Work out the exact path
-    #exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
+    set_exploder_root="../" # Do it relative
+    #set_exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
+    
+    exploder_root="%s/"%os.path.abspath(set_exploder_root) # Ensure this is defined as full path, required to support the hyperlinks to results in the Python GUI
 
     #### Should not need changing unless modify throughout other code ####
     global config_file_output,config_file_reference_seqs
