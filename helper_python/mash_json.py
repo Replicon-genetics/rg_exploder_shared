@@ -1,6 +1,12 @@
 #!/usr/local/bin/python3
 Progver="mash_json.py"
 ProgverDate="02-Mar-2022"
+# This merges the content of all the individual {locus}_transcrupts.json files in the 'curation' directory
+# into a single file loci.json. It is a source for RG_exploder_globals_make.py to create config.json
+# which in turn is a source of variable values required to run RG_exploder_main.py
+# with a bit more development work, the need for loci.json can be eliminated,
+# at the cost of more reads from the input directory. But as this was set up for running from AWS,
+# it was envisaged that this would keep reads down.
 import json
 from datetime import date
 import RG_exploder_io as RG_io
@@ -19,7 +25,6 @@ r_date = today.strftime("%Y %B %d")
 #print("r_date =%s"%r_date)
 
 def config_file_in(in_file):
-    print("in_file %s"%in_file)
     config_exists = RG_io.is_file(in_file)
     config_in_data=OrderedDict()
     if config_exists:
