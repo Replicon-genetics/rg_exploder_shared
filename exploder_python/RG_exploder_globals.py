@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="18-Oct-2022"
+#Prg_verDate="26-Oct-2022"
 # © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
 
 import time  # Used in getime()
@@ -134,11 +134,15 @@ def make_bio_parameters_configs3():
  
     # Set varfreqs as a single object instead of two: mutlabels & mutfreqs (legacy stuff)
     varfreqs=dict()
-    index=0
-    for label in mutlabels:
-        varfreqs.setdefault(label,mutfreqs[index])
-        index+=1
-    bio_parameters_tmp["mutfreqs"]=varfreqs
+    for index in range(len(mutlabels)):
+                       varfreqs.setdefault(str(mutlabels[index]),mutfreqs[index])
+    bio_parameters_tmp["mutlabelfreqs"]=varfreqs
+    # Not using 'for item in mutlabels' here because pyodide (when running in Vue.js) treats the item "00000" as a Boolean and barfs
+    # Likewise  'for item in mutfreqs', the item could be 0, and a Boolean
+    
+    # Or use the two. Vue.js does not barf
+    #bio_parameters_tmp["mutlabels"]=mutlabels
+    #bio_parameters_tmp["mutfreqs"]=mutfreqs
     return bio_parameters_tmp
 # end of make_bio_parameters_configs3()
     
