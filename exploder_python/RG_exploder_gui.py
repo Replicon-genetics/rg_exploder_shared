@@ -316,7 +316,8 @@ def get_config_limits():
     if RG_globals.Qualmax < RG_globals.Qualmin:
         RG_globals.Qualmin,RG_globals.Qualmax=RG_globals.Qualmax,RG_globals.Qualmin
         config_limit_vals[3],config_limit_vals[4]=config_limit_vals[4],config_limit_vals[3]
-        #correct_spin_vals() - see comments in object
+        correct_spin_vals() #see comments in object
+        #refresh_gui() # Has no effect
         # Deprecating the error message and error-return because this now only corrects one value, puts it on bounds
         # so can run after refreshing the display
         #was_val_in_bounds=False
@@ -331,7 +332,7 @@ def correct_spin_vals():
     set_spin_vals(config_limit_vals,config_limit_labels,config_limit_mins,config_limit_maxs)
     # Now update the spinboxes to show the correction by refreshing frame they are in
     # However: since addition of the build frame the layout gets rearranged. Tried fixing ... no luck
-    refresh_main_options_list() # Need to change because it messes up the build layout. 
+    #refresh_main_options_list() # Need to change because it messes up the build layout.
 
 def get_mutfreqs():
     # Set from src_sliders_init_vals (integers)
@@ -1381,7 +1382,6 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     return
 
 def get_slider_vals():
-
     global local_begin,local_end,src_slider_widgets,abs_Begin,abs_End
     global trans_Begin,trans_End,trans_Begin_ext,trans_End_ext
 
@@ -1404,10 +1404,12 @@ def get_slider_vals():
     abs_Begin=src_slider_widgets_build[0].abspos
     abs_End=src_slider_widgets_build[1].abspos
 
-def initialise_src_sliders():
+def refresh_gui():
+    refresh_genelabels_builder()
     initialise_mutfiles()
     refresh_src_sliders()
-
+    refresh_src_sliders_builder()
+    
 def refresh_src_sliders():
     #print("refresh_src_sliders")
     global src_slider_widgets, src_slider_widgets_active_count,src_slider_widgets_old_active_count
@@ -1536,16 +1538,24 @@ def forget_source_slider(v_index):
     self.entry.grid_forget()
     self.scale2.grid_forget()
 
-
 def refresh_main_options_list():
-    # Deprecated because it messes up the build layout. Tried fixing ... no luck
+    # Deprecated because it messes up the build layout. Tried fixing different ways ... no luck
     global main, main_options_list
     global main_build
     main_options_list.destroy()
+    main_build.destroy()
     initialise_main_options_list(main)
     main_options_list.pack(side="right", fill="both", expand=True)
     tog_instantiate(main_options_list)
     spin_instantiate(main_options_list)
+
+    initialise_main_build(main)
+    main_build.pack(side="left", fill="both", expand=True)
+    src_sliders_instantiate(main_vars_list)
+    tog_instantiate2_builder(main_left)
+    src_sliders_instantiate_build(main_build)
+    
+    #refresh_gui()
     
 def instantiate_widgets():
     global is_guitext_on,is_guitext2_on
@@ -1579,10 +1589,7 @@ def listbox_select(evt):
         count+=1
     RG_globals.target_locus=locus
     
-    refresh_genelabels_builder()
-    initialise_mutfiles()
-    refresh_src_sliders() 
-    refresh_src_sliders_builder()
+    refresh_gui()
     
     fill_transcript_list()
     ts_listbox.config(value=transcript_list)
@@ -1773,12 +1780,10 @@ initialise_tk()
 initialise_stuff()
 
 #print("GUI 1: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
-
 instantiate_widgets()
 #print("GUI 3: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
-refresh_genelabels_builder()
-initialise_src_sliders() 
-refresh_src_sliders_builder() 
+refresh_gui() 
+
 
 # Keeping the widgets live
 exploder_win.mainloop()
