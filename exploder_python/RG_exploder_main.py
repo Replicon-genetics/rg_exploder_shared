@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_24_11.py"
-ProgverDate="16-Oct-2022"
+ProgverDate="18-Nov-2022"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
 This module reads in Genbank format files and uses
@@ -2585,7 +2585,8 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     for item in splice_joinlist_txt:
         begin,end=item.split(":")
         begin=int(begin)
-        end=int(end)        
+        end=int(end)
+        #print("begin %s \n end %s"%(begin,end)) # Validation check
         #Last intron / upstream 
         ends.append(begin-1)
        
@@ -2595,8 +2596,8 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Not an Exon
             feature_titles.append("Gene")
             # Need to store an offset for case of generating variants from *clipped* genomic sequence, so the offset is the Headclip length
-            # both ["mRNA_join"]["Locus"] and ["CDS_join"]["Locus"] store this when RG_globals.target_transcript_name == RG_globals.empty_transcript_name
-            RG_globals.bio_parameters["target_build_variant"]["headclip"]=int(RG_globals.bio_parameters["target_build_variant"]["mRNA_join"]["Locus"].split(":")[0])-1
+            headclip=int(splice_joinlist_txt[0].split(":")[0])-1
+            RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
         else: #Exon
             exon_total+=1
             feature_titles.append(exon_text+str(exon_total))
@@ -2620,7 +2621,8 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     feature_titles[len(feature_titles)-1]="Downstream"
     ends.append(maxreflen)
     exon_length.append(exon_len)
-    
+    #print("starts %s \n ends %s"%(starts,ends)) # Validation check
+
     # This is all that is essential to send back to GUI
     RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]=mrnapos_lookup
     RG_globals.bio_parameters["target_build_variant"]["abs_offset"]=abs_offset
@@ -2629,7 +2631,8 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     RG_globals.bio_parameters["target_build_variant"]["trans_End"]["max"]=max_seqlength
     RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]=Region.split(":")[0]
 
-    # The rest of this is only for user-notification. It recreates the intron/exon table as seen in Ensembl transcript view. Ideally put in journal somehow
+    # The following is only to build transcript_view for user-notification via RG_globals.bio_parameters["target_build_variant"]["transcript_view"]
+    # It recreates the intron/exon table as seen in Ensembl transcript view. Ideally put in journal somehow
     for count in range(len(ends)):
         abs_starts.append(abs(starts[count]+abs_offset))
         abs_ends.append(abs(ends[count]+abs_offset))
@@ -2769,19 +2772,12 @@ def get_ref_subseq3():
 
 # Save the additional variants
 def save_add_var():
+    is_success=False
     if RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"] != RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]:
         is_success=True
-        addvar={"locus":RG_globals.target_locus,
-                "hapname":RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"],
-                "varname":RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"],
-                "local_begin":RG_globals.bio_parameters["target_build_variant"]["local_begin"],
-                "local_end":RG_globals.bio_parameters["target_build_variant"]["local_end"],
-                "ref_seq":RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"],
-                "var_seq":RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"],
-                "abs_Begin":RG_globals.bio_parameters["target_build_variant"]["abs_Begin"]["value"],
-                "abs_End":RG_globals.bio_parameters["target_build_variant"]["abs_End"]["value"]
-                }
-        RG_globals.bio_parameters["target_build_variant"]["AddVars"].append(addvar)
+    if is_success and (RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"] !="") and (RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"] !=""):
+        is_success=save_add_var2()
+            
         # Not essential, but this may be needed for App.js message panel report
         '''
         spacer="                     /"
@@ -2802,7 +2798,27 @@ def save_add_var():
         
     # Is RG_exploder_gui.add_mutlabs code required here for App.js?
     return is_success
-    
+
+def save_add_var2():
+    match = False
+    for label in RG_globals.mutlabels:
+        if label == RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"]:
+            match = True
+            
+    if not match:
+        addvar={"locus":RG_globals.target_locus,
+                "hapname":RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"],
+                "varname":RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"],
+                "local_begin":RG_globals.bio_parameters["target_build_variant"]["local_begin"],
+                "local_end":RG_globals.bio_parameters["target_build_variant"]["local_end"],
+                "ref_seq":RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"],
+                "var_seq":RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"],
+                "abs_Begin":RG_globals.bio_parameters["target_build_variant"]["abs_Begin"]["value"],
+                "abs_End":RG_globals.bio_parameters["target_build_variant"]["abs_End"]["value"]
+                }
+        RG_globals.bio_parameters["target_build_variant"]["AddVars"].append(addvar)
+    return (not match)
+ 
 # Calls the main exploder function
 def exploder_initiate(is_get_new_refseq,is_journal):
     #  This basically runs the job
