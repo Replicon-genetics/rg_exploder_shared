@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="21-Oct-2022"
+#Prg_verDate="14-Nov-2022"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
@@ -512,19 +512,21 @@ def make_bio_parameters_configs():
             "ref_strand":1,
             "local_begin":0,
             "local_end":0,
+            "joinlist":"",
+            "refseq":"TTCAATGTCATTTTTCTAGCTTAGATTATCTAAAAAAAATGCCACAACAGGGGATACAAA",  #  Test value. Should be ""
 
             "abs_Begin":{
-                "label":"Absolute_begin",
+                "label":"Absolute Begin",
                 "value":0
                 },
             
             "abs_End":{
-                "label":"Absolute_end",
+                "label":"Absolute End",
                 "value":0, 
                 },
             
             "trans_Begin":{
-                "label":"Genomic",
+                "label":"Genomic", # Original variable names annotated here
                 "value":1, # trans_Begin
                 "min":1, #"min_seqlength":1,
                 "max":15 #"max_seqlength":15
@@ -554,17 +556,19 @@ def make_bio_parameters_configs():
             "ref_subseq": {
                 "label":"Reference Sequence", # "ref_label": "Reference Sequence",-convert
                 "value":"", #was "ref_viewstring": -convert
+                "length":0,
                 "viewstring":""
                 },
 
             "var_subseq": {
                 "label":"Variant Sequence",#"var_label": "Variant Sequence"
+                "length":0,
                 "value":""
                 },
 
             "hap_name":{
                 "label":"%s Name"%variants_header, #"hap_name_label": "%s Name"%variants_header, -convert
-                "value":"" #"hap_name": "",-convert
+                "value":"hapx" #"hap_name": "",-convert
                 },
  
              "var_name":{
