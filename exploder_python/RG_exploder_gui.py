@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder11_gui.py"
-ProgverDate="18-Oct-2022"
+ProgverDate="18-Nov-2022"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -314,27 +314,24 @@ def get_config_limits():
 
     # Checks if the min & max require inversion
     if RG_globals.Qualmax < RG_globals.Qualmin:
-        RG_globals.Qualmin=config_limit_vals[4]
-        RG_globals.Qualmax=config_limit_vals[3]
-        correct_spin_vals()
+        RG_globals.Qualmin,RG_globals.Qualmax=RG_globals.Qualmax,RG_globals.Qualmin
+        config_limit_vals[3],config_limit_vals[4]=config_limit_vals[4],config_limit_vals[3]
+        #correct_spin_vals() - see comments in object
         # Deprecating the error message and error-return because this now only corrects one value, puts it on bounds
         # so can run after refreshing the display
         #was_val_in_bounds=False
         #write_GUI_text("FASTQ Min & Max values were inverted and have been reset\n")
-    return was_val_in_bounds
+    return
 
 def correct_spin_vals():
     global previous_target_locus,previous_target_transcript_name
     # Sledgehammer to re-set everything where the Qualmin/max are swapped
-    # Called conditionally only after a swap because the frame-refresh causes a screen-flicker
+    # Called conditionally only after a swap because the frame-refresh caused a screen-flicker when build absent
     set_config_limits()
     set_spin_vals(config_limit_vals,config_limit_labels,config_limit_mins,config_limit_maxs)
     # Now update the spinboxes to show the correction by refreshing frame they are in
-    refresh_main_options_list() # Different builder
-    # The next forces a url re-set on target_locus, was previously necessary for exome reset, but now deprecated
-    previous_target_locus=""
-    previous_target_transcript_name=RG_globals.empty_transcript_name
-    refresh_genelabels_builder()
+    # However: since addition of the build frame the layout gets rearranged. Tried fixing ... no luck
+    refresh_main_options_list() # Need to change because it messes up the build layout. 
 
 def get_mutfreqs():
     # Set from src_sliders_init_vals (integers)
@@ -364,8 +361,8 @@ def save_and_leave():
     #print("GUI save_and_leave2: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
     get_flags_output_bools()
     #print("GUI save_and_leave3: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
-    is_inlimits=get_config_limits()
-    return is_inlimits
+    get_config_limits()
+    return
 
 def increment_run():
     global run_count,results_links, results_idx
@@ -458,30 +455,24 @@ def save_and_go():
     wait_img=ImageTk.PhotoImage(Image.open(icondir+"wait45.png"))
     gobutton.configure(image=wait_img)
     gobutton.configure(state="disable")
-    is_OK_torun=save_and_leave()
+    save_and_leave()
     #print("GUI save_and_go: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
 
-    if is_OK_torun:
-        increment_run()
-        write_GUI_text("Running Exploder on %s- run number %s\n"%(RG_globals.target_locus,run_count))
-        #is_successful=RG_main.exploder_initiate(True)
-        is_successful=RG_main.call_exploder_main()
-        previous_target_ref=RG_globals.target_locus
-        time_stamp=RG_globals.getime()
-        #print("is_successful %s"%is_successful)
-        if is_successful:
-            write_GUI_text("Run %s Complete at %s\n"%(run_count,time_stamp))
-        else:
-            write_GUI_text("Run %s Failed at %s\n"%(run_count,time_stamp))
-        write_GUI_results_link("%s run results. Check time stamp!"%RG_globals.get_locus_transcript())
+    increment_run()
+    write_GUI_text("Running Exploder on %s- run number %s\n"%(RG_globals.target_locus,run_count))
+    #is_successful=RG_main.exploder_initiate(True)
+    is_successful=RG_main.call_exploder_main()
+    previous_target_ref=RG_globals.target_locus
+    time_stamp=RG_globals.getime()
+    #print("is_successful %s"%is_successful)
+    if is_successful:
+        write_GUI_text("Run %s Complete at %s\n"%(run_count,time_stamp))
     else:
-        write_GUI_text("Review settings and try again\n")
-
+        write_GUI_text("Run %s Failed at %s\n"%(run_count,time_stamp))
+    write_GUI_results_link("%s run results. Check time stamp!"%RG_globals.get_locus_transcript())
+        
     gobutton.configure(state="normal")
     gobutton.configure(image=go_img)
-
-def exit_stuff():
-    is_config_in_limits=save_and_leave()
 
 # =================  END GUI module setups =========================
 
@@ -492,7 +483,7 @@ def exit_stuff():
 def set_pygui_defaults010():
     global pygui_frame_labels,pygui_button_labels # Used as tk object labels
     pygui_frame_labels=["Messages Panel"]
-    pygui_button_labels=["Clear messages","Retrieve Region","Save New %s"%RG_globals.variants_label]
+    pygui_button_labels=["Clear messages","Retrieve Reference Sequence","Save New %s"%RG_globals.variants_label]
 # end of set_pygui_defaults010()
 
 def initialise_tk():
@@ -802,14 +793,15 @@ class source_sliders_builder:
         if self.transpos > max_seqlength:
             self.transpos = max_seqlength
         if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
-            add_factor=RG_globals.bio_parameters["target_build_variant"]["headclip"] # This should be == the REFSEQ.Headclip value
-            self.localpos=self.transpos+self.extension+add_factor
+            headclip=RG_globals.bio_parameters["target_build_variant"]["headclip"] # This should be == the REFSEQ.Headclip value
+            #headclip=int(RG_globals.bio_parameters[RG_globals.target_locus]["Locus_range"].split(":")[0])-1 # Do not need the previous!
+            self.localpos=self.transpos+self.extension+headclip
         else:
             if RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:
-                add_factor=-self.extension
+                modpos=-self.extension # alternative to headclip, but does same job here
             else:
-                add_factor=self.extension
-            self.localpos=int(mrnapos_lookup[self.transpos])+int(add_factor)
+                modpos=self.extension
+            self.localpos=int(mrnapos_lookup[self.transpos])+int(modpos)
         self.abspos=abs(abs_offset+self.localpos)
     # Extra in builder
         
@@ -990,7 +982,7 @@ def src_sliders_instantiate_build(window):
                 RG_globals.mutlabels=get_mutlabs()
                 new_mutlabs_tot=len(RG_globals.mutlabels)
                 if  new_mutlabs_tot > old_mutlabs_tot:
-                    #refresh_src_sliders() # Need better, because refresh_src_sliders() resets all defaults, only need to set a default for new mutlab
+                    #refresh_src_sliders() # Need better, because refresh_src_sliders() resets all defaults,only need to set a default for new mutlab
                     # This seems to work ...
                     setfreq=50
                     src_sliders_vals[new_mutlabs_tot-1]=tk.IntVar(value=setfreq)
@@ -1004,7 +996,7 @@ def src_sliders_instantiate_build(window):
                         refresh_source_slider(i,w_text)
                     src_slider_widgets_active_count=src_count
             else:
-                write_GUI_text("Reference is unmodified; no Haplotype generated")
+                write_GUI_text("Either: Reference is unmodified; duplicate name; empty name(s); no Haplotype saved")
                                
             #print("RG_globals.AddVars: %s"%RG_globals.AddVars)
     # End Instantiating the label/slider display
@@ -1032,8 +1024,6 @@ def src_sliders_instantiate_build(window):
 
 
     ############## varseqtxt  ##############
-
-
     def handle_DNA_input(s):
         varseqtxt.configure(state = tk.NORMAL)
         s.char=s.char.upper()
@@ -1057,7 +1047,7 @@ def src_sliders_instantiate_build(window):
     varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     #refseqtxtframe=tk.Frame(window,bd=1,relief=tk.SUNKEN)
     varseqtxt=tk.Text(window,height=4)
-    #varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
+    varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
     varseqtxt.bind("<Key>", handle_DNA_input)
     
     varseqtxt.grid(row=10,column=0)
@@ -1071,17 +1061,53 @@ def src_sliders_instantiate_build(window):
 
     ############## hapnameseqtxt  ##############
 
+    def handle_hapname_input(s):
+        hapnameseqtxt.configure(state = tk.NORMAL)
+        if re.match('[a-zA-Z0-9_]',s.char):
+            hapnameseqtxt.insert(
+                hapnameseqtxt.index(tk.INSERT),s.char
+            )
+        elif s.keysym.lower() in {"backspace"}:
+            hapnameseqtxt.delete(
+                hapnameseqtxt.index(tk.INSERT)
+                + "-1c" * (s.keysym.lower() == "backspace")
+            )
+        elif  s.char.lower() in { "delete"}:
+            hapnameseqtxt.delete(1.0, tk.END)
+        else:
+            pass
+        hapnameseqtxt.configure(state = tk.DISABLED)
+
     hapnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
     hapnameseqtxt=tk.Text(window,height=2)
     hapnameseqtxt.bind("<1>", lambda event: hapnameseqtxt.focus_set())
+    hapnameseqtxt.bind("<Key>", handle_hapname_input)
     hapnameseqtxt.grid(row=12,column=0)
     hapnameseqtxt.insert(tk.END,hapnametxt)
 
 
     ############## varnameseqtxt  ##############
+    def handle_varname_input(s):
+        varnameseqtxt.configure(state = tk.NORMAL)
+        if re.match('[a-zA-Z0-9_.()]',s.char):
+            varnameseqtxt.insert(
+                varnameseqtxt.index(tk.INSERT),s.char
+            )
+        elif s.keysym.lower() in {"backspace"}:
+            varnameseqtxt.delete(
+                varnameseqtxt.index(tk.INSERT)
+                + "-1c" * (s.keysym.lower() == "backspace")
+            )
+        elif  s.char.lower() in { "delete"}:
+            varnameseqtxt.delete(1.0, tk.END)
+        else:
+            pass
+        varnameseqtxt.configure(state = tk.DISABLED)
+    
     varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqtxt=tk.Text(window,height=2)
     varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
+    varnameseqtxt.bind("<Key>", handle_varname_input)
     varnameseqtxt.grid(row=14,column=0)
     varnameseqtxt.insert(tk.END,varnametxt)
 
@@ -1510,14 +1536,17 @@ def forget_source_slider(v_index):
     self.entry.grid_forget()
     self.scale2.grid_forget()
 
+
 def refresh_main_options_list():
+    # Deprecated because it messes up the build layout. Tried fixing ... no luck
     global main, main_options_list
+    global main_build
     main_options_list.destroy()
     initialise_main_options_list(main)
     main_options_list.pack(side="right", fill="both", expand=True)
     tog_instantiate(main_options_list)
     spin_instantiate(main_options_list)
-
+    
 def instantiate_widgets():
     global is_guitext_on,is_guitext2_on
     is_guitext_on=False
