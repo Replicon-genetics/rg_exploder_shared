@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-Progver="RG_builder11_gui.py"
-ProgverDate="18-Nov-2022"
+Progver="RG_builder12_gui.py"
+ProgverDate="02-Jan-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -71,12 +71,13 @@ def initialise_modulevalues():
     results_links=['']
     results_idx=[]
 
-    global bgcolours
+    global label_colour
     global flags_output_labels,flags_output_bools
     global config_limit_labels,config_limit_vals,config_limit_mins,config_limit_maxs
     # colour lists: http://www.science.smith.edu/dftwiki/index.php/Color_Charts_for_TKinter
-    bgcolours = ['bisque','LightSkyBlue1','lavender','khaki1','light goldenrod','LemonChiffon2','pale turquoise1','PaleGreen1','cornsilk2','thistle1','light cyan',
-                 'pale turquoise1','PaleGreen1','cornsilk2','thistle1','light cyan','bisque','LightSkyBlue1','lavender','khaki1','light goldenrod','LemonChiffon2']
+    #bg_colours = ['bisque','LightSkyBlue1','lavender','khaki1','light goldenrod','LemonChiffon2','pale turquoise1','PaleGreen1','cornsilk2','thistle1','light cyan',
+    #             'pale turquoise1','PaleGreen1','cornsilk2','thistle1','light cyan','bisque','LightSkyBlue1','lavender','khaki1','light goldenrod','LemonChiffon2']
+    label_colour='LightSkyBlue1'
 
     ''' Use below for testing set_tog_bools(test_labels,test_booleans)
     test_labels=["One","Two","Three"]
@@ -454,7 +455,8 @@ def save_and_go():
     global run_count,previous_target_ref,icondir
     global go_img,gobutton
     wait_img=ImageTk.PhotoImage(Image.open(icondir+"wait45.png"))
-    gobutton.configure(image=wait_img)
+    #gobutton.configure(image=wait_img)
+    gobutton.configure(text="WAIT")
     gobutton.configure(state="disable")
     save_and_leave()
     #print("GUI save_and_go: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
@@ -473,7 +475,8 @@ def save_and_go():
     write_GUI_results_link("%s run results. Check time stamp!"%RG_globals.get_locus_transcript())
         
     gobutton.configure(state="normal")
-    gobutton.configure(image=go_img)
+    #gobutton.configure(image=go_img)
+    gobutton.configure(text="GO")
 
 # =================  END GUI module setups =========================
 
@@ -487,6 +490,12 @@ def set_pygui_defaults010():
     pygui_button_labels=["Clear messages","Retrieve Reference Sequence","Save New %s"%RG_globals.variants_label]
 # end of set_pygui_defaults010()
 
+def background_config(scope):
+    # Here in case it's needed
+    pass
+    #scope.configure(background="white")
+    
+
 def initialise_tk():
     set_pygui_defaults010()
     global pygui_frame_labels,pygui_button_labels
@@ -494,14 +503,26 @@ def initialise_tk():
     global exploder_win,topbar,main,bottom_left,bottom_right
     global exploder_win,topbar,main,main_left,main_vars_list,main_build,main_options_list,bottom_left
     exploder_win= tk.Tk()
-    exploder_win.title("Variant Builder v11") 
+    background_config(exploder_win)
+    exploder_win.title("Variant Builder v12") 
     #exploder_win.title(RG_globals.title_label) # Different in builder
-    frame=tk.Frame(exploder_win)
+    #frame=tk.Frame(exploder_win)
+    frame=ttk.Frame(exploder_win)
     # Laying out grid
-    topbar=tk.Frame(exploder_win)
-    main=tk.Frame(exploder_win)
-    bottom_left=tk.Frame(exploder_win)
-    bottom_right=tk.Frame(exploder_win)
+    #topbar=tk.Frame(exploder_win)
+    topbar=ttk.Frame(exploder_win)
+    #main=tk.Frame(exploder_win)
+    main=ttk.Frame(exploder_win)
+    #bottom_left=tk.Frame(exploder_win)
+    bottom_left=ttk.Frame(exploder_win)
+    #bottom_right=tk.Frame(exploder_win)
+    bottom_right=ttk.Frame(exploder_win)
+    # Trying to set background all same
+    background_config(main)
+    background_config(topbar)
+    background_config(main)
+    background_config(bottom_left)
+    background_config(bottom_right)
 
     topbar.pack(side="top", fill="x")
     main.pack(side="top", fill="both", expand=True)
@@ -519,9 +540,12 @@ def initialise_tk():
     main_build.pack(side="left", fill="both", expand=True)
 
     #topbar.label=tk.Label(topbar, width=30,text="Topbar Panel",foreground="blue")
-    topbar.header=tk.Label(topbar,text="%s | %s"%(RG_globals.CustomerIDText,RG_globals.DatasetIDText))
+    #topbar.header=tk.Label(topbar,text="%s | %s"%(RG_globals.CustomerIDText,RG_globals.DatasetIDText))
+    topbar.header=ttk.Label(topbar,text="%s | %s"%(RG_globals.CustomerIDText,RG_globals.DatasetIDText))
+    background_config(topbar.header)
     topbar.header.pack()
-    topbar.help=tk.Label(topbar,text="%s"%(RG_globals.help_label))
+    #topbar.help=tk.Label(topbar,text="%s"%(RG_globals.help_label))
+    topbar.help=ttk.Label(topbar,text="%s"%(RG_globals.help_label))
     topbar.help.pack()
     set_topbar_help()
     ### Next lines add an Ensembl and LRG hyperlink to top of page, but these duplicated in titles of selection boxes
@@ -532,10 +556,12 @@ def initialise_tk():
     ### If reinstate these, need to reinstate lines in refresh_genelabels as well
 
     #bottom_left.label=tk.Label(bottom_left, width=30,text="Messages Panel",)
-    bottom_left.label=tk.Label(bottom_left, width=30,text=pygui_frame_labels[0])
+    #bottom_left.label=tk.Label(bottom_left, width=30,text=pygui_frame_labels[0])
+    bottom_left.label=ttk.Label(bottom_left, width=30,text=pygui_frame_labels[0])
     bottom_left.label.grid()
 
-    bottom_right.label=tk.Label(bottom_right, width=30,text="Gene structure")
+    #bottom_right.label=tk.Label(bottom_right, width=30,text="Gene structure")
+    bottom_right.label=ttk.Label(bottom_right, width=30,text="Gene structure")
     bottom_right.label.grid()
 
     #main_vars_list.label=tk.Label(main_vars_list, width=10,text="Centre Panel",)
@@ -598,26 +624,38 @@ def set_topbar_help():
 
 def initialise_main_left(frame):
     global main_left
-    main_left=tk.LabelFrame(main,text="Main_Left",padx=10,pady=10)
+    #main_left=tk.LabelFrame(main,text="Main_Left",padx=10,pady=10)
+    main_left=ttk.LabelFrame(main,text="Main_Left")
+    #background_config(main_left)
     set_gene_list(main_left)
 
 def initialise_main_options_list(frame):
     global main_options_list
     #main_options_list=tk.LabelFrame(frame,text="   Output options",padx=10,pady=10)
-    main_options_list=tk.LabelFrame(frame,text=RG_globals.options_label,padx=10,pady=10)
+    #main_options_list=tk.LabelFrame(frame,text=RG_globals.options_label,padx=10,pady=10)
+    main_options_list=ttk.LabelFrame(frame,text=RG_globals.options_label)
+    #background_config(main_options_list)
 
 def initialise_main_vars_list(frame):
     global main_vars_list
-    main_vars_list=tk.LabelFrame(main,padx=10,pady=10)
+    #main_vars_list=tk.LabelFrame(main,padx=10,pady=10) # Compatible with font setting in class source_sliders
+    main_vars_list=ttk.LabelFrame(main) # Not compatible with font setting in class source_sliders
+    #background_config(main_vars_list)
     set_slider_gene_label()
 
 def initialise_main_build(frame):
     global main_build
-    main_build=tk.LabelFrame(main,padx=10,pady=10)
+    #main_build=tk.LabelFrame(main,padx=10,pady=10)
+    #main_build=tk.LabelFrame(main)
+    main_build=ttk.LabelFrame(main)
+    #background_config(main_build)
     set_slider_build_label()
-    panel_build = tk.Frame(main_build)
+    #panel_build = tk.Frame(main_build)
+    panel_build = ttk.Frame(main_build)
+    #background_config(panel_build)
     panel_build.grid()
-    panel_build.label=tk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
+    #panel_build.label=tk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
+    panel_build.label=ttk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
     panel_build.label.grid(row=0,column=0,sticky=tk.W)
 
 def set_slider_gene_label():
@@ -646,17 +684,19 @@ def set_gene_list(frame):
 # Source label/slider definitions
 class source_sliders:
     def __init__(self, master1,v_index,**kwargs):
-        global src_sliders_vals,src_sliders_strvals,src_sliders_labels,bgcolours
-        self.panel2 = tk.Frame(master1)
+        global src_sliders_vals,src_sliders_strvals,src_sliders_labels,label_colour
+        #self.panel2 = tk.Frame(master1)
+        self.panel2 = ttk.Frame(master1)
         self.panel2.grid()
-        self.label=tk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]), bg=bgcolours[v_index])
+        #self.label=tk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]), bg=label_colour)
+        self.label=ttk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]))
         self.label.grid(row=0,column=0,sticky=tk.W)
-        f2 = font.Font(master1, master1.cget("font"))
-        self.label.configure(font=f2)
+        #f2 = font.Font(master1, master1.cget("font")) # Looks superfluous here
+        #self.label.configure(font=f2)# Not supported ttk.LabelFrame, so looks superfluous
         ####### Extra to make this a hyperlink to the source file
-        # However unless this is made READ only, implementing this allows user to edit the file before a runs.
-        # This is Dangerous because it wil change it permanently and changes will not have been verified
-        # Best way to control is to use the 'Create a New Variations Source' feature aka 'Builder' 
+        # However unless this is made READ only, implementing this allows the user to edit the file before a run.
+        # This is Dangerous because it will change the source file without verification of constraint to correct number range
+        # Best way to manage this is to use the 'Create a New Variations Source' feature aka 'Builder' 
         #f2.configure(underline = True)
         #self.label['fg']="blue"
         #self.label['cursor']="hand2"
@@ -664,7 +704,8 @@ class source_sliders:
         #######
 
         self.entryvar=src_sliders_strvals[v_index]
-        self.entry = tk.Entry(self.panel2, textvariable=self.entryvar, width=3)
+        #self.entry = tk.Entry(self.panel2, textvariable=self.entryvar, width=3)
+        self.entry = ttk.Entry(self.panel2, textvariable=self.entryvar, width=3)
         self.entry.grid(row=0,column=1,sticky=tk.W)
 
         self.blank=''
@@ -674,7 +715,8 @@ class source_sliders:
         self.get, self.set = self.entryvar.get, self.entryvar.set
 
         self.scalevar=src_sliders_vals[v_index]
-        self.scale2 = tk.Scale(self.panel2,variable = self.scalevar,orient=tk.HORIZONTAL,sliderlength=25,**kwargs)
+        #self.scale2 = tk.Scale(self.panel2,variable = self.scalevar,orient=tk.HORIZONTAL,sliderlength=25,**kwargs)
+        self.scale2 = ttk.Scale(self.panel2,variable = self.scalevar,orient=tk.HORIZONTAL,**kwargs)
         self.scale2.grid(row=0,column=2,sticky=tk.W)
         self.scalevar.trace('w', self.setentryfromscale)
 
@@ -715,15 +757,18 @@ class source_sliders:
 
 class source_sliders_builder:
     def __init__(self, master1,v_index,**kwargs):
-        global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build,bgcolours
+        global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build,label_colour
         global src_sliders_straddvals_build,max_seqlength,min_seqlength,max_ext_add,min_ext_add
-        self.panel2 = tk.Frame(master1)
+        #self.panel2 = tk.Frame(master1)
+        self.panel2 = ttk.Frame(master1)
         self.panel2.grid()
-        self.label=tk.Label(self.panel2, width=10,text="%s"%(src_sliders_labels_build[v_index]), bg=bgcolours[v_index])
+        #self.label=tk.Label(self.panel2, width=10,text="%s"%(src_sliders_labels_build[v_index]), bg=label_colour)
+        self.label=ttk.Label(self.panel2, width=11,text="%s"%(src_sliders_labels_build[v_index]))
         self.label.grid(row=0,column=0,sticky=tk.W)
         
         self.entryvar=src_sliders_strvals_build[v_index]
-        self.entry = tk.Spinbox(self.panel2, textvariable=self.entryvar, width=6,from_=min_seqlength,to=max_seqlength)
+        #self.entry = tk.Spinbox(self.panel2, textvariable=self.entryvar, width=6,from_=min_seqlength,to=max_seqlength)
+        self.entry = ttk.Spinbox(self.panel2, textvariable=self.entryvar, width=6,from_=min_seqlength,to=max_seqlength)
         self.entry.grid(row=0,column=0,sticky=tk.W)
 
         self.abspos=0
@@ -739,7 +784,8 @@ class source_sliders_builder:
         self.scalevar.trace('w', self.checkentry2)
         
         self.entry2var=src_sliders_straddvals_build[v_index]
-        self.entry2 = tk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
+        #self.entry2 = tk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
+        self.entry2 = ttk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
         self.entry2.grid(row=0,column=1,sticky=tk.W)
         self.zero2='1'
         self.old_value2 = src_sliders_straddvals_build[v_index].get()
@@ -751,7 +797,8 @@ class source_sliders_builder:
         #self.complement_check(self)
         self.complement_check() # Extra in builder
         
-        self.abslabel=tk.Label(self.panel2, width=10,text=str(self.abspos))
+        #self.abslabel=tk.Label(self.panel2, width=10,text=str(self.abspos))
+        self.abslabel=ttk.Label(self.panel2, width=10,text=str(self.abspos))
         self.abslabel.grid(row=0,column=2,sticky=tk.W)
 
     def checkentry(self, *args):
@@ -836,7 +883,8 @@ def src_sliders_instantiate(window):
     src_slider_widgets_active_count=0
     # Instantiating the label/slider display
     for r in range(len(src_sliders_vals)):
-        src_slider_widgets.append(source_sliders(window,r,from_=0, to=100,showvalue=0)) # Use showvalue to hide(0), or show(1) the slider values above the slider
+        # src_slider_widgets.append(source_sliders(window,r,from_=0, to=100,showvalue=0)) # Use showvalue to hide(0), or show(1) the slider values above the slider
+        src_slider_widgets.append(source_sliders(window,r,from_=0, to=100)) # showvalue not supported in ttk, but defaults to not showing above slider
     src_slider_widgets_active_count=len(src_slider_widgets)
     max_src_slider_widgets=len(src_slider_widgets)
     # End Instantiating the label/slider display
@@ -1005,17 +1053,20 @@ def src_sliders_instantiate_build(window):
     rownum=5
 
     ############## Calc button  ##############
-    calcseq=tk.Button(window,text=pygui_button_labels[1],bg="red", command=calc_seq)
+    #calcseq=tk.Button(window,text=pygui_button_labels[1],bg="red", command=calc_seq)
+    calcseq=ttk.Button(window,text=pygui_button_labels[1], command=calc_seq)
     calcseq.grid(row=5,column=0,sticky=tk.W)
 
     ############## refseqtxt  ##############
-    reflabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
+    #reflabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
+    reflabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
     #refseqtxtframe=tk.Frame(window,bd=1,relief=tk.SUNKEN)
     refseqtxt=tk.Text(window,height=4)
     refseqtxt.bind("<1>", lambda event: refseqtxt.focus_set())
     refseqtxt.grid(row=8,column=0)
 
-    refseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
+    #refseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
+    refseqscroll = ttk.Scrollbar(window,orient="vertical")
     refseqscroll.grid(row=8,column=1,sticky=tk.E)
 
     refseqtxt.config(yscrollcommand=refseqscroll.set)
@@ -1027,10 +1078,13 @@ def src_sliders_instantiate_build(window):
     ############## varseqtxt  ##############
     def handle_DNA_input(s):
         varseqtxt.configure(state = tk.NORMAL)
-        s.char=s.char.upper()
-        if s.char in RG_globals.IUPAC_codes:
+        
+        if s.char.upper() in RG_globals.IUPAC_codes:
+            var_seq=varseqtxt.get('0.3',tk.END)
+            if var_seq[:-1]=="-":
+                varseqtxt.delete(1.0, tk.END)
             varseqtxt.insert(
-                varseqtxt.index(tk.INSERT),s.char
+                varseqtxt.index(tk.INSERT),s.char.upper()
             )
 
         elif s.keysym.lower() in {"backspace"}:
@@ -1038,22 +1092,34 @@ def src_sliders_instantiate_build(window):
                 varseqtxt.index(tk.INSERT)
                 + "-1c" * (s.keysym.lower() == "backspace")
             )
-        elif  s.char.lower() in { "-","delete"}:
+        elif  s.char.lower() in { "-"}:
             varseqtxt.delete(1.0, tk.END)
             varseqtxt.insert(tk.END,"-")
+            
+        elif s.keysym.lower() in {"delete"}: # No obvious reason why the delete' does not work on Mac M2, Ventura and python 3.11.0, but does work on Mac i5, Monterey and Python 3.8.2
+                                             
+            varseqtxt.delete(1.0, tk.END)
         else:
             pass
+
+        var_seq=varseqtxt.get('0.3',tk.END)
+        if var_seq[:-1]=="":
+            varseqtxt.delete(1.0, tk.END)
+            varseqtxt.insert(tk.END,"-")
+            
         varseqtxt.configure(state = tk.DISABLED)
 
+
     varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
-    #refseqtxtframe=tk.Frame(window,bd=1,relief=tk.SUNKEN)
+    #varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varseqtxt=tk.Text(window,height=4)
     varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
     varseqtxt.bind("<Key>", handle_DNA_input)
     
     varseqtxt.grid(row=10,column=0)
 
-    varseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
+    #varseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
+    varseqscroll = ttk.Scrollbar(window,orient="vertical")
     varseqscroll.grid(row=10,column=1,sticky=tk.E)
 
     varseqtxt.config(yscrollcommand=varseqscroll.set)
@@ -1073,13 +1139,14 @@ def src_sliders_instantiate_build(window):
                 hapnameseqtxt.index(tk.INSERT)
                 + "-1c" * (s.keysym.lower() == "backspace")
             )
-        elif  s.char.lower() in { "delete"}:
+        elif  s.keysym.lower() in { "delete"}: # s.char.lower() behaves the same as s.keysym.lower() here
             hapnameseqtxt.delete(1.0, tk.END)
         else:
             pass
         hapnameseqtxt.configure(state = tk.DISABLED)
 
-    hapnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
+    #hapnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
+    hapnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
     hapnameseqtxt=tk.Text(window,height=2)
     hapnameseqtxt.bind("<1>", lambda event: hapnameseqtxt.focus_set())
     hapnameseqtxt.bind("<Key>", handle_hapname_input)
@@ -1099,13 +1166,14 @@ def src_sliders_instantiate_build(window):
                 varnameseqtxt.index(tk.INSERT)
                 + "-1c" * (s.keysym.lower() == "backspace")
             )
-        elif  s.char.lower() in { "delete"}:
+        elif  s.keysym.lower() in { "delete"}:
             varnameseqtxt.delete(1.0, tk.END)
         else:
             pass
-        varnameseqtxt.configure(state = tk.DISABLED)
+        #varnameseqtxt.configure(state = tk.DISABLED)
     
-    varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
+    #varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
+    varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqtxt=tk.Text(window,height=2)
     varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
     varnameseqtxt.bind("<Key>", handle_varname_input)
@@ -1114,7 +1182,8 @@ def src_sliders_instantiate_build(window):
 
     ############## Save button  ##############
     #save=tk.Button(buttons,text='Save',bg="blue", command=save_src_sliders_vals)
-    saveseq=tk.Button(window,text=pygui_button_labels[2],bg="blue", command=save_seq)
+    #saveseq=tk.Button(window,text=pygui_button_labels[2],bg="blue", command=save_seq)
+    saveseq=ttk.Button(window,text=pygui_button_labels[2], command=save_seq)
     saveseq.grid(row=15,column=0,sticky=tk.W)    
 
 
@@ -1125,25 +1194,30 @@ def src_sliders_instantiate_build(window):
 # Defining the output flags toggle options
 class flags_toggler:
     def __init__(self, master2,v_index,**kwargs):
-        global tog_labels,tog_booleans,bgcolours
+        global tog_labels,tog_booleans,label_colour
 
-        self.panel2 = tk.Frame(master2)
+        #self.panel2 = tk.Frame(master2)
+        self.panel2 = ttk.Frame(master2)
         self.panel2.grid()
         self.vindex=v_index
 
         if tog_booleans[self.vindex] != None:
             # True or False values - display label and show default box ticked or not
-            self.label=tk.Label(self.panel2,width=21,anchor="w",text=tog_labels[v_index], bg=bgcolours[v_index])
+            #self.label=tk.Label(self.panel2,width=21,anchor="w",text=tog_labels[v_index], bg=label_colour)
+            self.label=ttk.Label(self.panel2,width=21,anchor="w",text=tog_labels[v_index])
             self.label.grid(row=0,column=0,sticky=tk.W)
             self.bool = tk.BooleanVar()
             self.bool.set(tog_booleans[self.vindex])
 
-            self.btn=tk.Checkbutton(self.panel2, width=5,selectcolor="blue", highlightcolor="blue", var=self.bool,command=self.set_tog)
+            #self.btn=tk.Checkbutton(self.panel2, width=5,selectcolor="blue", highlightcolor="blue", var=self.bool,command=self.set_tog)
+            self.btn=ttk.Checkbutton(self.panel2, width=5, var=self.bool,command=self.set_tog)
+
             self.btn.grid(row=0,column=1,sticky=tk.W)
         else:
             # Null settings hide the label and box but preserve layout
             
-            self.label=tk.Label(self.panel2)# retain this or refresh_genelabels kills
+            #self.label=tk.Label(self.panel2)# retain this or refresh_genelabels kills
+            self.label=ttk.Label(self.panel2)# retain this or refresh_genelabels kills
             #self.label=tk.Label(self.panel2, width=25,text="", bg="light grey")
             #self.label.grid(row=0,column=0,sticky=tk.W)
             #self.label.grid(row=0,column=0)
@@ -1157,25 +1231,29 @@ class flags_toggler:
 
 class flags_toggler2_builder:
     def __init__(self, master2,v_index,**kwargs):
-        global tog_labels2,tog_booleans2,bgcolours
+        global tog_labels2,tog_booleans2,label_colour
 
-        self.panel2 = tk.Frame(master2)
+        #self.panel2 = tk.Frame(master2)
+        self.panel2 = ttk.Frame(master2)
         self.panel2.grid()
         self.vindex=v_index
 
         if tog_booleans2[self.vindex] != None:
             # True or False values - display label and show default box ticked or not
-            self.label=tk.Label(self.panel2,width=22,anchor="w",text=tog_labels2[v_index], bg=bgcolours[v_index])
+            #self.label=tk.Label(self.panel2,width=22,anchor="w",text=tog_labels2[v_index], bg=label_colour)
+            self.label=ttk.Label(self.panel2,width=22,anchor="w",text=tog_labels2[v_index])
             self.label.grid(row=0,column=0,sticky=tk.W)
             self.bool = tk.BooleanVar()
             self.bool.set(tog_booleans2[self.vindex])
 
-            self.btn=tk.Checkbutton(self.panel2, width=5,selectcolor="blue", highlightcolor="blue", var=self.bool,command=self.set_tog)
+            #self.btn=tk.Checkbutton(self.panel2, width=5,selectcolor="blue", highlightcolor="blue", var=self.bool,command=self.set_tog)
+            self.btn=ttk.Checkbutton(self.panel2, width=5,var=self.bool,command=self.set_tog)
             self.btn.grid(row=0,column=1,sticky=tk.W)
         else:
             # Null settings hide the label and box but preserve layout
             
-            self.label=tk.Label(self.panel2)# retain this or refresh_genelabels kills
+            #self.label=tk.Label(self.panel2)# retain this or refresh_genelabels kills
+            self.label=ttk.Label(self.panel2)# retain this or refresh_genelabels kills
             #self.label=tk.Label(self.panel2, width=25,text="", bg="light grey")
             #self.label.grid(row=0,column=0,sticky=tk.W)
             #self.label.grid(row=0,column=0)
@@ -1198,21 +1276,24 @@ class flags_toggler2_builder:
 # Defining the initialising values spinbox options
 class spinlimits:
     def __init__(self, master2,v_index,**kwargs):
-        global bgcolours,spinvals,spin_labels,spin_mins,spin_maxs
-        self.panel2 = tk.Frame(master2)
+        global label_colour,spinvals,spin_labels,spin_mins,spin_maxs
+        #self.panel2 = tk.Frame(master2)
+        self.panel2 = ttk.Frame(master2)
         self.panel2.grid()
 
         self.vindex=v_index
         self.inMin=spin_mins[self.vindex]
         self.inMax=spin_maxs[self.vindex]
         self.labelplus=" (%s - %s)"%(self.inMin,self.inMax)
-        self.label=tk.Label(self.panel2, width=20,anchor="w",text=spin_labels[self.vindex]+self.labelplus,bg=bgcolours[self.vindex])
+        #self.label=tk.Label(self.panel2, width=20,anchor="w",text=spin_labels[self.vindex]+self.labelplus,bg=label_colour)
+        self.label=ttk.Label(self.panel2, width=20,anchor="w",text=spin_labels[self.vindex]+self.labelplus)
         self.label.grid(row=0,column=0,sticky=tk.W)
         self.putMin=self.inMin
         self.putMax=self.inMax
 
         self.spinvar=spinvals[self.vindex]
-        self.spin=tk.Spinbox(self.panel2, width=4, textvariable=self.spinvar,from_=self.inMin,to=self.inMax)
+        #self.spin=tk.Spinbox(self.panel2, width=4, textvariable=self.spinvar,from_=self.inMin,to=self.inMax)
+        self.spin=ttk.Spinbox(self.panel2, width=4, textvariable=self.spinvar,from_=self.inMin,to=self.inMax)
         #self.spin=tk.Spinbox(self.panel2, width=4, textvariable=self.spinvar,from_=1,to=999)
         self.spin.grid(row=0,column=1,sticky=tk.W)
         self.blank=''
@@ -1506,7 +1587,7 @@ def refresh_source_slider_builder(v_index,w_text):
     #print("At refresh_source_slider_builder)
     self=src_slider_widgets_build[v_index]
     self.panel2.grid()
-    self.label['text']="%s_%s"%(w_text,src_sliders_labels_build[v_index])
+    self.label['text']="%s_%s"%(w_text,src_sliders_labels_build[v_index])# This is the Souce  x_Begin / x_End label 
     self.label.grid(row=0,column=0,sticky=tk.W)
     
     self.entryvar=src_sliders_strvals_build[v_index]
@@ -1616,7 +1697,7 @@ def setup_listbox(inframe):
     '''
     inframe.genelistlabel = ttk.Label(frame,text=RG_globals.bio_parameters["target_locus"]["label"])
     inframe.genelistlabel.grid()
-    listbox=ttk.Combobox(frame,width=22,height=1,value=RG_globals.GeneList)
+    listbox=ttk.Combobox(frame,width=22,height=10,value=RG_globals.GeneList)
     #listbox=ttk.Combobox(frame,width=22,height=1,value=RG_globals.LRG_GeneList)
     #listbox.set(RG_globals.target_locus)
     #listbox.set(RG_globals.LRG_GeneList[0])
@@ -1629,7 +1710,7 @@ def setup_listbox(inframe):
     inframe.tslistlabel = ttk.Label(frame,text=RG_globals.bio_parameters["target_transcript_name"]["label"])
     inframe.tslistlabel.grid()
 
-    ts_listbox=ttk.Combobox(frame,width=22,height=1,value=transcript_list)
+    ts_listbox=ttk.Combobox(frame,width=22,height=10,value=transcript_list)
     ts_listbox.set(RG_globals.target_transcript_name)
     ts_listbox.bind('<<ComboboxSelected>>',ts_listbox_select)
     ts_listbox['state']='readonly'
@@ -1654,7 +1735,7 @@ def setup_reads_listbox(inframe):
     '''
     #inframe.readslistlabel = ttk.Label(frame,text=RG_globals.reads_type_label)
     #inframe.readslistlabel.grid()
-    reads_listbox=ttk.Combobox(frame,width=22,height=1,value=RG_globals.ReadsList)
+    reads_listbox=ttk.Combobox(frame,width=22,height=3,value=RG_globals.ReadsList)
     reads_listbox.set(RG_globals.ReadsList[0])
     reads_listbox.bind('<<ComboboxSelected>>',reads_listbox_select)
     reads_listbox['state']='readonly'
@@ -1679,9 +1760,12 @@ def setup_gobutton(inframe):
     global go_img,gobutton,icondir
     # image-objects have to have global scope or the tkinter objects fail
     go_img = ImageTk.PhotoImage(Image.open(icondir+"./go.png"))
-    gobutton=tk.Button(inframe,command=save_and_go,image=go_img)
-
-    gobutton.grid(row=30,column=1,sticky=tk.W)
+    
+    #gobutton=tk.Button(inframe,command=save_and_go,image=go_img)
+    gobutton=ttk.Button(inframe,text="GO",command=save_and_go)
+    #background_config(gobutton)
+    #gobutton.grid(row=30,column=1,sticky=tk.W)# When using go_img
+    gobutton.grid(row=30,column=0,sticky=tk.E)# When using text
     #gobutton.grid()
 
     #quitbutton.grid(row=30,column=1,sticky=tk.W)
@@ -1690,15 +1774,18 @@ def setup_gobutton(inframe):
 def setup_GUI_text2(inframe):
     global guitextbox2
 
-    clearguitxt2=tk.Button(inframe,text="Clear Structure", bg='blue',command=clear_GUI_text2)
+    #clearguitxt2=tk.Button(inframe,text="Clear Structure", bg='blue',command=clear_GUI_text2)
+    clearguitxt2=ttk.Button(inframe,text="Clear Structure",command=clear_GUI_text2)
     clearguitxt2.grid()
 
-    guitextframe2=tk.Frame(inframe,bd=1,relief=tk.SUNKEN)
+    #guitextframe2=tk.Frame(inframe,bd=1,relief=tk.SUNKEN)
+    guitextframe2=ttk.Frame(inframe)
     guitextbox2=tk.Text(guitextframe2)
     guitextbox2.bind("<1>", lambda event: guitextbox2.focus_set())
     guitextbox2.configure(state="disable")
     guitextbox2.grid(row=0,column=0,sticky=tk.W)
-    guiscrollbar2=tk.Scrollbar(guitextframe2,bd=1,orient="vertical")
+    #guiscrollbar2=tk.Scrollbar(guitextframe2,bd=1,orient="vertical")
+    guiscrollbar2=ttk.Scrollbar(guitextframe2,orient="vertical")
     guiscrollbar2.grid(row=0,column=1,sticky=tk.E)
     guitextbox2.config(yscrollcommand=guiscrollbar2.set)
     guiscrollbar2.config(command=guitextbox2.yview)
@@ -1708,16 +1795,19 @@ def setup_GUI_text2(inframe):
 def setup_GUI_text(inframe):
     global guitextbox
     #clearguitxt=tk.Button(bottom_left,text='Clear messages', bg='blue',command=clear_GUI_text)
-    clearguitxt=tk.Button(inframe,text=pygui_button_labels[0], bg='blue',command=clear_GUI_text)
+    #clearguitxt=tk.Button(inframe,text=pygui_button_labels[0], bg='blue',command=clear_GUI_text)
+    clearguitxt=ttk.Button(inframe,text=pygui_button_labels[0],command=clear_GUI_text)
     clearguitxt.grid()
 
-    guitextframe=tk.Frame(inframe,bd=1,relief=tk.SUNKEN)
+    #guitextframe=tk.Frame(inframe,bd=1,relief=tk.SUNKEN)
+    guitextframe=ttk.Frame(inframe)
     guitextbox=tk.Text(guitextframe)
     guitextbox.bind("<1>", lambda event: guitextbox.focus_set())
     guitextbox.configure(state="disable")
     #guitextbox.bind("<Key>", lambda e: "break") # Disables text box entry and copy
     guitextbox.grid(row=0,column=0,sticky=tk.W)
-    guiscrollbar=tk.Scrollbar(guitextframe,bd=1,orient="vertical")
+    #guiscrollbar=tk.Scrollbar(guitextframe,bd=1,orient="vertical")
+    guiscrollbar=ttk.Scrollbar(guitextframe,orient="vertical")
     guiscrollbar.grid(row=0,column=1,sticky=tk.E)
     guitextbox.config(yscrollcommand=guiscrollbar.set)
     guiscrollbar.config(command=guitextbox.yview)
