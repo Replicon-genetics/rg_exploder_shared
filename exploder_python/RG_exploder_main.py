@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_24_11.py"
-ProgverDate="18-Nov-2022"
+ProgverDate="31-Dec-2022"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
 This module reads in Genbank format files and uses
@@ -46,7 +46,7 @@ BioPython imports
 '''
 from Bio import SeqIO
 from Bio.Seq import MutableSeq
-from Bio.Alphabet import generic_dna
+#from Bio.Alphabet import generic_dna #generic_dna # Deprecated from Biopython 1.78 (September 2020)
 from Bio.SeqRecord import SeqRecord # Used in writing protein sequence
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation  # used in splice_a_sequence
@@ -70,6 +70,12 @@ mut_types=""
 
 global is_append_journalfile # This is a file-open flag for output journal file
 is_append_journalfile=False
+
+from RG_exploder_globals import is_htm_journal # Admin set flag for creation of html version of journal file
+global is_htm_journal
+
+global is_joindata_in_json
+is_joindata_in_json= None
 
 global is_append_journalfile_htm # This is a file-open flag for output journal html file
 is_append_journalfile_htm=False
@@ -121,8 +127,7 @@ def initialise_module_globals(is_journal):
     global MaxRefPos # Maxlength of reference sequence
     global MaxVarPos
     MaxRefPos=0      # read_refseqrecord sets this on sequence read, but initialise here
-    MaxVarPos=RG_globals.MaxVarPos # Set to original before resetting in read_refseqrecord
-    
+    MaxVarPos=RG_globals.MaxVarPos # Set to original before resetting in read_refseqrecord    
     initialise_module_counters()
     initialise_module_outfiles()
     if is_journal:
@@ -164,9 +169,6 @@ def initialise_flags_output_configs():
 
     from RG_exploder_globals import is_show_infilepath  
     global is_show_infilepath # Not intended for GUI module modification
-
-    from RG_exploder_globals import is_htm_journal
-    global is_htm_journal
 
     from RG_exploder_globals import is_fasta_out,is_fastq_out,is_sam_out,is_mut_out
     #global is_fasta_out,is_fastq_out,is_sam_out,is_mut_out
@@ -326,10 +328,10 @@ def initialise_journal():
     global readmehead,readmeend
     global Outfilepath
     global locus_transcript
-    global is_htm_journal
+    global is_htm_journal,is_joindata_in_json
 
     #Opens the, metadata, journal file
-    global journout,is_append_journalfile
+    global journout,is_append_journalfile,is_joindata_in_json
     if not is_append_journalfile:
         extralabel,strandlabel=RG_globals.get_strand_extra_label()
         journal_outfilename="%s%s%s%s%s"%(Outfilepath,locus_transcript,journhead,extralabel,journend)
@@ -347,6 +349,13 @@ def initialise_journal():
                                                            RG_globals.target_transcript_name,
                                                            bio_parameters["is_CDS"]["label"],
                                                            RG_globals.is_CDS))
+        if is_joindata_in_json:
+            update_journal("Joinlist read from config file for %s"%RG_globals.target_locus)
+        elif not is_joindata_in_json:
+            update_journal("Joinlist derived from Refseq for %s;is_joindata_in_json %s "%(RG_globals.target_locus,is_joindata_in_json))
+        else:
+            update_journal("Unexpected:is_joindata_in_json undefined")
+            
         update_journal("If this is the last line, then something has gone wrong reading the source files")
     return
 # End of initialise_journal()
@@ -613,10 +622,9 @@ def write_gb_features(SeqRec,out_file,readmetxt,style):
     else:
         # Style is "short" or "long", so ...
         #a) Create a new sequence clipped to 0 nucleotide
-        CopySeq=MutableSeq(str(SeqRec.seq[0:0]),generic_dna)
+        #CopySeq=MutableSeq(str(SeqRec.seq[0:0]),generic_dna) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
+        CopySeq=MutableSeq(str(SeqRec.seq[0:0]))
         #b) Take clipped sequence and only the base annotations into a new sequence record
-        #CopySeqRec=RG_process.annotate_seq_to_record(SeqRec.annotations,CopySeq,SeqRec.id,SeqRec.name,SeqRec.description,SeqRec.polarity,SeqRec.howmany)
-        # NB: could replace above with ...
         CopySeqRec=RG_process.modify_seq_in_record(SeqRec.seq[0:0],SeqRec)
     if style =="short":
         #Add the filtered-variant features only -> the mutseq
@@ -738,13 +746,15 @@ def writeprotmut(seq_record,label):
         is_append_mutprotfile=True
 
     mod_seqlen= len(seq_record.seq) % 3
-    VSeq=MutableSeq(str(seq_record.seq),generic_dna)
+    #VSeq=MutableSeq(str(seq_record.seq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+    VSeq=MutableSeq(str(seq_record.seq))
     # If CDS is from a complement, or it isn't and we have switched polarity, then get sense strand
     if is_do_complement:
-        VSeq.reverse_complement()
+        VSeq.reverse_complement(inplace=True)
     if mod_seqlen >0:
         VSeq=VSeq+"N"*(3-mod_seqlen)
-    ThisSeqr=SeqRecord(Seq(str(VSeq),generic_dna))
+    #ThisSeqr=SeqRecord(Seq(str(VSeq),generic_dna))#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+    ThisSeqr=SeqRecord(Seq(str(VSeq)))
     prot_record=SeqRecord(seq = ThisSeqr.seq.translate(to_stop=True), \
              id = seq_record.id +"_1p", \
              description = "translated sequence")
@@ -1228,7 +1238,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         intended_delete=replace_string.split("/")[0]
         
         if feat_polarity!=seq_polarity:
-            delete_string.reverse_complement()
+            delete_string.reverse_complement(inplace=True)
         if intended_delete !="N":
             if str(delete_string) != intended_delete:
                 matchtxt1="*mis"
@@ -1273,8 +1283,9 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         insert_string=replace
 
         if feat_polarity!=seq_polarity:
-            insert_string=MutableSeq(insert_string,generic_dna)
-            insert_string.reverse_complement()
+            #insert_string=MutableSeq(insert_string,generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+            insert_string=MutableSeq(insert_string)
+            insert_string.reverse_complement(inplace=True)
         if RG_globals.is_vars_to_lower: # Have to convert the replacement back to upper for this comparison
             insert_string=str(insert_string)
             insert_string=insert_string.upper()
@@ -1324,8 +1335,10 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
                 compseq=replace
             else:
                 ''' Leaving opposite polarity '''
-                compseq=MutableSeq(replace,generic_dna)
-                compseq.reverse_complement()
+                #compseq=MutableSeq(replace,generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+                compseq=MutableSeq(replace)
+                #compseq.reverse_complement()# Warning from Python 3.11.0 that this needs replacing for near-future releases 
+                compseq.reverse_complement(inplace=True)
             replace=str(compseq)
             if RG_globals.is_vars_to_lower:
                 replace=replace.lower()
@@ -1361,11 +1374,12 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
             #Expect feat_end == feat_start+1
             
             # Next block is a verification check for SNV string match/mis-match 
-            sub_n=MutableSeq(replace,generic_dna)
+            #sub_n=MutableSeq(replace,generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+            sub_n=MutableSeq(replace)
             current_n=VSeq[feat_start:feat_end]
             if feat_polarity!=seq_polarity: # Have to reverse both because we have done so already and are now turning back to compare to replace_string
-                sub_n.reverse_complement()
-                current_n.reverse_complement()
+                sub_n.reverse_complement(inplace=True)
+                current_n.reverse_complement(inplace=True)
             if RG_globals.is_vars_to_lower: # Have to convert the replacement back to upper for this comparison
                 sub_n=str(sub_n)
                 sub_n=sub_n.upper()
@@ -1513,7 +1527,8 @@ def make_allvars_in_one_seq(SeqRec,label):
     if err:
         update_journal(" %s mismatched Source Range: %s" %(in_label,SeqRec.firstid.replace("chromosome:","")))
     
-    VarSeq=MutableSeq(str(SeqRec.seq),generic_dna)
+    #VarSeq=MutableSeq(str(SeqRec.seq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+    VarSeq=MutableSeq(str(SeqRec.seq))
     cigarbox=[len(VarSeq),len(VarSeq)]
     for (index) in RG_process.get_varfeature_index(SeqRec): # Progressively adds each feature to VarSeq and cigarbox
         VarSeq,cigarbox=MutateVarSeq(VarSeq,SeqRec.polarity,SeqRec.features[index],cigarbox)
@@ -1570,8 +1585,9 @@ def refseq_to_frags3(mutrecs):
 
 def get_rev_fragseq(inseq):
     # Do a complement on arrivals here
-    outseq=MutableSeq(str(inseq),generic_dna)
-    outseq.reverse_complement()
+    #outseq=MutableSeq(str(inseq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+    outseq=MutableSeq(str(inseq))
+    outseq.reverse_complement(inplace=True)
     #print("inseq %s ; outseq %s"%(inseq,outseq))
     outseq=str(outseq)
     return outseq,"r",RG_globals.rev_label
@@ -2318,7 +2334,8 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
                 joinlist+=splice_joinlist[pos]
                 #print("\njoinlist %s\n"%joinlist)
         #print("joinlist %s"%joinlist)
-        spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)),generic_dna)
+        #spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
+        spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)))
         # Modify the start and end trim-lengths to the addition of Exome_extend
         this_ref_offset-=RG_globals.Exome_extend
         this_ref_endclip-=RG_globals.Exome_extend
@@ -2472,6 +2489,8 @@ def reset_is_frg_paired_end():
 #########################################
 def get_transcript_data_json():
     # The joinlist is present in json file, use it
+    global is_joindata_in_json
+    is_joindata_in_json=True
     splice_joinlist_txt=[]
     if  RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         splice_joinlist_txt=RG_globals.Reference_sequences[RG_globals.target_locus]["Locus_range"]
@@ -2485,7 +2504,8 @@ def get_transcript_data_json():
     return True,splice_joinlist_txt
 
 def get_transcript_data_process(redo_locus):
-    global REF_record
+    global REF_record,is_joindata_in_json
+    is_joindata_in_json=False
     # The joinlist is not present in json file, so create it from the feature table
     # Fronts splice_a_sequence2 
     # The only interest in calling splice_a_sequence2 is to get the splice_joinlist_txt
@@ -2685,10 +2705,12 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
 
 # Diversion from main 'exploder' function to extract a subsequence that supports user-defined variants (aka the 'builder' function)
 def get_joinlist():
+    global is_joindata_in_json
     success=False
+    is_joindata_in_json=None
     try: # Are the joins defined in globals via the json file?
-        barf=RG_globals.Reference_sequences[RG_globals.target_locus]["CDS_join"][RG_globals.target_transcript_name] # tests if it exists
-        success,splice_joinlist_txt=get_transcript_data_json() 
+        barf=RG_globals.Reference_sequences[RG_globals.target_locus]["CDS_join"] # tests if it exists
+        success,splice_joinlist_txt=get_transcript_data_json()
     except: # Failed, so read the Reference file
         success,splice_joinlist_txt=get_transcript_data_process(True)
     if success:
