@@ -3,7 +3,7 @@ DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence 10970055..1102707
             via EnsEMBL
 ACCESSION   chromosome:GRCh37:16:10970055:11027079:1
 VERSION     chromosome:GRCh37:16:10970055:11027079:1
-OMMENT     /db_xref=”EB:madeup";/comment="RG:EB0105" annotation by Replicon Genetics Mar-2022
+COMMENT     /db_xref=”EB:madeup";/comment="RG:EB0105" annotation by Replicon Genetics Mar-2022
 FEATURES             Location/Qualifiers
      source          1..57025
                      /organism="Homo sapiens"

@@ -18,7 +18,7 @@ FEATURES             Location/Qualifiers
                      /note="adenylate kinase 2 [Source:HGNC Symbol;Acc:362]"
      variation       6219..6220
                      /replace="TT/-"
-                     /db_xref=”clinvar:1034623"
+                     /db_xref="clinvar:1034623"
                      /comment="RG:EB0004:c.698_699del (p.Lys233fs)"
                      /comment="RG:GRCh37:1:33478803:33478804:1"
 ORIGIN
