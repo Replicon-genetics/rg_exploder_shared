@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder12_gui.py"
-ProgverDate="02-Jan-2023"
+ProgverDate="11-Jan-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -504,7 +504,7 @@ def initialise_tk():
     global exploder_win,topbar,main,main_left,main_vars_list,main_build,main_options_list,bottom_left
     exploder_win= tk.Tk()
     background_config(exploder_win)
-    exploder_win.title("Variant Builder v12") 
+    exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v12)") 
     #exploder_win.title(RG_globals.title_label) # Different in builder
     #frame=tk.Frame(exploder_win)
     frame=ttk.Frame(exploder_win)
@@ -1078,8 +1078,10 @@ def src_sliders_instantiate_build(window):
     ############## varseqtxt  ##############
     def handle_DNA_input(s):
         varseqtxt.configure(state = tk.NORMAL)
+        if  s.keysym.lower() in { "delete"}: #  No obvious reason why the delete does not work here in python 3.11.0, but does work in Python 3.8.2
+            varseqtxt.delete(1.0, tk.END)    #  When it does work in similar code blocks: handle_hapname_input(s) & handle_varname_input(s)
         
-        if s.char.upper() in RG_globals.IUPAC_codes:
+        elif s.char.upper() in RG_globals.IUPAC_codes:
             var_seq=varseqtxt.get('0.3',tk.END)
             if var_seq[:-1]=="-":
                 varseqtxt.delete(1.0, tk.END)
@@ -1095,42 +1097,40 @@ def src_sliders_instantiate_build(window):
         elif  s.char.lower() in { "-"}:
             varseqtxt.delete(1.0, tk.END)
             varseqtxt.insert(tk.END,"-")
-            
-        elif s.keysym.lower() in {"delete"}: # No obvious reason why the delete' does not work on Mac M2, Ventura and python 3.11.0, but does work on Mac i5, Monterey and Python 3.8.2
-                                             
-            varseqtxt.delete(1.0, tk.END)
         else:
             pass
-
+        
         var_seq=varseqtxt.get('0.3',tk.END)
         if var_seq[:-1]=="":
             varseqtxt.delete(1.0, tk.END)
             varseqtxt.insert(tk.END,"-")
-            
+    
         varseqtxt.configure(state = tk.DISABLED)
 
 
-    varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
-    #varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
+    #varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
+    varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varseqtxt=tk.Text(window,height=4)
     varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
     varseqtxt.bind("<Key>", handle_DNA_input)
-    
     varseqtxt.grid(row=10,column=0)
 
-    #varseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
-    varseqscroll = ttk.Scrollbar(window,orient="vertical")
-    varseqscroll.grid(row=10,column=1,sticky=tk.E)
+    ##varseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
+    #varseqscroll = ttk.Scrollbar(window,orient="vertical")
+    #varseqscroll.grid(row=10,column=1,sticky=tk.E)
 
-    varseqtxt.config(yscrollcommand=varseqscroll.set)
-    varseqscroll.config(command=varseqtxt.yview)
+    #varseqtxt.config(yscrollcommand=varseqscroll.set)
+    #varseqscroll.config(command=varseqtxt.yview)
     varseqtxt.insert(tk.END,seq_region)
 
     ############## hapnameseqtxt  ##############
 
     def handle_hapname_input(s):
         hapnameseqtxt.configure(state = tk.NORMAL)
-        if re.match('[a-zA-Z0-9_]',s.char):
+        if  s.keysym.lower() in { "delete"}: # s.char.lower() behaves the same as s.keysym.lower() here
+            hapnameseqtxt.delete(1.0, tk.END)
+            
+        elif re.match('[a-zA-Z0-9_]',s.char):
             hapnameseqtxt.insert(
                 hapnameseqtxt.index(tk.INSERT),s.char
             )
@@ -1139,8 +1139,6 @@ def src_sliders_instantiate_build(window):
                 hapnameseqtxt.index(tk.INSERT)
                 + "-1c" * (s.keysym.lower() == "backspace")
             )
-        elif  s.keysym.lower() in { "delete"}: # s.char.lower() behaves the same as s.keysym.lower() here
-            hapnameseqtxt.delete(1.0, tk.END)
         else:
             pass
         hapnameseqtxt.configure(state = tk.DISABLED)
@@ -1157,7 +1155,10 @@ def src_sliders_instantiate_build(window):
     ############## varnameseqtxt  ##############
     def handle_varname_input(s):
         varnameseqtxt.configure(state = tk.NORMAL)
-        if re.match('[a-zA-Z0-9_.()]',s.char):
+        if  s.keysym.lower() in { "delete"}:
+            varnameseqtxt.delete(1.0, tk.END)
+            
+        elif re.match('[a-zA-Z0-9_.()]',s.char):
             varnameseqtxt.insert(
                 varnameseqtxt.index(tk.INSERT),s.char
             )
@@ -1166,11 +1167,9 @@ def src_sliders_instantiate_build(window):
                 varnameseqtxt.index(tk.INSERT)
                 + "-1c" * (s.keysym.lower() == "backspace")
             )
-        elif  s.keysym.lower() in { "delete"}:
-            varnameseqtxt.delete(1.0, tk.END)
         else:
             pass
-        #varnameseqtxt.configure(state = tk.DISABLED)
+        varnameseqtxt.configure(state = tk.DISABLED)
     
     #varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
