@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder12_gui.py"
-ProgverDate="11-Jan-2023"
+ProgverDate="13-Jan-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -1078,10 +1078,11 @@ def src_sliders_instantiate_build(window):
     ############## varseqtxt  ##############
     def handle_DNA_input(s):
         varseqtxt.configure(state = tk.NORMAL)
-        if  s.keysym.lower() in { "delete"}: #  No obvious reason why the delete does not work here in python 3.11.0, but does work in Python 3.8.2
-            varseqtxt.delete(1.0, tk.END)    #  When it does work in similar code blocks: handle_hapname_input(s) & handle_varname_input(s)
+        if  s.keysym.lower() in { "delete"}:
+            varseqtxt.delete(1.0, tk.END)    
         
-        elif s.char.upper() in RG_globals.IUPAC_codes:
+        #elif s.char.upper() in RG_globals.IUPAC_codes: #  does not work here in python 3.11.0, but does work in Python 3.8.2
+        elif re.match('[ACGTRYSWKMBDHVN]',s.char.upper()):
             var_seq=varseqtxt.get('0.3',tk.END)
             if var_seq[:-1]=="-":
                 varseqtxt.delete(1.0, tk.END)
