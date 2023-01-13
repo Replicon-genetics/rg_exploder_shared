@@ -455,8 +455,8 @@ def save_and_go():
     global run_count,previous_target_ref,icondir
     global go_img,gobutton
     wait_img=ImageTk.PhotoImage(Image.open(icondir+"wait45.png"))
-    #gobutton.configure(image=wait_img)
-    gobutton.configure(text="WAIT")
+    gobutton.configure(image=wait_img)
+    #gobutton.configure(text="WAIT")
     gobutton.configure(state="disable")
     save_and_leave()
     #print("GUI save_and_go: RG_globals.is_mut_out %s"%RG_globals.is_mut_out)
@@ -475,8 +475,8 @@ def save_and_go():
     write_GUI_results_link("%s run results. Check time stamp!"%RG_globals.get_locus_transcript())
         
     gobutton.configure(state="normal")
-    #gobutton.configure(image=go_img)
-    gobutton.configure(text="GO")
+    gobutton.configure(image=go_img)
+    #gobutton.configure(text="GO")
 
 # =================  END GUI module setups =========================
 
@@ -490,11 +490,17 @@ def set_pygui_defaults010():
     pygui_button_labels=["Clear messages","Retrieve Reference Sequence","Save New %s"%RG_globals.variants_label]
 # end of set_pygui_defaults010()
 
-def background_config(scope):
+def tk_background_config(scope):
     # Here in case it's needed
-    pass
-    #scope.configure(background="white")
+    return
+    scope.configure(background="white")
     
+def ttk_background_config(scope):
+    # Here in case it's needed
+    style_4 = {'fg': 'white', 'bg': 'coral2', 'activebackground':
+               'gray71', 'activeforeground': 'gray71'}
+    scope.configure(**style_4)
+
 
 def initialise_tk():
     set_pygui_defaults010()
@@ -502,8 +508,8 @@ def initialise_tk():
     
     global exploder_win,topbar,main,bottom_left,bottom_right
     global exploder_win,topbar,main,main_left,main_vars_list,main_build,main_options_list,bottom_left
-    exploder_win= tk.Tk()
-    background_config(exploder_win)
+    exploder_win= tk.Tk() # tk only, not ttk
+    tk_background_config(exploder_win)
     exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v12)") 
     #exploder_win.title(RG_globals.title_label) # Different in builder
     #frame=tk.Frame(exploder_win)
@@ -518,11 +524,11 @@ def initialise_tk():
     #bottom_right=tk.Frame(exploder_win)
     bottom_right=ttk.Frame(exploder_win)
     # Trying to set background all same
-    background_config(main)
-    background_config(topbar)
-    background_config(main)
-    background_config(bottom_left)
-    background_config(bottom_right)
+    tk_background_config(main)
+    tk_background_config(topbar)
+    tk_background_config(main)
+    tk_background_config(bottom_left)
+    tk_background_config(bottom_right)
 
     topbar.pack(side="top", fill="x")
     main.pack(side="top", fill="both", expand=True)
@@ -542,7 +548,7 @@ def initialise_tk():
     #topbar.label=tk.Label(topbar, width=30,text="Topbar Panel",foreground="blue")
     #topbar.header=tk.Label(topbar,text="%s | %s"%(RG_globals.CustomerIDText,RG_globals.DatasetIDText))
     topbar.header=ttk.Label(topbar,text="%s | %s"%(RG_globals.CustomerIDText,RG_globals.DatasetIDText))
-    background_config(topbar.header)
+    tk_background_config(topbar.header)
     topbar.header.pack()
     #topbar.help=tk.Label(topbar,text="%s"%(RG_globals.help_label))
     topbar.help=ttk.Label(topbar,text="%s"%(RG_globals.help_label))
@@ -626,7 +632,7 @@ def initialise_main_left(frame):
     global main_left
     #main_left=tk.LabelFrame(main,text="Main_Left",padx=10,pady=10)
     main_left=ttk.LabelFrame(main,text="Main_Left")
-    #background_config(main_left)
+    #tk_background_config(main_left)
     set_gene_list(main_left)
 
 def initialise_main_options_list(frame):
@@ -634,13 +640,13 @@ def initialise_main_options_list(frame):
     #main_options_list=tk.LabelFrame(frame,text="   Output options",padx=10,pady=10)
     #main_options_list=tk.LabelFrame(frame,text=RG_globals.options_label,padx=10,pady=10)
     main_options_list=ttk.LabelFrame(frame,text=RG_globals.options_label)
-    #background_config(main_options_list)
+    #tk_background_config(main_options_list)
 
 def initialise_main_vars_list(frame):
     global main_vars_list
     #main_vars_list=tk.LabelFrame(main,padx=10,pady=10) # Compatible with font setting in class source_sliders
     main_vars_list=ttk.LabelFrame(main) # Not compatible with font setting in class source_sliders
-    #background_config(main_vars_list)
+    #tk_background_config(main_vars_list)
     set_slider_gene_label()
 
 def initialise_main_build(frame):
@@ -648,11 +654,11 @@ def initialise_main_build(frame):
     #main_build=tk.LabelFrame(main,padx=10,pady=10)
     #main_build=tk.LabelFrame(main)
     main_build=ttk.LabelFrame(main)
-    #background_config(main_build)
+    #tk_background_config(main_build)
     set_slider_build_label()
     #panel_build = tk.Frame(main_build)
     panel_build = ttk.Frame(main_build)
-    #background_config(panel_build)
+    #tk_background_config(panel_build)
     panel_build.grid()
     #panel_build.label=tk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
     panel_build.label=ttk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
@@ -1757,13 +1763,19 @@ def reads_listbox_select(evt):
         RG_globals.is_duplex = False
         
 def setup_gobutton(inframe):
-    global go_img,gobutton,icondir
+    global go_img,gobutton,icondir,Style
     # image-objects have to have global scope or the tkinter objects fail
     go_img = ImageTk.PhotoImage(Image.open(icondir+"./go.png"))
     
-    #gobutton=tk.Button(inframe,command=save_and_go,image=go_img)
-    gobutton=ttk.Button(inframe,text="GO",command=save_and_go)
-    #background_config(gobutton)
+    Style = ttk.Style()
+    # style.theme_use options: ('clam', 'alt', 'default', 'classic')
+    Style.theme_use('alt')
+    Style.configure('TButton', width = 20, borderwidth=1, focusthickness=3, focuscolor='none')
+
+    gobutton=ttk.Button(inframe,command=save_and_go,image=go_img)
+    #gobutton=ttk.Button(inframe,text="GO",command=save_and_go)
+
+    #ttk_background_config(gobutton)
     #gobutton.grid(row=30,column=1,sticky=tk.W)# When using go_img
     gobutton.grid(row=30,column=0,sticky=tk.E)# When using text
     #gobutton.grid()
