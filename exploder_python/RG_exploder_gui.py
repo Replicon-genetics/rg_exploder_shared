@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-Progver="RG_builder12_gui.py"
+Progver="RG_builder13_gui.py"
 ProgverDate="13-Jan-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
@@ -507,10 +507,10 @@ def initialise_tk():
     global pygui_frame_labels,pygui_button_labels
     
     global exploder_win,topbar,main,bottom_left,bottom_right
-    global exploder_win,topbar,main,main_left,main_vars_list,main_build,main_options_list,bottom_left
+    global exploder_win,topbar,main,main_left,main_vars_list,main_build,main_options_list
     exploder_win= tk.Tk() # tk only, not ttk
     tk_background_config(exploder_win)
-    exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v12)") 
+    exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v13)") 
     #exploder_win.title(RG_globals.title_label) # Different in builder
     #frame=tk.Frame(exploder_win)
     frame=ttk.Frame(exploder_win)
@@ -521,6 +521,7 @@ def initialise_tk():
     main=ttk.Frame(exploder_win)
     #bottom_left=tk.Frame(exploder_win)
     bottom_left=ttk.Frame(exploder_win)
+    bottom_centre=ttk.Frame(exploder_win)
     #bottom_right=tk.Frame(exploder_win)
     bottom_right=ttk.Frame(exploder_win)
     # Trying to set background all same
@@ -533,6 +534,7 @@ def initialise_tk():
     topbar.pack(side="top", fill="x")
     main.pack(side="top", fill="both", expand=True)
     bottom_left.pack(side="left", fill="both", expand=False)
+    bottom_centre.pack(side="left", fill="both", expand=False)
     bottom_right.pack(side="right", fill="both", expand=False)
 
     initialise_main_left(main)
@@ -565,6 +567,9 @@ def initialise_tk():
     #bottom_left.label=tk.Label(bottom_left, width=30,text=pygui_frame_labels[0])
     bottom_left.label=ttk.Label(bottom_left, width=30,text=pygui_frame_labels[0])
     bottom_left.label.grid()
+
+    bottom_centre.label=ttk.Label(bottom_centre, width=30,text="")
+    bottom_centre.label.grid()
 
     #bottom_right.label=tk.Label(bottom_right, width=30,text="Gene structure")
     bottom_right.label=ttk.Label(bottom_right, width=30,text="Gene structure")
@@ -1067,7 +1072,7 @@ def src_sliders_instantiate_build(window):
     #reflabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
     reflabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
     #refseqtxtframe=tk.Frame(window,bd=1,relief=tk.SUNKEN)
-    refseqtxt=tk.Text(window,height=4)
+    refseqtxt=tk.Text(window,height=4,background="grey")
     refseqtxt.bind("<1>", lambda event: refseqtxt.focus_set())
     refseqtxt.grid(row=8,column=0)
 
@@ -1117,7 +1122,7 @@ def src_sliders_instantiate_build(window):
 
     #varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
-    varseqtxt=tk.Text(window,height=4)
+    varseqtxt=tk.Text(window,height=4,background="white",foreground="black")
     varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
     varseqtxt.bind("<Key>", handle_DNA_input)
     varseqtxt.grid(row=10,column=0)
@@ -1152,7 +1157,7 @@ def src_sliders_instantiate_build(window):
 
     #hapnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
     hapnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
-    hapnameseqtxt=tk.Text(window,height=2)
+    hapnameseqtxt=tk.Text(window,height=2,background="white",foreground="black")
     hapnameseqtxt.bind("<1>", lambda event: hapnameseqtxt.focus_set())
     hapnameseqtxt.bind("<Key>", handle_hapname_input)
     hapnameseqtxt.grid(row=12,column=0)
@@ -1180,7 +1185,7 @@ def src_sliders_instantiate_build(window):
     
     #varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
-    varnameseqtxt=tk.Text(window,height=2)
+    varnameseqtxt=tk.Text(window,height=2,background="white",foreground="black")
     varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
     varnameseqtxt.bind("<Key>", handle_varname_input)
     varnameseqtxt.grid(row=14,column=0)
@@ -1794,7 +1799,7 @@ def setup_GUI_text2(inframe):
     guitextframe2=ttk.Frame(inframe)
     guitextbox2=tk.Text(guitextframe2)
     guitextbox2.bind("<1>", lambda event: guitextbox2.focus_set())
-    guitextbox2.configure(state="disable")
+    guitextbox2.configure(state="disable",background="grey")
     guitextbox2.grid(row=0,column=0,sticky=tk.W)
     #guiscrollbar2=tk.Scrollbar(guitextframe2,bd=1,orient="vertical")
     guiscrollbar2=ttk.Scrollbar(guitextframe2,orient="vertical")
@@ -1815,7 +1820,7 @@ def setup_GUI_text(inframe):
     guitextframe=ttk.Frame(inframe)
     guitextbox=tk.Text(guitextframe)
     guitextbox.bind("<1>", lambda event: guitextbox.focus_set())
-    guitextbox.configure(state="disable")
+    guitextbox.configure(state="disable",background="grey")
     #guitextbox.bind("<Key>", lambda e: "break") # Disables text box entry and copy
     guitextbox.grid(row=0,column=0,sticky=tk.W)
     #guiscrollbar=tk.Scrollbar(guitextframe,bd=1,orient="vertical")
