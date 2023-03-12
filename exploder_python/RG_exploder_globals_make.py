@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="14-Nov-2022"
+#Prg_verDate="12-Mar-2023"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
@@ -16,39 +16,46 @@ import RG_exploder_io as RG_io # File input/output
 
 ######################  SET THE GLOBALS IN set_config_consts() BEFORE RUNNING ################
 
-
-
 def set_config_consts():
     global exploder_root
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
-    #### Revisit these three each time a data set is renewed ###
-    #GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
-    GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
+    ######## Revisit these three each time a data set is renewed ########
+    GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
+    #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
     CustomerIDText="EBaker"
     #CustomerIDText="Public"
 
     is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
     #is_pygui_browser=False   # When setting up to use the Vue.js GUI
+
+    is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
+    #is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
     
-    #### End of: Revisit these each time a data set is renewed ####
+    ######## End of: Revisit these each time a data set is renewed ########
 
     #### One-off customisation of set_exploder_root per installation. ####
-    #exploder_root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/" # rg_exploder_shared version # Do it explicitly
-    set_exploder_root="../" # Do it relative
-    #set_exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
     
+    if not is_pygui_browser or is_rg_exploder_shared:
+        set_exploder_root="../" # Do it relative, as for App.vue setup
+    else:
+        set_exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
+
     exploder_root="%s/"%os.path.abspath(set_exploder_root) # Ensure this is defined as full path, required to support the hyperlinks to results in the Python GUI
 
     #### Should not need changing unless modify throughout other code ####
+
     global config_file_output,config_file_reference_seqs
     global rootdatadir,rootapplicationdir,roothelpscriptdir
-    
-    rootdatadir="%sdata_sources"%exploder_root # rg_exploder_shared version
-    #rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version
-    rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
-    #rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version
+
+    if is_rg_exploder_shared:
+        rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
+        rootdatadir=exploder_root
+    else:
+        rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version and as for App.vue setup
+        rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version and as for App.vue setup
+        
     roothelpscriptdir="%shelper_scripts"%exploder_root
 
     config_file_output="input/config.json"
@@ -128,7 +135,7 @@ def make_out_data():
 # ==========================
 def set_string_defaults():
     global CopyrightText
-    CopyrightText="Copyright © Replicon Genetics 2021, 2022. All rights reserved."
+    CopyrightText="Copyright © Replicon Genetics 2021-2023. All rights reserved."
     #There are several ways of declaring polarity so we define the known ones and use as needed
     global seq_polarity_plus,seq_polarity_minus,seq_polarity_none
     seq_polarity_plus="1"; seq_polarity_minus="-1";seq_polarity_none="0"
