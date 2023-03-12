@@ -2,7 +2,7 @@
     "stringconstants": {
         "DatasetIDText": "EB dataset GRCh38_0005_02; September 2022",
         "CustomerIDText": "EBaker",
-        "CopyrightText": "Copyright \u00a9 Replicon Genetics 2021, 2022. All rights reserved.",
+        "CopyrightText": "Copyright \u00a9 Replicon Genetics 2021-2023. All rights reserved.",
         "seq_polarity_plus": "1",
         "seq_polarity_minus": "-1",
         "seq_polarity_none": "0",
@@ -138,22 +138,24 @@
             "ref_strand": 1,
             "local_begin": 0,
             "local_end": 0,
+            "joinlist": "",
+            "refseq": "TTCAATGTCATTTTTCTAGCTTAGATTATCTAAAAAAAATGCCACAACAGGGGATACAAA",
             "abs_Begin": {
-                "label": "Absolute_begin",
+                "label": "Absolute Begin",
                 "value": 0
             },
             "abs_End": {
-                "label": "Absolute_end",
+                "label": "Absolute End",
                 "value": 0
             },
             "trans_Begin": {
-                "label": "Genomic",
+                "label": "Locus",
                 "value": 1,
                 "min": 1,
                 "max": 15
             },
             "trans_End": {
-                "label": "Genomic",
+                "label": "Locus",
                 "value": 1,
                 "min": 1,
                 "max": 15
@@ -173,15 +175,17 @@
             "ref_subseq": {
                 "label": "Reference Sequence",
                 "value": "",
+                "length": 0,
                 "viewstring": ""
             },
             "var_subseq": {
                 "label": "Variant Sequence",
+                "length": 0,
                 "value": ""
             },
             "hap_name": {
                 "label": "Haplotype Definition Name",
-                "value": ""
+                "value": "hapx"
             },
             "var_name": {
                 "label": "Variant Name",
