@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="31-Dec-2022"
+#ProgverDate="12-Mar-2023"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 '''
 
 # =================================================
@@ -39,6 +39,7 @@ from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation
+import Biopython_fix  # New Feb 2023
 
 # =================================================
 # End of python_imports
@@ -65,7 +66,8 @@ def modify_seq_in_record(inseq,SeqRec):
 
     
     #CopySeqRec=SeqRecord(Seq(str(inseq),generic_dna)) # Creates an empty record with a given sequence #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    CopySeqRec=SeqRecord(Seq(str(inseq))) # Creates an empty record with a given sequence
+    #CopySeqRec=SeqRecord(Seq(str(inseq))) # Creates an empty record with a given sequence
+    CopySeqRec=Biopython_fix.fix_SeqRecord(inseq)
     
     # Copies each of the other records from SeqRec into this new record
     # Cannot do this another way because the sequence part of a sequence record is immutable.
@@ -114,7 +116,8 @@ def annotate_seq_to_record(SeqRec,inseq,seq_id,seq_name):
 def annotate_seq_to_record1(annotations,inseq,seq_id,seq_name,seq_description,seq_polarity,howmany):
     # Formerly annotate_seqrecord - purpose of this is to omit copying the full feature-table
     #ThisSeqr=SeqRecord(Seq(str(inseq),generic_dna)) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    ThisSeqr=SeqRecord(Seq(str(inseq)))
+    #ThisSeqr=SeqRecord(Seq(str(inseq)))
+    ThisSeqr=Biopython_fix.fix_SeqRecord(inseq)
     ThisSeqr.id=seq_id
     ThisSeqr.name=seq_name
     ThisSeqr.description=seq_description
@@ -128,7 +131,8 @@ def annotate_seq_to_record1(annotations,inseq,seq_id,seq_name,seq_description,se
 def annotate_frag_to_record(inseq,seq_id):
     # Only need minimal annotation for a fragment record
     #ThisSeqr=SeqRecord(Seq(str(inseq),generic_dna)) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    ThisSeqr=SeqRecord(Seq(str(inseq)))
+    #ThisSeqr=SeqRecord(Seq(str(inseq)))
+    ThisSeqr=Biopython_fix.fix_SeqRecord(inseq)
 
     ThisSeqr.id=seq_id
     #Create a fake quality string for Fastq - only do it if fastq output is selected
@@ -319,6 +323,13 @@ def knit_features(seqdonor,vardonor):
     outfeatures=non_varfeatures+varfeatures
     return outfeatures
 
+def get_addmut_labels():
+    addmut_labels=[]
+    if not RG_globals.bio_parameters["target_build_variant"]["AddVars"]==[]:
+        for item in RG_globals.bio_parameters["target_build_variant"]["AddVars"]:
+            addmut_labels.append(item["hapname"])
+    return addmut_labels
+
 def make_addmut(refseqdonor,label):
     success=False; item_count=0
     for item in RG_globals.bio_parameters["target_build_variant"]["AddVars"]:
@@ -425,14 +436,19 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
 
         if refseqdonor.polarity==RG_globals.seq_polarity_minus:
             #compseq=MutableSeq(str(new_ref_frag_string),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-            compseq=MutableSeq(str(new_ref_frag_string))
+            #compseq=MutableSeq(str(new_ref_frag_string))
+            compseq=Biopython_fix.fix_MutableSeq(new_ref_frag_string)
 
-            new_ref_frag_string=compseq.reverse_complement(inplace=True)
+            #new_ref_frag_string=compseq.reverse_complement(inplace=True)
+            new_ref_frag_string=Biopython_fix.fix_reverse_complement(compseq)
+            
             if new_mut_frag_string !="-":
                 #compseq=MutableSeq(str(new_mut_frag_string),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-                compseq=MutableSeq(str(new_mut_frag_string))
-                new_mut_frag_string=compseq.reverse_complement(inplace=True)
-
+                #compseq=MutableSeq(str(new_mut_frag_string))
+                compseq=Biopython_fix.fix_MutableSeq(new_mut_frag_string)
+                #new_mut_frag_string=compseq.reverse_complement(inplace=True)
+                new_mut_frag_string=Biopython_fix.fix_reverse_complement(compseq)
+                
         '''
         print("B: otype %s \n, old_ref_frag_string %s\n,old_mut_frag_string %s\n, new_ref_frag_string %s\n, new_mut_frag_string %s\n"
               %(otype, old_ref_frag_string, old_mut_frag_string, new_ref_frag_string, new_mut_frag_string))
@@ -935,8 +951,10 @@ def get_revcomp(inseq):
     instr=str(inseq)
     if instr !="" and instr !="-":
         #compseq=MutableSeq(instr,generic_dna) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-        compseq=MutableSeq(instr) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-        compseq.reverse_complement(inplace=True)
+        #compseq=MutableSeq(instr) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
+        compseq=Biopython_fix.fix_MutableSeq(instr)
+        #compseq.reverse_complement(inplace=True)
+        Biopython_fix.fix_reverse_complement(compseq)
     else:
         compseq=instr
     return str(compseq)
@@ -944,7 +962,9 @@ def get_revcomp(inseq):
 def switch_Rec_polarity(SeqRec):
     #print("IN switch: %s"%SeqRec.seq[0:5])
     #rev_inseq=MutableSeq(get_revcomp(SeqRec.seq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    rev_inseq=MutableSeq(get_revcomp(SeqRec.seq))
+    #rev_inseq=MutableSeq(get_revcomp(SeqRec.seq))
+    rev_inseq=Biopython_fix.fix_MutableSeq(get_revcomp(SeqRec.seq))
+    
     ModSeqRec=modify_seq_in_record(rev_inseq,SeqRec)
     
     ModSeqRec.Headclip,ModSeqRec.Tailclip=ModSeqRec.Tailclip,ModSeqRec.Headclip # Switch head & tail clips (Reference origin)
