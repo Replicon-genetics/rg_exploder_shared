@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="13-Jan-2023"
+ProgverDate="12-Mar-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
 
@@ -1576,7 +1576,7 @@ def refresh_src_sliders_builder():
 
     if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         #w_text=RG_globals.target_locus
-        w_text="Genomic"
+        w_text="Locus"
     elif RG_globals.is_CDS:
         w_text="CDS"
     else:
