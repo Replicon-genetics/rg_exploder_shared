@@ -50,8 +50,8 @@ def set_config_consts():
     global rootdatadir,rootapplicationdir,roothelpscriptdir
 
     if is_rg_exploder_shared:
+        rootdatadir="%sdata_sources"%exploder_root
         rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
-        rootdatadir=exploder_root
     else:
         rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version and as for App.vue setup
         rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version and as for App.vue setup
@@ -60,7 +60,6 @@ def set_config_consts():
 
     config_file_output="input/config.json"
     config_file_reference_seqs="input/loci.json"
-
 
 def config_file_out():
     set_defaults()
