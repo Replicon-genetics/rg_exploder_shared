@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_24_11.py"
-ProgverDate="31-Dec-2022"
+ProgverDate="12-Mar-2023"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 This module reads in Genbank format files and uses
 any variant feature definitions to create those
 variants from the reference sequence.
@@ -18,11 +18,12 @@ j) mutrecs is the biggest memory-user. Is there another way without creating the
 
 =====================================
 
-Significant changes since RG_exploder_main_20:
-1 - Adding paired-reads option
-2 - Refactoring of label_and_save: from two distinct versions in two routines into a shared, congruent one (prep for paired-reads)
-3 - Implementation of paired-reads
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
+Major modification Feb 2023 - attempting to keep one code base to maintain different Biopython versions.
+a) Deprecation of 'generic_dna' in MutableSeq and SeqRecord
+b) sequence.reverse_complement() change to sequence.reverse_complement(inplace=True)
+Uses import Biopython_fix  to modulate
+
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 '''
 # =================================================
 # python_imports
@@ -50,6 +51,7 @@ from Bio.Seq import MutableSeq
 from Bio.SeqRecord import SeqRecord # Used in writing protein sequence
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation  # used in splice_a_sequence
+import Biopython_fix  # New Feb 2023
 # =================================================
 # End of python_imports
 # =================================================
@@ -623,7 +625,9 @@ def write_gb_features(SeqRec,out_file,readmetxt,style):
         # Style is "short" or "long", so ...
         #a) Create a new sequence clipped to 0 nucleotide
         #CopySeq=MutableSeq(str(SeqRec.seq[0:0]),generic_dna) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-        CopySeq=MutableSeq(str(SeqRec.seq[0:0]))
+        #CopySeq=MutableSeq(str(SeqRec.seq[0:0]))
+        CopySeq=Biopython_fix.fix_MutableSeq(SeqRec.seq[0:0])
+        
         #b) Take clipped sequence and only the base annotations into a new sequence record
         CopySeqRec=RG_process.modify_seq_in_record(SeqRec.seq[0:0],SeqRec)
     if style =="short":
@@ -747,14 +751,18 @@ def writeprotmut(seq_record,label):
 
     mod_seqlen= len(seq_record.seq) % 3
     #VSeq=MutableSeq(str(seq_record.seq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    VSeq=MutableSeq(str(seq_record.seq))
+    #VSeq=MutableSeq(str(seq_record.seq))
+    VSeq=Biopython_fix.fix_MutableSeq(seq_record.seq)
+    
     # If CDS is from a complement, or it isn't and we have switched polarity, then get sense strand
     if is_do_complement:
-        VSeq.reverse_complement(inplace=True)
+        #VSeq.reverse_complement(inplace=True)
+        Biopython_fix.fix_reverse_complement(VSeq)
     if mod_seqlen >0:
         VSeq=VSeq+"N"*(3-mod_seqlen)
     #ThisSeqr=SeqRecord(Seq(str(VSeq),generic_dna))#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    ThisSeqr=SeqRecord(Seq(str(VSeq)))
+    #ThisSeqr=SeqRecord(Seq(str(VSeq)))
+    ThisSeqr=Biopython_fix.fix_SeqRecord(VSeq)
     prot_record=SeqRecord(seq = ThisSeqr.seq.translate(to_stop=True), \
              id = seq_record.id +"_1p", \
              description = "translated sequence")
@@ -1158,23 +1166,23 @@ def get_mutrecords(REF_record,embl_or_genbank):
     
     mutfreqs_extend(RG_globals.mutlabels) # First Check, then set, mutfreqs at same length as mutlabels
 
+    addmut_labels= RG_process.get_addmut_labels()
     for label in RG_globals.mutlabels:
         accept= False
         mutfreq=get_mutfreq_from_label(label)
         if mutfreq > 0:
-            Seq_record,exists = read_mutrecord(label,embl_or_genbank)
-            if exists:
-                Seq_record,accept=local_add_mutrec(Seq_record,label)
-            else: #No file matching the next variant set, or there's a version or range mismatch, or it's a user-defined
-                Seq_record,exists=RG_process.make_addmut(REF_record,label) # Look for user-defined
+            if label in addmut_labels: # Look for user-defined
+                Seq_record,exists=RG_process.make_addmut(REF_record,label) 
                 if exists:
                     update_journal(" '%s' %s_%s found as user-defined haplotype"%(RG_globals.variants_label,RG_globals.target_locus,label))
                     Seq_record,accept=local_add_mutrec(Seq_record,label)
-                else:
-                    update_journal(" failed to find %s"%label)
-            if not accept:
-                #print("barf")
-                update_journal(" %s definition not accepted"%label)
+                    if not accept:
+                        #print("barf")
+                        update_journal(" %s definition not accepted"%label)
+            else:
+                Seq_record,exists = read_mutrecord(label,embl_or_genbank) # Read from input directory
+            if  not exists:
+                update_journal(" failed to load %s"%label)
     # end of loop for label in RG_globals.mutlabels:
 
     if accept:
@@ -1238,7 +1246,8 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         intended_delete=replace_string.split("/")[0]
         
         if feat_polarity!=seq_polarity:
-            delete_string.reverse_complement(inplace=True)
+            #delete_string.reverse_complement(inplace=True)
+            Biopython_fix.fix_reverse_complement(delete_string)
         if intended_delete !="N":
             if str(delete_string) != intended_delete:
                 matchtxt1="*mis"
@@ -1284,8 +1293,12 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
 
         if feat_polarity!=seq_polarity:
             #insert_string=MutableSeq(insert_string,generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-            insert_string=MutableSeq(insert_string)
-            insert_string.reverse_complement(inplace=True)
+            #insert_string=MutableSeq(insert_string)
+            insert_string=Biopython_fix.fix_MutableSeq(insert_string)
+            #insert_string.reverse_complement()# Warning from Python 3.11.0 that this needs replacing for near-future releases 
+            #insert_string.reverse_complement(inplace=True)
+            Biopython_fix.fix_reverse_complement(insert_string)
+            
         if RG_globals.is_vars_to_lower: # Have to convert the replacement back to upper for this comparison
             insert_string=str(insert_string)
             insert_string=insert_string.upper()
@@ -1336,9 +1349,12 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
             else:
                 ''' Leaving opposite polarity '''
                 #compseq=MutableSeq(replace,generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-                compseq=MutableSeq(replace)
+                #compseq=MutableSeq(replace)
+                compseq=Biopython_fix.fix_MutableSeq(replace)
                 #compseq.reverse_complement()# Warning from Python 3.11.0 that this needs replacing for near-future releases 
-                compseq.reverse_complement(inplace=True)
+                #compseq.reverse_complement(inplace=True)
+                Biopython_fix.fix_reverse_complement(compseq)
+                
             replace=str(compseq)
             if RG_globals.is_vars_to_lower:
                 replace=replace.lower()
@@ -1375,11 +1391,16 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
             
             # Next block is a verification check for SNV string match/mis-match 
             #sub_n=MutableSeq(replace,generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-            sub_n=MutableSeq(replace)
+            #sub_n=MutableSeq(replace)
+            sub_n=Biopython_fix.fix_MutableSeq(replace)
+            
             current_n=VSeq[feat_start:feat_end]
             if feat_polarity!=seq_polarity: # Have to reverse both because we have done so already and are now turning back to compare to replace_string
-                sub_n.reverse_complement(inplace=True)
-                current_n.reverse_complement(inplace=True)
+                #sub_n.reverse_complement(inplace=True)
+                Biopython_fix.fix_reverse_complement(sub_n)
+                #current_n.reverse_complement(inplace=True)
+                Biopython_fix.fix_reverse_complement(current_n)
+                
             if RG_globals.is_vars_to_lower: # Have to convert the replacement back to upper for this comparison
                 sub_n=str(sub_n)
                 sub_n=sub_n.upper()
@@ -1528,7 +1549,9 @@ def make_allvars_in_one_seq(SeqRec,label):
         update_journal(" %s mismatched Source Range: %s" %(in_label,SeqRec.firstid.replace("chromosome:","")))
     
     #VarSeq=MutableSeq(str(SeqRec.seq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    VarSeq=MutableSeq(str(SeqRec.seq))
+    #VarSeq=MutableSeq(str(SeqRec.seq))
+    VarSeq=Biopython_fix.fix_MutableSeq(SeqRec.seq)
+    
     cigarbox=[len(VarSeq),len(VarSeq)]
     for (index) in RG_process.get_varfeature_index(SeqRec): # Progressively adds each feature to VarSeq and cigarbox
         VarSeq,cigarbox=MutateVarSeq(VarSeq,SeqRec.polarity,SeqRec.features[index],cigarbox)
@@ -1586,8 +1609,10 @@ def refseq_to_frags3(mutrecs):
 def get_rev_fragseq(inseq):
     # Do a complement on arrivals here
     #outseq=MutableSeq(str(inseq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-    outseq=MutableSeq(str(inseq))
-    outseq.reverse_complement(inplace=True)
+    #outseq=MutableSeq(str(inseq))
+    outseq=Biopython_fix.fix_MutableSeq(inseq)
+    #outseq.reverse_complement(inplace=True)
+    Biopython_fix.fix_reverse_complement(outseq)
     #print("inseq %s ; outseq %s"%(inseq,outseq))
     outseq=str(outseq)
     return outseq,"r",RG_globals.rev_label
@@ -2335,7 +2360,8 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
                 #print("\njoinlist %s\n"%joinlist)
         #print("joinlist %s"%joinlist)
         #spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-        spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)))
+        #spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)))
+        spliceseq=Biopython_fix.fix_MutableSeq(seq_record.seq)
         # Modify the start and end trim-lengths to the addition of Exome_extend
         this_ref_offset-=RG_globals.Exome_extend
         this_ref_endclip-=RG_globals.Exome_extend
