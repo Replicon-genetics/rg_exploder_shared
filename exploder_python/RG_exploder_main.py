@@ -1,9 +1,11 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_24_12.py"
-ProgverDate="10-Apr-2023"
+Progver="RG_exploder_main_24_11.py"
+ProgverDate="12-Mar-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
-This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
+This module reads in Genbank format files and uses
+any variant feature definitions to create those
+variants from the reference sequence.
 These variants are then split into mutiple shorter fragments.
 Output can be made to SAM, fasta & fastq files
 Created using python3 and BioPython
@@ -19,7 +21,7 @@ j) mutrecs is the biggest memory-user. Is there another way without creating the
 Major modification Feb 2023 - attempting to keep one code base to maintain different Biopython versions.
 a) Deprecation of 'generic_dna' in MutableSeq and SeqRecord
 b) sequence.reverse_complement() change to sequence.reverse_complement(inplace=True)
-c) Uses extra module import Biopython_fix to modulate
+Uses import Biopython_fix  to modulate
 
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 '''
@@ -131,7 +133,7 @@ def initialise_module_globals(is_journal):
     initialise_module_counters()
     initialise_module_outfiles()
     if is_journal:
-        # Only set up journaling files for exploder function, not others like builder
+        # Only set up journaling files for exploder function, not builder
         initialise_journal()
         initialise_readme()
     return
@@ -2588,14 +2590,6 @@ def get_transcript_data_process(redo_locus):
 #     This was developed after the initial 'explode' function ie: the fragmentation of sequence into reads
 #########################################
 
-
-def swaplistends(inlist): # Swap function
-    # Storing the first and last element as a pair in a tuple variable get
-    get = inlist[-1], inlist[0]
-    # unpacking those elements
-    inlist[0], inlist[-1] = get
-    return inlist
-
 def get_muttranscripts(redo_locus): # Derive the transcript tables
     # NB: redo_locus isn't used!
     # Very importantly the values set here to pass back to the calling GUI are:
@@ -2604,23 +2598,23 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     
     is_join_complement=RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
     Region=RG_globals.Reference_sequences[RG_globals.target_locus]["Region"]
+    
     abs_start=int(Region.split(":")[2])
     abs_end=int(Region.split(":")[3])
     ref_strand=int(Region.split(":")[4])
     maxreflen=abs(abs_end-abs_start)+1
     if ref_strand == 1:
-        offset=abs_start-1
+        if is_join_complement:
+            offset=abs_start-1
+        else:
+            offset=abs_start+1   
     else:
-        offset=abs_end-1
+        if is_join_complement:
+            offset=abs_end-1
+        else:
+            offset=abs_end+1
 
     abs_offset=offset*ref_strand
-
-    if is_join_complement:
-        read_strand=-1
-    else:
-        read_strand=1
-        
-    #print("abs_start: %s; abs_end: %s; abs_offset: %s"%(abs_start,abs_end,abs_offset))
 
     exon_total=0; intron_total=0; feature_titles=["Upstream"]; starts=[int(1)]; ends=[]
     abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0]; exon_length=[0];max_seqlength=0;
@@ -2632,26 +2626,17 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         exon_text="Exon "
         intron_text="Intron "
 
-    run_success,splice_joinlist_txt=get_joinlist()
-    #print("splice_joinlist_txt %s"%splice_joinlist_txt)
+    run_success,splice_joinlist_txt=get_joinlist()        
     
     for item in splice_joinlist_txt:
         begin,end=item.split(":")
         begin=int(begin)
         end=int(end)
-        
-        lookup_begin=int(begin)
-        lookup_end=int(end)
-
-        if is_join_complement:
-            begin,end=end,begin
         #print("begin %s \n end %s"%(begin,end)) # Validation check
-        #Last intron / upstream
-            
-        #ends.append(begin-1)
-        #exon_len=abs(end-begin+1)
-        ends.append(begin-read_strand)
-        exon_len=abs(end-begin+read_strand)
+        #Last intron / upstream 
+        ends.append(begin-1)
+       
+        exon_len=end-begin+1
         max_seqlength+=exon_len
         
         if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Not an Exon
@@ -2662,29 +2647,22 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         else: #Exon
             exon_total+=1
             feature_titles.append(exon_text+str(exon_total))
-            #print("lookup_begin: %s,lookup_end+1 %s"%(lookup_begin,lookup_end+1))
-            this_exon=[]
-            for n in range(lookup_begin,lookup_end+1):
-                this_exon.append(n)
-            if is_join_complement:
-                this_exon.reverse()
-            for item in this_exon:
-                mrnapos_lookup.append(item)
-                
-        #print("Locus: %s mrnapos_lookup %s"%(RG_globals.target_locus,mrnapos_lookup))      
+            for n in range(begin,end+1):
+                if is_join_complement:
+                    mrnapos_lookup.insert(1,n)
+                else:
+                    mrnapos_lookup.append(n)
+                    
         starts.append(begin)
         ends.append(end)
         exon_length.append(exon_len)
         #Next intron / downstream start
         intron_total+=1
         feature_titles.append(intron_text+str(intron_total)+"-"+str(intron_total+1))
-        #starts.append(int(end)+1)
-        starts.append(int(end)+read_strand)
+        starts.append(int(end)+1)
         exon_length.append(exon_len)
-        #print("%s"%mrnapos_lookup[(len(mrnapos_lookup)-10):-1])
     ## End of: for item in splice_joinlist_txt
-    #print("%s"%mrnapos_lookup)
-        
+    
     # Finishing off
     feature_titles[len(feature_titles)-1]="Downstream"
     ends.append(maxreflen)
@@ -2705,21 +2683,13 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         abs_starts.append(abs(starts[count]+abs_offset))
         abs_ends.append(abs(ends[count]+abs_offset))
 
-    '''
-    # experimental: for fixing the Upstream & Downstream outputs 
     if is_join_complement:
-        swaplistends(starts)
-        swaplistends(ends)
-        swaplistends(abs_starts)
-        swaplistends(abs_ends)
-    '''
-        
-    #    abs_starts.reverse()
-    #    abs_ends.reverse()
-    #    starts.reverse()
-    #    ends.reverse()
-    #    exon_length.reverse()
-    #    exon_length[0]=0
+        abs_starts.reverse()
+        abs_ends.reverse()
+        starts.reverse()
+        ends.reverse()
+        exon_length.reverse()
+        exon_length[0]=0
     #  end of: if is_join_complement
         
     exon_cumulative_length=[] # Building this for both polarities
@@ -2736,15 +2706,8 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     else:
         add=""
 
-    if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
-        trans_text="DNA"
-    elif RG_globals.is_CDS:
-        trans_text="CDS"
-    else:
-        trans_text="mRNA"
-
-    transcript_view="Locus: %s, %s: %s%s,\tLength: %s\n Source %s%s\n"%(RG_globals.target_locus,trans_text,RG_globals.target_transcript_name,add,max_seqlength,
-                                                                             RG_globals.Reference_sequences[RG_globals.target_locus]["Region"][:-1],read_strand)
+    transcript_view="Locus: %s, Transcript: %s%s,\tLength: %s\n Mapping %s\n"%(RG_globals.target_locus,RG_globals.target_transcript_name,add,max_seqlength,
+                                                                             RG_globals.Reference_sequences[RG_globals.target_locus]["Region"])
     
     transcript_view+=" Label\t\t Local\t\t| Global\t\t\t| Length | Cumulative\n"
 
@@ -2754,12 +2717,12 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         glob_start=abs_starts[count]
         glob_end=abs_ends[count]
         
-        #if is_join_complement: # swap abs
-        #    glob_start,glob_end= glob_end,glob_start
-        #    loc_start,loc_end=loc_end,loc_start
+        if is_join_complement: # swap abs
+            glob_start,glob_end= glob_end,glob_start
+            loc_start,loc_end=loc_end,loc_start
             
         transcript_view+=" %s:\t %s - %s\t| %s - %s\t| %s\t | %s\n"%(feature_titles[count],loc_start,loc_end,glob_start,glob_end,
-                                                                     abs(ends[count]-starts[count]+read_strand),exon_cumulative_length[count])
+                                                                     ends[count]-starts[count]+1,exon_cumulative_length[count])
     transcript_view+="\n"
 
     RG_globals.bio_parameters["target_build_variant"]["transcript_view"]=transcript_view #Not essential - only used for GUI information
@@ -2934,7 +2897,17 @@ def call_exploder_main():
     else:
         run_success=exploder_initiate(True,True)
     return run_success
-
+'''
+# Original App.js call
+# When run as a batch, as in web version ... 
+if __name__ == "__main__":
+    general_initiate()
+    if run_processing(True): # True is for "need to read in the reference sequence"
+        print("Done")
+    else:
+        print("Fail")
+    print("Target locus was %s"%RG_globals.target_locus)
+'''
 # When run as a batch, as in web version ...
 # Current App.js call
 if __name__ == "__main__":
