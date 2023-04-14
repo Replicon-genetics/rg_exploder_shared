@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="13-Apr-2023"
+ProgverDate="14-Apr-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
 
@@ -397,32 +397,51 @@ def set_refseq_target_url():
     LRG_target_url_txt=""
     ENS_ts_target_url=""
     ENS_ts_target_url_txt=""
- 
+
+    if RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]== RG_globals.GRCh37_txt:
+        target="37"
+    elif RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]== RG_globals.GRCh38_txt:
+        target="38"
+    else:
+        target=""
+
     if LRG_id != "":
         #LRG_target_url=RG_globals.lrg_view_url+LRG_id+".xml"
         LRG_target_url=RG_globals.lrg_view_url+LRG_id
         #LRG_target_url_txt=RG_globals.bio_parameters["target_locus"]["label"]+" "+RG_globals.target_locus+": "+LRG_id
         LRG_target_url_txt="LRG "+RG_globals.target_locus+": "+LRG_id
         #print("LRG_target_url: %s"%LRG_target_url)
-    
+            
     if "." in geneid:
         geneid,version=RG_globals.ensembl_geneid.split(".")
-        if RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]== RG_globals.GRCh37_txt:
+        if target=="37":
             ENS_target_url=RG_globals.ensembl37_gene_url+"g="+geneid
             ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh37_txt+":"+geneid
-        else:
+        elif target=="38":
             ENS_target_url=RG_globals.ensembl38_gene_url+"g="+geneid
-            ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh38_txt+":"+geneid        
+            ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh38_txt+":"+geneid
+        else:
+            ENS_target_url=""
+            ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+"no build "+":"+geneid
 
     if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         ENS_ts_target_url=ENS_target_url
         ENS_ts_target_url_txt=ENS_target_url_txt
     else:
         tsid,version=RG_globals.Reference_sequences[RG_globals.target_locus]["mRNA"][RG_globals.target_transcript_name].split(".")
-        if RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]== RG_globals.GRCh37_txt:
+        
+        if target=="37":
+            # Special cases where transcript is not defined in build 37, is present in 38, and has been edited into the 37 source data
+            # eg: in config.json AK2-672715m(MANE_Select) and in genbank file "ENST00000672715m.1 , with 'm' as the triggering identifier
+            if tsid[-1:]=="m": # identify the modified id
+                tsid=tsid[:-1] # chop it for the hyperlink
+                target="38" #  Switch to 38
+        if target=="37":
             ENS_ts_target_url=RG_globals.ensembl37_transcript_url+"g="+geneid+";t="+tsid
-        else:
+        elif target=="38":
             ENS_ts_target_url=RG_globals.ensembl38_transcript_url+"g="+geneid+";t="+tsid
+        else:
+            ENS_ts_target_url=""
         ENS_ts_target_url_txt="Ensembl_transcript"+":"+tsid
 
 def results_hyperLink(event):

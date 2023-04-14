@@ -9,7 +9,7 @@
             "LRG_id": "133",
             "Ensembl_id": "ENSG00000004455.12",
             "mRNA": {
-                "AK2-672715(MANE_Select)":"ENST00000672715.1",
+                "AK2-672715m(MANE_Select)":"ENST00000672715m.1",
                 "AK2-354858": "ENST00000354858.6",
                 "AK2-373449": "ENST00000373449.2",
                 "AK2-467905": "ENST00000467905.1",
@@ -20,7 +20,7 @@
             },
             "MANE_Select": {
                 "version": "v0.95",
-                "mRNA": "AK2-672715(MANE_Select)"
+                "mRNA": "AK2-672715m(MANE_Select)"
             }
         }
     }
