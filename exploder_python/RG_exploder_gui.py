@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="12-Mar-2023"
+ProgverDate="13-Apr-2023"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022
+© author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
 
 Note added 16-Oct-2022:
     The calls to RG_main.call_exploder_main() are to support the Vue.js GUI version available at
     https://repliconevaluation.wordpress.com/replicon-genetics/ngs-emulator-sets
 
     The objective is to minimise the amount of coding required in the App.vue front end where this coding can be carried out in RG_main.call_exploder_main
-    and any calculated variables communicated to the js as parameters.
+    and any calculated variables communicated to the js as parameters. If only this were possible!
     
     There may be some other features that would be improved in the same way and eliminate the need for some of the config.json file
     
@@ -105,7 +105,7 @@ def initialise_modulevalues():
 # End of def initialise_modulevalues()    
 
 def set_flags_dict():
-    # Only used for testing at present
+    return # Available for testing
     global flags_output_labels,flags_output_bools # externally pre-defined
     global flags_dict
     flags_dict={}
@@ -666,7 +666,7 @@ def initialise_main_build(frame):
     #tk_background_config(panel_build)
     panel_build.grid()
     #panel_build.label=tk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
-    panel_build.label=ttk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
+    panel_build.label=ttk.Label(panel_build,text="    Source            Local_pos      Extension   Global_pos")
     panel_build.label.grid(row=0,column=0,sticky=tk.W)
 
 def set_slider_gene_label():
@@ -780,7 +780,7 @@ class source_sliders_builder:
         self.entryvar=src_sliders_strvals_build[v_index]
         #self.entry = tk.Spinbox(self.panel2, textvariable=self.entryvar, width=6,from_=min_seqlength,to=max_seqlength)
         self.entry = ttk.Spinbox(self.panel2, textvariable=self.entryvar, width=6,from_=min_seqlength,to=max_seqlength)
-        self.entry.grid(row=0,column=0,sticky=tk.W)
+        self.entry.grid(row=0,column=1,sticky=tk.W)
 
         self.abspos=0
         self.localpos=0
@@ -797,7 +797,7 @@ class source_sliders_builder:
         self.entry2var=src_sliders_straddvals_build[v_index]
         #self.entry2 = tk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
         self.entry2 = ttk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
-        self.entry2.grid(row=0,column=1,sticky=tk.W)
+        self.entry2.grid(row=0,column=2,sticky=tk.W)
         self.zero2='1'
         self.old_value2 = src_sliders_straddvals_build[v_index].get()
         self.blank2=''
@@ -810,7 +810,7 @@ class source_sliders_builder:
         
         #self.abslabel=tk.Label(self.panel2, width=10,text=str(self.abspos))
         self.abslabel=ttk.Label(self.panel2, width=10,text=str(self.abspos))
-        self.abslabel.grid(row=0,column=2,sticky=tk.W)
+        self.abslabel.grid(row=0,column=3,sticky=tk.W)
 
     def checkentry(self, *args):
        if self.get().isdigit():
@@ -954,6 +954,7 @@ def src_sliders_instantiate_build(window):
     
     def calc_seq():
         global varnametxt
+        global trans_text
         nonlocal seq_region,seq_region_success
         get_slider_vals()
         #print("trans_Begin %s; local_begin %s| trans_End %s;local_end %s"%(trans_Begin,local_begin,trans_End,local_end))
@@ -965,8 +966,9 @@ def src_sliders_instantiate_build(window):
             #varnametxt="%s_to_%s"%(abs_Begin,abs_End)
             varnametxt=RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"]
 
-            write_GUI_text2("[trans_Begin %s;local_begin %s, trans_End %s; local_end %s Strln: %s Calclen %s\n"%(trans_Begin,local_begin,trans_End,local_end,len(seq_region),abs(local_begin-local_end)+1))
-        
+            #write_GUI_text2("[trans_Begin %s;local_begin %s, trans_End %s; local_end %s Strln: %s Calclen %s\n"%(trans_Begin,local_begin,trans_End,local_end,len(seq_region),abs(local_begin-local_end)+1))
+            write_GUI_text2("[%s_Begin %s;local_begin %s, %s_End %s; local_end %s Strln: %s Calclen %s\n"%(trans_text,trans_Begin,local_begin,trans_text,trans_End,local_end,len(seq_region),abs(local_begin-local_end)+1))
+
             write_GUI_text2("seq_region\n%s\n"%ref_string)
             
             refseqtxt.configure(state="normal")
@@ -1047,6 +1049,7 @@ def src_sliders_instantiate_build(window):
                     setfreq=50
                     src_sliders_vals[new_mutlabs_tot-1]=tk.IntVar(value=setfreq)
                     src_sliders_strvals[new_mutlabs_tot-1]=tk.StringVar(value=str(setfreq))
+
                     RG_globals.mutfreqs[new_mutlabs_tot-1]=setfreq
 
                     src_count=len(RG_globals.mutlabels)
@@ -1445,6 +1448,7 @@ def get_mutlabs(): # Get list of non-ref files in target-input folder
         mutlabs.sort()
     #update_journal(" Identified presence of %s variant files for %s up to %s"%(peekcount,RG_globals.target_locus,last_inlabel))
     mutlabs=add_mutlabs(mutlabs)
+    RG_process.mutfreqs_extend(mutlabs) # Extend mutfreqs if necessary
     #print("mutlabs %s"%mutlabs)
     return mutlabs
 
@@ -1533,17 +1537,8 @@ def refresh_src_sliders():
             RG_globals.mutfreqs.append(setfreq)
         #print("label %s; freq %s"%(RG_globals.mutlabels[i],RG_globals.mutfreqs[i]))
     count=0
-    '''
-    for i in range(src_count):
-        if "%s_"%RG_globals.target_locus in RG_globals.mutlabels[i] :
-            w_text=RG_globals.mutlabels[i]
-        else:
-            w_text="%s_%s"%(RG_globals.target_locus,RG_globals.mutlabels[i])
-        refresh_source_slider(i,w_text)
-    '''
 
     for i in range(src_count):
-        #w_text=RG_globals.mutlabels[i]
         w_text="%s_%s"%(RG_globals.target_locus,RG_globals.mutlabels[i])
         refresh_source_slider(i,w_text)
     
@@ -1573,25 +1568,26 @@ def refresh_src_sliders_builder():
     #print("at refresh_src_sliders")
     global src_slider_widgets_build
     global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build,max_seqlength
+    global trans_text
 
     if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         #w_text=RG_globals.target_locus
-        w_text="Locus"
+        trans_text="Locus"
     elif RG_globals.is_CDS:
-        w_text="CDS"
+        trans_text="CDS"
     else:
-        w_text="mRNA"
+        trans_text="mRNA"
     src_sliders_build_clear_seqs()
     
     src_sliders_vals_build[0]=tk.IntVar(value=1)
     src_sliders_strvals_build[0]=tk.StringVar(value=str(1))
     src_sliders_straddvals_build[0]=tk.StringVar(value=str(0))
-    refresh_source_slider_builder(0,w_text)
+    refresh_source_slider_builder(0,trans_text)
     
     src_sliders_vals_build[1]=tk.IntVar(value=max_seqlength)
     src_sliders_strvals_build[1]=tk.StringVar(value=str(max_seqlength))
     src_sliders_straddvals_build[1]=tk.StringVar(value=str(0))
-    refresh_source_slider_builder(1,w_text)
+    refresh_source_slider_builder(1,trans_text)
 
 def refresh_source_slider_builder(v_index,w_text):
     global max_seqlength,min_seqlength
@@ -1613,7 +1609,7 @@ def refresh_source_slider_builder(v_index,w_text):
 
     self.entry2var=src_sliders_straddvals_build[v_index]
     self.entry2['textvariable']=self.entry2var
-    self.entry2.grid(row=0,column=3,sticky=tk.W)
+    self.entry2.grid(row=0,column=2,sticky=tk.W)
     self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute
     self.get2, self.set2 = self.entry2var.get, self.entry2var.set
  
