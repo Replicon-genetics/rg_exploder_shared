@@ -323,12 +323,9 @@ def knit_features(seqdonor,vardonor):
     outfeatures=non_varfeatures+varfeatures
     return outfeatures
 
-def get_addmut_labels():
-    addmut_labels=[]
-    if not RG_globals.bio_parameters["target_build_variant"]["AddVars"]==[]:
-        for item in RG_globals.bio_parameters["target_build_variant"]["AddVars"]:
-            addmut_labels.append(item["hapname"])
-    return addmut_labels
+# =====================================================
+# End of Seqrecord manipulation
+# =====================================================
 
 def make_addmut(refseqdonor,label):
     success=False; item_count=0
@@ -1448,3 +1445,37 @@ def is_mut_cigar(cigar):
 # ===============================================================
 # End of cigar-manipulation functions definition
 # ===============================================================
+
+# ===============================================================
+# Mutfreq and mutlabels functions 
+# ===============================================================
+
+def mutfreqs_extend(mutlabels):
+    # App.vue should deliver a correctly-sized list. This is to catch any other situations
+    #array_extend=0
+    for i in range(0, len(mutlabels)):
+        # To prevent an out-of-range, append last frequency to end
+        if i > len(RG_globals.mutfreqs)-1:
+            RG_globals.mutfreqs.append(RG_globals.mutfreqs[-1])
+            #array_extend+=1
+    #if array_extend > 0:  # Was previously in RG_main; update journal will not work here
+    #    update_journal("mutation frequencies array automatically extended by %s to: %s"%(array_extend,RG_globals.mutfreqs))
+    return
+
+def get_addmut_labels():
+    addmut_labels=[]
+    if not RG_globals.bio_parameters["target_build_variant"]["AddVars"]==[]:
+        for item in RG_globals.bio_parameters["target_build_variant"]["AddVars"]:
+            addmut_labels.append(item["hapname"])
+    return addmut_labels
+
+def get_mutfreq_from_label(inlabel):
+    # Was used by several, now only by get_mutrecords to avoid reading unselected input files 
+    labelcount=0
+    for label in RG_globals.mutlabels:
+        if label == inlabel:
+            break
+        else:
+            labelcount+=1
+    return RG_globals.mutfreqs[labelcount]
+
