@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_24_12.py"
-ProgverDate="13-Apr-2023"
+Progver="RG_exploder_main_24_13.py"
+ProgverDate="02-May-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -2599,7 +2599,7 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     if ref_strand == 1:
         offset=abs_start-1
     else:
-        offset=abs_end-1
+        offset=abs_end+1
 
     abs_offset=offset*ref_strand
 
