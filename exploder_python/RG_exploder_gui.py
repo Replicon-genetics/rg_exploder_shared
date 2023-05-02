@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="14-Apr-2023"
+ProgverDate="02-May-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
 
@@ -861,7 +861,7 @@ class source_sliders_builder:
 
     # Extra in builder
     def complement_check(self,*args):
-        abs_offset=RG_globals.bio_parameters["target_build_variant"]["abs_offset"] # This needs to be here, not a global set in get_muttranscripts, probably because initial setup value required
+        abs_offset=RG_globals.bio_parameters["target_build_variant"]["abs_offset"] # This needs to be here, not a global set in get_muttranscripts,probably because initial setup value required
         mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"] # This could be a global instead, but not sure why it doesn't fail like abs_offset when it is 
         self.extension=int(self.entry2var.get())
         if self.entry.get() == self.blank:
@@ -1094,19 +1094,18 @@ def src_sliders_instantiate_build(window):
     #reflabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
     reflabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
     #refseqtxtframe=tk.Frame(window,bd=1,relief=tk.SUNKEN)
-    refseqtxt=tk.Text(window,height=4,background="grey")
+    refseqtxt=tk.Text(window,height=4,width=50,background="grey")
     refseqtxt.bind("<1>", lambda event: refseqtxt.focus_set())
-    refseqtxt.grid(row=8,column=0)
+    refseqtxt.grid(row=8,column=0,sticky=tk.W)
 
     #refseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
-    refseqscroll = ttk.Scrollbar(window,orient="vertical")
-    refseqscroll.grid(row=8,column=1,sticky=tk.E)
+    #refseqscroll = ttk.Scrollbar(window,orient="vertical")
+    #refseqscroll.grid(row=8,column=1,sticky=tk.E)
 
-    refseqtxt.config(yscrollcommand=refseqscroll.set)
-    refseqscroll.config(command=refseqtxt.yview)
+    #refseqtxt.config(yscrollcommand=refseqscroll.set)
+    #refseqscroll.config(command=refseqtxt.yview)
     refseqtxt.insert(tk.END,seq_region)
     refseqtxt.configure(state="disable")
-
 
     ############## varseqtxt  ##############
     def handle_DNA_input(s):
@@ -1144,10 +1143,10 @@ def src_sliders_instantiate_build(window):
 
     #varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
-    varseqtxt=tk.Text(window,height=4,background="white",foreground="black")
+    varseqtxt=tk.Text(window,height=4,width=50,background="white",foreground="black")
     varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
     varseqtxt.bind("<Key>", handle_DNA_input)
-    varseqtxt.grid(row=10,column=0)
+    varseqtxt.grid(row=10,column=0,sticky=tk.W)
 
     ##varseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
     #varseqscroll = ttk.Scrollbar(window,orient="vertical")
@@ -1179,7 +1178,8 @@ def src_sliders_instantiate_build(window):
 
     #hapnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
     hapnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
-    hapnameseqtxt=tk.Text(window,height=2,background="white",foreground="black")
+    hapnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
+    #hapnameseqtxt.configure(bg="#1C6C0B", insertbackground='white')
     hapnameseqtxt.bind("<1>", lambda event: hapnameseqtxt.focus_set())
     hapnameseqtxt.bind("<Key>", handle_hapname_input)
     hapnameseqtxt.grid(row=12,column=0)
@@ -1207,7 +1207,7 @@ def src_sliders_instantiate_build(window):
     
     #varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
-    varnameseqtxt=tk.Text(window,height=2,background="white",foreground="black")
+    varnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
     varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
     varnameseqtxt.bind("<Key>", handle_varname_input)
     varnameseqtxt.grid(row=14,column=0)
@@ -1218,7 +1218,6 @@ def src_sliders_instantiate_build(window):
     #saveseq=tk.Button(window,text=pygui_button_labels[2],bg="blue", command=save_seq)
     saveseq=ttk.Button(window,text=pygui_button_labels[2], command=save_seq)
     saveseq.grid(row=15,column=0,sticky=tk.W)    
-
 
     # END Instantiating the save buttons to label/slider
     return
