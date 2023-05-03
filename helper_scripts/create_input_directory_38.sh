@@ -36,6 +36,14 @@ ln -s ../../$curationdir/$locus$curation $locus$dirtxt
 ln -s $locus$dirtxt/$locus*.gb .
 mv $locus$noseq $locus$hap0
 
+locus="BRCA2_minus"
+mkdir $base_output_seq/$locus
+mkdir $base_input_seq/$locus
+cd $base_input_seq/$locus
+ln -s ../../$curationdir/$locus$curation $locus$dirtxt
+ln -s $locus$dirtxt/$locus*.gb .
+mv $locus$noseq $locus$hap0
+
 locus="PTEN_a"
 mkdir $base_output_seq/$locus
 mkdir $base_input_seq/$locus

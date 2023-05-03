@@ -36,6 +36,18 @@ ln -s $locus$dirtxt/$prelocus$ensembl $locus$ensembl
 #sed -e "s/$prelocus/$locus/g" barf > $locus$jsonfile
 #/bin/rm barf
 
+prelocus="BRCA2"
+locus="BRCA2_minus"
+mkdir $locus$curation
+cd $locus$curation
+ln -s ../../$datadir/$locus$dirtxt/ .
+ln -s $locus$dirtxt/$prelocus$noseq $locus$noseq
+ln -s $locus$dirtxt/$prelocus$locseq $locus$locseq 
+ln -s $locus$dirtxt/$prelocus$ensembl $locus$ensembl
+#/bin/cp -p $locus$dirtxt/$prelocus$jsonfile barf
+#sed -e "s/$prelocus/$locus/g" barf > $locus$jsonfile
+#/bin/rm barf
+
 prelocus="PTEN"
 locus="PTEN_a"
 mkdir $locus$curation
