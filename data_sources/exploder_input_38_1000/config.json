@@ -483,7 +483,7 @@
             }
         },
         "BRCA2_minus": {
-            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Release": "Ensembl Release 109 (Feb 2023)",
             "Retrieval_date": "3-MAY-2023",
             "Region": "GRCh38:13:32314086:32401268:-1",
             "Locus_range": "1001:86183",
