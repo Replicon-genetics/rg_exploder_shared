@@ -1,7 +1,7 @@
 # Shell script to create input AND output directory trees from curation directories
 
 root="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/"
-baseindir="GRCH37_sequences_1000"
+datadir="GRCH37_sequences_1000"
 base_input_seq=$root"exploder_input_37_1000"
 base_output_seq=$root"exploder_output_37_1000"
 mkdir $base_input_seq
@@ -10,7 +10,7 @@ pw=$PWD
 cd $base_input_seq
 
 curation="_curation"
-curationdir=$baseindir$curation
+curationdir=$datadir$curation
 dirtxt="_dir"
 hap0="_000000.gb"
 noseq="_noseq.gb"
