@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_24_13.py"
-ProgverDate="02-May-2023"
+ProgverDate="08-May-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -2656,8 +2656,8 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
                 this_exon.append(n)
             if is_join_complement:
                 this_exon.reverse()
-            for item in this_exon:
-                mrnapos_lookup.append(item)
+            for item2 in this_exon:
+                mrnapos_lookup.append(item2)
                 
         #print("Locus: %s mrnapos_lookup %s"%(RG_globals.target_locus,mrnapos_lookup))      
         starts.append(begin)
