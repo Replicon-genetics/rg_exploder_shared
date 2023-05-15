@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="02-May-2023"
+ProgverDate="14-May-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
 
@@ -719,7 +719,7 @@ class source_sliders:
         self.panel2 = ttk.Frame(master1)
         self.panel2.grid()
         #self.label=tk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]), bg=label_colour)
-        self.label=ttk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]))
+        self.label=ttk.Label(self.panel2, width=15,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]))
         self.label.grid(row=0,column=0,sticky=tk.W)
         #f2 = font.Font(master1, master1.cget("font")) # Looks superfluous here
         #self.label.configure(font=f2)# Not supported ttk.LabelFrame, so looks superfluous
@@ -1029,11 +1029,10 @@ def src_sliders_instantiate_build(window):
             if var_seq=="":
                 var_seq="-"
 
-            is_join_complement=RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
-            ref_strand=int(RG_globals.bio_parameters["target_build_variant"]["ref_strand"]) # Could make it global, although only used here
-            if (ref_strand==-1 and not is_join_complement) or (ref_strand==1 and is_join_complement) :
-                ref_seq=RG_process.get_revcomp(ref_seq)
-                var_seq=RG_process.get_revcomp(var_seq)
+            #is_do_complement=RG_main.is_make_addvar_complement()
+            #if is_do_complement :
+            #    ref_seq=RG_process.get_revcomp(ref_seq)
+            #    var_seq=RG_process.get_revcomp(var_seq)
             
             var_name=varnameseqtxt.get('0.3',tk.END)
             var_name = var_name[:-1]
@@ -1054,8 +1053,9 @@ def src_sliders_instantiate_build(window):
                 else:
                     abs_maptxt="%s..%s"%(abs_End,abs_Begin)
                 spacer="                     /"
+                ref_save,var_save=RG_main.get_add_saves()
                 msgtxt= 'Haplotype Name: %s\n     variation       %s..%s\n%sreplace="%s/%s"\n%sabsolute_map="%s"\n%scomment="%s"\n'\
-                 %(hap_name,local_begin,local_end,spacer,ref_seq,var_seq,spacer,abs_maptxt,spacer,var_name)
+                 %(hap_name,local_begin,local_end,spacer,ref_save,var_save,spacer,abs_maptxt,spacer,var_name)
                 write_GUI_text2(msgtxt)
                 
                 #RG_globals.AddVars.append(addvar)

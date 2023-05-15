@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_24_13.py"
-ProgverDate="08-May-2023"
+ProgverDate="15-May-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -1159,7 +1159,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
         
     update_journal("\nReading %s (feature) files..."%RG_globals.variants_label)
     if not RG_globals.is_mut_out:
-        update_journal(" NOTE: %s not saved to %s.fasta because option '%s' is set to %s"
+        update_journal(" NOTE: Sequence of %s not saved to %s.fasta because option '%s' is set to %s"
                        %(RG_globals.variants_header,out_mut,bio_parameters["is_mut_out"]["label"],RG_globals.is_mut_out))
     
     RG_process.mutfreqs_extend(RG_globals.mutlabels) # First Check, then set, mutfreqs at same length as mutlabels
@@ -2602,11 +2602,6 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         offset=abs_end+1
 
     abs_offset=offset*ref_strand
-
-    if is_join_complement:
-        read_strand=-1
-    else:
-        read_strand=1
         
     #print("abs_start: %s; abs_end: %s; abs_offset: %s"%(abs_start,abs_end,abs_offset))
 
@@ -2631,16 +2626,21 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         lookup_begin=int(begin)
         lookup_end=int(end)
 
-        if is_join_complement:
+        if is_join_complement: # Only used in transcript_view
+            read_strand=-1
+        else:
+            read_strand=1
+
+        if begin > end : # Typically where is_join_complement
             begin,end=end,begin
+
+        read_strand=1
         #print("begin %s \n end %s"%(begin,end)) # Validation check
         #Last intron / upstream
-            
-        #ends.append(begin-1)
-        #exon_len=abs(end-begin+1)
-        ends.append(begin-read_strand)
-        exon_len=abs(end-begin+read_strand)
+        ends.append(begin-1)
+        exon_len=abs(end-begin+1)
         max_seqlength+=exon_len
+        #print("begin:%s; end: %s; read_strand: %s; exon_len: %s"%(begin,end,read_strand,exon_len))
         
         if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Not an Exon
             feature_titles.append("Gene")
@@ -2656,6 +2656,7 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
                 this_exon.append(n)
             if is_join_complement:
                 this_exon.reverse()
+            #print("exon %s: %s"%(exon_total,this_exon))
             for item2 in this_exon:
                 mrnapos_lookup.append(item2)
                 
@@ -2666,8 +2667,7 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         #Next intron / downstream start
         intron_total+=1
         feature_titles.append(intron_text+str(intron_total)+"-"+str(intron_total+1))
-        #starts.append(int(end)+1)
-        starts.append(int(end)+read_strand)
+        starts.append(int(end)+1)
         exon_length.append(exon_len)
         #print("%s"%mrnapos_lookup[(len(mrnapos_lookup)-10):-1])
     ## End of: for item in splice_joinlist_txt
@@ -2693,23 +2693,6 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         abs_starts.append(abs(starts[count]+abs_offset))
         abs_ends.append(abs(ends[count]+abs_offset))
 
-    '''
-    # experimental: for fixing the Upstream & Downstream outputs 
-    if is_join_complement:
-        swaplistends(starts)
-        swaplistends(ends)
-        swaplistends(abs_starts)
-        swaplistends(abs_ends)
-    '''
-        
-    #    abs_starts.reverse()
-    #    abs_ends.reverse()
-    #    starts.reverse()
-    #    ends.reverse()
-    #    exon_length.reverse()
-    #    exon_length[0]=0
-    #  end of: if is_join_complement
-        
     exon_cumulative_length=[] # Building this for both polarities
     exon_current_length=0
 
@@ -2769,7 +2752,49 @@ def get_joinlist():
         if splice_joinlist_txt == "":
             success=False
     return success,splice_joinlist_txt
-    
+
+def is_make_ref_complement():
+    # Was this, but obviously wrong because of AK2
+    # is_complement=(RG_globals.target_transcript_name != RG_globals.empty_transcript_name) and RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
+    # Create the default variant 'reference' sequence;
+    # If it's not transcript sequence, then determine the strand, and present as forward (so flip if -1)
+    # If it is a transcript then flip if the transcript is on the opposite strand (is_join_complment)
+    # We are sending back the instruction whether to flip (True) or not (False)
+    if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Locus
+        if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:  # Strand-check
+            is_complement=False
+        else:
+            is_complement=True # Not really: this is a special case where should leave it or flip polarity entirely. What to do?
+            
+    elif RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:# Transcripts
+        is_complement=True
+    else:
+        is_complement=False                                    
+    return is_complement
+
+def is_make_addvar_complement():
+    # Note that any transformation enacted in get_ref_subseq3 by calling is_make_ref_complement will have already been made
+    # There's a different determination to decide whether it's flipped back again before saving to Addvar
+    # If it's not transcript sequence, it's already on, or flipped to +, so do not change
+    # If the strand is + and the transcript is on the opposite strand, we previously flipped the default to -; so we flip the edited one back to +
+    # If the strand is - and the transcript is on the same strand, we left it - ; so we flip the edited to +
+    # We leave the others unchanged as they are already +
+    if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Locus
+        if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:  # Strand-check
+            is_complement=False
+        else:
+            is_complement=False # Not really: this is a special case. Changes will have incorrect specification!!
+    elif RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:  # Transcripts that are is_join_complement
+        if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:  # Strand-check
+            is_complement=True
+        else:
+            is_complement=False
+    elif RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:   # Transcripts Not is_join_complement
+        is_complement=False
+    else:
+        is_complement=True
+    return is_complement
+
 def get_ref_subseq3():
     flip_is_frg_paired_end()
     general_initiate(False)
@@ -2779,11 +2804,10 @@ def get_ref_subseq3():
 
     local_begin=RG_globals.bio_parameters["target_build_variant"]["local_begin"]
     local_end=RG_globals.bio_parameters["target_build_variant"]["local_end"]
-    #is_join_complement=RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
-    # Using is_do_complement in place of is_join_complement means sequence is *not* reverse complemented for genomic, whatever the complement status  
-    is_do_complement=(RG_globals.target_transcript_name != RG_globals.empty_transcript_name) and RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
+    is_do_complement=is_make_ref_complement()
 
     reflen=local_end-local_begin+1
+    #print("reflen %s"%reflen)
     
     if reflen > 100:
         first=REF_record.seq[local_begin-1:local_begin+2]
@@ -2872,6 +2896,20 @@ def save_add_var():
     # Is RG_exploder_gui.add_mutlabs code required here for App.js?
     return is_success
 
+def get_add_saves():
+    if is_make_addvar_complement():
+        #print("is_make_addvar_complement")
+        #print("ref_subseq %s, var_subseq %s"%(RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"],
+        #                                     RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]))
+        ref_save=RG_process.get_revcomp(RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"])
+        var_save=RG_process.get_revcomp(RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"])
+    else:
+        ref_save=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"]
+        var_save=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]
+        #print("NOT is_make_addvar_complement")
+        #print("ref_save %s, var_save %s"%(ref_save,var_save))
+    return (ref_save,var_save)
+
 def save_add_var2():
     match = False
     for label in RG_globals.mutlabels:
@@ -2879,13 +2917,14 @@ def save_add_var2():
             match = True
             
     if not match:
+        ref_save,var_save=get_add_saves()
         addvar={"locus":RG_globals.target_locus,
                 "hapname":RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"],
                 "varname":RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"],
                 "local_begin":RG_globals.bio_parameters["target_build_variant"]["local_begin"],
                 "local_end":RG_globals.bio_parameters["target_build_variant"]["local_end"],
-                "ref_seq":RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"],
-                "var_seq":RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"],
+                "ref_seq":ref_save,
+                "var_seq":var_save,
                 "abs_Begin":RG_globals.bio_parameters["target_build_variant"]["abs_Begin"]["value"],
                 "abs_End":RG_globals.bio_parameters["target_build_variant"]["abs_End"]["value"]
                 }
