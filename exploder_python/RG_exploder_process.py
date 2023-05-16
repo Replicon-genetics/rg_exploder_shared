@@ -995,6 +995,7 @@ def add_seqrec_objects(SeqRec,splits):
     else:
         offset=int(SeqRec.abs_start)
     SeqRec.offset=offset
+    # WHOAH!! Different to main.get_muttranscripts(). May explain all the +1/-1 malarkey
     SeqRec.firstid="%s:%s:%s:%s:%s:%s"%(splits[0],splits[1],splits[2],splits[3],splits[4],splits[5])
     return SeqRec
 # end of add_seqrec_objects(SeqRec,splits)
