@@ -1151,6 +1151,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
                 writemut(Seq_rec,label)
             Seq_rec.mutlabel=label
             Seq_rec.mutfreq=mutfreq
+            Seq_rec.clipped_length=len(Seq_rec.seq)
             mutrecs.append(Seq_rec)
             mutcount+=1
             mutlistlabels=mutlistlabels+" "+label+","
@@ -1686,18 +1687,26 @@ def zero_mutfragcount(mutrecs):
     return Generated_Fragcount,Saved_Fragcount,mutfragcount
 
 def validate_fraglength(mutrecs,fraglen):
+    # The variant must be long enough to accomodate fragments
+    # In the case of paired-ends, need to account for ends as well
+    if RG_globals.is_frg_paired_end:
+        mod_fragtest=mutrecs[0].Tailclip+mutrecs[0].Headclip
+    else:
+        mod_fragtest=0
     longest=0; is_fraglength_OK=True
-    shortest=len(mutrecs[0].seq)
+    shortest=mutrecs[0].clipped_length-mod_fragtest
+    short_label=""
     for item in mutrecs:
-        thislen=len(item.seq)
+        thislen=item.clipped_length-mod_fragtest
+        print("thislen %s %s"%(item.mutlabel,thislen))
         if thislen > longest:
             longest = thislen
         elif thislen < shortest:
             shortest=thislen
-            
+            short_label=item.mutlabel      
     if fraglen*2 > shortest-1:
         is_fraglength_OK=False
-    return is_fraglength_OK,shortest
+    return is_fraglength_OK,shortest,short_label
        
 def normalise_mutfreqs(mutrecs):
     global NormaliseUpper,DOC_precision
@@ -1876,7 +1885,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
     Paired_Fragcount=0
     #ref_doc_len=RefRec.spliced_length # Set before this called
        
-    is_fraglength_OK,shortest=validate_fraglength(mutrecs,fraglen)
+    is_fraglength_OK,shortest,short_label=validate_fraglength(mutrecs,fraglen)
 
     if not is_fraglength_OK:
         update_journal(" *** WARNING1 *** should not reach here ")
@@ -1937,7 +1946,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
 
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
     Paired_Fragcount=0
-    is_fraglength_OK,shortest=validate_fraglength(mutrecs,fraglen)
+    is_fraglength_OK,shortest,short_label=validate_fraglength(mutrecs,fraglen)
        
     if not is_fraglength_OK:
         update_journal(" *** WARNING1 *** should not reach here ")
@@ -1947,9 +1956,8 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
         # First a list of normalised frequencies for each mutseq
         normutfreq=normalise_mutfreqs(mutrecs)
         # Next the sequence end of each mutseq
-        mutseqend=[];mutseqlen=[]
+        mutseqend=[]
         for item in mutrecs:
-            mutseqlen.append(len(item.seq)-RefRec.Tailclip-RefRec.Headclip)
             mutseqend.append(len(item.seq)-RefRec.Tailclip) # Constraining the end position to align with original locus range, not full source sequence
            
         if len(normutfreq)>0:
@@ -1971,7 +1979,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                         mutrec_index=i
                         break
                 #print("normalised %i %s %i %i "%(lottowin,RG_globals.mutlabels[mutrec_index],normutfreq[mutrec_index],lottoline[mutrec_index]))
-                # Constrain the range position to the defined locus range   
+                # Constrain the range position to the defined locus range
                 start=randint(RefRec.Headclip,mutseqend[mutrec_index]-fraglen)# Lookup of pre-calculated mutseqend to save processing
                 
                 #insert_len=randint(fraglen,Paired_insert_Max) # Flat distribution frequencies
@@ -2463,9 +2471,10 @@ def run_processing(is_get_new_refseq):
         (Mutrecs,is_success)=get_mutrecords(REFSEQ_RECORD,Seq_Format)
                 
         if is_success:
-            is_fraglength_OK,shortest=validate_fraglength(Mutrecs,RG_globals.Fraglen)
+            is_fraglength_OK,shortest,short_label=validate_fraglength(Mutrecs,RG_globals.Fraglen)
             if not is_fraglength_OK:
-                update_journal(" *** Processing halted *** Requested %s length %s is more than half the shortest %s sequence length of %s"%(RG_globals.read_annotation,RG_globals.Fraglen,RG_globals.variants_label,shortest))
+                update_journal(" *** Processing halted *** Requested %s length %s is more than half the shortest '%s' %s with sequence length %s"%
+                               (RG_globals.read_annotation,RG_globals.Fraglen,RG_globals.variants_label,short_label,shortest))
                 is_success= False
             elif (RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out) :
                 refseq_to_frags3(Mutrecs)
@@ -2556,26 +2565,25 @@ def get_transcript_data_process(redo_locus):
     #print("data_process splice_joinlist_txt: %s"%(splice_joinlist_txt))
     return exists,splice_joinlist_txt
 
-
 #########################################
 # MAIN
 # This section once only had call_exploder_main() for use by a GUI coded in Vue.js,
 # which batch-called this object after allowing the setting of user-modifiable parameters and pressing "Run"
 #
 # The Vue.js GUI version is available at https://repliconevaluation.wordpress.com/replicon-genetics/ngs-emulator-sets
-#
-# After realising how calls from vue.js could be used to conditionally call different objects within this code (originally advised this was *not* possible) instead of just one ,
-# the Python code originally within the TK GUI RG_exploder_gui.py (that supporting the 'build'* function) was moved here in 2022, to avoid having to code same in Vue.js
 # 
-# The main reason for including "Reference_sequences" with the config.json file was because of this same understanding:
-# the first version of RG_exploder_gui.py did some pre-reading of the input data, but was moved to config,json.
-# Some of this pre-reading has now been re-introduced (for the mRNA and CDS join features), eliminating the need to include it within config.json
+# The first version of RG_exploder_gui.py did some pre-reading of the input data, but "Reference_sequences" 
+# was coded into config.json to replace this because values could not be passed back to the pyodide-compiled version fronted by Vue.js
+# 
+# Some of this pre-reading has been re-introduced (for the mRNA and CDS join features), eliminating the need to include it within config.json
+# The Python version tests ('try') whteher the mRNA and CDS join features are in config.json. If not, it pre-reads.
+# 'Try' cannot be done in the pyodide version
+# 
 # There may be some other features that would be improved in the same way and eliminate the need for more of the config.json file
 #
 #    *The 'build' function is the original developer's name for the GUI function allowing the addition of further haplotypes,
-#     This was developed after the initial 'explode' function ie: the fragmentation of sequence into reads
+#     This was developed after the initial 'explode' function; the fragmentation of sequence into reads
 #########################################
-
 
 def swaplistends(inlist): # Swap function
     # Storing the first and last element as a pair in a tuple variable get
@@ -2585,6 +2593,9 @@ def swaplistends(inlist): # Swap function
     return inlist
 
 def get_muttranscripts(redo_locus): # Derive the transcript tables
+    # It might be obvious to use Refseq.abs_start, Refseq.abs_end, Refseq.polarity
+    # But at this point we have not necessarily read in the sequence file yet. Data are from config.json
+
     # NB: redo_locus isn't used!
     # Very importantly the values set here to pass back to the calling GUI are:
     # mrnapos_lookup,abs_offset,ref_strand,max_seqlength,GRChver_txt
@@ -2592,9 +2603,9 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     
     is_join_complement=RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
     Region=RG_globals.Reference_sequences[RG_globals.target_locus]["Region"]
-    abs_start=int(Region.split(":")[2])
-    abs_end=int(Region.split(":")[3])
-    ref_strand=int(Region.split(":")[4])
+    abs_start=int(Region.split(":")[2])  # REFSEQ.abs_start - available only when sequence file read. This comes from config.json
+    abs_end=int(Region.split(":")[3])    # REFSEQ.abs_end - ditto
+    ref_strand=int(Region.split(":")[4]) # REFSEQ.polarity - ditto
     maxreflen=abs(abs_end-abs_start)+1
     if ref_strand == 1:
         offset=abs_start-1
@@ -2764,7 +2775,7 @@ def is_make_ref_complement():
         if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:  # Strand-check
             is_complement=False
         else:
-            is_complement=True # Not really: this is a special case where should leave it or flip polarity entirely. What to do?
+            is_complement=None # Not really True: this is a special case where should leave it or flip polarity entirely. What to do?
             
     elif RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:# Transcripts
         is_complement=True
@@ -2783,7 +2794,7 @@ def is_make_addvar_complement():
         if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:  # Strand-check
             is_complement=False
         else:
-            is_complement=False # Not really: this is a special case. Changes will have incorrect specification!!
+            is_complement=None # Not really False: this is a special case. Changes will have incorrect specification!!
     elif RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:  # Transcripts that are is_join_complement
         if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==1:  # Strand-check
             is_complement=True
@@ -2827,6 +2838,10 @@ def get_ref_subseq3():
         else:
             success=False
         viewstring="%s"%str(subref)
+
+    if is_do_complement==None:
+        subref="XXX"
+        viewstring="Quack"
         
     RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"]=str(subref)
     RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["viewstring"]="%s bases:%s"%(reflen,str(viewstring))
@@ -2897,7 +2912,13 @@ def save_add_var():
     return is_success
 
 def get_add_saves():
-    if is_make_addvar_complement():
+    is_do_complment=is_make_addvar_complement()
+    varname_save=RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"],
+    if is_do_complment== None:
+        ref_save="-"
+        var_save="-"
+        varname_save="Quack"
+    elif is_do_complment:
         #print("is_make_addvar_complement")
         #print("ref_subseq %s, var_subseq %s"%(RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"],
         #                                     RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]))
@@ -2908,19 +2929,21 @@ def get_add_saves():
         var_save=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]
         #print("NOT is_make_addvar_complement")
         #print("ref_save %s, var_save %s"%(ref_save,var_save))
-    return (ref_save,var_save)
+
+    return (ref_save,var_save,varname_save)
 
 def save_add_var2():
     match = False
     for label in RG_globals.mutlabels:
         if label == RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"]:
             match = True
-            
+            break
     if not match:
-        ref_save,var_save=get_add_saves()
+
+        ref_save,var_save,varname_save=get_add_saves()
         addvar={"locus":RG_globals.target_locus,
                 "hapname":RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"],
-                "varname":RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"],
+                "varname":varname_save,
                 "local_begin":RG_globals.bio_parameters["target_build_variant"]["local_begin"],
                 "local_end":RG_globals.bio_parameters["target_build_variant"]["local_end"],
                 "ref_seq":ref_save,
