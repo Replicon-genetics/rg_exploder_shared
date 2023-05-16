@@ -1013,6 +1013,7 @@ def src_sliders_instantiate_build(window):
         
     def save_seq():
         nonlocal seq_region,seq_region_success
+        global local_begin,local_end
         global src_slider_widgets, src_slider_widgets_active_count,src_slider_widgets_old_active_count
         global src_sliders_vals,src_sliders_strvals
 
@@ -1053,7 +1054,9 @@ def src_sliders_instantiate_build(window):
                 else:
                     abs_maptxt="%s..%s"%(abs_End,abs_Begin)
                 spacer="                     /"
-                ref_save,var_save=RG_main.get_add_saves()
+                ref_save,var_save,var_name=RG_main.get_add_saves()
+                if var_name=="Quack":
+                    local_begin=1; local_end=1
                 msgtxt= 'Haplotype Name: %s\n     variation       %s..%s\n%sreplace="%s/%s"\n%sabsolute_map="%s"\n%scomment="%s"\n'\
                  %(hap_name,local_begin,local_end,spacer,ref_save,var_save,spacer,abs_maptxt,spacer,var_name)
                 write_GUI_text2(msgtxt)
@@ -1584,6 +1587,7 @@ def refresh_source_slider(v_index,w_text):
           
 def refresh_src_sliders_builder():
     #print("at refresh_src_sliders")
+    #print("ref_strand %s"%RG_globals.bio_parameters["target_build_variant"]["ref_strand"])
     global src_slider_widgets_build
     global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build,max_seqlength
     global trans_text
@@ -1591,6 +1595,10 @@ def refresh_src_sliders_builder():
     if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         #w_text=RG_globals.target_locus
         trans_text="Locus"
+        if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==-1:
+            trans_text="Quack"
+            print("trans_text %s"%trans_text)
+        
     elif RG_globals.is_CDS:
         trans_text="CDS"
     else:
