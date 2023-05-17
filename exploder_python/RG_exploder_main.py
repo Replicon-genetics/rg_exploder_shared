@@ -1698,7 +1698,7 @@ def validate_fraglength(mutrecs,fraglen):
     short_label=""
     for item in mutrecs:
         thislen=item.clipped_length-mod_fragtest
-        print("thislen %s %s"%(item.mutlabel,thislen))
+        #print("thislen %s %s"%(item.mutlabel,thislen))
         if thislen > longest:
             longest = thislen
         elif thislen < shortest:
