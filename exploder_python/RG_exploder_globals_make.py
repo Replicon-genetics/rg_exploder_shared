@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="12-Mar-2023"
+#Prg_verDate="11-Jun-2023"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
@@ -505,13 +505,14 @@ def make_bio_parameters_configs():
             "value":target_transcript_id
             },
         "target_build_variant": {
-            "GRChver_txt": GRCh38_txt,
+            "GRChver_txt": GRCh38_txt, # Superfluous?
             "is_get_ref": False,
             "is_save_var": False,
             "is_get_muttranscripts":False,
             "mRNA_join":"",
             "CDS_join":"",
             "headclip":0,
+            "tailclip":0,
             "mrnapos_lookup":[0],
             "transcript_view":"",
             "abs_offset":0,
