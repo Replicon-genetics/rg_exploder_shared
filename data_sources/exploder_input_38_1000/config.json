@@ -130,6 +130,7 @@
             "mRNA_join": "",
             "CDS_join": "",
             "headclip": 0,
+            "tailclip": 0,
             "mrnapos_lookup": [
                 0
             ],
