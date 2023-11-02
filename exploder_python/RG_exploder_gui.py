@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="14-May-2023"
+ProgverDate="22-Sep-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
 
@@ -398,9 +398,10 @@ def set_refseq_target_url():
     ENS_ts_target_url=""
     ENS_ts_target_url_txt=""
 
-    if RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]== RG_globals.GRCh37_txt:
+    GRChver_txt=RG_globals.Reference_sequences[RG_globals.target_locus]["Region"].split(":")[0]
+    if GRChver_txt== RG_globals.GRCh37_txt:
         target="37"
-    elif RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]== RG_globals.GRCh38_txt:
+    elif GRChver_txt== RG_globals.GRCh38_txt:
         target="38"
     else:
         target=""
@@ -443,6 +444,7 @@ def set_refseq_target_url():
         else:
             ENS_ts_target_url=""
         ENS_ts_target_url_txt="Ensembl_transcript"+":"+tsid
+    #print("ENS_ts_target_url %s"%ENS_ts_target_url)
 
 def results_hyperLink(event):
     global results_links
@@ -1597,7 +1599,6 @@ def refresh_src_sliders_builder():
         trans_text="Locus"
         if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==-1:
             trans_text="Quack"
-            print("trans_text %s"%trans_text)
         
     elif RG_globals.is_CDS:
         trans_text="CDS"
