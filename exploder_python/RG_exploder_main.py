@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_24_13.py"
-ProgverDate="15-May-2023"
+ProgverDate="1-Nov-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -1632,12 +1632,12 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
     
     label_count=0 # Takes over the role of Saved_Fragcount for numbering the id-label because when is_duplex=True, it passes through label_and_save twice
     
-    is_fraglength_OK,longest=validate_fraglength(mutrecs,fraglen)
+    is_fraglength_OK,longest,short_label=validate_fraglength(mutrecs,fraglen)
 
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
 
     if not is_fraglength_OK:
-        update_journal(" *** WARNING2 *** should not reach here ")
+        update_journal(" *** WARNING1 *** should not reach here ")
 
     else:
         mutrec_index=0
@@ -1687,7 +1687,7 @@ def zero_mutfragcount(mutrecs):
     return Generated_Fragcount,Saved_Fragcount,mutfragcount
 
 def validate_fraglength(mutrecs,fraglen):
-    # The variant must be long enough to accomodate fragments
+    # The variant must be long enough to accommodate fragments
     # In the case of paired-ends, need to account for ends as well
     if RG_globals.is_frg_paired_end:
         mod_fragtest=mutrecs[0].Tailclip+mutrecs[0].Headclip
@@ -1888,7 +1888,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
     is_fraglength_OK,shortest,short_label=validate_fraglength(mutrecs,fraglen)
 
     if not is_fraglength_OK:
-        update_journal(" *** WARNING1 *** should not reach here ")
+        update_journal(" *** WARNING2 *** should not reach here ")
 
     else:
         # Get two parallel lists to match mutrecs
@@ -1949,7 +1949,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     is_fraglength_OK,shortest,short_label=validate_fraglength(mutrecs,fraglen)
        
     if not is_fraglength_OK:
-        update_journal(" *** WARNING1 *** should not reach here ")
+        update_journal(" *** WARNING3 *** should not reach here ")
 
     else:
         # Get two parallel lists to match mutrecs
@@ -2592,7 +2592,9 @@ def swaplistends(inlist): # Swap function
     inlist[0], inlist[-1] = get
     return inlist
 
-def get_muttranscripts(redo_locus): # Derive the transcript tables
+def get_muttranscripts(redo_locus):
+    # Refactoring June 2023
+    # Derive the transcript tables
     # It might be obvious to use Refseq.abs_start, Refseq.abs_end, Refseq.polarity
     # But at this point we have not necessarily read in the sequence file yet. Data are from config.json
 
@@ -2616,79 +2618,162 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
         
     #print("abs_start: %s; abs_end: %s; abs_offset: %s"%(abs_start,abs_end,abs_offset))
 
-    exon_total=0; intron_total=0; feature_titles=["Upstream"]; starts=[int(1)]; ends=[]
-    abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0]; exon_length=[0];max_seqlength=0;
+    locus_begin,locus_end=RG_globals.Reference_sequences[RG_globals.target_locus]["Locus_range"].split(":")
+    locus_begin=int(locus_begin)
+    locus_end=int(locus_end)
     
-    if RG_globals.is_CDS:
-        exon_text="CDS "
-        intron_text="CDS_Intron "
-    else:
-        exon_text="Exon "
-        intron_text="Intron "
+    # Need to store an offset for case of generating variants from *clipped* genomic sequence, so the offset is the Headclip length
+    headclip=locus_begin-1
+    tailclip=maxreflen-locus_end
+    
+    RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
+    RG_globals.bio_parameters["target_build_variant"]["tailclip"]=tailclip
+
+    #exon_total=0; intron_total=0; feature_titles=["Pre-Locus","Upstream"]; starts=[int(1),int(locus_begin)]; ends=[headclip]
+    #abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0,0]; exon_length=[0,0];max_seqlength=0;
+
+    exon_total=0; intron_total=0; feature_titles=["Pre-Locus"]; starts=[]; ends=[]
+    abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0]; exon_length=[0];max_seqlength=0;
+    template_length=0;template_cumulative_length=["-"]
 
     run_success,splice_joinlist_txt=get_joinlist()
-    #print("splice_joinlist_txt %s"%splice_joinlist_txt)
+
+    # set Pre-Locus range
+    if is_join_complement:
+        #headclip,tailclip=tailclip,headclip
+        starts.append(maxreflen)
+        ends.append(locus_end+1)
+        exon_length.append(tailclip)
+    else:
+        starts.append(1)
+        ends.append(locus_begin-1)
+        exon_length.append(headclip)
     
-    for item in splice_joinlist_txt:
-        begin,end=item.split(":")
-        begin=int(begin)
-        end=int(end)
-        
-        lookup_begin=int(begin)
-        lookup_end=int(end)
 
-        if is_join_complement: # Only used in transcript_view
-            read_strand=-1
+    # set Locus ranges
+    if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Locus
+        feature_titles.append(RG_globals.empty_transcript_name)
+        if is_join_complement:
+            starts.append(locus_end)
+            ends.append(locus_begin)
         else:
-            read_strand=1
-
-        if begin > end : # Typically where is_join_complement
-            begin,end=end,begin
-
-        read_strand=1
-        #print("begin %s \n end %s"%(begin,end)) # Validation check
-        #Last intron / upstream
-        ends.append(begin-1)
-        exon_len=abs(end-begin+1)
-        max_seqlength+=exon_len
-        #print("begin:%s; end: %s; read_strand: %s; exon_len: %s"%(begin,end,read_strand,exon_len))
+            starts.append(locus_begin)
+            ends.append(locus_end)
+        locus_length=locus_end-locus_begin+1
+        exon_length.append(locus_length)
+        max_seqlength=locus_length
+        template_length+=locus_length
+        template_cumulative_length.append(template_length)
         
-        if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Not an Exon
-            feature_titles.append("Gene")
-            # Need to store an offset for case of generating variants from *clipped* genomic sequence, so the offset is the Headclip length
-            headclip=int(splice_joinlist_txt[0].split(":")[0])-1
-            RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
-        else: #Exon
+    # or set introns & exons ranges
+    else:
+        feature_titles.append("Upstream")
+        #mrnapos_lookup.append(0)
+        exon_length.append(0)
+        template_cumulative_length.append("-")
+        if is_join_complement:
+            starts.append(locus_end)
+        else:
+            starts.append(locus_begin)
+                                                                        
+        if RG_globals.is_CDS:
+            exon_text="CDS "
+            intron_text="CDS_Intron "
+        else:
+            exon_text="Exon "
+            intron_text="Intron "
+
+        #print("splice_joinlist_txt %s"%splice_joinlist_txt)
+
+        for count in range(len(splice_joinlist_txt)): # was for item in splice_joinlist_txt
+            this_pair=splice_joinlist_txt[count]
+            if count < len(splice_joinlist_txt)-1:
+                next_pair=splice_joinlist_txt[count+1]
+            begin,end=this_pair.split(":")
+            begin=int(begin)
+            end=int(end)
+
+            #print("begin %s \n end %s"%(begin,end)) # Validation check
+            #Last intron / upstream
+            if is_join_complement:
+                if end == locus_end:
+                    ends.append(end)
+                else:
+                    ends.append(end+1)
+            elif begin == locus_begin:
+                    ends.append(begin)
+            else:
+                    ends.append(begin-1)
+            exon_len=abs(end-begin+1)
+            max_seqlength+=exon_len
+            
+            #print("begin:%s; end: %s; read_strand: %s; exon_len: %s"%(begin,end,read_strand,exon_len))
+        
             exon_total+=1
             feature_titles.append(exon_text+str(exon_total))
             #print("lookup_begin: %s,lookup_end+1 %s"%(lookup_begin,lookup_end+1))
             this_exon=[]
-            for n in range(lookup_begin,lookup_end+1):
+            for n in range(begin,end+1):
                 this_exon.append(n)
             if is_join_complement:
                 this_exon.reverse()
             #print("exon %s: %s"%(exon_total,this_exon))
             for item2 in this_exon:
                 mrnapos_lookup.append(item2)
-                
-        #print("Locus: %s mrnapos_lookup %s"%(RG_globals.target_locus,mrnapos_lookup))      
-        starts.append(begin)
-        ends.append(end)
+            
+            #print("Locus: %s mrnapos_lookup %s"%(RG_globals.target_locus,mrnapos_lookup))
+            #print(" locus %s ; transcript %s; begin %s ; end %s ; exon_len %s "%(RG_globals.target_locus,RG_globals.target_transcript_name,begin,end,exon_len))
+
+            if is_join_complement:
+                starts.append(end)
+                ends.append(begin)
+                starts.append(begin-1)
+            else:
+                starts.append(begin)
+                ends.append(end)
+                starts.append(end+1)
+            exon_length.append(exon_len)
+            template_length+=exon_len
+            template_cumulative_length.append(template_length)
+            #Next intron / downstream start
+            intron_total+=1
+            feature_titles.append(intron_text+str(intron_total)+"-"+str(intron_total+1))
+            template_cumulative_length.append(template_length)
+            
+            #print("%s"%mrnapos_lookup[(len(mrnapos_lookup)-10):-1])
+        ## End of: for item in splice_joinlist_txt
+        ##        /for count in range(len(splice_joinlist_txt))
+        feature_titles[-1]="Downstream"
+        intron_total-=1
         exon_length.append(exon_len)
-        #Next intron / downstream start
-        intron_total+=1
-        feature_titles.append(intron_text+str(intron_total)+"-"+str(intron_total+1))
-        starts.append(int(end)+1)
-        exon_length.append(exon_len)
-        #print("%s"%mrnapos_lookup[(len(mrnapos_lookup)-10):-1])
-    ## End of: for item in splice_joinlist_txt
-    #print("%s"%mrnapos_lookup)
-        
-    # Finishing off
-    feature_titles[len(feature_titles)-1]="Downstream"
-    ends.append(maxreflen)
-    exon_length.append(exon_len)
-    #print("starts %s \n ends %s"%(starts,ends)) # Validation check
+        template_cumulative_length[-1]="-"
+
+        if is_join_complement:
+            ends.append(locus_begin)
+        else:
+            ends.append(locus_end)
+
+    ## End of: if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Locus
+    # Finishing off    
+    feature_titles.append("Post-Locus")
+    if is_join_complement:
+        starts.append(locus_begin-1)
+        ends.append(1)
+        exon_length.append(headclip)
+    else:
+        starts.append(locus_end+1)
+        ends.append(maxreflen)
+        exon_length.append(tailclip)
+    template_cumulative_length.append("-")
+
+    if starts[-2]==starts[-1]:# This to catch where there's no downstream because exon boundary coincides with locus boundary
+        ends[-2]=starts[-2]
+        feature_titles[-2]="No Downstream"
+
+    if starts[1]==ends[1]:# This to catch where there's no upstream because exon boundary coincides with locus boundary
+        feature_titles[1]="No Upstream"
+         
+    #print("feature_titles %s \n starts %s \n ends %s"%(feature_titles,starts,ends)) # Validation check
 
     # This is all that is essential to send back to GUI
     RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]=mrnapos_lookup
@@ -2696,22 +2781,12 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     RG_globals.bio_parameters["target_build_variant"]["ref_strand"]=ref_strand
     RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["max"]=max_seqlength
     RG_globals.bio_parameters["target_build_variant"]["trans_End"]["max"]=max_seqlength
-    RG_globals.bio_parameters["target_build_variant"]["GRChver_txt"]=Region.split(":")[0]
 
     # The following is only to build transcript_view for user-notification via RG_globals.bio_parameters["target_build_variant"]["transcript_view"]
     # It recreates the intron/exon table as seen in Ensembl transcript view. Ideally put in journal somehow
     for count in range(len(ends)):
         abs_starts.append(abs(starts[count]+abs_offset))
         abs_ends.append(abs(ends[count]+abs_offset))
-
-    exon_cumulative_length=[] # Building this for both polarities
-    exon_current_length=0
-
-    for count in range(len(feature_titles)):
-        if count % 2 != 0:
-            exon_current_length+=abs(exon_length[count])
-        exon_cumulative_length.append(exon_current_length)
-            #print("count %s, exon_length[count] %s, exon_current_length %s"%(count,exon_length[count],exon_current_length))
 
     if RG_globals.is_CDS and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
         add="_CDS"
@@ -2725,28 +2800,28 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     else:
         trans_text="mRNA"
 
-    transcript_view="Locus: %s, %s: %s%s,\tLength: %s\n Source %s%s\n"%(RG_globals.target_locus,trans_text,RG_globals.target_transcript_name,add,max_seqlength,
-                                                                             RG_globals.Reference_sequences[RG_globals.target_locus]["Region"][:-1],read_strand)
+    transcript_view="Locus: %s, %s: %s%s,\tLength: %s\n Source %s\n"%(RG_globals.target_locus,trans_text,RG_globals.target_transcript_name,add,max_seqlength,
+                                                                             RG_globals.Reference_sequences[RG_globals.target_locus]["Region"])
     
-    transcript_view+=" Label\t\t Local\t\t| Global\t\t\t| Length | Cumulative\n"
+    transcript_view+=" Label\t\t Local\t\t| Global\t\t| Length| Template (Cumulative)\n"
 
     for count in range(len(feature_titles)):
         loc_start=starts[count]
         loc_end=ends[count]
         glob_start=abs_starts[count]
         glob_end=abs_ends[count]
-        
-        #if is_join_complement: # swap abs
-        #    glob_start,glob_end= glob_end,glob_start
-        #    loc_start,loc_end=loc_end,loc_start
+        this_len=abs(ends[count]-starts[count])+1
+        if this_len==1: this_len = 0
+        #print("%s; start %s; end %s; this_len %s; templ %s"%(feature_titles[count],starts[count],ends[count],this_len,template_cumulative_length[count]))
             
         transcript_view+=" %s:\t %s - %s\t| %s - %s\t| %s\t | %s\n"%(feature_titles[count],loc_start,loc_end,glob_start,glob_end,
-                                                                     abs(ends[count]-starts[count]+read_strand),exon_cumulative_length[count])
+                                                                     this_len,template_cumulative_length[count])
     transcript_view+="\n"
 
     RG_globals.bio_parameters["target_build_variant"]["transcript_view"]=transcript_view #Not essential - only used for GUI information
     # End of user-notification section. 
     return run_success
+
 
 # Diversion from main 'exploder' function to extract a subsequence that supports user-defined variants (aka the 'builder' function)
 def get_joinlist():
