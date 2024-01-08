@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="22-Sep-2023"
+ProgverDate="04-Dec-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
 
@@ -493,7 +493,9 @@ def save_and_go():
         write_GUI_text("Run %s Complete at %s\n"%(run_count,time_stamp))
     else:
         write_GUI_text("Run %s Failed at %s\n"%(run_count,time_stamp))
-    write_GUI_results_link("%s run results. Check time stamp!"%RG_globals.get_locus_transcript())
+
+    extralabel,strandlabel=RG_globals.get_strand_extra_label()
+    write_GUI_results_link("%s_%s run results. Check time stamp!"%(RG_globals.get_locus_transcript(),extralabel))
         
     gobutton.configure(state="normal")
     gobutton.configure(image=go_img)
