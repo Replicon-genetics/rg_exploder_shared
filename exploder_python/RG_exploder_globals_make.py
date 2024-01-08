@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="11-Jun-2023"
+#Prg_verDate="28-Nov-2023"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
@@ -204,16 +204,19 @@ def set_string_defaults():
     #read_annotation="fragment"
     frag_annotation="frg" # The prefix to the fragment-read number in fasta description eg: >frg_1 
 
-    global title_label,reference_header,variants_header,variants_label,frequency_label,options_label,reads_list_label,reads_type_label,help_label,about_label,more_label
+    global title_label,template_label,reference_header,variants_header,variants_label,frequency_label,options_label,reads_list_label,reads_type_label,help_label,about_label,more_label
     hapname="Haplotype"
     #title_label="NGS Read Simulator"
     title_label="Synthetic %ss Generator"%read_annotation.title() 
     #reference_header="Reference Sequence"
+    template_label="Template"
     reference_header="Reference Source"
     #variants_header="Variant Sequences"
-    variants_header="%s Definition"%hapname
+    #variants_header="%s Definition"%hapname
+    variants_header="%s Source"%hapname
     #variants_label="Variant Source"
-    variants_label="Variations Source"
+    #variants_label="Variations Source"
+    variants_label="%s Source"%hapname
     #frequency_label="Source Frequency"
     frequency_label="Source Ratio"
     options_label="Output Options"
@@ -338,8 +341,8 @@ def set_diagnostic_defaults():
                           # It is deprecated as a user-selectable option
 
     global is_trim_to_gene
-    is_trim_to_gene =True # is_trim_to_gene =True the source for the Reference sequence will be trimmed to the gene boundary, in teh same way as used for exons)
-                          # is_trim_to_gene = False he source for the Reference sequence is not trimmed 
+    is_trim_to_gene =True # is_trim_to_gene =True the source for the Reference sequence will be trimmed to the gene boundary, in the same way as used for exons)
+                          # is_trim_to_gene = False the source for the Reference sequence is not trimmed 
                           # This switch is solely here as an override to permit processing of the same data & parameters set with- and without- trimming
                           # It is not available as a user-selectable option
     
@@ -498,7 +501,7 @@ def make_bio_parameters_configs():
             "value": target_locus
             },
         "target_transcript_name":{
-            "label": "Template",
+            "label":template_label,
             "value":target_transcript_name
             },
         "target_transcript_id":{
@@ -561,7 +564,7 @@ def make_bio_parameters_configs():
                 },
             
             "ref_subseq": {
-                "label":"Reference Sequence", # "ref_label": "Reference Sequence",-convert
+                "label":"%s Sequence"%template_label, # "ref_label": "Reference Sequence",-convert
                 "value":"", #was "ref_viewstring": -convert
                 "length":0,
                 "viewstring":""
@@ -676,7 +679,7 @@ def make_bio_parameters_configs():
             "max": QualMAX
             },
         "is_write_ref_fasta": {
-            "label": "Save Reference Sequences",
+            "label": "Save Template Sequence",
             "value": is_write_ref_fasta
             },
         "is_mut_out": {
