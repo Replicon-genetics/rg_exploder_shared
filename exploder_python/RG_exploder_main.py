@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_24_13.py"
-ProgverDate="1-Nov-2023"
+Progver="RG_exploder_main_24_15.py"
+ProgverDate="04-Dec-2023"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -91,7 +91,7 @@ def general_initiate(is_journal):
     #  Call all the initialising subroutines that define globals in sequence
     initialise_start_time()
     if mut_types=="" : # Double use as a trigger to identify if initialise_global_text_constants() has already been called
-        initialise_global_vars() # this needs running once only to set the cross-module ( global) shared constants and variables
+        initialise_global_vars() # this needs running once only to set the cross-module (global) shared constants and variables
     initialise_module_outflags()
     set_IO_filenames()
     initialise_module_globals(is_journal)
@@ -230,9 +230,8 @@ def initialise_global_consts():
     from RG_exploder_globals import is_include_indels,is_vars_to_lower, is_dels_to_dots, is_dels_to_dots_override
     global is_include_indels,is_vars_to_lower, is_dels_to_dots, is_dels_to_dots_override  # Diagnostics
 
-    from RG_exploder_globals import is_print_diagnostics
-    global is_print_diagnostics      #  Switch to print more verbose runtime messages for diagnostic purposes. Rarely used now
-    #is_print_diagnostics=True
+    from RG_exploder_globals import is_print_diagnostics   
+    #RG_globals.is_print_diagnostics=True  #  Switch to print more verbose runtime messages for diagnostic purposes. Rarely used now
 
     from RG_exploder_globals import Paired_insert_Min,Paired_insert_Max
     global Paired_insert_Min, Paired_insert_Max
@@ -834,7 +833,6 @@ def write_refseq(RefRecord,which):
                 reftxt="%s%s"%(RG_globals.CDS_trigger,reftxt)
             else:
                 reftxt="%s%s"%(RG_globals.mRNA_trigger,reftxt)
-            
             VSeqRec=make_allvars_in_one_seq(RefRecord,id_label)
             VSeqRec.description=VSeqRec.description+" "+VSeqRec.cigar
             outfile="%s_%s"%(locus_transcript,id_label)
@@ -866,7 +864,7 @@ def write_refseq(RefRecord,which):
 def write_samheader(ThisSeqr,Rname):
     # Writes a header to sam format,unless is_append_samfile already True
     global samout,is_append_samfile,out_sa_file,RNAME,Out_Ref_Source,in_ref_src
-    global ref_doc_len
+    global REFSEQ_RECORD
     if not is_append_samfile:
         out_samfile="%s%s"%(Outfilepath,out_sa_file)
         samout = RG_io.open_write(out_samfile)
@@ -880,7 +878,7 @@ def write_samheader(ThisSeqr,Rname):
 
         RNAME=Rname
         head1="@HD\tVN:1.6\tSO:coordinate\n"
-        head2="@SQ\tSN:%s\tLN:%i\tAS:%s\tUR:%s.fasta\n"%(RNAME,ref_doc_len,genass,sam_in_src)
+        head2="@SQ\tSN:%s\tLN:%i\tAS:%s\tUR:%s.fasta\n"%(RNAME,REFSEQ_RECORD.spliced_length,genass,sam_in_src)
         head3="@CO\tACCESSION:\t%s\n"%(ThisSeqr.firstid)
 
         samout.write(head1)
@@ -1058,13 +1056,18 @@ def journal_final_summary():
     else:
         addtxt=""
     update_journal(" %s sections from the Reference Sequence are spliced out%s"%(introns,addtxt))
-    if RG_globals.is_duplex:
-        plextxt="dual"
-        endtxt="and reverse-complement"       
+    if RG_globals.is_frg_paired_end:
+        plextxt="paired ends"
+        endtxt="" 
     else:
-        plextxt="single"
-        endtxt="only"
-    update_journal(" Saved %ss created as %s strand: forward %s"%(RG_globals.read_annotation,plextxt,endtxt))
+        pairtxt=""
+        if RG_globals.is_duplex:
+            plextxt="dual strand:"
+            endtxt="forward and reverse-complement"       
+        else:
+            plextxt="single strand:"
+            endtxt="forward only"
+    update_journal(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
 # end of def journal_final_summary
 
 def close_journal(no_error):
@@ -1131,19 +1134,14 @@ def get_mutrecords(REF_record,embl_or_genbank):
     global is_dels_to_dots, is_dels_to_dots_override
     # Protection part 1 - temporarily override is_dels_to_dots flag for this routine
     save_idd=is_dels_to_dots; is_dels_to_dots=is_dels_to_dots_override
-    global mutlistlabels # Now used only in close_seqout and journalfrags
-    
+    global mutlistlabels # Now used only in close_seqout and journalfrags 
+
     mutlistlabels=""; mutrecs=[]; mutcount=0 ;is_success=True
-
-    #print("refseqdonor %s\n"%REF_record)
-    #print("refseqdonor features %s\n"%REF_record.features)
     
-    def local_add_mutrec(Seq_rec,label):
+    def local_add_mutrec(Seq_rec,label,mutfreq):
         global mutlistlabels
-        nonlocal mutrecs,mutcount,mutfreq,REF_record
-        #print("refseqdonor features %s\n"%REF_record.features)
-        #print("Seq_rec features %s\n"%Seq_rec.features)
-
+        nonlocal mutrecs,mutcount,REF_record
+ 
         Seq_rec,accept=merge_ref_with_mut(REF_record,Seq_rec,label)
         if accept:
             Seq_rec=make_allvars_in_one_seq(Seq_rec,label)
@@ -1155,10 +1153,11 @@ def get_mutrecords(REF_record,embl_or_genbank):
             mutrecs.append(Seq_rec)
             mutcount+=1
             mutlistlabels=mutlistlabels+" "+label+","
-        return Seq_rec,accept
+        return accept
    #end of def local_add_mutrec(Seq_rec,label)
         
-    update_journal("\nReading %s (feature) files..."%RG_globals.variants_label)
+    #update_journal("\nReading %s (feature) files..."%RG_globals.variants_label)
+    update_journal("\nReading %s files..."%RG_globals.variants_label)
     if not RG_globals.is_mut_out:
         update_journal(" NOTE: Sequence of %s not saved to %s.fasta because option '%s' is set to %s"
                        %(RG_globals.variants_header,out_mut,bio_parameters["is_mut_out"]["label"],RG_globals.is_mut_out))
@@ -1172,15 +1171,15 @@ def get_mutrecords(REF_record,embl_or_genbank):
             if label in addmut_labels: # Look for user-defined
                 Seq_record,exists=RG_process.make_addmut(REF_record,label) 
                 if exists:
-                    update_journal(" '%s' %s_%s found as user-defined haplotype"%(RG_globals.variants_label,RG_globals.target_locus,label))
-                    Seq_record,accept=local_add_mutrec(Seq_record,label)
+                    update_journal("\n'%s' %s_%s found as user-defined %s"%(RG_globals.variants_label,RG_globals.target_locus,label,RG_globals.variants_header))
+                    accept=local_add_mutrec(Seq_record,label,mutfreq)
                     if not accept:
                         #print("barf")
                         update_journal(" %s definition not accepted"%label)
             else: # Look for data in input directory
                 Seq_record,exists = read_mutrecord(label,embl_or_genbank) # Read from input directory
                 if exists:
-                    Seq_record,accept=local_add_mutrec(Seq_record,label) # Add to mutrecs
+                    accept=local_add_mutrec(Seq_record,label,mutfreq) # Add to mutrecs
                     if not accept:
                         #print("barf")
                         update_journal(" %s definition not accepted"%label)
@@ -1191,6 +1190,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
     if accept:
         mutlistlabels=mutlistlabels[:-1]
     if mutcount < 1:
+        print("special case mutcount %s "%mutcount)
         # Check special case when there is only 1 mutrec and freq is set to zero. Set freq to 1 to avoid nul run. It keeps tripping me up!
         RG_globals.mutfreqs[0]=1
         label=RG_globals.mutlabels[0]
@@ -1198,30 +1198,31 @@ def get_mutrecords(REF_record,embl_or_genbank):
         if exists:
                 update_journal(" No haplotypes with frequency >0, so setting the first:%s to %s to get something!"%(RG_globals.mutlabels[0],RG_globals.mutfreqs[0]))
                 mutfreq=RG_globals.mutfreqs[0]
-                Seq_record=local_add_mutrec(Seq_record,label)
-                is_success=exists
+                local_add_mutrec(Seq_record,label,mutfreq)
+                is_success=exists  
         else:
             program_exit("\t- Unable to read a minimum of 1 %s"%RG_globals.variants_header)
             is_success=False
+
+    if mutcount > 1:
+        addtxt="s"
     else:
-        if mutcount > 1:
-            addtxt="s"
-        else:
-            addtxt=""
-        update_journal("\nProcessing %s %s%s with frequency >0 : %s"%(mutcount,RG_globals.variants_header,addtxt,mutlistlabels))
-        journalise_dels()
+        addtxt=""
+
+    update_journal("\nProcessing %s %s%s with frequency >0 : %s"%(mutcount,RG_globals.variants_header,addtxt,mutlistlabels))
+    journalise_dels()
     # Protection part 2 - switch back this flag, on leaving this routine
     is_dels_to_dots=save_idd
     return mutrecs,is_success
 
 def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
-    global is_print_diagnostics
+    # Take an incoming sequence, and a feature definition: add the feature to the sequence. Update the 'CIGAR box' appropriately
     #This first line of globals would be tidier returned as a list from this function, rather than be globals?
     global var_count, sub_count, indel_count,insert_count, delete_count, complex_count
     global is_include_indels, skip_count
     global locus_transcript
 
-    #if is_print_diagnostics: print(this_feature)
+    #if RG_globals.is_print_diagnostics: print(this_feature)
     #print("Type:%s\nLocation:%s\nQualifiers:%s"%(this_feature.type,this_feature.location,this_feature.qualifiers))
     matchvardef=True  # Default to matching variant definitions are true because it should be set to False when found.
     msgtxt_mvs=""
@@ -1318,7 +1319,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         cigarbox=RG_process.fill_cigar(cigarbox,feat_start,feat_start,"I",len(replace))
         #end of local function do_insert()
 
-    if is_print_diagnostics: print("start %i end %i length %i"%(feat_start,feat_end,len(VSeq)))
+    if RG_globals.is_print_diagnostics: print("start %i end %i length %i"%(feat_start,feat_end,len(VSeq)))
     if (feat_start <= cigarbox[len(cigarbox)-1]) and replace_type!="err":
         # Increase the variant counter
         var_count+=1
@@ -1387,7 +1388,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
             msgtxt_mvs1+="         ..."+msgtxt_mvs
             msgtxt_mvs=msgtxt_mvs1
             complex_count +=1
-            #if is_print_diagnostics: print("Delins variant processed: %s"%this_feature)
+            #if RG_globals.is_print_diagnostics: print("Delins variant processed: %s"%this_feature)
         elif not is_indel:
             #Single substitution. This is where the variant substitution is made in VSeq
             #Expect feat_end == feat_start+1
@@ -1455,23 +1456,28 @@ def no_splice_refseq(SeqRec):
     # Could actually merge with splice_refseq and add conditionals for RG_globals.is_frg_paired_end
     global out_sa_file,in_ref_src
 
-    tmpRec=splice_refseq(SeqRec) # Make the disposable do the hard work of saving a REF file.
+    #tmpRec=splice_refseq(SeqRec) # Make the disposable do the hard work of saving a template file.
+    #CopyRec=RG_process.duplicate_record(SeqRec)
 
     # .spliced_length is used to determine target fragment total for target DOC, which is why this sets the spliced length to what would be the clipped length if clipped
+    '''
     SeqRec.Headclip=tmpRec.Headclip
     SeqRec.Tailclip=tmpRec.Tailclip
     SeqRec.spliced_length=tmpRec.spliced_length
     SeqRec.clipped_length=len(SeqRec.seq) # This is probably unchanged
     SeqRec.endlocus=tmpRec.endlocus
     SeqRec.rev_endlocus=tmpRec.rev_endlocus
-    SeqRec.features=RG_process.get_source_gene_features(SeqRec)# This to toss out the rest of the feature list so, when saving source features for haplotypes, don't
-
+    '''
+    #CopyRec.features=RG_process.get_source_gene_features(CopyRec)# This to toss out any feature list so, when saving source features for haplotypes, don't
+    #Seq_rec,accept=merge_ref_with_mut(REF_record,Seq_rec,label)
+    
     if RG_globals.is_write_ref_fasta:
         addtxt="is"
         write_refseq(SeqRec,Ref_file_name)
     else:
         addtxt="would be"
-    update_journal("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the paired-end %ss in %s, %s and %s"%(in_ref_src,SeqRec.clipped_length,addtxt,RG_globals.read_annotation,out_fa_file,out_fq_file,out_sa_file))
+    update_journal("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the paired-end %ss in %s, %s and %s"\
+                   %(in_ref_src,SeqRec.clipped_length,addtxt,RG_globals.read_annotation,out_fa_file,out_fq_file,out_sa_file))
 
 def splice_refseq(SeqRec):
     global in_ref_src_title,in_ref_src,locus_transcript
@@ -1517,10 +1523,11 @@ def zero_varcounts():
     return
 
 def make_allvars_in_one_seq(SeqRec,label):
-    # There used to be a companion to this in which each variant was put into a single sequence. But no requirement for this at present, so deprecated
+    # This applies all the variant features in the feature table into the incoming sequence, returning a new seqeunce record with the modified sequence.
+    # It does this by applying the variants in reverse order from the tail of the sequence, allowing the original position-definitions to retain relevance.
+    # There used to be a companion to this in which each variant was put into its own sequence record. But this was deprecated, there being no requirement for this.
     global REFSEQ_RECORD,MaxVarPos
     global mutseqcount
-    global is_print_diagnostics
     global var_count, sub_count, indel_count, insert_count, delete_count, complex_count
     global skip_count
     global locus_transcript,in_ref_src
@@ -1581,8 +1588,6 @@ def make_allvars_in_one_seq(SeqRec,label):
 
 def refseq_to_frags3(mutrecs):
     global REFSEQ_RECORD
-    global ref_doc_len
-    ref_doc_len=REFSEQ_RECORD.unclipped_length # Modified in generate_multisource_paired_frags
     if not RG_globals.is_fastq_random:
         RG_process.make_fastq_slice()
     if RG_globals.is_frg_paired_end:
@@ -1627,51 +1632,44 @@ def get_fragseq(inseq):
     return outseq,dupstr,dir_label
 
 def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
-    # NB: RG_globals.is_onefrag_out must be True to get here
-    global is_print_diagnostics
+    # NB: RG_globals.is_onefrag_out must be True to get here AND fraglen must have been tested as OK with validate_fraglength
+    # NB: fragtotal is irrelevant for "all_frags"
     
     label_count=0 # Takes over the role of Saved_Fragcount for numbering the id-label because when is_duplex=True, it passes through label_and_save twice
-    
-    is_fraglength_OK,longest,short_label=validate_fraglength(mutrecs,fraglen)
-
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
 
-    if not is_fraglength_OK:
-        update_journal(" *** WARNING1 *** should not reach here ")
+    mutrec_index=0
+    mutlabel_count=0
+    update_journal(" Relative frequency values ignored because option '%s' selected"%bio_parameters["is_onefrag_out"]["label"])
 
-    else:
-        mutrec_index=0
-        mutlabel_count=0
-        update_journal(" Relative frequency values ignored because option '%s' selected"%bio_parameters["is_onefrag_out"]["label"])
-
-        for item in mutrecs: # Pick each mutrecs entry in turn to be VarSeq
-            for start in range(0,len(item.seq)-fraglen+1):
-                #if Generated_Fragcount > 2:
-                #    input("enter to continue")
-                end=start+fraglen
-                thisrec_count=0
-                Generated_Fragcount+=1
-                #if RG_globals.is_duplex: # Increment here because of RG_process.is_mut_cigar filter below
-                #   Generated_Fragcount+=1 # Yes: that's +2 for if RG_globals.is_duplex == True
-                ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(item.cigarbox,item.mutbox,
-                                                                                 start,fraglen) # Calculate the CIGAR before trimming the sequence
-                #if not RG_globals.is_muts_only or (RG_globals.is_muts_only and RG_process.is_mut_cigar(fwd_cigar_label)) : shortens to ...
-                if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) : # Only fragment if RG_globals.is_muts_only is False
-                                                                                             # or when the fwd_cigar_label includes a variant
-                    trimseq=item.seq[start:end]  # item.seq[start:end] trims the mutseq to get the fragment
-                    mutlabel_count+=1
-                    # Ideally would assign item.Saved_Fragcount+=1 - but this cannot be done in generate_multisource_random_frags, so not doing here
+    for item in mutrecs: # Pick each mutrecs entry in turn to be VarSeq
+        for start in range(0,len(item.seq)-fraglen+1):
+            #if Generated_Fragcount > 2:
+            #    input("enter to continue")
+            end=start+fraglen
+            thisrec_count=0
+            Generated_Fragcount+=1
+            #if RG_globals.is_duplex: # Increment here because of RG_process.is_mut_cigar filter below
+            #   Generated_Fragcount+=1 # Yes: that's +2 for if RG_globals.is_duplex == True
+            ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(item.cigarbox,item.mutbox,
+                                                                             start,fraglen) # Calculate the CIGAR before trimming the sequence
+            #if not RG_globals.is_muts_only or (RG_globals.is_muts_only and RG_process.is_mut_cigar(fwd_cigar_label)) : shortens to ...
+            if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) : # Only fragment if RG_globals.is_muts_only is False
+                                                                                        # or when the fwd_cigar_label includes a variant
+                trimseq=item.seq[start:end]  # item.seq[start:end] trims the mutseq to get the fragment
+                mutlabel_count+=1
+                # Ideally would assign item.Saved_Fragcount+=1 - but this cannot be done in generate_multisource_random_frags, so not doing here
+                Saved_Fragcount+=1
+                #label_and_saveg("f",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,RefRec,0,0,0)
+                label_and_saveg("f",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,item,0,0,0)
+                mutfragcount[mutrec_index]+=1
+                if RG_globals.is_duplex: # Just repeat with reverse_complement
                     Saved_Fragcount+=1
-                    #label_and_saveg("f",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,RefRec,0,0,0)
-                    label_and_saveg("f",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,item,0,0,0)
-                    mutfragcount[mutrec_index]+=1
-                    if RG_globals.is_duplex: # Just repeat with reverse_complement
-                        Saved_Fragcount+=1
-                        #label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,RefRec,0,0,0)
-                        label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,item,0,0,0)
-                        mutfragcount[mutrec_index]+=1                        
-            mutrec_index+=1
-        journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount)
+                    #label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,RefRec,0,0,0)
+                    label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item.mutlabel,item,0,0,0)
+                    mutfragcount[mutrec_index]+=1                        
+        mutrec_index+=1
+    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount)
     return
 # end of def generate_multisource_all_frags(RefRec,mutrecs,fraglen)
 
@@ -1877,185 +1875,170 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
 
 
 def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
-    # NB: RG_globals.is_onefrag_out must be False to get here
-    global is_print_diagnostics,NormaliseUpper,Paired_insert_Max
-    global ref_doc_len
+    # NB: RG_globals.is_onefrag_out must be False to get here AND fraglen must have been tested as OK with validate_fraglength
+    global NormaliseUpper,Paired_insert_Max
 
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
     Paired_Fragcount=0
-    #ref_doc_len=RefRec.spliced_length # Set before this called
-       
-    is_fraglength_OK,shortest,short_label=validate_fraglength(mutrecs,fraglen)
 
-    if not is_fraglength_OK:
-        update_journal(" *** WARNING2 *** should not reach here ")
+    # Calculate an expected fragtotal using un-modified spliced-reference
+    fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen))
+    
 
-    else:
-        # Get two parallel lists to match mutrecs
-        # First a list of normalised frequencies for each mutseq
-        normutfreq=normalise_mutfreqs(mutrecs)
-        # Next the sequence end of each mutseq
-        mutseqend=[]
-        for item in mutrecs:
-            mutseqend.append(len(item.seq))
+    # Get two parallel lists to match mutrecs
+    # First a list of normalised frequencies for each mutseq
+    normutfreq=normalise_mutfreqs(mutrecs)
+    # Next the sequence end of each mutseq
+    mutseqend=[]
+    for item in mutrecs:
+        mutseqend.append(len(item.seq))
             
-        if len(normutfreq)>0:
-            # Sum the normalised frequencies progressively to create number-ranges in lottoline
-            # lottoline converts the normalised frequencies into a list of cutoff positions for matching a later random number call
-            lottoline=[normutfreq[0]]; maxnormfreq=max(normutfreq); minnormfreq=min(normutfreq)
-            for i in range(1, len(normutfreq)):
-                lottoline.append(lottoline[len(lottoline)-1]+normutfreq[i])
+    if len(normutfreq)>0:
+        # Sum the normalised frequencies progressively to create number-ranges in lottoline
+        # lottoline converts the normalised frequencies into a list of cutoff positions for matching a later random number call
+        lottoline=[normutfreq[0]]; maxnormfreq=max(normutfreq); minnormfreq=min(normutfreq)
+        for i in range(1, len(normutfreq)):
+            lottoline.append(lottoline[len(lottoline)-1]+normutfreq[i])
             
-            # Calculate an expected fragtotal using un-modified spliced-reference
-            #fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen)) # Not the correct calculation
-            fragtotal= fragdepth*(ref_doc_len/fraglen)
-             #  Now do the fragmentation
-            while Generated_Fragcount < fragtotal:
-                # Pick a random mutrecs entry to be VarSeq, weighted by its normalised values.
-                lottowin=randint(1,NormaliseUpper)
-                for i in range(0, len(lottoline)):
-                    if lottowin <= lottoline[i]:
-                        mutrec_index=i
-                        break
-                #print("normalised %i %s %i %i "%(lottowin,RG_globals.mutlabels[mutrec_index],normutfreq[mutrec_index],lottoline[mutrec_index]))
-                start=randint(0,mutseqend[mutrec_index]-fraglen)# Lookup of pre-calculated mutseqend to save processing
-                end=start+fraglen
-                Generated_Fragcount+=1
-                ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,
-                                                                                 start,fraglen)
-                # Only fragment if RG_globals.is_muts_only == False
-                #    or, when it's true, when the fwd_cigar_label includes a variant
-                # This was originally split into two conditional tests to avoid calling RG_process.is_mut_cigar unnecessarily,
-                # but code changes to the first were repeatedly omitted in the second conditional, so reduced to this simpler alternative
-                if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
-                    trimseq=mutrecs[mutrec_index].seq[start:end] # Trim the sequence to get a fragment
-                    mutfragcount[mutrec_index]+=1
-                    Saved_Fragcount+=1
-                    #label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,RefRec,0,0,0)
-                    label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,mutrecs[mutrec_index],0,0,0)
-
-        journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount+Paired_Fragcount,mutfragcount)
+        #  Now do the fragmentation
+        while Generated_Fragcount < fragtotal:
+            # Pick a random mutrecs entry to be VarSeq, weighted by its normalised values.
+            lottowin=randint(1,NormaliseUpper)
+            for i in range(0, len(lottoline)):
+                if lottowin <= lottoline[i]:
+                    mutrec_index=i
+                    break
+            #print("normalised %i %s %i %i "%(lottowin,RG_globals.mutlabels[mutrec_index],normutfreq[mutrec_index],lottoline[mutrec_index]))
+            start=randint(0,mutseqend[mutrec_index]-fraglen)# Lookup of pre-calculated mutseqend to save processing
+            end=start+fraglen
+            Generated_Fragcount+=1
+            ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,
+                                                                            start,fraglen)
+            # Only fragment if RG_globals.is_muts_only == False
+            #    or, when it's true, when the fwd_cigar_label includes a variant
+            # This was originally split into two conditional tests to avoid calling RG_process.is_mut_cigar unnecessarily,
+            # but code changes to the first were repeatedly omitted in the second conditional, so reduced to this simpler alternative
+            if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
+                trimseq=mutrecs[mutrec_index].seq[start:end] # Trim the sequence to get a fragment
+                mutfragcount[mutrec_index]+=1
+                Saved_Fragcount+=1
+                #label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,RefRec,0,0,0)
+                label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,mutrecs[mutrec_index],0,0,0)
+    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount+Paired_Fragcount,mutfragcount)
     return
 # end of def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth)
 
 def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
-    global is_print_diagnostics,NormaliseUpper,Paired_insert_Max
-    global ref_doc_len
+    # fraglen must have been tested as OK with validate_fraglength to get here
+    global NormaliseUpper,Paired_insert_Max
     
-    ref_doc_len=RefRec.unclipped_length # Unclipped for paired frags
-
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
     Paired_Fragcount=0
-    is_fraglength_OK,shortest,short_label=validate_fraglength(mutrecs,fraglen)
-       
-    if not is_fraglength_OK:
-        update_journal(" *** WARNING3 *** should not reach here ")
 
-    else:
-        # Get two parallel lists to match mutrecs
-        # First a list of normalised frequencies for each mutseq
-        normutfreq=normalise_mutfreqs(mutrecs)
-        # Next the sequence end of each mutseq
-        mutseqend=[]
-        for item in mutrecs:
-            mutseqend.append(len(item.seq)-RefRec.Tailclip) # Constraining the end position to align with original locus range, not full source sequence
+    # Calculate an expected fragtotal using un-modified spliced-reference
+    fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen))
+
+    # Get two parallel lists to match mutrecs
+    # First a list of normalised frequencies for each mutseq
+    normutfreq=normalise_mutfreqs(mutrecs)
+    # Next the sequence end of each mutseq
+    mutseqend=[]
+    for item in mutrecs:
+        mutseqend.append(len(item.seq)-RefRec.Tailclip) # Constraining the end position to align with original locus range, not full source sequence
            
-        if len(normutfreq)>0:
-            # Sum the normalised frequencies progressively to create number-ranges in lottoline
-            # lottoline converts the normalised frequencies into a list of cutoff positions for matching a later random number call
-            lottoline=[normutfreq[0]]; maxnormfreq=max(normutfreq); minnormfreq=min(normutfreq)
-            for i in range(1, len(normutfreq)):
-                lottoline.append(lottoline[len(lottoline)-1]+normutfreq[i])
+    if len(normutfreq)>0:
+        # Sum the normalised frequencies progressively to create number-ranges in lottoline
+        # lottoline converts the normalised frequencies into a list of cutoff positions for matching a later random number call
+        lottoline=[normutfreq[0]]; maxnormfreq=max(normutfreq); minnormfreq=min(normutfreq)
+        for i in range(1, len(normutfreq)):
+            lottoline.append(lottoline[len(lottoline)-1]+normutfreq[i])
             
-            # Calculate an expected fragtotal using un-modified spliced-reference
-            #fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen)) # Not the correct calculation
-            fragtotal= fragdepth*(ref_doc_len/fraglen)
-             #  Now do the fragmentation
-            while Generated_Fragcount < fragtotal:
-                # Pick a random mutrecs entry to be VarSeq, weighted by its normalised values.
-                lottowin=randint(1,NormaliseUpper)
-                for i in range(0, len(lottoline)):
-                    if lottowin <= lottoline[i]:
-                        mutrec_index=i
-                        break
-                #print("normalised %i %s %i %i "%(lottowin,RG_globals.mutlabels[mutrec_index],normutfreq[mutrec_index],lottoline[mutrec_index]))
-                # Constrain the range position to the defined locus range
-                start=randint(RefRec.Headclip,mutseqend[mutrec_index]-fraglen)# Lookup of pre-calculated mutseqend to save processing
+        #  Now do the fragmentation
+        while Generated_Fragcount < fragtotal:
+            # Pick a random mutrecs entry to be VarSeq, weighted by its normalised values.
+            lottowin=randint(1,NormaliseUpper)
+            for i in range(0, len(lottoline)):
+                if lottowin <= lottoline[i]:
+                    mutrec_index=i
+                    break
+            #print("normalised %i %s %i %i "%(lottowin,RG_globals.mutlabels[mutrec_index],normutfreq[mutrec_index],lottoline[mutrec_index]))
+            # Constrain the range position to the defined locus range
+            start=randint(RefRec.Headclip,mutseqend[mutrec_index]-fraglen)# Lookup of pre-calculated mutseqend to save processing
                 
-                #insert_len=randint(fraglen,Paired_insert_Max) # Flat distribution frequencies
-                #insert_len=randint(Paired_insert_Min,Paired_insert_Max) # Flat distribution frequencies
+            #insert_len=randint(fraglen,Paired_insert_Max) # Flat distribution frequencies
+            #insert_len=randint(Paired_insert_Min,Paired_insert_Max) # Flat distribution frequencies
                 
-                while True:
-                    insert_len=int(np.random.normal(loc = RG_globals.gauss_mean , scale=RG_globals.gauss_SD, size=None)) # Gaussian distribution frequencies
-                    if Paired_insert_Min <= insert_len <=Paired_insert_Max:
-                        break
+            while True:
+                insert_len=int(np.random.normal(loc = RG_globals.gauss_mean , scale=RG_globals.gauss_SD, size=None)) # Gaussian distribution frequencies
+                if Paired_insert_Min <= insert_len <=Paired_insert_Max:
+                    break
                 
-                # 50% chance of the position start being the forward read's start-point or the reverse-read's end-point
-                if random() < 0.5: # Position is the forward-read's start point
-                    fwd_start=start  
-                    rev_end=start+insert_len # Will be > len(mutrecs[mutrec_index].seq if outside the template
-                else: # Position is reverse-read's end-point
-                    fwd_start=start-insert_len # Will be < 0 if outside the template
-                    rev_end=start
+            # 50% chance of the position start being the forward read's start-point or the reverse-read's end-point
+            if random() < 0.5: # Position is the forward-read's start point
+                fwd_start=start  
+                rev_end=start+insert_len # Will be > len(mutrecs[mutrec_index].seq if outside the template
+            else: # Position is reverse-read's end-point
+                fwd_start=start-insert_len # Will be < 0 if outside the template
+                rev_end=start
             
-                # Calculate other end cases
-                rev_start=rev_end-fraglen
-                fwd_end=fwd_start+fraglen
+            # Calculate other end cases
+            rev_start=rev_end-fraglen
+            fwd_end=fwd_start+fraglen
 
-                ref_fwd_start=fwd_start-RefRec.Headclip
-                ref_rev_start=rev_start-RefRec.Headclip
-                #ref_fwd_start=fwd_start
-                #ref_rev_start=rev_start
+            ref_fwd_start=fwd_start-RefRec.Headclip
+            ref_rev_start=rev_start-RefRec.Headclip
+            #ref_fwd_start=fwd_start
+            #ref_rev_start=rev_start
 
 
-                tlen=rev_end-fwd_start+1
+            tlen=rev_end-fwd_start+1
                 
-                max_insert_pos=len(mutrecs[mutrec_index].seq)
+            max_insert_pos=len(mutrecs[mutrec_index].seq)
 
-                for_frag=False
-                rev_frag=False
+            for_frag=False
+            rev_frag=False
 
-                last_Saved_Fragcount=Saved_Fragcount
+            last_Saved_Fragcount=Saved_Fragcount
         
-                if fwd_start>=0:# We know that insert_len gives enough room for fraglen at end
-                    for_frag=True
-                if fraglen <= rev_end <= max_insert_pos: # Worst-case is that rev_end==start and too close to template start
-                    rev_frag=True
+            if fwd_start>=0:# We know that insert_len gives enough room for fraglen at end
+                for_frag=True
+            if fraglen <= rev_end <= max_insert_pos: # Worst-case is that rev_end==start and too close to template start
+                rev_frag=True
 
-                if random() < 0.5: # Assign a 50% random orientation to the insert 
-                    insert_dirA=RG_globals.fwd_label
-                    insert_dirB=RG_globals.rev_label
-                else:
-                    insert_dirA=RG_globals.rev_label
-                    insert_dirB=RG_globals.fwd_label
+            if random() < 0.5: # Assign a 50% random orientation to the insert 
+                insert_dirA=RG_globals.fwd_label
+                insert_dirB=RG_globals.rev_label
+            else:
+                insert_dirA=RG_globals.rev_label
+                insert_dirB=RG_globals.fwd_label
                     
-                if for_frag:
-                    Generated_Fragcount+=1
-                    # Process a forward sequencing fragment
-                    ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,
-                                                                                     fwd_start,fraglen)
-                    if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
-                        forward_seq=mutrecs[mutrec_index].seq[fwd_start:fwd_end] # Trim the sequence to get a fragment
-                        mutfragcount[mutrec_index]+=1
-                        Saved_Fragcount+=1
-                        #label_and_saveg("pf",forward_seq,Saved_Fragcount,ref_fwd_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,RefRec,rev_start,tlen,insert_dirA)
-                        label_and_saveg("pf",forward_seq,Saved_Fragcount,ref_fwd_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,mutrecs[mutrec_index],rev_start,tlen,insert_dirA)
+            if for_frag:
+                Generated_Fragcount+=1
+                # Process a forward sequencing fragment
+                ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,
+                                                                                fwd_start,fraglen)
+                if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
+                    forward_seq=mutrecs[mutrec_index].seq[fwd_start:fwd_end] # Trim the sequence to get a fragment
+                    mutfragcount[mutrec_index]+=1
+                    Saved_Fragcount+=1
+                    #label_and_saveg("pf",forward_seq,Saved_Fragcount,ref_fwd_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,RefRec,rev_start,tlen,insert_dirA)
+                    label_and_saveg("pf",forward_seq,Saved_Fragcount,ref_fwd_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,mutrecs[mutrec_index],rev_start,tlen,insert_dirA)
 
-                if rev_frag:
-                    Generated_Fragcount+=1
-                    # Process a reverse sequencing fragment
-                    ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,
-                                                                                     rev_start,fraglen)
-                    if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
-                        reverse_seq=mutrecs[mutrec_index].seq[rev_start:rev_end] # Trim the sequence to get a fragment
-                        mutfragcount[mutrec_index]+=1
-                        if last_Saved_Fragcount==Saved_Fragcount: # It didn't change for forward_seq - because it was excluded, either because it didn't have a mut_cigar or for_frag false
-                            Saved_Fragcount+=1 # Was not incremented in saving forward_seq
-                        else:# both forward and reverse frags were generated, but Saved_Fragcount remains the same; it's used for shared name 
-                            Paired_Fragcount+=1 # Have to tally the pairs in order to sum with Saved_Fragcount on return
-                        #label_and_saveg("pr",reverse_seq,Saved_Fragcount,ref_rev_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,RefRec,fwd_start,tlen,insert_dirB)
-                        label_and_saveg("pr",reverse_seq,Saved_Fragcount,ref_rev_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,mutrecs[mutrec_index],fwd_start,tlen,insert_dirB)    
-        journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount+Paired_Fragcount,mutfragcount)
+            if rev_frag:
+                Generated_Fragcount+=1
+                # Process a reverse sequencing fragment
+                ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,
+                                                                                rev_start,fraglen)
+                if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
+                    reverse_seq=mutrecs[mutrec_index].seq[rev_start:rev_end] # Trim the sequence to get a fragment
+                    mutfragcount[mutrec_index]+=1
+                    if last_Saved_Fragcount==Saved_Fragcount: # It didn't change for forward_seq - because it was excluded, either because it didn't have a mut_cigar or for_frag false
+                        Saved_Fragcount+=1 # Was not incremented in saving forward_seq
+                    else:# both forward and reverse frags were generated, but Saved_Fragcount remains the same; it's used for shared name 
+                        Paired_Fragcount+=1 # Have to tally the pairs in order to sum with Saved_Fragcount on return
+                    #label_and_saveg("pr",reverse_seq,Saved_Fragcount,ref_rev_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,RefRec,fwd_start,tlen,insert_dirB)
+                    label_and_saveg("pr",reverse_seq,Saved_Fragcount,ref_rev_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index].mutlabel,mutrecs[mutrec_index],fwd_start,tlen,insert_dirB)    
+    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount+Paired_Fragcount,mutfragcount)
     return
 # end of def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth)
 
@@ -2079,7 +2062,6 @@ def journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount):
 def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount):
     global REFSEQ_RECORD
     global DOC_precision
-    global ref_doc_len
     # DOC: Depth of sequencing should be = (total number of reads * average read length) / total length of reference sequence (which is the genomic region covered, or the exome).
     # The target number of fragments is calculated in generate_multisource_random_frags
     # Generated_Fragcount is the actual number of fragments generated before any filtering when RG_globals.is_muts_only is True 
@@ -2089,13 +2071,14 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount):
     fragtallycount=0
     doc_mult=10**DOC_precision
     half_adj=0.5/doc_mult
+    ref_doc_len=REFSEQ_RECORD.spliced_length
     if len(mutfragcount)>0:
         #min_norm=min(mutfragcount)
         min_norm=min([i for i in mutfragcount if i > 0])
     for item in mutrecs:
         if item.mutfreq >0:
             fragtallystring=fragtallystring+item.mutlabel+"("+str(mutfragcount[fragtallycount])+"),"
-            doc=mutfragcount[fragtallycount]*RG_globals.Fraglen/len(item.seq)
+            doc=mutfragcount[fragtallycount]*RG_globals.Fraglen/ref_doc_len
             fragdocstring=fragdocstring+item.mutlabel+"("+str(int((doc+half_adj)*doc_mult)/doc_mult)+"),"
             fragsourcelen=fragsourcelen+item.mutlabel+"("+str(len(item.seq))+"),"
             ratiofreq=mutfragcount[fragtallycount]/min_norm    
@@ -2128,7 +2111,7 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount):
     update_journal(" source(count):\n\t%s"%(fragtallystring[:-1]))
     update_journal(" source(count-ratio):\n\t%s"%(fragratio[:-1]))
     update_journal(" source(length):\n\t%s"%(fragsourcelen[:-1]))
-    update_journal(" source('%s'=count*%s/length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-1]))
+    update_journal(" source('%s'=count*%s/template_length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-1]))
     REFSEQ_RECORD.Generated_Fragcount=Generated_Fragcount
     REFSEQ_RECORD.Saved_Fragcount=Saved_Fragcount
     return
@@ -2157,7 +2140,6 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
     ''' Development would be to use return_message as in merge_seqvar_records and move this to RG_process'''
     
     ''' from Bio.SeqFeature import SeqFeature, FeatureLocation required'''
-    global is_print_diagnostics
     # Set null return parameters to avoid non-assignment crashes
     is_spliced =False
     splicetotal=0; splice_joinlist = [] ; extra_record_features=[];splice_joinlist_txt = []
@@ -2169,7 +2151,6 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
     this_ref_offset=0;this_ref_endclip=0
         
     def skipit(minloc,maxloc,begin,end,second):
-        global is_print_diagnostics
         nonlocal splicetotal, splice_joinlist,splice_joinlist_txt,extra_record_features,this_ref_offset,this_ref_endclip
         # Hiding building of the mirror components
         #nonlocal mirror
@@ -2186,7 +2167,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
         #dbxref="%s:%snum%s"%(RG_globals.skip_trigger,RG_globals.skip_trigger,str(splicetotal))
         f.qualifiers['replace']=["N/-"]
         f.qualifiers['db_xref']=[dbxref]
-        #if is_print_diagnostics: print(begin,first,second)
+        #if RG_globals.is_print_diagnostics: print(begin,first,second)
         if second >= begin:
             # Want highest-position first
             extra_record_features.insert(0,f)
@@ -2338,7 +2319,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
             # end of: if this_feature.type == splice_trigger
            # end of ...# if RG_globals.target_transcript_name != RG_globals.empty_transcript_name
         # end of: for (index, features) in enumerate (seq_record.features):
-    #if is_print_diagnostics:print("mirror:",mirror)
+    #if RG_globals.is_print_diagnostics:print("mirror:",mirror)
 
     #print("is_spliced%s, mirror %s"%(is_spliced,mirror))
     if is_spliced:
@@ -2350,8 +2331,8 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
                 #print("\njoinlist %s\n"%joinlist)
         #print("joinlist %s"%joinlist)
         #spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
-        #spliceseq=MutableSeq(str(joinlist.extract(seq_record.seq)))
-        spliceseq=Biopython_fix.fix_MutableSeq(seq_record.seq)
+        spliceseq=Biopython_fix.fix_MutableSeq(str(joinlist.extract(seq_record.seq)))
+        #print("splice_a_sequence2: len spliceseq %s"%len(spliceseq))
         # Modify the start and end trim-lengths to the addition of Exome_extend
         this_ref_offset-=RG_globals.Exome_extend
         this_ref_endclip-=RG_globals.Exome_extend
@@ -2362,7 +2343,7 @@ def splice_a_sequence(seq_record,target_loc):
     # splice_a_sequence fronts splice_a_sequence2
     global in_ref_src
 
-    def sac_update(template_length):
+    def sac_update(template_length,clip_length):
         nonlocal last_first,last_second,splicetotal
 
         # This documents the addition of nucleotides to each end of the locus range when call_skipit(this_feature,RG_globals.Exome_extend) for this_feature.type == 'gene'
@@ -2383,13 +2364,16 @@ def splice_a_sequence(seq_record,target_loc):
                     RG_process.get_absolute_position(seq_record,last_first+1),
                     RG_process.get_absolute_position(seq_record,last_second),
                     template_length))
-        update_journal("  %s %s has %s bases; %s spliced-out regions compared to %s %s"%(bio_parameters["target_transcript_name"]["label"],locus_transcript,template_length,splicetotal,in_ref_src_title,in_ref_src))
+        update_journal("  %s %s has %s bases; %s spliced-out regions compared to %s %s with %s bases"%(bio_parameters["target_transcript_name"]["label"],
+                                                                                                       locus_transcript,template_length,splicetotal,in_ref_src_title,
+                                                                                                       in_ref_src,clip_length))
 
     splicetotal=0; is_spliced =False; spliceseq=""; extra_record_features=[]; this_ref_offset=0; this_ref_endclip=0 # Initialise returned parameters although moot with current settings
 
     if RG_globals.is_make_exome:
         if  RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
-            is_spliced,splicetotal,spliceseq,extra_record_features,target_gene,message,gene_id,last_first,last_second,this_ref_offset,this_ref_endclip,splice_joinlist_txt=splice_a_sequence2(seq_record,target_loc,"gene")
+            is_spliced,splicetotal,spliceseq,extra_record_features,target_gene,message,gene_id,last_first,last_second,this_ref_offset,this_ref_endclip,splice_joinlist_txt\
+                        =splice_a_sequence2(seq_record,target_loc,"gene")
             '''
             if not RG_globals.is_trim_to_gene:
                 msgtxt=" NOT"
@@ -2399,7 +2383,7 @@ def splice_a_sequence(seq_record,target_loc):
                                %(msgtxt,RG_globals.is_trim_to_gene))
             '''
             if RG_globals.is_trim_to_gene:
-                sac_update(len(spliceseq))
+                sac_update(len(spliceseq),seq_record.unclipped_length)
                 
             if RG_globals.is_CDS:
                 msgtxt=", even with '%s' selected, "%(bio_parameters["is_CDS"]["label"])
@@ -2413,7 +2397,8 @@ def splice_a_sequence(seq_record,target_loc):
             else:
                 join_trigger=RG_globals.mRNA_trigger # changed from splice_trigger
 
-            is_spliced,splicetotal,spliceseq,extra_record_features,target_gene,message,transcript_id,last_first,last_second,this_ref_offset,this_ref_endclip,splice_joinlist_txt=splice_a_sequence2(seq_record,target_loc,join_trigger)
+            is_spliced,splicetotal,spliceseq,extra_record_features,target_gene,message,transcript_id,last_first,last_second,this_ref_offset,this_ref_endclip,splice_joinlist_txt\
+                        =splice_a_sequence2(seq_record,target_loc,join_trigger)
  
             if not is_spliced :
                 success_text="but"
@@ -2424,11 +2409,10 @@ def splice_a_sequence(seq_record,target_loc):
 
             update_journal(" Searched gene %s features for %s, %s found %s which appears%sto match %s:%s"
                            %(target_gene,message,success_text,transcript_id,within_text,RG_globals.target_transcript_name,RG_globals.target_transcript_id))
-            sac_update(len(spliceseq))
+            sac_update(len(spliceseq),seq_record.clipped_length)
  
     else:
-        update_journal(" No trimming nor splicing of exon boundaries because system-config option 'is_make_exome' is set to %s"
-                       %(RG_globals.is_make_exome))
+        update_journal(" No trimming nor splicing of exon boundaries because system-config option 'is_make_exome' is set to %s"%(RG_globals.is_make_exome))
 
     return (is_spliced,splicetotal,spliceseq,extra_record_features,this_ref_offset,this_ref_endclip)
 # end of def splice_a_sequence(seq_record,target_loc)
@@ -2443,17 +2427,31 @@ def make_reference_files1():
             pass
             #write_refseq(REFSEQ_RECORD,Ref_file_name) # Save the un-modified Primary Source sequence
     else:
-        update_journal(" NOTE: Sequence files for: %s %s.fasta, and 'Reference %s' %s.fasta, NOT saved because option '%s' is set to %s"%(in_ref_src_title,in_ref_src,
-                                                                                                                                          bio_parameters["target_transcript_name"]["label"],
-                                                                                                                                          Out_Ref_Source,bio_parameters["is_write_ref_fasta"]["label"],
-                                                                                                                                          RG_globals.is_write_ref_fasta))
+        if RG_globals.is_frg_paired_end:
+            templatetxt=""
+            addtxt=""
+        else:
+            templatetxt=", and 'Reference %s' %s.fasta, "%(bio_parameters["target_transcript_name"]["label"],Out_Ref_Source)
+            addtxt="s"
+
+        #update_journal(" NOTE: Sequence files for: %s %s.fasta, and 'Reference %s' %s.fasta, NOT saved because option '%s' is set to %s"%(in_ref_src_title,in_ref_src,
+        #                                                                                                                                 bio_parameters["target_transcript_name"]["label"],
+        #                                                                                                                                 Out_Ref_Source,bio_parameters["is_write_ref_fasta"]["label"],
+        #                                                                                                                                 RG_globals.is_write_ref_fasta))
+
+        update_journal(" NOTE: Sequence file%s for: %s %s.fasta %sNOT saved because option '%s' is set to %s"%(addtxt,
+                                                                                                               in_ref_src_title,
+                                                                                                               in_ref_src,
+                                                                                                               templatetxt,
+                                                                                                               bio_parameters["is_write_ref_fasta"]["label"],
+                                                                                                               RG_globals.is_write_ref_fasta))
     return
+
 # run_processing was formerly the way of starting the batch run.
 # It has been adapted into a function to support repeated-calling from a GUI module
 def run_processing(is_get_new_refseq):
     global REFSEQ_RECORD,Seq_Format,in_ref_src_title,in_ref_src,Out_Ref_Source
-    #print("running: RG_globals.target_transcript_name %s"%RG_globals.target_transcript_name)
-    # Let's save the latest configs first
+    # Save the latest configs first
     RG_globals.save_user_configs()
     is_success=True
     if is_get_new_refseq:
@@ -2469,7 +2467,8 @@ def run_processing(is_get_new_refseq):
         else:
             REFSEQ_RECORD=splice_refseq(REFSEQ_RECORD)
         (Mutrecs,is_success)=get_mutrecords(REFSEQ_RECORD,Seq_Format)
-                
+        #print("run_processing: Mutrecs[0].clipped_length) %s"%Mutrecs[0].clipped_length)
+           
         if is_success:
             is_fraglength_OK,shortest,short_label=validate_fraglength(Mutrecs,RG_globals.Fraglen)
             if not is_fraglength_OK:
@@ -2576,7 +2575,7 @@ def get_transcript_data_process(redo_locus):
 # was coded into config.json to replace this because values could not be passed back to the pyodide-compiled version fronted by Vue.js
 # 
 # Some of this pre-reading has been re-introduced (for the mRNA and CDS join features), eliminating the need to include it within config.json
-# The Python version tests ('try') whteher the mRNA and CDS join features are in config.json. If not, it pre-reads.
+# The Python version tests ('try') whether the mRNA and CDS join features are in config.json. If not, it pre-reads.
 # 'Try' cannot be done in the pyodide version
 # 
 # There may be some other features that would be improved in the same way and eliminate the need for more of the config.json file
@@ -2628,9 +2627,6 @@ def get_muttranscripts(redo_locus):
     
     RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
     RG_globals.bio_parameters["target_build_variant"]["tailclip"]=tailclip
-
-    #exon_total=0; intron_total=0; feature_titles=["Pre-Locus","Upstream"]; starts=[int(1),int(locus_begin)]; ends=[headclip]
-    #abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0,0]; exon_length=[0,0];max_seqlength=0;
 
     exon_total=0; intron_total=0; feature_titles=["Pre-Locus"]; starts=[]; ends=[]
     abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0]; exon_length=[0];max_seqlength=0;
@@ -2861,7 +2857,7 @@ def is_make_ref_complement():
 def is_make_addvar_complement():
     # Note that any transformation enacted in get_ref_subseq3 by calling is_make_ref_complement will have already been made
     # There's a different determination to decide whether it's flipped back again before saving to Addvar
-    # If it's not transcript sequence, it's already on, or flipped to +, so do not change
+    # If it's not transcript sequence, it's already on +, or flipped to +, so do not change
     # If the strand is + and the transcript is on the opposite strand, we previously flipped the default to -; so we flip the edited one back to +
     # If the strand is - and the transcript is on the same strand, we left it - ; so we flip the edited to +
     # We leave the others unchanged as they are already +
@@ -2893,8 +2889,7 @@ def get_ref_subseq3():
     is_do_complement=is_make_ref_complement()
 
     reflen=local_end-local_begin+1
-    #print("reflen %s"%reflen)
-    
+   
     if reflen > 100:
         first=REF_record.seq[local_begin-1:local_begin+2]
         last=REF_record.seq[local_end-3:local_end]
@@ -3047,7 +3042,7 @@ def showmutfreqs():
     print("RG_globals.mutlabels %s"%RG_globals.mutlabels)
     
 def call_exploder_main():
-    #print("New call_exploder_main")
+    #print(" ***** New call_exploder_main %s *****"%RG_globals.getime())
     #showmutfreqs()
     if RG_globals.bio_parameters["target_build_variant"]["is_get_ref"]:
         subseq,run_success=get_ref_subseq3()
