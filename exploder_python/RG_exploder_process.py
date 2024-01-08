@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="12-Mar-2023"
+#ProgverDate="08-Jan-2024"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
 
 # =================================================
@@ -281,12 +281,10 @@ def purl_features(seqdonor,vardonor):
             return_message+=update_journal(" Matching %s"%part_message)
         else:
             return_message+=update_journal(" Differing %s; offset_change: %s"%(part_message,local_offset_diff)) 
-            
-        for index in vardonor_index:
+
+        for index in vardonor_index[:-1]:
             xref_vardonor=str(vardonor.features[index].qualifiers.get("db_xref"))
-            seq_start=int(vardonor.features[index].location.start)+local_offset_diff # causing OMITTED message with Addvars. seq_start absolute calc seems to be -1 off: but WHY?
-            
-            #seq_start=int(vardonor.features[index].location.start)+local_offset_diff+1 # This stops the OMITTED message with Addvars, but messes with everything else
+            seq_start=int(vardonor.features[index].location.start)+local_offset_diff 
             seq_end=int(vardonor.features[index].location.end)+local_offset_diff
 
             var_abs_start=get_absolute_position(seqdonor,seq_start)
@@ -299,15 +297,13 @@ def purl_features(seqdonor,vardonor):
                 f.qualifiers=vardonor.features[index].qualifiers
                 #print("purl; f.qualifiers %s"%f.qualifiers)
                 vardonor.features[index]=f
+                #print(" Feature RETAINED %s DONE"%SeqFeature(FeatureLocation(seq_start,seq_end,strand=1),type="variation"))
             else:
                 ''' remove it '''
                 del vardonor.features[index]
-                #print(" Feature %s omitted"%SeqFeature(FeatureLocation(seq_start,seq_end,strand=1),type="variation"))
+                #print(" Feature OMITTED %s DONE"%SeqFeature(FeatureLocation(seq_start,seq_end,strand=1),type="variation"))
                 return_message+=update_journal(" OMITTED feature %s start: %s, end: %s because it is out-of-range for sequence start: %s, end: %s "
-                                               %(xref_vardonor,var_abs_start,var_abs_end,seqdonor_begin,seqdonor_end))
-                if xref_vardonor=="['gap:5-prime upstream trim']":
-                    return_message+=update_journal(" *** Omission of %s is a known bug when adding a %s. It does not appear to interfere with the process ***"%(xref_vardonor,RG_globals.variants_label)) 
-                    
+                                               %(xref_vardonor,var_abs_start,var_abs_end,seqdonor_begin,seqdonor_end))                    
     else:
         return_message+=update_journal(" Incompatible GRCh build, chromosome or polarity for sequence: "+seqdonor_version+" vs variants: "+vardonor_version)
 
