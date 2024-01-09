@@ -1,9 +1,9 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="28-Nov-2023"
+#Prg_verDate="08-Jan-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
 import sys
 import json
@@ -344,7 +344,7 @@ def set_diagnostic_defaults():
     is_trim_to_gene =True # is_trim_to_gene =True the source for the Reference sequence will be trimmed to the gene boundary, in the same way as used for exons)
                           # is_trim_to_gene = False the source for the Reference sequence is not trimmed 
                           # This switch is solely here as an override to permit processing of the same data & parameters set with- and without- trimming
-                          # It is not available as a user-selectable option
+                          # It is not available as a user-selectable option, but the False option seems to have become disused within the code
     
     global is_mutate_ref
     is_mutate_ref= False  # ''' To include the variants defined in the Refseq file included within the Reference sequence set: is_mutate_ref= True
