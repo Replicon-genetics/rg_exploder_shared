@@ -20,8 +20,8 @@
         "LRG_txt": "LRG",
         "title_label": "Synthetic Reads Generator",
         "reference_header": "Reference Source",
-        "variants_header": "Haplotype Definition",
-        "variants_label": "Variations Source",
+        "variants_header": "Haplotype Source",
+        "variants_label": "Haplotype Source",
         "frequency_label": "Source Ratio",
         "options_label": "Output Options",
         "reads_list_label": "Reads Configuration",
@@ -174,7 +174,7 @@
                 "max": 50
             },
             "ref_subseq": {
-                "label": "Reference Sequence",
+                "label": "Template Sequence",
                 "value": "",
                 "length": 0,
                 "viewstring": ""
@@ -185,7 +185,7 @@
                 "value": ""
             },
             "hap_name": {
-                "label": "Haplotype Definition Name",
+                "label": "Haplotype Source Name",
                 "value": "hapx"
             },
             "var_name": {
@@ -285,7 +285,7 @@
             "max": 93
         },
         "is_write_ref_fasta": {
-            "label": "Save Reference Sequences",
+            "label": "Save Template Sequence",
             "value": false
         },
         "is_mut_out": {
