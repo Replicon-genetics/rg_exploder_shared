@@ -30,8 +30,8 @@ def set_config_consts():
     is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
     #is_pygui_browser=False   # When setting up to use the Vue.js GUI
 
-    #is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
-    is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
+    is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
+    #is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
     
     ######## End of: Revisit these each time a data set is renewed ########
 
