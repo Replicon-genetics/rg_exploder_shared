@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_24_15.py"
-ProgverDate="04-Dec-2023"
+Progver="RG_exploder_main_24_16.py"
+ProgverDate="09-Jan-2024"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
 These variants are then split into mutiple shorter fragments.
 Output can be made to SAM, fasta & fastq files
@@ -538,9 +538,9 @@ def grab_mut_annotation(SeqRec,label):
     join_ann=""
     introntxt=" "
     if SeqRec.is_ref_spliced:
-        if (SeqRec.splicecount+SeqRec.endclipcount) >0:
-            introntxt=" and %s introns "%(SeqRec.splicecount+SeqRec.endclipcount)
-        ref_splice_ann=", with %s end-trims%sderived from source %s"%(-SeqRec.endclipcount,introntxt,in_ref_src)
+        if (SeqRec.splicecount-SeqRec.endclipcount) >0:
+            introntxt=" and %s introns "%(SeqRec.splicecount-SeqRec.endclipcount)
+        ref_splice_ann=", with %s end-trims%sderived from source %s"%(SeqRec.endclipcount,introntxt,in_ref_src)
     else:
         ref_splice_ann=""
 
@@ -559,7 +559,7 @@ def read_mutrecord(label,embl_or_genbank):
     inlabel=RG_globals.target_locus+"_"+label
     ingb_file=inlabel+Seq_IO_file_ext
     
-    Mut_record,exists = read_seqrecord(ingb_file,embl_or_genbank,label,"'%s'"%RG_globals.variants_label)
+    Mut_record,exists = read_seqrecord(ingb_file,embl_or_genbank,label,"'%s'"%RG_globals.variants_header)
     if exists:
         #Write out input data as its non-processed interpretation
         if RG_globals.is_write_ref_ingb:
@@ -933,8 +933,8 @@ def close_seqout(SeqRec):
     else:
         flip_extra=""
 
-    add_extra_ref=" with %s end-trims applied to %s %s sequence"%(-SeqRec.endclipcount,in_ref_src_title,in_ref_src)
-    add_extra_tem=" with %s end-trims and %s introns applied to %s %s sequence"%(-SeqRec.endclipcount,SeqRec.splicecount+SeqRec.endclipcount,in_ref_src_title,in_ref_src)
+    add_extra_ref=" with %s end-trims applied to %s %s sequence"%(SeqRec.endclipcount,in_ref_src_title,in_ref_src)
+    add_extra_tem=" with %s end-trims and %s introns applied to %s %s sequence"%(SeqRec.endclipcount,SeqRec.splicecount-SeqRec.endclipcount,in_ref_src_title,in_ref_src)
 
     if RG_globals.is_write_ref_fasta:
         if RG_globals.is_frg_paired_end:
@@ -966,7 +966,7 @@ def close_seqout(SeqRec):
         is_append_fastafile = False
         sam_fastfile=out_fa_file
         
-        if SeqRec.is_ref_spliced and ((SeqRec.splicecount+SeqRec.endclipcount) !=0):
+        if SeqRec.is_ref_spliced and ((SeqRec.splicecount-SeqRec.endclipcount) !=0):
             addtxt="spliced "
         else:
             addtxt=""
@@ -1050,12 +1050,12 @@ def journal_final_summary():
     global Progver,journout,REFSEQ_RECORD
 
     update_journal(" %s=%i\n Total number of %ss=%s"%(bio_parameters["Fraglen"]["label"],RG_globals.Fraglen,RG_globals.read_annotation,REFSEQ_RECORD.Saved_Fragcount))
-    introns=REFSEQ_RECORD.splicecount+REFSEQ_RECORD.endclipcount
-    if introns > 0:
+    spliceouts=REFSEQ_RECORD.splicecount
+    if spliceouts > 0:
         addtxt=", shown in %s CIGAR as 'N'"%RG_globals.read_annotation
     else:
         addtxt=""
-    update_journal(" %s sections from the Reference Sequence are spliced out%s"%(introns,addtxt))
+    update_journal(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
     if RG_globals.is_frg_paired_end:
         plextxt="paired ends"
         endtxt="" 
@@ -1157,9 +1157,9 @@ def get_mutrecords(REF_record,embl_or_genbank):
    #end of def local_add_mutrec(Seq_rec,label)
         
     #update_journal("\nReading %s (feature) files..."%RG_globals.variants_label)
-    update_journal("\nReading %s files..."%RG_globals.variants_label)
+    update_journal("\nReading '%s' files..."%RG_globals.variants_header)
     if not RG_globals.is_mut_out:
-        update_journal(" NOTE: Sequence of %s not saved to %s.fasta because option '%s' is set to %s"
+        update_journal(" NOTE: Sequence of '%s'(s) not saved to %s.fasta because option '%s' is set to %s"
                        %(RG_globals.variants_header,out_mut,bio_parameters["is_mut_out"]["label"],RG_globals.is_mut_out))
     
     RG_process.mutfreqs_extend(RG_globals.mutlabels) # First Check, then set, mutfreqs at same length as mutlabels
@@ -1264,7 +1264,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         else: # These are the N-gaps / splices
             # was  msgtxt=" Gap: loc: ...            
             #msgtxt_mvs=" %s: loc: %s to %s, abs: %s to %s"%(this_feature.qualifiers['db_xref'],feat_start+1,feat_end,mod_abs_start,mod_abs_end)
-            msgtxt_mvs=" %s: abs: %s to %s, loc: %s to %s"%(this_feature.qualifiers['db_xref'],mod_abs_start,mod_abs_end,feat_start+1,feat_end)
+            msgtxt_mvs=" %s: length: %s , abs: %s to %s, loc: %s to %s"%(this_feature.qualifiers['db_xref'],feat_end-feat_start,mod_abs_start,mod_abs_end,feat_start+1,feat_end)
                                                                   
         # End of verification check for delete string match/mis-match
         
@@ -1493,9 +1493,9 @@ def splice_refseq(SeqRec):
     CopyRec.endclipcount=0                                                                                            
     if CopyRec.is_ref_spliced:
         if CopyRec.Headclip > 0:
-            CopyRec.endclipcount-=1
+            CopyRec.endclipcount+=1
         if CopyRec.Tailclip > 0:
-            CopyRec.endclipcount-=1
+            CopyRec.endclipcount+=1
             
     CopyRec.clipped_length=len(CopyRec.seq)-CopyRec.Tailclip-CopyRec.Headclip
     CopyRec.spliced_length=len(splicedseq)
@@ -1558,8 +1558,8 @@ def make_allvars_in_one_seq(SeqRec,label):
     mutseqcount+=1
     RG_process.pad_cigarbox(cigarbox)# Important - modifies cigarbox!!
     
-    subst_txt="End-trim of %s regions; splice-removal of %s regions, from %s. %s variants: %s substitutions; %s inserts; %s deletions; %s delins"\
-               %(-SeqRec.endclipcount,skip_count+SeqRec.endclipcount,in_ref_src,var_count,sub_count,insert_count,delete_count-skip_count,complex_count)
+    subst_txt="End-trim of %s sections; splice-removal of %s sections, from %s. %s variants: %s substitutions; %s inserts; %s deletions; %s delins"\
+               %(SeqRec.endclipcount,skip_count-SeqRec.endclipcount,in_ref_src,var_count,sub_count,insert_count,delete_count-skip_count,complex_count)
     VarSeqRec=RG_process.annotate_seq_to_record(REFSEQ_RECORD,VarSeq,out_label,SeqRec.name)
     VarSeqRec.description="%s nucleotides from %s: %s"%(len(VarSeq),MaxVarPos,subst_txt)
 
