@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 Progver="RG_builder13_gui.py"
-ProgverDate="04-Dec-2023"
+ProgverDate="09-Jan-2024"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023
+© author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
 Note added 16-Oct-2022:
     The calls to RG_main.call_exploder_main() are to support the Vue.js GUI version available at
@@ -510,7 +510,9 @@ def save_and_go():
 def set_pygui_defaults010():
     global pygui_frame_labels,pygui_button_labels # Used as tk object labels
     pygui_frame_labels=["Messages Panel"]
-    pygui_button_labels=["Clear messages","Retrieve Reference Sequence","Save New %s"%RG_globals.variants_label]
+    pygui_button_labels=["Clear messages",
+                         "Retrieve %s Sequence"%RG_globals.bio_parameters["target_transcript_name"]["label"],
+                         "Save %s"%RG_globals.variants_label]
 # end of set_pygui_defaults010()
 
 def tk_background_config(scope):
@@ -703,7 +705,7 @@ def set_gene_label(frame):
     
 def set_builder_label(frame):
     #frame['text']="               Label         Position                 Extension         Global_mapping"  # Addition in builder
-    frame['text']=" Create a new %s"%RG_globals.variants_label  # Addition in builder
+    frame['text']=" Create a %s"%RG_globals.variants_label  # Addition in builder
 
 def set_gene_picker_label(): # NB - not used
     global main_left,topbar

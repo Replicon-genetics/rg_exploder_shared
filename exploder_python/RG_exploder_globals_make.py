@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="08-Jan-2024"
+#Prg_verDate="09-Jan-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -30,8 +30,8 @@ def set_config_consts():
     is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
     #is_pygui_browser=False   # When setting up to use the Vue.js GUI
 
-    is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
-    #is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
+    #is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
+    is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
     
     ######## End of: Revisit these each time a data set is renewed ########
 
@@ -216,7 +216,8 @@ def set_string_defaults():
     variants_header="%s Source"%hapname
     #variants_label="Variant Source"
     #variants_label="Variations Source"
-    variants_label="%s Source"%hapname
+    #variants_label="%s Source"%hapname
+    variants_label="Variant"
     #frequency_label="Source Frequency"
     frequency_label="Source Ratio"
     options_label="Output Options"
@@ -344,7 +345,7 @@ def set_diagnostic_defaults():
     is_trim_to_gene =True # is_trim_to_gene =True the source for the Reference sequence will be trimmed to the gene boundary, in the same way as used for exons)
                           # is_trim_to_gene = False the source for the Reference sequence is not trimmed 
                           # This switch is solely here as an override to permit processing of the same data & parameters set with- and without- trimming
-                          # It is not available as a user-selectable option, but the False option seems to have become disused within the code
+                          # It is not available as a user-selectable option
     
     global is_mutate_ref
     is_mutate_ref= False  # ''' To include the variants defined in the Refseq file included within the Reference sequence set: is_mutate_ref= True
