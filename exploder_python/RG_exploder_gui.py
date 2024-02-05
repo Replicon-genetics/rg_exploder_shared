@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-Progver="RG_builder13_gui.py"
-ProgverDate="09-Jan-2024"
+Progver="RG_builder14_gui.py"
+ProgverDate="05-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -40,7 +40,7 @@ def initialise_stuff():
 def initialise_modulevalues():
     # Globals limited to this module
     global Progver,ProgverDate
-    global local_begin,local_end,trans_Begin,trans_End
+    global local_begin,local_end,trans_Begin,trans_End,abs_Begin,abs_End
     local_begin=RG_globals.bio_parameters["target_build_variant"]["local_begin"]
     local_end=RG_globals.bio_parameters["target_build_variant"]["local_end"]
     abs_Begin=RG_globals.bio_parameters["target_build_variant"]["abs_Begin"]["value"]
@@ -71,13 +71,8 @@ def initialise_modulevalues():
     results_links=['']
     results_idx=[]
 
-    global label_colour
     global flags_output_labels,flags_output_bools
     global config_limit_labels,config_limit_vals,config_limit_mins,config_limit_maxs
-    # colour lists: http://www.science.smith.edu/dftwiki/index.php/Color_Charts_for_TKinter
-    #bg_colours = ['bisque','LightSkyBlue1','lavender','khaki1','light goldenrod','LemonChiffon2','pale turquoise1','PaleGreen1','cornsilk2','thistle1','light cyan',
-    #             'pale turquoise1','PaleGreen1','cornsilk2','thistle1','light cyan','bisque','LightSkyBlue1','lavender','khaki1','light goldenrod','LemonChiffon2']
-    label_colour='LightSkyBlue1'
 
     ''' Use below for testing set_tog_bools(test_labels,test_booleans)
     test_labels=["One","Two","Three"]
@@ -123,7 +118,7 @@ def set_flags_output_labels():
     flag_widget_order={#"is_duplex":1,            # Duplex reads
                        #"is_frg_paired_end":0,    #  Paired end reads
                        "is_flip_strand":0,
-                       "is_fasta_out":1,         #  Save reads in FASTA
+                       "is_fasta_out":1,         #  Reads in FASTA format
                        "is_onefrag_out":2,       #  Each possible read
                        "is_muts_only":3,         # Variant reads only
                        "is_frg_label":4,         # Annotate source positions ...
@@ -131,11 +126,11 @@ def set_flags_output_labels():
                        "is_fastacigar_out":6,    # CIGAR annotation
                        "is_vars_to_lower":7,     # Substitutions in lower case
                        "is_journal_subs":8,      # Journal the substitutions - Verbose documentation of variant substitutions
-                       "is_fastq_out":9,         #  Save reads in FASTQ
-                       "is_write_ref_fasta":10,  # Save Reference Sequence
-                       "is_mut_out":11,          # Save Variant Sequences
+                       "is_fastq_out":9,         # Reads in FASTQ format
+                       "is_write_ref_fasta":10,  # Save Template Sequence
+                       "is_mut_out":11,          # Save Haplotype Sequences
                        "is_write_ref_ingb":12,   # Save Source features
-                       "is_sam_out":13          #  Save reads in SAM
+                       "is_sam_out":13          #  Reads in SAM format
                        }
    
     flags_output_labels=[""] * len(flag_widget_order)
@@ -305,7 +300,6 @@ def get_config_limits():
         #print("2: label %s, value %s"%(spin_labels[i],spinvals[i].get()))
         config_limit_vals[i]=int(float(spinvals[i].get()))
 
-    was_val_in_bounds=True
 
     RG_globals.Exome_extend=config_limit_vals[0]
     RG_globals.Fraglen=config_limit_vals[1]
@@ -319,10 +313,6 @@ def get_config_limits():
         config_limit_vals[3],config_limit_vals[4]=config_limit_vals[4],config_limit_vals[3]
         correct_spin_vals() #see comments in object
         #refresh_gui() # Has no effect
-        # Deprecating the error message and error-return because this now only corrects one value, puts it on bounds
-        # so can run after refreshing the display
-        #was_val_in_bounds=False
-        #write_GUI_text("FASTQ Min & Max values were inverted and have been reset\n")
     return
 
 def correct_spin_vals():
@@ -473,7 +463,7 @@ def results_hyperLink(event):
         pass
 
 def save_and_go():
-    global run_count,previous_target_ref,icondir
+    global run_count,icondir
     global go_img,gobutton
     wait_img=ImageTk.PhotoImage(Image.open(icondir+"wait45.png"))
     gobutton.configure(image=wait_img)
@@ -486,7 +476,6 @@ def save_and_go():
     write_GUI_text("Running Exploder on %s- run number %s\n"%(RG_globals.target_locus,run_count))
     #is_successful=RG_main.exploder_initiate(True)
     is_successful=RG_main.call_exploder_main()
-    previous_target_ref=RG_globals.target_locus
     time_stamp=RG_globals.getime()
     #print("is_successful %s"%is_successful)
     if is_successful:
@@ -536,18 +525,11 @@ def initialise_tk():
     exploder_win= tk.Tk() # tk only, not ttk
     tk_background_config(exploder_win)
     exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v13)") 
-    #exploder_win.title(RG_globals.title_label) # Different in builder
-    #frame=tk.Frame(exploder_win)
-    frame=ttk.Frame(exploder_win)
     # Laying out grid
-    #topbar=tk.Frame(exploder_win)
     topbar=ttk.Frame(exploder_win)
-    #main=tk.Frame(exploder_win)
     main=ttk.Frame(exploder_win)
-    #bottom_left=tk.Frame(exploder_win)
     bottom_left=ttk.Frame(exploder_win)
     bottom_centre=ttk.Frame(exploder_win)
-    #bottom_right=tk.Frame(exploder_win)
     bottom_right=ttk.Frame(exploder_win)
     # Trying to set background all same
     tk_background_config(main)
@@ -707,10 +689,6 @@ def set_builder_label(frame):
     #frame['text']="               Label         Position                 Extension         Global_mapping"  # Addition in builder
     frame['text']=" Create a %s"%RG_globals.variants_label  # Addition in builder
 
-def set_gene_picker_label(): # NB - not used
-    global main_left,topbar
-    set_gene_list(main_left)
-
 def set_gene_list(frame):
     #frame['text']="Gene List:%s"%RG_globals.target_locus
     #frame['text']=" Reference Gene"
@@ -720,11 +698,10 @@ def set_gene_list(frame):
 # Source label/slider definitions
 class source_sliders:
     def __init__(self, master1,v_index,**kwargs):
-        global src_sliders_vals,src_sliders_strvals,src_sliders_labels,label_colour
+        global src_sliders_vals,src_sliders_strvals,src_sliders_labels
         #self.panel2 = tk.Frame(master1)
         self.panel2 = ttk.Frame(master1)
         self.panel2.grid()
-        #self.label=tk.Label(self.panel2, width=10,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]), bg=label_colour)
         self.label=ttk.Label(self.panel2, width=15,text="%s_%s"%(RG_globals.target_locus,src_sliders_labels[v_index]))
         self.label.grid(row=0,column=0,sticky=tk.W)
         #f2 = font.Font(master1, master1.cget("font")) # Looks superfluous here
@@ -793,12 +770,11 @@ class source_sliders:
 
 class source_sliders_builder:
     def __init__(self, master1,v_index,**kwargs):
-        global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build,label_colour
+        global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build
         global src_sliders_straddvals_build,max_seqlength,min_seqlength,max_ext_add,min_ext_add
         #self.panel2 = tk.Frame(master1)
         self.panel2 = ttk.Frame(master1)
         self.panel2.grid()
-        #self.label=tk.Label(self.panel2, width=10,text="%s"%(src_sliders_labels_build[v_index]), bg=label_colour)
         self.label=ttk.Label(self.panel2, width=11,text="%s"%(src_sliders_labels_build[v_index]))
         self.label.grid(row=0,column=0,sticky=tk.W)
         
@@ -823,12 +799,8 @@ class source_sliders_builder:
         #self.entry2 = tk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
         self.entry2 = ttk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
         self.entry2.grid(row=0,column=2,sticky=tk.W)
-        self.zero2='1'
-        self.old_value2 = src_sliders_straddvals_build[v_index].get()
-        self.blank2=''
 
         self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute
-        self.get2, self.set2 = self.entry2var.get, self.entry2var.set
 
         #self.complement_check(self)
         self.complement_check() # Extra in builder
@@ -892,7 +864,7 @@ class source_sliders_builder:
 # END class source_sliders_builder
 
 def src_sliders_build_clear_seqs():
-    global refseqtxt,varseqtxt,varnameseqtxt,out_seq,varnametxt,hapnameseqtxt
+    global refseqtxt,varseqtxt,varnameseqtxt,out_seq,varnametxt,hapnameseqtxt,hapnametxt
     refseqtxt.configure(state="normal")
     refseqtxt.delete('1.0', tk.END)
     refseqtxt.configure(state="disable")
@@ -929,7 +901,7 @@ def src_sliders_instantiate(window):
 def src_sliders_instantiate_build(window):
     global src_slider_widgets_build,src_sliders_vals_build,max_seqlength,src_slider_widgets,max_src_slider_widgets
     global local_begin,local_end,abs_Begin,abs_End,trans_Begin,trans_End
-    global refseqtxt,varseqtxt,out_seq,varnameseqtxt,hapnameseqtxt
+    global refseqtxt,varseqtxt,out_seq,varnameseqtxt,hapnameseqtxt,hapnametxt
     
     seq_region=""
     seq_region_success=False
@@ -1092,27 +1064,16 @@ def src_sliders_instantiate_build(window):
             #print("RG_globals.AddVars: %s"%RG_globals.AddVars)
     # End Instantiating the label/slider display
 
-    rownum=5
-
     ############## Calc button  ##############
-    #calcseq=tk.Button(window,text=pygui_button_labels[1],bg="red", command=calc_seq)
+
     calcseq=ttk.Button(window,text=pygui_button_labels[1], command=calc_seq)
     calcseq.grid(row=5,column=0,sticky=tk.W)
 
     ############## refseqtxt  ##############
-    #reflabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
-    reflabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0)
-    #refseqtxtframe=tk.Frame(window,bd=1,relief=tk.SUNKEN)
+    reflabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["label"]).grid(row=6,column=0) # Redundant?
     refseqtxt=tk.Text(window,height=4,width=50,background="grey")
     refseqtxt.bind("<1>", lambda event: refseqtxt.focus_set())
     refseqtxt.grid(row=8,column=0,sticky=tk.W)
-
-    #refseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
-    #refseqscroll = ttk.Scrollbar(window,orient="vertical")
-    #refseqscroll.grid(row=8,column=1,sticky=tk.E)
-
-    #refseqtxt.config(yscrollcommand=refseqscroll.set)
-    #refseqscroll.config(command=refseqtxt.yview)
     refseqtxt.insert(tk.END,seq_region)
     refseqtxt.configure(state="disable")
 
@@ -1149,8 +1110,6 @@ def src_sliders_instantiate_build(window):
     
         varseqtxt.configure(state = tk.DISABLED)
 
-
-    #varlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varseqtxt=tk.Text(window,height=4,width=50,background="white",foreground="black")
     varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
@@ -1185,7 +1144,6 @@ def src_sliders_instantiate_build(window):
             pass
         hapnameseqtxt.configure(state = tk.DISABLED)
 
-    #hapnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
     hapnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
     hapnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
     #hapnameseqtxt.configure(bg="#1C6C0B", insertbackground='white')
@@ -1214,7 +1172,6 @@ def src_sliders_instantiate_build(window):
             pass
         varnameseqtxt.configure(state = tk.DISABLED)
     
-    #varnameseqlabel=tk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
     varnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
     varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
@@ -1235,7 +1192,7 @@ def src_sliders_instantiate_build(window):
 # Defining the output flags toggle options
 class flags_toggler:
     def __init__(self, master2,v_index,**kwargs):
-        global tog_labels,tog_booleans,label_colour
+        global tog_labels,tog_booleans
 
         #self.panel2 = tk.Frame(master2)
         self.panel2 = ttk.Frame(master2)
@@ -1244,7 +1201,6 @@ class flags_toggler:
 
         if tog_booleans[self.vindex] != None:
             # True or False values - display label and show default box ticked or not
-            #self.label=tk.Label(self.panel2,width=21,anchor="w",text=tog_labels[v_index], bg=label_colour)
             self.label=ttk.Label(self.panel2,width=21,anchor="w",text=tog_labels[v_index])
             self.label.grid(row=0,column=0,sticky=tk.W)
             self.bool = tk.BooleanVar()
@@ -1272,7 +1228,7 @@ class flags_toggler:
 
 class flags_toggler2_builder:
     def __init__(self, master2,v_index,**kwargs):
-        global tog_labels2,tog_booleans2,label_colour
+        global tog_labels2,tog_booleans2
 
         #self.panel2 = tk.Frame(master2)
         self.panel2 = ttk.Frame(master2)
@@ -1281,7 +1237,6 @@ class flags_toggler2_builder:
 
         if tog_booleans2[self.vindex] != None:
             # True or False values - display label and show default box ticked or not
-            #self.label=tk.Label(self.panel2,width=22,anchor="w",text=tog_labels2[v_index], bg=label_colour)
             self.label=ttk.Label(self.panel2,width=22,anchor="w",text=tog_labels2[v_index])
             self.label.grid(row=0,column=0,sticky=tk.W)
             self.bool = tk.BooleanVar()
@@ -1317,7 +1272,7 @@ class flags_toggler2_builder:
 # Defining the initialising values spinbox options
 class spinlimits:
     def __init__(self, master2,v_index,**kwargs):
-        global label_colour,spinvals,spin_labels,spin_mins,spin_maxs
+        global spinvals,spin_labels,spin_mins,spin_maxs
         #self.panel2 = tk.Frame(master2)
         self.panel2 = ttk.Frame(master2)
         self.panel2.grid()
@@ -1326,7 +1281,6 @@ class spinlimits:
         self.inMin=spin_mins[self.vindex]
         self.inMax=spin_maxs[self.vindex]
         self.labelplus=" (%s - %s)"%(self.inMin,self.inMax)
-        #self.label=tk.Label(self.panel2, width=20,anchor="w",text=spin_labels[self.vindex]+self.labelplus,bg=label_colour)
         self.label=ttk.Label(self.panel2, width=20,anchor="w",text=spin_labels[self.vindex]+self.labelplus)
         self.label.grid(row=0,column=0,sticky=tk.W)
         self.putMin=self.inMin
@@ -1413,7 +1367,6 @@ def spin_instantiate(window):
 def refresh_genelabels_builder():
     global toggler_widgets,flag_widget_order,previous_target_locus,previous_target_transcript_name
     set_flags_output_labels()
-    #set_gene_picker_label()
     redo=False
     
     for i in range(3):
@@ -1540,7 +1493,6 @@ def refresh_src_sliders():
     #print("RG_globals.mutlabels %s"%RG_globals.mutlabels)
     src_count=len(RG_globals.mutlabels)
     src_slider_widgets_old_active_count=src_slider_widgets_active_count
-    rowcount=0
     def_freqlow=30
     def_freqstd=50
     setfreq=def_freqstd
@@ -1563,7 +1515,6 @@ def refresh_src_sliders():
         else:
             RG_globals.mutfreqs.append(setfreq)
         #print("label %s; freq %s"%(RG_globals.mutlabels[i],RG_globals.mutfreqs[i]))
-    count=0
 
     for i in range(src_count):
         w_text="%s_%s"%(RG_globals.target_locus,RG_globals.mutlabels[i])
@@ -1641,10 +1592,7 @@ def refresh_source_slider_builder(v_index,w_text):
     self.entry2var=src_sliders_straddvals_build[v_index]
     self.entry2['textvariable']=self.entry2var
     self.entry2.grid(row=0,column=2,sticky=tk.W)
-    self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute
-    self.get2, self.set2 = self.entry2var.get, self.entry2var.set
- 
-    #self.complement_check(self)
+    self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute 
     self.complement_check()
         
     self.abslabel.config(text=str(self.abspos))
