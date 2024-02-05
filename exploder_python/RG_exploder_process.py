@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="09-Jan-2024"
+#ProgverDate="0-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -34,12 +34,8 @@ import copy
 '''
 BioPython imports
 '''
-from Bio.Seq import MutableSeq
-# from Bio.Alphabet import generic_dna # Deprecated from Biopython 1.78 (September 2020) after update to Python 3.11.0
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-import Biopython_fix  # New Feb 2023
+import Biopython_fix  # New Feb 2023 to fix MutableSeq, Seq, SeqRecord, Bio.Alphabet deprecated from Biopython 1.78 (September 2020)
 
 # =================================================
 # End of python_imports
@@ -178,7 +174,6 @@ def get_quality_list_random(Seqrec):
         "phred_quality":quality_list
     }
     '''
-    return phred_dict
 # end of get_quality_list_random0(Seqrec)
 
 def get_quality_list_slice(Seqrec):
@@ -209,12 +204,12 @@ def merge_feats(featlist1,featlist2):
         f1parts=feat1.location.parts
         for item in f1parts:
             ''' Only one item, so only does this once '''
-            f1start=item.start; f1end=item.end
+            f1start=item.start
         feat2=featlist2[0]
         f2parts=feat2.location.parts
         for item in f2parts:
             ''' Only one item, so only does this once '''
-            f2start=item.start; f2end=item.end
+            f2start=item.start
         if f1start > f2start:
             outfeats.append(feat1)
             x=featlist1.pop(0)
@@ -606,12 +601,11 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
 
     if not CopySeqRec.is_ref_spliced:
         CopySeqRec.features=get_filtered_features(mutseqrecipient,True)
-        if RG_globals.target_transcript_name != RG_globals.empty_transcript_name:
-            return_message+=update_journal(" No gap features in reference to merge with %s"%mutlabel)
-        else:
+        if RG_globals.is_frg_paired_end or (RG_globals.target_transcript_name == RG_globals.empty_transcript_name):
             return_message+=update_journal(" Not splicing %s"%RG_globals.empty_transcript_name)
+        else:
+            return_message+=update_journal(" No gap features in reference to merge with %s"%mutlabel)
     else:
-
         return_message+=update_journal(" Merging gap features from %s with variant features from %s"%(RG_globals.bio_parameters["target_transcript_name"]["label"],mutlabel))
         mut_var_index=get_varfeature_index(mutseqrecipient)
         for mutidx in mut_var_index:
@@ -1056,26 +1050,8 @@ def set_seqrec_absolutes2(seq_record):
             feat_abs_start,feat_abs_end=feat_abs_end,feat_abs_start
         feat_abs_end -=1 # Another normalising-for-polarity +1 step
        
-        if varfeats['replace_type']=="ins_":
-            map_pos=feat_abs_end
-        elif varfeats['replace_type']=="delins_":
-            map_pos="not_directly_calculable"
-        else:
-            map_pos=feat_abs_start
-
-        # global_map="%s:%s:%s"%(seq_record.GRChver,seq_record.chrom,map_pos) # Probably obsolete
         global_range="%s:%s:%s:%s:1"%(seq_record.GRChver,seq_record.chrom,feat_abs_start,feat_abs_end)
-        local_range=str(feat_abs_start)+".."+str(feat_abs_end) # polarity 1
-
-        '''if seq_record.polarity == RG_globals.seq_polarity_plus or varfeats['replace_type']=="ins_":
-            local_range=str(feat_abs_start)+".."+str(feat_abs_end) # polarity 1
-        else:
-            local_range=str(feat_abs_end)+".."+str(feat_abs_start) # polarity -1, unless insert
-        '''
         seq_record.features[index].qualifiers['global_range']=global_range
-        # if varfeats['replace_type']!="delins_" and varfeats["replace_string"].split("/")[0] != "N" : # Probably obsolete
-        #    seq_record.features[index].qualifiers['global_map']=global_map
-        #seq_record.features[index].qualifiers['abs_variation']=local_range
 
         if RG_globals.is_print_diagnostics:
             print("index %s , feature %s"%(index,seq_record.features[index]))
@@ -1162,14 +1138,8 @@ def pad_cigarbox(cigarbox):
     return
 
 def get_untrimmed_cigar(cigarbox):
-    # Was wrap_cigar(cigarbox)
-    '''
-    Builds a CIGAR string based on contents of the 'cigarbox' list previously built in eg: MutateVarSeq
-    '''
+    # Builds a CIGAR string based on contents of the 'cigarbox' list previously built in eg: MutateVarSeq
     cigar=""
-    clear=False
- 
-    ''' Build the CIGAR string '''
     index=1; 
     while index<len(cigarbox)-2:
         cigar+="%s%s"%(cigarbox[index],cigarbox[index+1])
@@ -1280,16 +1250,9 @@ def haveamutbox(cigarbox):
 
 
 def trimcigarbox(cigarbox,mut_box,start,length):
+    #Take an existing cigar string and slice it accurately.
+    #This is tricksy, begging for an easier-to-follow algorithm
 
-    '''
-    Take an existing cigar string and slice it accurately.
-    This is tricksy, begging for an easier-to-follow algorithm
-    Historical development in modcigar.py, most of which failed.
-    '''
-    ''' Monitor is trigger to print intermediate values
-        (may be commented out)
-        Useful in debugging. Set monitor to 0 to silence the print'''
-    monitor=1
     seqpos=start
     end=start+length
     added=False
