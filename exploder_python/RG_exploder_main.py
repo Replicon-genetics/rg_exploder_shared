@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_24_16.py"
-ProgverDate="09-Jan-2024"
+Progver="RG_exploder_main_25_01.py"
+ProgverDate="05-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -44,12 +44,10 @@ from random import random
 BioPython imports
 '''
 from Bio import SeqIO
-from Bio.Seq import MutableSeq
-#from Bio.Alphabet import generic_dna #generic_dna # Deprecated from Biopython 1.78 (September 2020)
 from Bio.SeqRecord import SeqRecord # Used in writing protein sequence
-from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation  # used in splice_a_sequence
-import Biopython_fix  # New Feb 2023
+import Biopython_fix  # New Feb 2023 to fix MutableSeq, Seq, Bio.Alphabet deprecated from Biopython 1.78 (September 2020)
+
 # =================================================
 # End of python_imports
 # =================================================
@@ -138,9 +136,7 @@ def initialise_module_globals(is_journal):
 
 def initialise_module_counters():
     # Globals limited to ***this*** module
-    global mutseqcount
-    mutseqcount=0     # Initialises count of total number of mutated/variant sequences processed
-    global var_count, sub_count, indel_count, insert_count, delete_count, complex_count #  counted in MutateVarSeq
+    global var_count, sub_count,  insert_count, delete_count, complex_count #  counted in MutateVarSeq
     zero_varcounts()  #  Above set to zero by zero_varcounts()
 
     global skip_count
@@ -620,23 +616,11 @@ def write_gb_features(SeqRec,out_file,readmetxt,style):
         CopySeqRec=SeqRec
     else:
         # Style is "short" or "long", so ...
-        #a) Create a new sequence clipped to 0 nucleotide
-        #CopySeq=MutableSeq(str(SeqRec.seq[0:0]),generic_dna) #generic_dna # Deprecated from Biopython 1.78 (September 2020)
-        #CopySeq=MutableSeq(str(SeqRec.seq[0:0]))
-        CopySeq=Biopython_fix.fix_MutableSeq(SeqRec.seq[0:0])
-        
-        #b) Take clipped sequence and only the base annotations into a new sequence record
+        #Take clipped sequence and only the base annotations into a new sequence record
         CopySeqRec=RG_process.modify_seq_in_record(SeqRec.seq[0:0],SeqRec)
-    if style =="short":
-        #Add the filtered-variant features only -> the mutseq
-        CopySeqRec.features=RG_process.get_varfeatures(SeqRec)
-    '''
-    elif style =="long": # Or omit this if use RG_process.modify_seq_in_record above
-        #Add all the original features
-        CopySeqRec.features=SeqRec.features
-    '''
-
-    #print("CopySeqrec.annotations %s"%CopySeqRec.annotations)
+        if style =="short":
+            #Add the filtered-variant features only -> the mutseq
+            CopySeqRec.features=RG_process.get_varfeatures(SeqRec)
 
     out_gbfile="%s%s"%(Outfilepath,out_file)
     update_journal(" Writing %s"%out_file)
@@ -790,7 +774,7 @@ def write_refseq(RefRecord,which):
         refout.write(out_data)
         out_handle.close()
         refout.close()
-        return
+        return 
         
     #if which=="fasta": # Saving for SAM locseq
     if which==Ref_file_name: # Saving Locseq
@@ -801,7 +785,7 @@ def write_refseq(RefRecord,which):
             update_journal(" %s %s Range re-defined as: %s" %(in_ref_src,in_ref_src_title,LSeqRec.firstid.replace("chromosome:","")))
             
         LSeqRec.description="%s %i nucleotides from %s"%(LSeqRec.howmany,len(LSeqRec.seq),LSeqRec.firstid)
-        writeref_fasta(LSeqRec,in_ref_src)
+        writeref_fasta(LSeqRec,Out_Ref_Source)
         update_journal(" %s Location: %s; length: %s %i of %i bases"
                        %(in_ref_src,LSeqRec.firstid.replace("chromosome:",""),LSeqRec.howmany,MaxVarPos,MaxRefPos))
     elif which=="long":
@@ -811,23 +795,18 @@ def write_refseq(RefRecord,which):
         write_gb_features(RefRecord,out_file,readmetxt,"long")
 
     elif which=="spliced_fasta":
-        
         #Create a spliced-sequence version of refseq as the haplotype 'template' when a splice is defined and is_frg_paired_end is False
         if RefRecord.is_ref_spliced and not RG_globals.is_frg_paired_end:
             reftxt="-based template sequence"
             reftxt2=RG_globals.variants_header
             reftxt3=""
-            id_label="tem"
+            id_label="TEM"
             extralabel,strandlabel=RG_globals.get_strand_extra_label()
             
             if  RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
                 reftxt="** Reference Sequence **"
                 reftxt2="%ss"%RG_globals.read_annotation
-                if RG_globals.is_frg_paired_end:
-                    reftxt="** Trimmed %s.fasta **"%in_ref_src
-                    reftxt3=" used to select the first in a pair of paired-ends. The second may be partly or fully outside this sequence, but fully within the Reference Sequence."
-                else:
-                    reftxt3=" in %s, %s and %s"%(out_fa_file,out_fq_file,out_sa_file)
+                reftxt3=" in %s, %s and %s"%(out_fa_file,out_fq_file,out_sa_file)
                 id_label="REF"
             elif RG_globals.is_CDS:
                 reftxt="%s%s"%(RG_globals.CDS_trigger,reftxt)
@@ -840,19 +819,25 @@ def write_refseq(RefRecord,which):
             update_journal("  %s, Length: %s bases, is the %s for the %s %s%s"
                                %(outfile,len(VSeqRec.seq),reftxt,strandlabel[1:],reftxt2,reftxt3))
         else:
-            update_journal(" Un-trimmed, and un-spliced, %s %s, so no additional fasta file saved"%(in_ref_src_title,in_ref_src))
+            update_journal(" Un-trimmed, and un-spliced, %s %s. Using sequence outside %s boundary for paired ends"%(in_ref_src_title,in_ref_src,bio_parameters["target_transcript_name"]["label"]))
 
     elif which=="force_Out_Ref_Source": # Forcing save of the correct Reference for mRNA or CDS-based fragments, which is the trimmed Primary Source, never the mRNA or CDS Template
-                                        # Only happens when choosing 'Reads Type' other than paired-ends
+                                        # Should only happen when choosing 'Reads Type' other than paired-ends
         
         # Template and true Reference are the same only when RG_globals.target_transcript_name == RG_globals.empty_transcript_name, so switch locus_transcript to make it happen!
         if RG_globals.target_transcript_name != RG_globals.empty_transcript_name:
             prior_transcript_name=RG_globals.target_transcript_name
             RG_globals.target_transcript_name=RG_globals.empty_transcript_name # swap to force a trimmed-only when calling splice_refseq(RefRecord)
             # NB: Retaining current value for locus_transcript - important part of the force
-            update_journal("\n Saving Reference Sequence to %s.fasta because option '%s' is set to %s and %s is not '%s'"
-                           %(locus_transcript,bio_parameters["is_write_ref_fasta"]["label"],RG_globals.is_write_ref_fasta,bio_parameters["target_transcript_name"]["label"],RG_globals.empty_transcript_name))
-            tmp=splice_refseq(RefRecord) # throwaway - don't actually change it
+            update_journal("\n Writing both a Reference and %s Sequence for %s because option '%s' is set to %s and %s '%s' is not '%s'"
+                           %(bio_parameters["target_transcript_name"]["label"],
+                             locus_transcript,
+                             bio_parameters["is_write_ref_fasta"]["label"],
+                             RG_globals.is_write_ref_fasta,
+                             bio_parameters["target_transcript_name"]["label"],
+                             locus_transcript,
+                             RG_globals.empty_transcript_name))
+            tmp=splice_refseq(RefRecord) # throwaway; adds to journal, but don't need to change it
             RG_globals.target_transcript_name=prior_transcript_name # Now swap-back to restore correct template settings
         
     else:
@@ -916,11 +901,11 @@ def close_seqout(SeqRec):
     global locus_transcript
 
     extralabel,strandlabel=RG_globals.get_strand_extra_label()
-    update_readme("\nProgram output metadata files:\n%s%s%s\t- This file"%(locus_transcript,readmehead,readmeend))
+    update_readme("\nProgram output metadata files:\n%s%s%s%s\t- This file"%(locus_transcript,readmehead,extralabel,readmeend))
     journaltxt="\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(in_ref_src_title)
-    update_readme("%s%s%s%s"%(locus_transcript,journhead,journend,journaltxt))
+    update_readme("%s%s%s%s%s"%(locus_transcript,journhead,extralabel,journend,journaltxt))
     if is_htm_journal:
-        update_readme("%s%s%s.htm%s (html version)"%(locus_transcript,journhead,journend,journaltxt))
+        update_readme("%s%s%s%s.htm%s (html version)"%(locus_transcript,journhead,extralabel,journend,journaltxt))
     update_readme("%s%s%s%s\t- contains configuration data for this run"%(locus_transcript,config_json_head,extralabel,config_json_end))
     sam_fastfile=""
 
@@ -938,13 +923,12 @@ def close_seqout(SeqRec):
 
     if RG_globals.is_write_ref_fasta:
         if RG_globals.is_frg_paired_end:
-            update_readme("%s.fasta\t- FASTA file of the un-modified %s %s sequence%s"%(in_ref_src,in_ref_src_title,in_ref_src,flip_extra))
-            update_readme("%s_REF.fasta\t- FASTA file used to select the first in a pair of paired-ends"%(locus_transcript))
+            update_readme("%s.fasta\t- FASTA file of the un-modified %s %s sequence%s, used to select paired-ends which may lie outside the %s range" %(Out_Ref_Source,in_ref_src_title,in_ref_src,flip_extra,RG_globals.empty_transcript_name))
         else:
             update_readme("%s.fasta\t- FASTA file%s; the Reference Sequence for all %ss%s"%(Out_Ref_Source,add_extra_ref,RG_globals.read_annotation,flip_extra))
         if SeqRec.is_ref_spliced:
             if not RG_globals.empty_transcript_name.lower() in Out_Ref_Source:
-                out_spliced=locus_transcript+"_tem.fasta"
+                out_spliced=locus_transcript+"_TEM.fasta"
                 update_readme("%s\t- FASTA file%s; the template sequence for all %s"%(out_spliced,add_extra_tem,RG_globals.variants_header))
 
     add_txt0="%s with frequency >0:"%RG_globals.variants_header
@@ -1060,7 +1044,6 @@ def journal_final_summary():
         plextxt="paired ends"
         endtxt="" 
     else:
-        pairtxt=""
         if RG_globals.is_duplex:
             plextxt="dual strand:"
             endtxt="forward and reverse-complement"       
@@ -1218,7 +1201,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
 def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
     # Take an incoming sequence, and a feature definition: add the feature to the sequence. Update the 'CIGAR box' appropriately
     #This first line of globals would be tidier returned as a list from this function, rather than be globals?
-    global var_count, sub_count, indel_count,insert_count, delete_count, complex_count
+    global var_count, sub_count, insert_count, delete_count, complex_count
     global is_include_indels, skip_count
     global locus_transcript
 
@@ -1323,11 +1306,10 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
     if (feat_start <= cigarbox[len(cigarbox)-1]) and replace_type!="err":
         # Increase the variant counter
         var_count+=1
-        original=VSeq[feat_start:feat_end]
         if replace_type=="ins_":
-            indel_count +=1; is_indel=True ; is_insert=True; original="-"
+            is_indel=True ; is_insert=True
         elif replace_type=="del_":
-            indel_count +=1; is_indel=True ; is_deletion=True; compseq="-"
+            is_indel=True ; is_deletion=True; compseq="-"
         elif replace_type=="delins_":
             is_complex=True
         else:
@@ -1477,7 +1459,7 @@ def no_splice_refseq(SeqRec):
     else:
         addtxt="would be"
     update_journal("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the paired-end %ss in %s, %s and %s"\
-                   %(in_ref_src,SeqRec.clipped_length,addtxt,RG_globals.read_annotation,out_fa_file,out_fq_file,out_sa_file))
+                   %(Out_Ref_Source,SeqRec.clipped_length,addtxt,RG_globals.read_annotation,out_fa_file,out_fq_file,out_sa_file))
 
 def splice_refseq(SeqRec):
     global in_ref_src_title,in_ref_src,locus_transcript
@@ -1516,10 +1498,10 @@ def splice_refseq(SeqRec):
 # end of def splice_refseq()
 
 def zero_varcounts():
-    global var_count, sub_count, indel_count, insert_count, delete_count, complex_count # counted in MutateVarSeq and probably should not be globals, but returned from that routine
+    global var_count, sub_count, insert_count, delete_count, complex_count # counted in MutateVarSeq and probably should not be globals, but returned from that routine
     global skip_count
     skip_count=0
-    var_count=0;sub_count=0;indel_count=0; insert_count=0; delete_count=0; complex_count=0
+    var_count=0;sub_count=0; insert_count=0; delete_count=0; complex_count=0
     return
 
 def make_allvars_in_one_seq(SeqRec,label):
@@ -1527,8 +1509,7 @@ def make_allvars_in_one_seq(SeqRec,label):
     # It does this by applying the variants in reverse order from the tail of the sequence, allowing the original position-definitions to retain relevance.
     # There used to be a companion to this in which each variant was put into its own sequence record. But this was deprecated, there being no requirement for this.
     global REFSEQ_RECORD,MaxVarPos
-    global mutseqcount
-    global var_count, sub_count, indel_count, insert_count, delete_count, complex_count
+    global var_count, sub_count, insert_count, delete_count, complex_count
     global skip_count
     global locus_transcript,in_ref_src
     zero_varcounts()
@@ -1555,7 +1536,7 @@ def make_allvars_in_one_seq(SeqRec,label):
     cigarbox=[len(VarSeq),len(VarSeq)]
     for (index) in RG_process.get_varfeature_index(SeqRec): # Progressively adds each feature to VarSeq and cigarbox
         VarSeq,cigarbox=MutateVarSeq(VarSeq,SeqRec.polarity,SeqRec.features[index],cigarbox)
-    mutseqcount+=1
+
     RG_process.pad_cigarbox(cigarbox)# Important - modifies cigarbox!!
     
     subst_txt="End-trim of %s sections; splice-removal of %s sections, from %s. %s variants: %s substitutions; %s inserts; %s deletions; %s delins"\
@@ -1635,7 +1616,6 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
     # NB: RG_globals.is_onefrag_out must be True to get here AND fraglen must have been tested as OK with validate_fraglength
     # NB: fragtotal is irrelevant for "all_frags"
     
-    label_count=0 # Takes over the role of Saved_Fragcount for numbering the id-label because when is_duplex=True, it passes through label_and_save twice
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
 
     mutrec_index=0
@@ -1647,7 +1627,6 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
             #if Generated_Fragcount > 2:
             #    input("enter to continue")
             end=start+fraglen
-            thisrec_count=0
             Generated_Fragcount+=1
             #if RG_globals.is_duplex: # Increment here because of RG_process.is_mut_cigar filter below
             #   Generated_Fragcount+=1 # Yes: that's +2 for if RG_globals.is_duplex == True
@@ -1896,7 +1875,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
     if len(normutfreq)>0:
         # Sum the normalised frequencies progressively to create number-ranges in lottoline
         # lottoline converts the normalised frequencies into a list of cutoff positions for matching a later random number call
-        lottoline=[normutfreq[0]]; maxnormfreq=max(normutfreq); minnormfreq=min(normutfreq)
+        lottoline=[normutfreq[0]]
         for i in range(1, len(normutfreq)):
             lottoline.append(lottoline[len(lottoline)-1]+normutfreq[i])
             
@@ -1949,7 +1928,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     if len(normutfreq)>0:
         # Sum the normalised frequencies progressively to create number-ranges in lottoline
         # lottoline converts the normalised frequencies into a list of cutoff positions for matching a later random number call
-        lottoline=[normutfreq[0]]; maxnormfreq=max(normutfreq); minnormfreq=min(normutfreq)
+        lottoline=[normutfreq[0]]
         for i in range(1, len(normutfreq)):
             lottoline.append(lottoline[len(lottoline)-1]+normutfreq[i])
             
@@ -2242,9 +2221,9 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
     
     settxt=bio_parameters["target_transcript_name"]["label"]
     if splice_trigger=="gene":
-        settxt="Reference %s"%settxt
+        settxt="Reference"
         
-    update_journal("\n Searching feature table to set %s"%settxt)
+    update_journal("\n Searching feature table to set %s Sequence"%settxt)
     # First match the locus id (format eg: 'KRAS') to determine what the local name is, format eg:ENSG00000133703.11
     
     for (index, features) in enumerate (seq_record.features):
@@ -2422,10 +2401,8 @@ def splice_a_sequence(seq_record,target_loc):
 # ===============================================================
 def make_reference_files1():
     if RG_globals.is_write_ref_fasta:
-        write_refseq(REFSEQ_RECORD,"force_Out_Ref_Source") # Save the trimmed Source sequence as reference
-        if RG_globals.is_sam_out:
-            pass
-            #write_refseq(REFSEQ_RECORD,Ref_file_name) # Save the un-modified Primary Source sequence
+        if not RG_globals.is_frg_paired_end:
+            write_refseq(REFSEQ_RECORD,"force_Out_Ref_Source") # Save the trimmed Source sequence as reference
     else:
         if RG_globals.is_frg_paired_end:
             templatetxt=""
@@ -2584,13 +2561,6 @@ def get_transcript_data_process(redo_locus):
 #     This was developed after the initial 'explode' function; the fragmentation of sequence into reads
 #########################################
 
-def swaplistends(inlist): # Swap function
-    # Storing the first and last element as a pair in a tuple variable get
-    get = inlist[-1], inlist[0]
-    # unpacking those elements
-    inlist[0], inlist[-1] = get
-    return inlist
-
 def get_muttranscripts(redo_locus):
     # Refactoring June 2023
     # Derive the transcript tables
@@ -2683,8 +2653,6 @@ def get_muttranscripts(redo_locus):
 
         for count in range(len(splice_joinlist_txt)): # was for item in splice_joinlist_txt
             this_pair=splice_joinlist_txt[count]
-            if count < len(splice_joinlist_txt)-1:
-                next_pair=splice_joinlist_txt[count+1]
             begin,end=this_pair.split(":")
             begin=int(begin)
             end=int(end)
@@ -2738,7 +2706,7 @@ def get_muttranscripts(redo_locus):
             
             #print("%s"%mrnapos_lookup[(len(mrnapos_lookup)-10):-1])
         ## End of: for item in splice_joinlist_txt
-        ##        /for count in range(len(splice_joinlist_txt))
+        ## End of: for count in range(len(splice_joinlist_txt))
         feature_titles[-1]="Downstream"
         intron_total-=1
         exon_length.append(exon_len)
