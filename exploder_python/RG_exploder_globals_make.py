@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="28-Jan-2024"
+#Prg_verDate="05-Feb-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -134,7 +134,7 @@ def make_out_data():
 # ==========================
 def set_string_defaults():
     global CopyrightText
-    CopyrightText="Copyright © Replicon Genetics 2021-2024. All rights reserved."
+    CopyrightText="Copyright © Replicon Genetics & Cary O'Donnell 2021-2024. All rights reserved."
     #There are several ways of declaring polarity so we define the known ones and use as needed
     global seq_polarity_plus,seq_polarity_minus,seq_polarity_none
     seq_polarity_plus="1"; seq_polarity_minus="-1";seq_polarity_none="0"
