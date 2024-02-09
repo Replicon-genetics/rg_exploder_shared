@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="05-Feb-2024"
+#Prg_verDate="09-Feb-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -27,11 +27,11 @@ def set_config_consts():
     CustomerIDText="EBaker"
     #CustomerIDText="Public"
 
-    is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
-    #is_pygui_browser=False   # When setting up to use the Vue.js GUI
+    #is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
+    is_pygui_browser=False   # When setting up to use the Vue.js GUI
 
-    is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
-    #is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
+    #is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
+    is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
     
     ######## End of: Revisit these each time a data set is renewed ########
 
@@ -99,12 +99,14 @@ def set_defaults():
     set_vars_seq_limits_defaults()
     if GRCH_dataset=="GRCh37":
         if CustomerIDText=="Public":
-            set_Reference_sequences_configs_GRCh37_1000_public()
+            #set_Reference_sequences_configs_GRCh37_1000_public()
+            set_Reference_sequences_configs_GRCh37_1000_public2()
         else:
             set_Reference_sequences_configs_GRCh37_1000()
     else:
         if CustomerIDText=="Public":
-            set_Reference_sequences_configs_GRCh38_1000_public()
+            #set_Reference_sequences_configs_GRCh38_1000_public()
+            set_Reference_sequences_configs_GRCh38_1000_public2()
         else:
             set_Reference_sequences_configs_GRCh38_1000()
     set_dynamic_vars_defaults()
@@ -718,7 +720,7 @@ def make_bio_parameters_configs():
 
 def set_Reference_sequences_configs_GRCh37_1000():
     global DatasetIDText,Reference_sequences
-    DatasetIDText="Dataset GRCh37_0003_02; September 2022"
+    DatasetIDText="EB dataset GRCh37_0003_03; September 2022"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -728,7 +730,29 @@ def set_Reference_sequences_configs_GRCh37_1000():
         
 def set_Reference_sequences_configs_GRCh38_1000():
     global DatasetIDText,Reference_sequences
-    DatasetIDText="EB dataset GRCh38_0005_02; September 2022"
+    DatasetIDText="EB dataset GRCh38_0005_03; September 2022"
+    exists,stuff=config_file_in(config_file_reference_seqs)
+    if exists:
+        Reference_sequences=stuff["Reference_sequences"]
+    else:
+        print("Fail")
+        sys.exit()
+
+def set_Reference_sequences_configs_GRCh37_1000_public2():
+    global DatasetIDText,Reference_sequences
+    #DatasetIDText="Open Access GRCh37_0005_03 ; September 2022"
+    DatasetIDText="EB dataset GRCh37_0003_03; September 2022"
+    exists,stuff=config_file_in(config_file_reference_seqs)
+    if exists:
+        Reference_sequences=stuff["Reference_sequences"]
+    else:
+        print("Fail")
+        sys.exit()
+
+def set_Reference_sequences_configs_GRCh38_1000_public2():
+    global CustomerIDText,DatasetIDText,Reference_sequences
+    #DatasetIDText="Open Access GRCh38_0005_03; September 2022"
+    DatasetIDText="EB dataset GRCh38_0005_03; September 2022"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -738,7 +762,7 @@ def set_Reference_sequences_configs_GRCh38_1000():
 
 def set_Reference_sequences_configs_GRCh37_1000_public():
     global DatasetIDText,Reference_sequences
-    DatasetIDText="Open Access GRCh37_0005_02 ; September 2022"
+    DatasetIDText="Open Access GRCh37_0005_03 ; September 2022"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -748,7 +772,7 @@ def set_Reference_sequences_configs_GRCh37_1000_public():
 
 def set_Reference_sequences_configs_GRCh38_1000_public():
     global CustomerIDText,DatasetIDText,Reference_sequences
-    DatasetIDText="Open Access GRCh38_0005_02; September 2022"
+    DatasetIDText="Open Access GRCh38_0005_03; September 2022"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
