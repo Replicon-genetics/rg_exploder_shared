@@ -688,7 +688,7 @@ def make_bio_parameters_configs():
             "value": is_write_ref_fasta
             },
         "is_mut_out": {
-            "label": "Save Haplotype Sequences",
+            "label": "Save Source Sequences",
             "value": is_mut_out
             },
         "is_write_ref_ingb": {
