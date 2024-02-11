@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="09-Feb-2024"
+#Prg_verDate="11-Feb-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -24,14 +24,14 @@ def set_config_consts():
     GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
     #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
-    CustomerIDText="EBaker"
-    #CustomerIDText="Public"
+    #CustomerIDText="EBaker"
+    CustomerIDText="Public"
 
-    #is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
-    is_pygui_browser=False   # When setting up to use the Vue.js GUI
+    is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
+    #is_pygui_browser=False   # When setting up to use the Vue.js GUI
 
-    #is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
-    is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
+    is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
+    #is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
     
     ######## End of: Revisit these each time a data set is renewed ########
 
@@ -159,7 +159,8 @@ def set_string_defaults():
                                 # '''           The clever bit comes when assessing whether another variant feature coincides, or overlaps with, this skip and how to handle it: in get_mutref_olap
 
     CDS_trigger="CDS"           # ''' CONSTANT: External dependency. Use in combination with is_CDS
-    empty_transcript_name="Locus"
+    #empty_transcript_name="Locus"
+    empty_transcript_name="Gene"
     empty_transcript_id=""
 
     
@@ -212,7 +213,8 @@ def set_string_defaults():
     title_label="Synthetic %ss Generator"%read_annotation.title() 
     #reference_header="Reference Sequence"
     template_label="Template"
-    reference_header="Reference Source"
+    #reference_header="Reference Source"
+    reference_header="Reference Gene"
     #variants_header="Variant Sequences"
     #variants_header="%s Definition"%hapname
     variants_header="%s Source"%hapname
@@ -497,10 +499,10 @@ def set_gui_vars_defaults():
 # end of set_gui_vars_defaults()
 
 def make_bio_parameters_configs():
-    global bio_parameters,ReadsList,read_annotation,variants_header
+    global bio_parameters,ReadsList,read_annotation,variants_header,empty_transcript_name
     bio_parameters={
         "target_locus":{
-            "label": "Locus",
+            "label": empty_transcript_name,
             "value": target_locus
             },
         "target_transcript_name":{
