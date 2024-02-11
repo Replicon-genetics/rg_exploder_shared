@@ -1,6 +1,6 @@
 {
     "stringconstants": {
-        "DatasetIDText": "EB dataset GRCh38_0005_02; September 2022",
+        "DatasetIDText": "EB dataset GRCh38_0005_03; September 2022",
         "CustomerIDText": "EBaker",
         "CopyrightText": "Copyright \u00a9 Replicon Genetics & Cary O'Donnell 2021-2024. All rights reserved.",
         "seq_polarity_plus": "1",
@@ -49,7 +49,7 @@
     "IOconstants": {
         "infilepathroot": "input/",
         "outfilepathroot": "output/",
-        "pygui_outfilepathroot": "/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/exploder_output_38_1000/",
+        "pygui_outfilepathroot": "/Users/caryodonnell/Replicon/exploder_output_38_1000/",
         "journhead": "_001",
         "journend": "_journal",
         "readmehead": "_000",
