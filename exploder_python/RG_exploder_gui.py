@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-Progver="RG_builder14_gui.py"
-ProgverDate="05-Feb-2024"
+Progver="RG_builder15_gui.py"
+ProgverDate="11-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -407,20 +407,24 @@ def set_refseq_target_url():
         geneid,version=RG_globals.ensembl_geneid.split(".")
         if target=="37":
             ENS_target_url=RG_globals.ensembl37_gene_url+"g="+geneid
-            ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh37_txt+":"+geneid
+            #ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh37_txt+":"+geneid
+            ENS_target_url_txt=RG_globals.GRCh37_txt+":"+geneid
+            
         elif target=="38":
             ENS_target_url=RG_globals.ensembl38_gene_url+"g="+geneid
-            ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh38_txt+":"+geneid
+            #ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+RG_globals.GRCh38_txt+":"+geneid
+            ENS_target_url_txt=RG_globals.GRCh38_txt+":"+geneid
         else:
             ENS_target_url=""
-            ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+"no build "+":"+geneid
+            #ENS_target_url_txt="Ensembl "+RG_globals.target_locus+": "+"no build "+":"+geneid
+            ENS_target_url_txt="GRCh??:"+geneid
+
 
     if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         ENS_ts_target_url=ENS_target_url
         ENS_ts_target_url_txt=ENS_target_url_txt
     else:
         tsid,version=RG_globals.Reference_sequences[RG_globals.target_locus]["mRNA"][RG_globals.target_transcript_name].split(".")
-        
         if target=="37":
             # Special cases where transcript is not defined in build 37, is present in 38, and has been edited into the 37 source data
             # eg: in config.json AK2-672715m(MANE_Select) and in genbank file "ENST00000672715m.1 , with 'm' as the triggering identifier
@@ -433,7 +437,7 @@ def set_refseq_target_url():
             ENS_ts_target_url=RG_globals.ensembl38_transcript_url+"g="+geneid+";t="+tsid
         else:
             ENS_ts_target_url=""
-        ENS_ts_target_url_txt="Ensembl_transcript"+":"+tsid
+        ENS_ts_target_url_txt="GRCh"+target+":"+tsid
     #print("ENS_ts_target_url %s"%ENS_ts_target_url)
 
 def results_hyperLink(event):
@@ -524,7 +528,7 @@ def initialise_tk():
     global exploder_win,topbar,main,main_left,main_vars_list,main_build,main_options_list
     exploder_win= tk.Tk() # tk only, not ttk
     tk_background_config(exploder_win)
-    exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v13)") 
+    exploder_win.title("Synthetic Reads Generator - Python tkinter GUI (v15)") 
     # Laying out grid
     topbar=ttk.Frame(exploder_win)
     main=ttk.Frame(exploder_win)
@@ -623,7 +627,8 @@ def set_topbar_LRG_label_link():
     set_generic_label(topbar.LRG_label,lrg_hyperLink,LRG_target_url,LRG_target_url_txt)
 
 def set_listbox_locus_label():
-    set_generic_label(main_left.genelistlabel,lrg_hyperLink,LRG_target_url,"")
+    #set_generic_label(main_left.genelistlabel,lrg_hyperLink,LRG_target_url,"") # LRG now
+    set_generic_label(main_left.genelistlabel,ensembl_hyperLink,ENS_target_url,ENS_target_url_txt)
 
 def ensembl_ts_hyperLink(event):
     global ENS_ts_target_url
@@ -631,7 +636,8 @@ def ensembl_ts_hyperLink(event):
         webbrowser.open("%s"%ENS_ts_target_url)
 
 def set_listbox_transcript_label():
-    set_generic_label(main_left.tslistlabel,ensembl_ts_hyperLink,ENS_ts_target_url,"")
+    #set_generic_label(main_left.tslistlabel,ensembl_ts_hyperLink,ENS_ts_target_url,"")
+    set_generic_label(main_left.tslistlabel,ensembl_ts_hyperLink,ENS_ts_target_url,ENS_ts_target_url_txt)
 
 def help_hyperLink(event):
     if RG_globals.help_url != "":
@@ -683,7 +689,8 @@ def set_slider_build_label():
     set_builder_label(main_build)
 
 def set_gene_label(frame):
-    frame['text']="  %s     %s"%(RG_globals.variants_header,RG_globals.frequency_label)
+    #frame['text']="  %s     %s"%(RG_globals.variants_header,RG_globals.frequency_label)
+    frame['text']="  %s             %s"%(RG_globals.variants_header,RG_globals.frequency_label)
     
 def set_builder_label(frame):
     #frame['text']="               Label         Position                 Extension         Global_mapping"  # Addition in builder
