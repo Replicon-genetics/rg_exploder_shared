@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="0-Feb-2024"
+#ProgverDate="27-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -325,10 +325,16 @@ def make_addmut(refseqdonor,label):
         if item["locus"]==RG_globals.target_locus and item["hapname"]==label:
             item_count+=1
             #print("Found item %s for label %s ; number %s"%(item,label,item_count))
-            f=SeqFeature(FeatureLocation(item["local_begin"]-1,item["local_end"],strand=1),type="variation")
+            #f=SeqFeature(FeatureLocation(item["local_begin"]-1,item["local_end"],strand=1),type="variation")
+            # Fixing the above for inconsistent order coming from App.js and RG_exploder_gui Feb 2024; it's RG_exploder_gui that's wrong
+            mutstart=item["local_begin"]; mutend=item["local_end"]
+            if mutstart > mutend:
+                mutend,mutstart=mutstart,mutend
+            f=SeqFeature(FeatureLocation(mutstart-1,mutend,strand=1),type="variation")
             qualifiers=OrderedDict()
             qualifiers["replace"]=["%s/%s"%(item["ref_seq"],item["var_seq"])]
-            qualifiers["db_xref"]=["%s_%s:%s"%(label,item_count,item["varname"])]
+            #qualifiers["comment"]=["%s_%s:%s"%(label,item_count,item["varname"])] # comes out bounded by unwanted braces
+            qualifiers["comment"]=label+"_%s:"%item_count+"%s"%item["varname"]
             f.qualifiers= qualifiers
             #print("addmut: f.qualifiers %s %s"%(label,f))
             if not success:  # Only do this for the first variant in case there are > 1
