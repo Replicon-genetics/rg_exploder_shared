@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_25_01.py"
-ProgverDate="05-Feb-2024"
+ProgverDate="28-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -21,7 +21,7 @@ a) Deprecation of 'generic_dna' in MutableSeq and SeqRecord
 b) sequence.reverse_complement() change to sequence.reverse_complement(inplace=True)
 c) Uses extra module import Biopython_fix to modulate
 
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
 # =================================================
 # python_imports
@@ -976,7 +976,7 @@ def close_seqout(SeqRec):
         update_readme("%s\t- SAM file of all the sequence %ss%s"%(out_sa_file,RG_globals.read_annotation,sam_fastfile))
         
     if not(RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out):
-        txt=" NB: All 'Save %ss in ...' options are de-selected, so not a lot happened"%RG_globals.read_annotation
+        txt=" NB: All 'Output Options: %ss in FASTA/FASTQ/SAM format' are de-selected, so not a lot happened"%RG_globals.read_annotation.capitalize()
         update_journal(txt)
         update_readme(txt)
     return
@@ -1032,25 +1032,27 @@ def close_nonseq_files(is_error):
 def journal_final_summary():
     #Prior declared globals
     global Progver,journout,REFSEQ_RECORD
-
-    update_journal(" %s=%i\n Total number of %ss=%s"%(bio_parameters["Fraglen"]["label"],RG_globals.Fraglen,RG_globals.read_annotation,REFSEQ_RECORD.Saved_Fragcount))
-    spliceouts=REFSEQ_RECORD.splicecount
-    if spliceouts > 0:
-        addtxt=", shown in %s CIGAR as 'N'"%RG_globals.read_annotation
+    if not(RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out):
+        update_journal(" ... Rolling tumbleweed ...")
     else:
-        addtxt=""
-    update_journal(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
-    if RG_globals.is_frg_paired_end:
-        plextxt="paired ends"
-        endtxt="" 
-    else:
-        if RG_globals.is_duplex:
-            plextxt="dual strand:"
-            endtxt="forward and reverse-complement"       
+        update_journal(" %s=%i\n Total number of %ss=%s"%(bio_parameters["Fraglen"]["label"],RG_globals.Fraglen,RG_globals.read_annotation,REFSEQ_RECORD.Saved_Fragcount))
+        spliceouts=REFSEQ_RECORD.splicecount
+        if spliceouts > 0:
+            addtxt=", shown in %s CIGAR as 'N'"%RG_globals.read_annotation
         else:
-            plextxt="single strand:"
-            endtxt="forward only"
-    update_journal(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
+            addtxt=""
+        update_journal(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
+        if RG_globals.is_frg_paired_end:
+            plextxt="paired ends"
+            endtxt="" 
+        else:
+            if RG_globals.is_duplex:
+                plextxt="dual strand:"
+                endtxt="forward and reverse-complement"       
+            else:
+                plextxt="single strand:"
+                endtxt="forward only"
+        update_journal(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
 # end of def journal_final_summary
 
 def close_journal(no_error):
@@ -1173,7 +1175,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
     if accept:
         mutlistlabels=mutlistlabels[:-1]
     if mutcount < 1:
-        print("special case mutcount %s "%mutcount)
+        #print("special case mutcount %s "%mutcount)
         # Check special case when there is only 1 mutrec and freq is set to zero. Set freq to 1 to avoid nul run. It keeps tripping me up!
         RG_globals.mutfreqs[0]=1
         label=RG_globals.mutlabels[0]
@@ -1390,16 +1392,16 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
             if RG_globals.is_vars_to_lower: # Have to convert the replacement back to upper for this comparison
                 sub_n=str(sub_n)
                 sub_n=sub_n.upper()
-            #print("replace_string %s, current_n %s, sub_n %s"%(replace_string,current_n,sub_n,))
-            if str(current_n) != replace_string.split("/")[0] or str(sub_n) != replace_string.split("/")[1] :
-                matchtxt="mis"
-                matchvardef=False
-            else:
-                matchtxt=""           
+
+            intended_delete=replace_string.split("/")[0]
+            matchtxt=""
+            if intended_delete !="N":
+                #print("replace_string %s, current_n %s, sub_n %s"%(replace_string,current_n,sub_n,))
+                if str(current_n) != intended_delete or str(sub_n) != replace_string.split("/")[1] :
+                    matchtxt="mis"
+                    matchvardef=False
             #msgtxt_mvs=" SNV: %s -> %s polarity %s, %smatches definition %s -> %s polarity +1, loc: %s, abs: %s"%(VSeq[feat_start:feat_end],replace,seq_polarity,matchtxt,current_n, sub_n,feat_end,mod_abs_end)
-            msgtxt_mvs=" SNV: %s -> %s polarity %s, %smatches definition %s -> %s polarity +1, abs: %s, loc: %s"%(VSeq[feat_start:feat_end],replace,seq_polarity,matchtxt,current_n,
-                                                                                                                  sub_n,mod_abs_end,feat_end)
-            
+            msgtxt_mvs=" SNV: %s -> %s polarity %s, %smatches definition %s -> %s polarity +1, abs: %s, loc: %s"%(VSeq[feat_start:feat_end],replace,seq_polarity,matchtxt,intended_delete,sub_n,mod_abs_end,feat_end)
             # End of verification check for SNV string match/mis-match 
             VSeq[feat_start:feat_end]=replace
             #Do CIGAR build
@@ -2905,8 +2907,11 @@ def get_ref_subseq3():
         if trans_End_ext >0:
             tee="+%s"%tee
 
-    if trans_Begin==trans_End and trans_Begin_ext==0 and trans_End_ext==0:
-        varname="%s"%(trans_Begin)
+    if trans_Begin==trans_End and (trans_Begin_ext==trans_End_ext):
+        if trans_Begin_ext==0:
+            varname="%s"%(trans_Begin)
+        else:
+            varname="%s%s"%(trans_Begin,tbe)
     else:
         varname="%s%s_%s%s"%(trans_Begin,tbe,trans_End,tee)
         
