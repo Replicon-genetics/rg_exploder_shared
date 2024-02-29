@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-Progver="RG_builder15_gui.py"
-ProgverDate="11-Feb-2024"
+Progver="RG_builder16_gui.py"
+ProgverDate="28-Feb-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -50,7 +50,9 @@ def initialise_modulevalues():
 
     global run_count
     run_count=0 # Count how many runs
-
+    
+    global IUPAC_sub
+    IUPAC_sub=RG_globals.IUPAC_codes[:1]+"^"+RG_globals.IUPAC_codes[1:] # Insert a "^" to get a re.sub string for parsing pasted text. Bizarre hack
     global previous_target_locus, previous_target_transcript_name
     previous_target_locus=""
     previous_target_transcript_name=RG_globals.empty_transcript_name
@@ -502,10 +504,11 @@ def save_and_go():
 
 def set_pygui_defaults010():
     global pygui_frame_labels,pygui_button_labels # Used as tk object labels
+    #"Save Variant to %s"%(RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"])]
     pygui_frame_labels=["Messages Panel"]
     pygui_button_labels=["Clear messages",
-                         "Retrieve %s Sequence"%RG_globals.bio_parameters["target_transcript_name"]["label"],
-                         "Save %s"%RG_globals.variants_label]
+                         "Retrieve Reference Sequence",
+                         "Save"]
 # end of set_pygui_defaults010()
 
 def tk_background_config(scope):
@@ -628,7 +631,7 @@ def set_topbar_LRG_label_link():
 
 def set_listbox_locus_label():
     #set_generic_label(main_left.genelistlabel,lrg_hyperLink,LRG_target_url,"") # LRG now
-    set_generic_label(main_left.genelistlabel,ensembl_hyperLink,ENS_target_url,ENS_target_url_txt)
+    set_generic_label(main_left.genelistlabel,ensembl_hyperLink,ENS_target_url,ENS_target_url_txt)    
 
 def ensembl_ts_hyperLink(event):
     global ENS_ts_target_url
@@ -666,6 +669,7 @@ def initialise_main_vars_list(frame):
     main_vars_list=ttk.LabelFrame(main) # Not compatible with font setting in class source_sliders
     #tk_background_config(main_vars_list)
     set_slider_gene_label()
+    
 
 def initialise_main_build(frame):
     global main_build
@@ -690,7 +694,10 @@ def set_slider_build_label():
 
 def set_gene_label(frame):
     #frame['text']="  %s     %s"%(RG_globals.variants_header,RG_globals.frequency_label)
-    frame['text']="  %s             %s"%(RG_globals.variants_header,RG_globals.frequency_label)
+    frame['text']=" %ss"%RG_globals.variants_label
+    frame_label=ttk.Label(frame,text=" %s             %s"%(RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"],RG_globals.frequency_label))
+    frame_label.grid()
+    #frame['text']=" Source Name             %s"%(RG_globals.frequency_label)
     
 def set_builder_label(frame):
     #frame['text']="               Label         Position                 Extension         Global_mapping"  # Addition in builder
@@ -775,7 +782,7 @@ class source_sliders:
             # print("results_hyperLink(event) fail")
             pass
 
-class source_sliders_builder:
+class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
     def __init__(self, master1,v_index,**kwargs):
         global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build
         global src_sliders_straddvals_build,max_seqlength,min_seqlength,max_ext_add,min_ext_add
@@ -1001,6 +1008,7 @@ def src_sliders_instantiate_build(window):
         global local_begin,local_end
         global src_slider_widgets, src_slider_widgets_active_count,src_slider_widgets_old_active_count
         global src_sliders_vals,src_sliders_strvals
+        global IUPAC_sub
 
         ref_seq=seq_region
         clear_GUI_text2()
@@ -1087,11 +1095,11 @@ def src_sliders_instantiate_build(window):
     ############## varseqtxt  ##############
     def handle_DNA_input(s):
         varseqtxt.configure(state = tk.NORMAL)
+        
         if  s.keysym.lower() in { "delete"}:
             varseqtxt.delete(1.0, tk.END)    
         
-        #elif s.char.upper() in RG_globals.IUPAC_codes: #  does not work here in python 3.11.0, but does work in Python 3.8.2
-        elif re.match('[ACGTRYSWKMBDHVN]',s.char.upper()):
+        elif re.match(RG_globals.IUPAC_codes,s.char.upper()):
             var_seq=varseqtxt.get('0.3',tk.END)
             if var_seq[:-1]=="-":
                 varseqtxt.delete(1.0, tk.END)
@@ -1107,6 +1115,16 @@ def src_sliders_instantiate_build(window):
         elif  s.char.lower() in { "-"}:
             varseqtxt.delete(1.0, tk.END)
             varseqtxt.insert(tk.END,"-")
+
+        elif s.state == 4 and s.keysym == 'c': # Detect CTRL-C for copy
+            content = varseqtxt.selection_get()
+            window.clipboard_clear()
+            window.clipboard_append(content)
+        
+        elif s.state == 4 and s.keysym == 'v': # Detect CTRL-V for paste
+            content=window.selection_get(selection='CLIPBOARD')
+            varseqtxt.insert('end',re.sub(IUPAC_sub,'',content.upper())) # Filter for IUPAC-allowed chars
+        
         else:
             pass
         
@@ -1120,7 +1138,7 @@ def src_sliders_instantiate_build(window):
     varlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["label"]).grid(row=9,column=0)
     varseqtxt=tk.Text(window,height=4,width=50,background="white",foreground="black")
     varseqtxt.bind("<1>", lambda event: varseqtxt.focus_set())
-    varseqtxt.bind("<Key>", handle_DNA_input)
+    varseqtxt.bind("<Key>", lambda e: handle_DNA_input(e))
     varseqtxt.grid(row=10,column=0,sticky=tk.W)
 
     ##varseqscroll = tk.Scrollbar(window,bd=1,orient="vertical")
@@ -1130,6 +1148,32 @@ def src_sliders_instantiate_build(window):
     #varseqtxt.config(yscrollcommand=varseqscroll.set)
     #varseqscroll.config(command=varseqtxt.yview)
     varseqtxt.insert(tk.END,seq_region)
+
+    ############## varnameseqtxt  ##############
+    def handle_varname_input(s):
+        varnameseqtxt.configure(state = tk.NORMAL)
+        if  s.keysym.lower() in { "delete"}:
+            varnameseqtxt.delete(1.0, tk.END)
+            
+        elif re.search('[a-zA-Z0-9_.()>]',s.char):
+            varnameseqtxt.insert(
+                varnameseqtxt.index(tk.INSERT),s.char
+            )
+        elif s.keysym.lower() in {"backspace"}:
+            varnameseqtxt.delete(
+                varnameseqtxt.index(tk.INSERT)
+                + "-1c" * (s.keysym.lower() == "backspace")
+            )     
+        else:
+            pass
+        varnameseqtxt.configure(state = tk.DISABLED)
+    
+    varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=11,column=0)
+    varnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
+    varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
+    varnameseqtxt.bind("<Key>", handle_varname_input)
+    varnameseqtxt.grid(row=12,column=0)
+    varnameseqtxt.insert(tk.END,varnametxt)
 
     ############## hapnameseqtxt  ##############
 
@@ -1151,40 +1195,14 @@ def src_sliders_instantiate_build(window):
             pass
         hapnameseqtxt.configure(state = tk.DISABLED)
 
-    hapnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=11,column=0)
+    hapnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["hap_name"]["label"]).grid(row=13,column=0)
     hapnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
     #hapnameseqtxt.configure(bg="#1C6C0B", insertbackground='white')
     hapnameseqtxt.bind("<1>", lambda event: hapnameseqtxt.focus_set())
     hapnameseqtxt.bind("<Key>", handle_hapname_input)
-    hapnameseqtxt.grid(row=12,column=0)
+    hapnameseqtxt.grid(row=14,column=0)
     hapnameseqtxt.insert(tk.END,hapnametxt)
 
-
-    ############## varnameseqtxt  ##############
-    def handle_varname_input(s):
-        varnameseqtxt.configure(state = tk.NORMAL)
-        if  s.keysym.lower() in { "delete"}:
-            varnameseqtxt.delete(1.0, tk.END)
-            
-        elif re.match('[a-zA-Z0-9_.()]',s.char):
-            varnameseqtxt.insert(
-                varnameseqtxt.index(tk.INSERT),s.char
-            )
-        elif s.keysym.lower() in {"backspace"}:
-            varnameseqtxt.delete(
-                varnameseqtxt.index(tk.INSERT)
-                + "-1c" * (s.keysym.lower() == "backspace")
-            )
-        else:
-            pass
-        varnameseqtxt.configure(state = tk.DISABLED)
-    
-    varnameseqlabel=ttk.Label(window,text=RG_globals.bio_parameters["target_build_variant"]["var_name"]["label"]).grid(row=13,column=0)
-    varnameseqtxt=tk.Text(window,height=2,width=20,background="white",foreground="black")
-    varnameseqtxt.bind("<1>", lambda event: varnameseqtxt.focus_set())
-    varnameseqtxt.bind("<Key>", handle_varname_input)
-    varnameseqtxt.grid(row=14,column=0)
-    varnameseqtxt.insert(tk.END,varnametxt)
 
     ############## Save button  ##############
     #save=tk.Button(buttons,text='Save',bg="blue", command=save_src_sliders_vals)
@@ -1494,6 +1512,7 @@ def refresh_gui():
     refresh_src_sliders_builder()
     
 def refresh_src_sliders():
+    # This is the Haplotype variants list sliders
     #print("refresh_src_sliders")
     global src_slider_widgets, src_slider_widgets_active_count,src_slider_widgets_old_active_count
     global src_sliders_vals,src_sliders_strvals
@@ -1533,6 +1552,8 @@ def refresh_src_sliders():
     #print("mutlabels: %s , mutfreqs: %s"%(RG_globals.mutlabels,RG_globals.mutfreqs))
 
 def refresh_source_slider(v_index,w_text):
+    # This is a single Haplotype variant slider - called for each one by refresh_src_sliders()
+    #print("at refresh_src_slider - singular")
     self=src_slider_widgets[v_index]
     self.panel2.grid()
     self.label['text']=w_text
@@ -1550,7 +1571,9 @@ def refresh_source_slider(v_index,w_text):
     self.scalevar.trace('w', self.setentryfromscale)
           
 def refresh_src_sliders_builder():
-    #print("at refresh_src_sliders")
+    # The Local_pos and Extension section
+    # Attempts to restrict ranges by current values of other range ... too hard in current state of code 27-Feb-2024
+    #print("at refresh_src_sliders_builder")
     #print("ref_strand %s"%RG_globals.bio_parameters["target_build_variant"]["ref_strand"])
     global src_slider_widgets_build
     global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build,max_seqlength
@@ -1571,31 +1594,34 @@ def refresh_src_sliders_builder():
     src_sliders_vals_build[0]=tk.IntVar(value=1)
     src_sliders_strvals_build[0]=tk.StringVar(value=str(1))
     src_sliders_straddvals_build[0]=tk.StringVar(value=str(0))
-    refresh_source_slider_builder(0,trans_text)
+    #Begin
+    refresh_source_slider_builder(0,trans_text) #CDA/mRNA etc
+    src_sliders_vals_build[1]=tk.IntVar(value=max_seqlength) # vals
+    src_sliders_strvals_build[1]=tk.StringVar(value=str(max_seqlength)) # strvals
     
-    src_sliders_vals_build[1]=tk.IntVar(value=max_seqlength)
-    src_sliders_strvals_build[1]=tk.StringVar(value=str(max_seqlength))
     src_sliders_straddvals_build[1]=tk.StringVar(value=str(0))
+    #End
     refresh_source_slider_builder(1,trans_text)
 
 def refresh_source_slider_builder(v_index,w_text):
     global max_seqlength,min_seqlength
-    #print("At refresh_source_slider_builder)
+    #print("At refresh_source_slider_builder")
     self=src_slider_widgets_build[v_index]
     self.panel2.grid()
-    self.label['text']="%s_%s"%(w_text,src_sliders_labels_build[v_index])# This is the Souce  x_Begin / x_End label 
+    self.label['text']="%s_%s"%(w_text,src_sliders_labels_build[v_index])# This is the Source  x_Begin / x_End label 
     self.label.grid(row=0,column=0,sticky=tk.W)
-    
-    self.entryvar=src_sliders_strvals_build[v_index]
+
+    # Localpos
+    self.entryvar=src_sliders_strvals_build[v_index] # strvals
     self.entry['textvariable']=self.entryvar
     self.entry.config(from_=min_seqlength, to=max_seqlength)# Reset new limits on spinbox
     self.entry.grid(row=0,column=1,sticky=tk.W)
     self.get, self.set = self.entryvar.get, self.entryvar.set
     self.entryvar.trace('w', self.checkentry)
-    
-    self.scalevar=src_sliders_vals_build[v_index]
+    self.scalevar=src_sliders_vals_build[v_index] # vals
     self.scalevar.trace('w', self.checkentry2)
 
+    # Extension
     self.entry2var=src_sliders_straddvals_build[v_index]
     self.entry2['textvariable']=self.entry2var
     self.entry2.grid(row=0,column=2,sticky=tk.W)
@@ -1603,7 +1629,7 @@ def refresh_source_slider_builder(v_index,w_text):
     self.complement_check()
         
     self.abslabel.config(text=str(self.abspos))
-    self.entry.config(from_=min_seqlength, to=max_seqlength)
+    #self.entry.config(from_=min_seqlength, to=max_seqlength)
     return
 
 def forget_source_slider(v_index):
@@ -1700,6 +1726,10 @@ def setup_listbox(inframe):
     listbox.focus()
     listbox.grid()
 
+    inframe.haptemplatelabel=ttk.Label(frame,text=RG_globals.variants_header)
+    inframe.haptemplatelabel.grid()
+                                       
+    
     inframe.tslistlabel = ttk.Label(frame,text=RG_globals.bio_parameters["target_transcript_name"]["label"])
     inframe.tslistlabel.grid()
 
