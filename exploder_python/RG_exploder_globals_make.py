@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="11-Feb-2024"
+#Prg_verDate="28-Feb-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -150,7 +150,7 @@ def set_string_defaults():
     mut_types = "DIX" # Mutation types declared in CIGAR: Deletion, Insertion, X - variant.
                       # N is a CIGAR item, but is ignored as a *mutation* type
 
-    IUPAC_codes="ACGTRYSWKMBDHVN"
+    IUPAC_codes="[ACGTRYSWKMBDHVN]"
 
     global mRNA_trigger,skip_trigger,CDS_trigger,empty_transcript_name,empty_transcript_id
     mRNA_trigger="mRNA"       # ''' CONSTANT: External dependency. This word in place of join in the refseq feature table will initiate a splice: the join regions become exons'''
@@ -217,11 +217,11 @@ def set_string_defaults():
     reference_header="Reference Gene"
     #variants_header="Variant Sequences"
     #variants_header="%s Definition"%hapname
-    variants_header="%s Source"%hapname
+    variants_header="%s %s"%(hapname,template_label)
     #variants_label="Variant Source"
     #variants_label="Variations Source"
     #variants_label="%s Source"%hapname
-    variants_label="Variant"
+    variants_label="%s Variant"%hapname
     #frequency_label="Source Frequency"
     frequency_label="Source Ratio"
     options_label="Output Options"
@@ -513,7 +513,6 @@ def make_bio_parameters_configs():
             "value":target_transcript_id
             },
         "target_build_variant": {
-            "GRChver_txt": GRCh38_txt, # Superfluous?
             "is_get_ref": False,
             "is_save_var": False,
             "is_get_muttranscripts":False,
@@ -541,54 +540,54 @@ def make_bio_parameters_configs():
                 },
             
             "trans_Begin":{
-                "label":"Locus", # Original variable names annotated here
-                "value":1, # trans_Begin
-                "min":1, #"min_seqlength":1,
-                "max":15 #"max_seqlength":15
+                "label":"Locus",
+                "value":1,
+                "min":1, 
+                "max":15
                 },
 
             "trans_End":{
                 "label":"Locus",
-                "value":1, # trans_End
-                "min":1, #"min_seqlength":1,
-                "max":15 #"max_seqlength":15
+                "value":1,
+                "min":1,
+                "max":15
                 },
             
             "trans_Begin_ext": {
                 "label":"Begin extension",
-                "value":0, # "trans_Begin":0, -convert
-                "min":-50, # "min_ext_add":-50,-deprecate
-                "max":50 #"max_ext_add":50,-deprecate
+                "value":0,
+                "min":-50,
+                "max":50
                 },
             
             "trans_End_ext": {
                 "label":"End extension",
-                "value":0, #"trans_End":0, -convert
-                "min":-50, # "min_ext_add":-50,-deprecate
-                "max":50 #"max_ext_add":50,-deprecate
+                "value":0, 
+                "min":-50,
+                "max":50
                 },
             
             "ref_subseq": {
-                "label":"%s Sequence"%template_label, # "ref_label": "Reference Sequence",-convert
-                "value":"", #was "ref_viewstring": -convert
+                "label":"Reference Sequence", 
+                "value":"", 
                 "length":0,
                 "viewstring":""
                 },
 
             "var_subseq": {
-                "label":"Variant Sequence",#"var_label": "Variant Sequence"
+                "label":"Variant Sequence",
                 "length":0,
                 "value":""
                 },
 
             "hap_name":{
-                "label":"%s Name"%variants_header, #"hap_name_label": "%s Name"%variants_header, -convert
-                "value":"hapx" #"hap_name": "",-convert
+                "label":"Source Name",
+                "value":"hapx"
                 },
  
              "var_name":{
-                "label":"Variant Name",#"var_name_label": "Variant Name",
-                "value":""  # "var_name": "",
+                "label":"Variant Name",
+                "value":""
                 },
             # "variant_view":"", # Might be useful - see RG_exploder_main.save_add_var()
             "AddVars": []
@@ -742,8 +741,8 @@ def set_Reference_sequences_configs_GRCh38_1000():
 
 def set_Reference_sequences_configs_GRCh37_1000_public2():
     global DatasetIDText,Reference_sequences
-    #DatasetIDText="Open Access GRCh37_0005_03 ; September 2022"
-    DatasetIDText="EB dataset GRCh37_0003_03; September 2022"
+    #DatasetIDText="Open Access GRCh37_0005_02 ; September 2022"
+    DatasetIDText="EB dataset GRCh37_0005_03; February 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -753,8 +752,8 @@ def set_Reference_sequences_configs_GRCh37_1000_public2():
 
 def set_Reference_sequences_configs_GRCh38_1000_public2():
     global CustomerIDText,DatasetIDText,Reference_sequences
-    #DatasetIDText="Open Access GRCh38_0005_03; September 2022"
-    DatasetIDText="EB dataset GRCh38_0005_03; September 2022"
+    #DatasetIDText="Open Access GRCh38_0005_02; September 2022"
+    DatasetIDText="EB dataset GRCh38_0005_03; February 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
