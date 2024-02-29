@@ -3,7 +3,7 @@ DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence 10970055..1102707
             via EnsEMBL
 ACCESSION   chromosome:GRCh37:16:10970055:11027079:1
 VERSION     chromosome:GRCh37:16:10970055:11027079:1
-COMMENT     /db_xref=”clinvar:1068098"; /comment="RG:EB0102" annotation by Replicon Genetics Sep-2021
+COMMENT     additional annotation by Replicon Genetics Sep-2021
 FEATURES             Location/Qualifiers
      source          1..57025
                      /organism="Homo sapiens"
@@ -17,6 +17,7 @@ FEATURES             Location/Qualifiers
      variation       22726..22726
                      /replace="A/G"
                      /db_xref="clinvar:1068098"
-                     /comment="RG:EB0102"
+                     /db_xref="RG001:000017"
+                     /comment="RG:EB0102; NM_000246.4:c.359-2A>G"
 ORIGIN
 //

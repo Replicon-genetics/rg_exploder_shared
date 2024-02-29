@@ -3,6 +3,7 @@ DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 74773462..74789876
             via EnsEMBL
 ACCESSION   chromosome:GRCh38:7:74773462:74789876:1
 VERSION     chromosome:GRCh38:7:74773462:74789876:1
+COMMENT     additional annotation by Replicon Genetics Mar-2022
 FEATURES             Location/Qualifiers
      source          1..16415
                      /organism="Homo sapiens"
@@ -18,7 +19,8 @@ FEATURES             Location/Qualifiers
                      /db_xref="clinvar:2250"
                      /db_xref="dbSNP:rs1563003964"
                      /db_xref="HGMD-PUBLIC:CD931024"
+                     /comment="RG:EB0201;NM_000265.6:c.502del(p.Glu168fs)"
                      /absolute_map="7:74782989..74782989"
-                     /comment="RG:EB0201"
+                     
 ORIGIN
 //

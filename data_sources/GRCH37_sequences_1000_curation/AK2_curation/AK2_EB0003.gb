@@ -3,7 +3,7 @@ DEFINITION  Homo sapiens chromosome 1 GRCh37 partial sequence 33472585..33547597
             reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:1:33472585:33547597:1
 VERSION     chromosome:GRCh37:1:33472585:33547597:1
-COMMENT     /comment="RG:..." annotation by Replicon Genetics Aug-2022
+COMMENT     additional annotation by Replicon Genetics Aug-2022
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -20,7 +20,7 @@ FEATURES             Location/Qualifiers
                      /replace="C/T"
                      /db_xref="dbSNP:rs1192619329"
                      /db_xref="clinvar:18253"
-                     /comment="RG:EB0003:c.331-1G>A"
+                     /comment="RG:EB0003;splice-site deletion NM_001625.4(AK2):c.331-1G>A"
                      /comment="RG:GRCh37:1:33487063:33487063:1"
 ORIGIN
 //

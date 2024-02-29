@@ -3,7 +3,7 @@ DEFINITION  Homo sapiens chromosome 16 GRCh38 partial sequence 10865722..1094352
             via EnsEMBL
 ACCESSION   chromosome:GRCh38:16:10865722:10943521:1
 VERSION     chromosome:GRCh38:16:10865722:10943521:1
-COMMENT     /db_xref=”HGMDPro:unknown";db_xref="RG001:000019" annotation by Replicon Genetics Sep-2021
+COMMENT     additional annotation by Replicon Genetics Sep-2021
 FEATURES             Location/Qualifiers
      source          1..77800
                      /organism="Homo sapiens"
@@ -18,7 +18,7 @@ FEATURES             Location/Qualifiers
                      /replace="ATGGAGTGAGTG/-"
                      /db_xref="RG001:000019"
                      /db_xref="HGMDPro:unknown"
-                     /comment="RG:EB0104"
+                     /comment="RG:EB0104; NM_000246.4:c.3229_3233+7delATGGAGTGAGTG"
 
 ORIGIN
 //

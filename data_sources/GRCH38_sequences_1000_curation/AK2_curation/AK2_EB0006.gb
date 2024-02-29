@@ -3,6 +3,11 @@ DEFINITION  Homo sapiens chromosome 1 GRCh38 partial sequence 33006986..33081996
             reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh38:1:33006986:33081996:1
 VERSION     chromosome:GRCh38:1:33006986:33081996:1
+COMMENT     additional annotation by Replicon Genetics Aug-2022
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
 FEATURES             Location/Qualifiers
      source          1..75011
                      /organism="Homo sapiens"
@@ -15,7 +20,7 @@ FEATURES             Location/Qualifiers
      variation       14379..14401
                      /replace="TACCTTCCTGTGATTCTTCGGAT/TACCTTCCTGTGATTCTTCGGATTA
                      CCTTCCTGTGATTCTTCGGAT"
-                     /comment="RG:EB0006_1::c.406_425+3dup"
+                     /comment="RG:EB0006_1; NM_001625.4(AK2):c.406_425+3dup"
                      /comment="RG:GRCh38:1:33021364:33021386:1"
 ORIGIN
 //

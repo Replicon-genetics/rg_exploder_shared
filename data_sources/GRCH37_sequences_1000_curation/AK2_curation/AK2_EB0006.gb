@@ -2,8 +2,7 @@ LOCUS       1                          0 bp    DNA              HTG 12-AUG-2022
 DEFINITION  Homo sapiens chromosome 1 GRCh37 partial sequence 33472585..33547597
             reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:1:33472585:33547597:1
-VERSION     chromosome:GRCh37:1:33472585:33547597:1
-COMMENT     /comment="RG:..." annotation by Replicon Genetics Aug-2022
+COMMENT     additional annotation by Replicon Genetics Aug-2022
 KEYWORDS    .
 SOURCE      .
   ORGANISM  .
@@ -19,7 +18,7 @@ FEATURES             Location/Qualifiers
      variation       14381..14403
                      /replace="TACCTTCCTGTGATTCTTCGGAT/TACCTTCCTGTGATTCTTCGGATTA
                      CCTTCCTGTGATTCTTCGGAT"
-                     /comment="RG:EB0006:c.406_425+3dup"
+                     /comment="RG:EB0006_1; NM_001625.4(AK2):c.406_425+3dup"
                      /comment="RG:GRCh37:1:33486965:33486987:1"
 ORIGIN
 //
