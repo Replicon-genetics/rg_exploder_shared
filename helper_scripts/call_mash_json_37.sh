@@ -1,8 +1,7 @@
-# Shell script to run mash_json.py from curation directory
-dataroot="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/"
-pythonroot="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/helper_python"
-targetdir="GRCH37_sequences_1000"
+# Shell script to run mash)json.py from curation directory
+datadir="GRCH37_sequences_1000"
+thispath="/Users/caryodonnell/Desktop/Replicon/"
 curation="_curation"
 
-cd $dataroot$targetdir$curation
-python3 $pythonroot/mash_json.py
+cd $thispath$datadir$curation
+python3 /Users/caryodonnell/mytools/mash_json.py
