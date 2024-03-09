@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="28-Feb-2024"
+#Prg_verDate="06-Mar-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -21,8 +21,8 @@ def set_config_consts():
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
     ######## Revisit these three each time a data set is renewed ########
-    GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
-    #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
+    #GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
+    GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
     #CustomerIDText="EBaker"
     CustomerIDText="Public"
@@ -136,7 +136,8 @@ def make_out_data():
 # ==========================
 def set_string_defaults():
     global CopyrightText
-    CopyrightText="Copyright © Replicon Genetics & Cary O'Donnell 2021-2024. All rights reserved."
+    #CopyrightText="Copyright © Replicon Genetics & Cary O'Donnell 2021-2024. All rights reserved."
+    CopyrightText="Copyright © Replicon Genetics 2021-2024. All rights reserved."
     #There are several ways of declaring polarity so we define the known ones and use as needed
     global seq_polarity_plus,seq_polarity_minus,seq_polarity_none
     seq_polarity_plus="1"; seq_polarity_minus="-1";seq_polarity_none="0"
@@ -207,14 +208,15 @@ def set_string_defaults():
     #read_annotation="fragment"
     frag_annotation="frg" # The prefix to the fragment-read number in fasta description eg: >frg_1 
 
-    global title_label,template_label,reference_header,variants_header,variants_label,frequency_label,options_label,reads_list_label,reads_type_label,help_label,about_label,more_label
+    global hapname,title_label,template_label,reference_gene,reference_haplotype,variants_header,variants_label,frequency_label,options_label,reads_list_label,reads_type_label,help_label,about_label,more_label
     hapname="Haplotype"
     #title_label="NGS Read Simulator"
     title_label="Synthetic %ss Generator"%read_annotation.title() 
-    #reference_header="Reference Sequence"
+    #reference_gene="Reference Sequence"
     template_label="Template"
-    #reference_header="Reference Source"
-    reference_header="Reference Gene"
+    #reference_gene="Reference Source"
+    reference_gene="Reference Gene"
+    reference_haplotype="Reference %s"%hapname
     #variants_header="Variant Sequences"
     #variants_header="%s Definition"%hapname
     variants_header="%s %s"%(hapname,template_label)
@@ -248,7 +250,8 @@ def make_stringconstants():
         "empty_transcript_name":empty_transcript_name,"empty_transcript_id":empty_transcript_id,
         "GRCh38_txt":GRCh38_txt,"GRCh37_txt":GRCh37_txt,"LRG_txt":LRG_txt,
         "title_label":title_label,
-        "reference_header":reference_header,
+        "reference_gene":reference_gene,
+        "reference_haplotype":reference_haplotype,
         "variants_header":variants_header,
         "variants_label":variants_label,
         "frequency_label":frequency_label,
@@ -647,11 +650,11 @@ def make_bio_parameters_configs():
             "value": is_muts_only
             },
         "is_frg_label": {
-            "label": "- Annotate source positions...",
+            "label": "- Add source coordinates...",
             "value": is_frg_label
             },
         "is_use_absolute": {
-            "label": "- ... plus absolute position",
+            "label": "- ... plus genome coordinates",
             "value": is_use_absolute
             },
         "is_fastacigar_out": {
@@ -683,11 +686,11 @@ def make_bio_parameters_configs():
             "max": QualMAX
             },
         "is_write_ref_fasta": {
-            "label": "Save Template Sequence",
+            "label": "Save %s"%(reference_haplotype),
             "value": is_write_ref_fasta
             },
         "is_mut_out": {
-            "label": "Save Source Sequences",
+            "label": "Save %ss"%(variants_label),
             "value": is_mut_out
             },
         "is_write_ref_ingb": {
@@ -742,7 +745,7 @@ def set_Reference_sequences_configs_GRCh38_1000():
 def set_Reference_sequences_configs_GRCh37_1000_public2():
     global DatasetIDText,Reference_sequences
     #DatasetIDText="Open Access GRCh37_0005_02 ; September 2022"
-    DatasetIDText="EB dataset GRCh37_0005_03; February 2024"
+    DatasetIDText="EB dataset GRCh37_0006_01; March 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -753,7 +756,7 @@ def set_Reference_sequences_configs_GRCh37_1000_public2():
 def set_Reference_sequences_configs_GRCh38_1000_public2():
     global CustomerIDText,DatasetIDText,Reference_sequences
     #DatasetIDText="Open Access GRCh38_0005_02; September 2022"
-    DatasetIDText="EB dataset GRCh38_0005_03; February 2024"
+    DatasetIDText="EB dataset GRCh38_0006_01; March 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]

@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_25_01.py"
-ProgverDate="28-Feb-2024"
+ProgverDate="09-Mar-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -299,19 +299,22 @@ def initialise_module_outfiles():
     global in_ref_src,in_ref_src_title
     in_ref_src="%s_%s"%(RG_globals.target_locus,Ref_file_name)
     #in_ref_src_title="Primary Source"
-    in_ref_src_title="'%s'"%RG_globals.reference_header
+    in_ref_src_title="'%s'"%RG_globals.reference_haplotype
     
     global out_sa_file,Out_Ref_Source
     out_sa_file="%s%s_%ss.sam"%(locus_transcript,extralabel,RG_globals.read_annotation)
 
     #Out_Ref_Source=in_ref_src # Possible alternative
     #Out_Ref_Source="%s-%s"%(RG_globals.target_locus,RG_globals.empty_transcript_name.lower())
-    Out_Ref_Source="%s_REF"%(locus_transcript)
+    Out_Ref_Source="%s%s_REF"%(locus_transcript,strandlabel)
 
     global out_mut,out_mutprot
-    mutxt=RG_globals.bio_parameters["is_mut_out"]["label"].split(" ")[1].lower()      
-    out_mut="%s_%ss"%(locus_transcript,mutxt) 
-    out_mutprot="%s_%ss_prot"%(locus_transcript,mutxt)
+    #mutxt=RG_globals.bio_parameters["is_mut_out"]["label"].split(" ")[1].lower()
+    mutxt="hapvar"
+    out_mut="%s%s_%ss"%(locus_transcript,strandlabel,mutxt)
+
+    #outfile="%s_%s%s"%(locus_transcript,id_label,strandlabel)  - see below consistency?
+    out_mutprot="%s%s_%ss_prot"%(locus_transcript,strandlabel,mutxt)
     
     return
 # End of initialise_module_outfiles()
@@ -497,8 +500,8 @@ def read_refseqrecord(embl_or_genbank):
             if RG_globals.is_write_ref_ingb:
                 write_refseq(SEQ_record,"long")
             else:
-                update_journal(" NOTE: Feature-definition files for: %s %s%sin, and '%s', NOT saved because option '%s' is set to %s"
-                               %(in_ref_src_title,in_ref_src,Seq_IO_file_ext,RG_globals.variants_label,bio_parameters["is_write_ref_ingb"]["label"],RG_globals.is_write_ref_ingb))
+                update_journal(" NOTE: Feature-definition files for: %s and '%ss', NOT saved because option '%s' is set to %s"
+                               %(in_ref_src_title,RG_globals.variants_label,bio_parameters["is_write_ref_ingb"]["label"],RG_globals.is_write_ref_ingb))
     return SEQ_record,exists
 # end of read_refseqrecord(embl_or_genbank)
 
@@ -555,7 +558,8 @@ def read_mutrecord(label,embl_or_genbank):
     inlabel=RG_globals.target_locus+"_"+label
     ingb_file=inlabel+Seq_IO_file_ext
     
-    Mut_record,exists = read_seqrecord(ingb_file,embl_or_genbank,label,"'%s'"%RG_globals.variants_header)
+    #Mut_record,exists = read_seqrecord(ingb_file,embl_or_genbank,label,"'%s'"%RG_globals.variants_header)
+    Mut_record,exists = read_seqrecord(ingb_file,embl_or_genbank,label,"'%s'"%RG_globals.variants_label)
     if exists:
         #Write out input data as its non-processed interpretation
         if RG_globals.is_write_ref_ingb:
@@ -650,7 +654,7 @@ def write_fastaout(ThisSeqr):
     global fastaout,is_append_fastafile,Outfilepath,out_fa_file
             
     if not is_append_fastafile:
-        out_fastafile="%s%s"%(Outfilepath,out_fa_file,)
+        out_fastafile="%s%s"%(Outfilepath,out_fa_file)
         fastaout = RG_io.open_write(out_fastafile)
         is_append_fastafile=True
         update_journal("\nWriting FASTA %ss to %s"%(RG_globals.read_annotation,out_fa_file))
@@ -763,6 +767,7 @@ def write_refseq(RefRecord,which):
     global Outfilepath
     global Ref_file_name
     global locus_transcript,in_ref_src,in_ref_src_title
+
     #global VSeqRecREC # testing only
     def writeref_fasta(record,out_file):
         update_journal(" Writing %s.fasta"%(out_file))
@@ -795,14 +800,14 @@ def write_refseq(RefRecord,which):
         write_gb_features(RefRecord,out_file,readmetxt,"long")
 
     elif which=="spliced_fasta":
+        extralabel,strandlabel=RG_globals.get_strand_extra_label()
         #Create a spliced-sequence version of refseq as the haplotype 'template' when a splice is defined and is_frg_paired_end is False
         if RefRecord.is_ref_spliced and not RG_globals.is_frg_paired_end:
-            reftxt="-based template sequence"
-            reftxt2=RG_globals.variants_header
-            reftxt3=""
-            id_label="TEM"
-            extralabel,strandlabel=RG_globals.get_strand_extra_label()
-            
+            reftxt="-based %s sequence"%RG_globals.reference_haplotype
+            #reftxt2=RG_globals.variants_header
+            reftxt2="%ss"%RG_globals.read_annotation
+            reftxt3=" in %s, %s and %s"%(out_fa_file,out_fq_file,out_sa_file)
+            id_label="refhap"
             if  RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
                 reftxt="** Reference Sequence **"
                 reftxt2="%ss"%RG_globals.read_annotation
@@ -814,10 +819,12 @@ def write_refseq(RefRecord,which):
                 reftxt="%s%s"%(RG_globals.mRNA_trigger,reftxt)
             VSeqRec=make_allvars_in_one_seq(RefRecord,id_label)
             VSeqRec.description=VSeqRec.description+" "+VSeqRec.cigar
-            outfile="%s_%s"%(locus_transcript,id_label)
+            outfile="%s%s_%s"%(locus_transcript,strandlabel,id_label)
+            
+            #outfile="%s_%s"%(outref,id_label)
             writeref_fasta(VSeqRec,outfile)
-            update_journal("  %s, Length: %s bases, is the %s for the %s %s%s"
-                               %(outfile,len(VSeqRec.seq),reftxt,strandlabel[1:],reftxt2,reftxt3))
+            update_journal("  %s, Length: %s bases, is the %s for the %s%s"
+                               %(outfile,len(VSeqRec.seq),reftxt,reftxt2,reftxt3))
         else:
             update_journal(" Un-trimmed, and un-spliced, %s %s. Using sequence outside %s boundary for paired ends"%(in_ref_src_title,in_ref_src,bio_parameters["target_transcript_name"]["label"]))
 
@@ -829,8 +836,9 @@ def write_refseq(RefRecord,which):
             prior_transcript_name=RG_globals.target_transcript_name
             RG_globals.target_transcript_name=RG_globals.empty_transcript_name # swap to force a trimmed-only when calling splice_refseq(RefRecord)
             # NB: Retaining current value for locus_transcript - important part of the force
-            update_journal("\n Writing both a Reference and %s Sequence for %s because option '%s' is set to %s and %s '%s' is not '%s'"
-                           %(bio_parameters["target_transcript_name"]["label"],
+            update_journal("\n Writing sequence files for both '%s' and '%s' for %s because option '%s' is set to %s and %s '%s' is not '%s'"
+                           %(RG_globals.reference_gene,
+                             RG_globals.reference_haplotype,
                              locus_transcript,
                              bio_parameters["is_write_ref_fasta"]["label"],
                              RG_globals.is_write_ref_fasta,
@@ -913,8 +921,8 @@ def close_seqout(SeqRec):
 
     update_readme("\nProgram output sequence files:")
     if RG_globals.is_flip_strand:
-        flip_extra=", with polarity reversed from '%s'"%RG_globals.reference_header
-        update_readme("NB: polarity of all output sequences reversed from '%s'"%RG_globals.reference_header)
+        flip_extra=", with polarity reversed from '%s'"%RG_globals.reference_gene
+        update_readme("NB: polarity of all output sequences reversed from '%s'"%RG_globals.reference_gene)
     else:
         flip_extra=""
 
@@ -928,15 +936,15 @@ def close_seqout(SeqRec):
             update_readme("%s.fasta\t- FASTA file%s; the Reference Sequence for all %ss%s"%(Out_Ref_Source,add_extra_ref,RG_globals.read_annotation,flip_extra))
         if SeqRec.is_ref_spliced:
             if not RG_globals.empty_transcript_name.lower() in Out_Ref_Source:
-                out_spliced=locus_transcript+"_TEM.fasta"
-                update_readme("%s\t- FASTA file%s; the template sequence for all %s"%(out_spliced,add_extra_tem,RG_globals.variants_header))
+                out_spliced=locus_transcript+extralabel+"_refhap.fasta"
+                update_readme("%s\t- FASTA file%s; the template sequence for all %s"%(out_spliced,add_extra_tem,RG_globals.variants_label))
 
-    add_txt0="%s with frequency >0:"%RG_globals.variants_header
+    add_txt0="'%s' with frequency >0:"%RG_globals.variants_label
     if is_append_mutfile:
         add_txt1=""
         if SeqRec.is_ref_spliced:
             add_txt1=add_extra_tem
-        update_readme("%s.fasta\t- FASTA file of all %s%s;%s"%(out_mut,add_txt0,mutlistlabels,add_txt1))
+        update_readme("%s.fasta\t- FASTA sequence of each %s%s;%s"%(out_mut,add_txt0,mutlistlabels,add_txt1))
         mutout.close()
         is_append_mutfile = False
 
@@ -1142,10 +1150,10 @@ def get_mutrecords(REF_record,embl_or_genbank):
    #end of def local_add_mutrec(Seq_rec,label)
         
     #update_journal("\nReading %s (feature) files..."%RG_globals.variants_label)
-    update_journal("\nReading '%s' files..."%RG_globals.variants_header)
+    update_journal("\nReading '%s' files..."%RG_globals.variants_label)
     if not RG_globals.is_mut_out:
         update_journal(" NOTE: Sequence of '%s'(s) not saved to %s.fasta because option '%s' is set to %s"
-                       %(RG_globals.variants_header,out_mut,bio_parameters["is_mut_out"]["label"],RG_globals.is_mut_out))
+                       %(RG_globals.variants_label,out_mut,bio_parameters["is_mut_out"]["label"],RG_globals.is_mut_out))
     
     RG_process.mutfreqs_extend(RG_globals.mutlabels) # First Check, then set, mutfreqs at same length as mutlabels
     addmut_labels= RG_process.get_addmut_labels()
@@ -1156,7 +1164,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
             if label in addmut_labels: # Look for user-defined
                 Seq_record,exists=RG_process.make_addmut(REF_record,label) 
                 if exists:
-                    update_journal("\n'%s' %s_%s found as user-defined %s"%(RG_globals.variants_label,RG_globals.target_locus,label,RG_globals.variants_header))
+                    update_journal("\n'%s' %s_%s found as user-defined %s"%(RG_globals.variants_label,RG_globals.target_locus,label,RG_globals.variants_label))
                     accept=local_add_mutrec(Seq_record,label,mutfreq)
                     if not accept:
                         #print("barf")
@@ -1186,7 +1194,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
                 local_add_mutrec(Seq_record,label,mutfreq)
                 is_success=exists  
         else:
-            program_exit("\t- Unable to read a minimum of 1 %s"%RG_globals.variants_header)
+            program_exit("\t- Unable to read a minimum of 1 %s"%RG_globals.variants_label)
             is_success=False
 
     if mutcount > 1:
@@ -1194,7 +1202,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
     else:
         addtxt=""
 
-    update_journal("\nProcessing %s %s%s with frequency >0 : %s"%(mutcount,RG_globals.variants_header,addtxt,mutlistlabels))
+    update_journal("\nProcessing %s %s%s with frequency >0 : %s"%(mutcount,RG_globals.variants_label,addtxt,mutlistlabels))
     journalise_dels()
     # Protection part 2 - switch back this flag, on leaving this routine
     is_dels_to_dots=save_idd
@@ -1218,6 +1226,8 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
     featurelist=RG_process.get_varfeats2(this_feature)      
     xref_ids=featurelist["xref_ids"];  replace=featurelist["replace"]; replace_string=featurelist["replace_string"]
     feat_start=featurelist["feat_start"]; feat_end=featurelist["feat_end"];feat_polarity=featurelist["feat_polarity"];replace_type=featurelist["replace_type"]
+    # To report Source position for local coord
+    feat_trim= -RG_globals.bio_parameters["target_build_variant"]["headclip"]
     '''  Try using this instead? (although you'll get the lot) :  for k, v in d.iteritems(): locals()[k]=v'''
     mod_abs_start,mod_abs_end=RG_process.get_absolute_pairs(feat_start,feat_end,REFSEQ_RECORD.offset,REFSEQ_RECORD.polarity)
     
@@ -1243,13 +1253,13 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
                 matchtxt2="*"
                 matchvardef=False
             #msgtxt_mvs=" Deletion: %s polarity %s, %smatches definition %s polarity +1, loc: %s to %s, abs: %s to %s"%(VSeq[feat_start:feat_end],seq_polarity,matchtxt,delete_string,feat_start+1,feat_end,mod_abs_start,mod_abs_end)
-            msgtxt_mvs=" Deletion of: %s polarity %s, %smatches%s sequence %s polarity +1, abs: %s to %s, loc: %s to %s"%(intended_delete,seq_polarity,matchtxt1,matchtxt2,delete_string,
-                                                                                                                       mod_abs_start,mod_abs_end,feat_start+1,feat_end)
+            msgtxt_mvs=" Deletion of: %s polarity %s, %smatches%s sequence %s polarity +1, gen: %s to %s, loc: %s to %s, var: %s to %s"%(intended_delete,seq_polarity,matchtxt1,matchtxt2,delete_string,
+                                                                                                                       mod_abs_start,mod_abs_end,feat_start+1+feat_trim,feat_end+feat_trim,feat_start+1,feat_end)
  
         else: # These are the N-gaps / splices
             # was  msgtxt=" Gap: loc: ...            
             #msgtxt_mvs=" %s: loc: %s to %s, abs: %s to %s"%(this_feature.qualifiers['db_xref'],feat_start+1,feat_end,mod_abs_start,mod_abs_end)
-            msgtxt_mvs=" %s: length: %s , abs: %s to %s, loc: %s to %s"%(this_feature.qualifiers['db_xref'],feat_end-feat_start,mod_abs_start,mod_abs_end,feat_start+1,feat_end)
+            msgtxt_mvs=" %s: length: %s , gen: %s to %s, loc: %s to %s,  var: %s to %s"%(this_feature.qualifiers['db_xref'],feat_end-feat_start,mod_abs_start,mod_abs_end,feat_start+1+feat_trim,feat_end+feat_trim,feat_start+1,feat_end)
                                                                   
         # End of verification check for delete string match/mis-match
         
@@ -1296,7 +1306,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
                 matchtxt="mis"
                 matchvardef=False
         #msgtxt_mvs=" Insert: %s polarity %s, %smatches definition %s polarity +1, loc: %s, abs: %s"%(replace,seq_polarity,matchtxt,insert_string,feat_end+1,mod_abs_end)
-        msgtxt_mvs=" Insert: %s polarity %s, %smatches definition %s polarity +1, abs: %s, loc: %s"%(replace,seq_polarity,matchtxt,insert_string,mod_abs_end,feat_end+1)
+        msgtxt_mvs=" Insert: %s polarity %s, %smatches definition %s polarity +1, gen: %s, loc: %s, var: %s"%(replace,seq_polarity,matchtxt,insert_string,mod_abs_end,feat_end+1+feat_trim,feat_end+1)
         
         # End of verification check for insert string match/mis-match 
 
@@ -1401,7 +1411,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
                     matchtxt="mis"
                     matchvardef=False
             #msgtxt_mvs=" SNV: %s -> %s polarity %s, %smatches definition %s -> %s polarity +1, loc: %s, abs: %s"%(VSeq[feat_start:feat_end],replace,seq_polarity,matchtxt,current_n, sub_n,feat_end,mod_abs_end)
-            msgtxt_mvs=" SNV: %s -> %s polarity %s, %smatches definition %s -> %s polarity +1, abs: %s, loc: %s"%(VSeq[feat_start:feat_end],replace,seq_polarity,matchtxt,intended_delete,sub_n,mod_abs_end,feat_end)
+            msgtxt_mvs=" SNV: %s -> %s polarity %s, %smatches definition %s -> %s polarity +1, gen: %s, loc: %s, var:%s"%(VSeq[feat_start:feat_end],replace,seq_polarity,matchtxt,intended_delete,sub_n,mod_abs_end,feat_end+feat_trim,feat_end)
             # End of verification check for SNV string match/mis-match 
             VSeq[feat_start:feat_end]=replace
             #Do CIGAR build
@@ -1460,7 +1470,7 @@ def no_splice_refseq(SeqRec):
         write_refseq(SeqRec,Ref_file_name)
     else:
         addtxt="would be"
-    update_journal("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the paired-end %ss in %s, %s and %s"\
+    update_journal("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the %ss in %s, %s and %s"\
                    %(Out_Ref_Source,SeqRec.clipped_length,addtxt,RG_globals.read_annotation,out_fa_file,out_fq_file,out_sa_file))
 
 def splice_refseq(SeqRec):
@@ -1493,7 +1503,7 @@ def splice_refseq(SeqRec):
             addtxt=""
         else:
             addtxt="un"
-        update_journal(" NOTE: A template file for the %ss: '%s_tem.fasta', derived from %strimmed %s %s sequence, is not saved because option '%s' is set to %s"
+        update_journal(" NOTE: A reference file for the %ss: '%s_hapvars.fasta', derived from %strimmed %s %s sequence, is not saved because option '%s' is set to %s"
                            %(RG_globals.variants_label,locus_transcript,addtxt,in_ref_src_title,in_ref_src,
                              bio_parameters["is_write_ref_fasta"]["label"],RG_globals.is_write_ref_fasta))
     return CopyRec
@@ -1801,7 +1811,7 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
         FragSeqRec.description="h:%s%sr:%s"%(var_location,RG_globals.spaceman,ref_location)
         
         if RG_globals.is_use_absolute:
-            FragSeqRec.description+="%sa:%s"%(RG_globals.spaceman, RG_process.get_absolute_position(RefRec,ref_begin))
+            FragSeqRec.description+="%sg:%s"%(RG_globals.spaceman, RG_process.get_absolute_position(RefRec,ref_begin))
 
         #if RG_globals.is_fastacigar_out:
         #    FragSeqRec.description+="%s%s"%(RG_globals.spaceman,loc_cigar_label)
@@ -2067,7 +2077,7 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount):
             fragtallycount+=1
     
     str0="For a '%s' target value of %s, based on reference length %s:"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fragdepth,ref_doc_len)
-    str1=str(Generated_Fragcount); str2="s";str3=str(RG_globals.Fraglen) ; str4="random";str4a="within" ; str5=str(fragtallycount); str6=RG_globals.variants_header;
+    str1=str(Generated_Fragcount); str2="s";str3=str(RG_globals.Fraglen) ; str4="random";str4a="within" ; str5=str(fragtallycount); str6=RG_globals.variants_label;
     if fragtallycount <2 :
         str7=""
     else:
@@ -2221,11 +2231,12 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
     Using 0..0 is a way to cheat when requiring a single-region slice eg: join(0..0,6..186)
     '''
     
-    settxt=bio_parameters["target_transcript_name"]["label"]
+    #settxt=bio_parameters["target_transcript_name"]["label"] # "Template" default
+    settxt=RG_globals.reference_haplotype
     if splice_trigger=="gene":
-        settxt="Reference"
+        settxt=RG_globals.reference_gene
         
-    update_journal("\n Searching feature table to set %s Sequence"%settxt)
+    update_journal("\n Searching feature table to set '%s' Sequence"%settxt)
     # First match the locus id (format eg: 'KRAS') to determine what the local name is, format eg:ENSG00000133703.11
     
     for (index, features) in enumerate (seq_record.features):
@@ -2371,7 +2382,7 @@ def splice_a_sequence(seq_record,target_loc):
             else:
                 msgtxt=" "
             update_journal(" No splicing of exon boundaries%sbecause '%s' is set to '%s'"
-                           %(msgtxt,bio_parameters["target_transcript_name"]["label"],RG_globals.target_transcript_name))
+                           %(msgtxt,RG_globals.reference_haplotype,RG_globals.target_transcript_name))
         else:
             if RG_globals.is_CDS:
                 join_trigger=RG_globals.CDS_trigger # changed from splice_trigger
@@ -2410,7 +2421,7 @@ def make_reference_files1():
             templatetxt=""
             addtxt=""
         else:
-            templatetxt=", and 'Reference %s' %s.fasta, "%(bio_parameters["target_transcript_name"]["label"],Out_Ref_Source)
+            templatetxt=", and '%s' %s.fasta, "%(RG_globals.reference_haplotype,Out_Ref_Source)
             addtxt="s"
 
         #update_journal(" NOTE: Sequence files for: %s %s.fasta, and 'Reference %s' %s.fasta, NOT saved because option '%s' is set to %s"%(in_ref_src_title,in_ref_src,
@@ -2420,7 +2431,7 @@ def make_reference_files1():
 
         update_journal(" NOTE: Sequence file%s for: %s %s.fasta %sNOT saved because option '%s' is set to %s"%(addtxt,
                                                                                                                in_ref_src_title,
-                                                                                                               in_ref_src,
+                                                                                                               Out_Ref_Source,
                                                                                                                templatetxt,
                                                                                                                bio_parameters["is_write_ref_fasta"]["label"],
                                                                                                                RG_globals.is_write_ref_fasta))

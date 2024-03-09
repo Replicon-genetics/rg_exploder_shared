@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="27-Feb-2024"
+#ProgverDate="7-Mar-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -271,7 +271,7 @@ def purl_features(seqdonor,vardonor):
 
     if GRCh_version_match and polarity_match:
         return_message+=update_journal(" Compatible GRCh build, chromosome and polarity: "+seqdonor_version)
-        part_message="ranges: %s_range: %s; %s_range: %s"%(RG_globals.reference_header,seqdonor_range,RG_globals.variants_header,vardonor_range)
+        part_message="ranges: %s_range: %s; %s_range: %s"%(RG_globals.reference_gene,seqdonor_range,RG_globals.variants_label,vardonor_range)
         if local_offset_diff ==0:
             return_message+=update_journal(" Matching %s"%part_message)
         else:

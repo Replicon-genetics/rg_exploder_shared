@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder16_gui.py"
-ProgverDate="28-Feb-2024"
+ProgverDate="07-Mar-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -41,12 +41,14 @@ def initialise_modulevalues():
     # Globals limited to this module
     global Progver,ProgverDate
     global local_begin,local_end,trans_Begin,trans_End,abs_Begin,abs_End
+    global Chrom_txt
     local_begin=RG_globals.bio_parameters["target_build_variant"]["local_begin"]
     local_end=RG_globals.bio_parameters["target_build_variant"]["local_end"]
     abs_Begin=RG_globals.bio_parameters["target_build_variant"]["abs_Begin"]["value"]
     abs_End=RG_globals.bio_parameters["target_build_variant"]["abs_End"]["value"]
     trans_Begin=RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["value"]
     trans_End=RG_globals.bio_parameters["target_build_variant"]["trans_End"]["value"]
+    Chrom_txt="X"
 
     global run_count
     run_count=0 # Count how many runs
@@ -382,6 +384,7 @@ def set_refseq_target_url():
     LRG_id=RG_globals.Reference_sequences[RG_globals.target_locus]["LRG_id"]
     
     global ENS_target_url,ENS_target_url_txt,LRG_target_url,LRG_target_url_txt,ENS_ts_target_url,ENS_ts_target_url_txt
+    global Chrom_txt
         
     ENS_target_url=""
     ENS_target_url_txt=""
@@ -391,6 +394,11 @@ def set_refseq_target_url():
     ENS_ts_target_url_txt=""
 
     GRChver_txt=RG_globals.Reference_sequences[RG_globals.target_locus]["Region"].split(":")[0]
+    Chrom_txt=RG_globals.Reference_sequences[RG_globals.target_locus]["Region"].split(":")[1]
+    # Special catch for non-standard chromosome identifiers such as PTEN_a
+    if len(Chrom_txt)>2:
+        Chrom_txt=Chrom_txt[:3]
+    
     if GRChver_txt== RG_globals.GRCh37_txt:
         target="37"
     elif GRChver_txt== RG_globals.GRCh38_txt:
@@ -683,7 +691,7 @@ def initialise_main_build(frame):
     #tk_background_config(panel_build)
     panel_build.grid()
     #panel_build.label=tk.Label(panel_build,text="    Source             Local_pos       Global_pos     Extension")
-    panel_build.label=ttk.Label(panel_build,text="    Source            Local_pos      Extension   Global_pos")
+    panel_build.label=ttk.Label(panel_build,text=" Source               Local_coord  Extension  Genome_coord")
     panel_build.label.grid(row=0,column=0,sticky=tk.W)
 
 def set_slider_gene_label():
@@ -701,13 +709,13 @@ def set_gene_label(frame):
     
 def set_builder_label(frame):
     #frame['text']="               Label         Position                 Extension         Global_mapping"  # Addition in builder
-    frame['text']=" Create a %s"%RG_globals.variants_label  # Addition in builder
+    frame['text']=" Create a new %s %s"%(RG_globals.target_locus,RG_globals.variants_label)  # Addition in builder
 
 def set_gene_list(frame):
     #frame['text']="Gene List:%s"%RG_globals.target_locus
     #frame['text']=" Reference Gene"
     #frame['text']=pygui_frame_labels[1]
-    frame['text']=RG_globals.reference_header
+    frame['text']=RG_globals.reference_gene
 
 # Source label/slider definitions
 class source_sliders:
@@ -786,6 +794,7 @@ class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
     def __init__(self, master1,v_index,**kwargs):
         global src_sliders_vals_build,src_sliders_strvals_build,src_sliders_labels_build
         global src_sliders_straddvals_build,max_seqlength,min_seqlength,max_ext_add,min_ext_add
+        global Chrom_txt
         #self.panel2 = tk.Frame(master1)
         self.panel2 = ttk.Frame(master1)
         self.panel2.grid()
@@ -814,13 +823,13 @@ class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
         self.entry2 = ttk.Spinbox(self.panel2, textvariable=self.entry2var, width=4,from_=min_ext_add,to=max_ext_add,state='readonly')
         self.entry2.grid(row=0,column=2,sticky=tk.W)
 
-        self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute
+        self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute / genome coord
 
         #self.complement_check(self)
         self.complement_check() # Extra in builder
         
         #self.abslabel=tk.Label(self.panel2, width=10,text=str(self.abspos))
-        self.abslabel=ttk.Label(self.panel2, width=10,text=str(self.abspos))
+        self.abslabel=ttk.Label(self.panel2, width=11,text=str(self.abspos))
         self.abslabel.grid(row=0,column=3,sticky=tk.W)
 
     def checkentry(self, *args):
@@ -848,7 +857,7 @@ class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
         self.entryvar.set(str(self.scalevar.get()))
         #self.complement_check(self)
         self.complement_check() # Extra in builder
-        self.abslabel.config(text=str(self.abspos))
+        self.abslabel.config(text=Chrom_txt +":"+str(self.abspos))
         self.entry.config(from_=min_seqlength, to=max_seqlength)
 
     # Extra in builder
@@ -1417,6 +1426,7 @@ def refresh_genelabels_builder():
         # Restore the next two if reinstating the links in function initialise_tk()
         #set_topbar_ENS_label_link()
         #set_topbar_LRG_label_link()
+        set_slider_build_label()
         set_listbox_locus_label()
         set_listbox_transcript_label()
         src_sliders_build_clear_seqs()
@@ -1582,7 +1592,7 @@ def refresh_src_sliders_builder():
     if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
         #w_text=RG_globals.target_locus
         trans_text="Locus"
-        if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==-1:
+        if RG_globals.bio_parameters["target_build_variant"]["ref_strand"]==-1:  # What was this here for?
             trans_text="Quack"
         
     elif RG_globals.is_CDS:
@@ -1604,7 +1614,7 @@ def refresh_src_sliders_builder():
     refresh_source_slider_builder(1,trans_text)
 
 def refresh_source_slider_builder(v_index,w_text):
-    global max_seqlength,min_seqlength
+    global max_seqlength,min_seqlength,Chrom_txt
     #print("At refresh_source_slider_builder")
     self=src_slider_widgets_build[v_index]
     self.panel2.grid()
@@ -1628,7 +1638,7 @@ def refresh_source_slider_builder(v_index,w_text):
     self.entry2var.trace('w', self.checkentry2)# Adds any change here to the absolute 
     self.complement_check()
         
-    self.abslabel.config(text=str(self.abspos))
+    self.abslabel.config(text=Chrom_txt +":"+str(self.abspos))
     #self.entry.config(from_=min_seqlength, to=max_seqlength)
     return
 
@@ -1726,7 +1736,7 @@ def setup_listbox(inframe):
     listbox.focus()
     listbox.grid()
 
-    inframe.haptemplatelabel=ttk.Label(frame,text=RG_globals.variants_header)
+    inframe.haptemplatelabel=ttk.Label(frame,text=RG_globals.reference_haplotype)
     inframe.haptemplatelabel.grid()
                                        
     

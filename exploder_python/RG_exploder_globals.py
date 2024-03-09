@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="26-Oct-2022"
-# © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022
+#Prg_verDate="07-Mar-2024"
+# © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 
 import time  # Used in getime()
 import json
@@ -223,7 +223,7 @@ def set_string_configs():
         global CustomerIDText,DatasetIDText,CopyrightText
         global seq_polarity_plus,seq_polarity_minus,seq_polarity_none
         global unwanted_replace, mut_types,mRNA_trigger,CDS_trigger,empty_transcript_name,empty_transcript_id,skip_trigger
-        global title_label,reference_header,variants_header,variants_label,frequency_label,options_label,reads_list_label,reads_type_label,help_label,about_label,more_label
+        global title_label,reference_gene,reference_haplotype,variants_header,variants_label,frequency_label,options_label,reads_list_label,reads_type_label,help_label,about_label,more_label
         global GRCh38_txt,GRCh37_txt,LRG_txt,ensembl38_gene_url,ensembl38_transcript_url,ensembl38_view_url,ensembl37_view_url,lrg_view_url,help_url
         global read_annotation,frag_annotation,spaceman,rev_label,fwd_label,IUPAC_codes
         global ensembl37_gene_url,ensembl37_transcript_url
@@ -246,7 +246,8 @@ def set_string_configs():
         empty_transcript_id=stringconstants["empty_transcript_id"]
         skip_trigger=stringconstants["skip_trigger"]
         title_label=stringconstants["title_label"]
-        reference_header=stringconstants["reference_header"]
+        reference_gene=stringconstants["reference_gene"]
+        reference_haplotype=stringconstants["reference_haplotype"]
         variants_header=stringconstants["variants_header"]
         variants_label=stringconstants["variants_label"]
         frequency_label=stringconstants["frequency_label"]
