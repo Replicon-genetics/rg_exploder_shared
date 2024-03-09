@@ -1,4 +1,4 @@
-LOCUS       1 0 bp DNA HTG 12-AUG-2022
+LOCUS       1                          0 bp    DNA              HTG 12-AUG-2022
 DEFINITION  Homo sapiens chromosome 1 GRCh37 partial sequence 33472585..33547597 reannotated
             via EnsEMBL
 ACCESSION   chromosome:GRCh37:1:33472585:33547597:1

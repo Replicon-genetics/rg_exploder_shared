@@ -1,0 +1,24 @@
+{
+    "Reference_sequences": {
+        "BARD1": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "28-FEB-2022",
+            "Region": "GRCh37:2:215589370:215675428:-1",
+            "Locus_range": "1001:85059",
+            "is_join_complement": false,
+            "LRG_id": "297",
+            "Ensembl_id": "ENSG00000138376.6",
+            "mRNA": {
+                "BARD1-260947(MANE_Select)": "ENST00000260947.4",
+                "BARD1-421162": "ENST00000421162.1",
+                "BARD1-432456": "ENST00000432456.1",
+                "BARD1-449967": "ENST00000449967.2",
+                "BARD1-455743": "ENST00000455743.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "BARD1-260947(MANE_Select)"
+            }
+        }
+    }
+}

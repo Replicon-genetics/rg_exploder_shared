@@ -1,0 +1,16 @@
+LOCUS       17 0 bp DNA HTG 28-FEB-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh37 partial sequence 41195312..41278500 reannotated
+            via EnsEMBL
+ACCESSION   chromosome:GRCh37:17:41195312:41278500:-1
+VERSION     chromosome:GRCh37:17:41195312:41278500:-1
+FEATURES             Location/Qualifiers
+     source          1..83189
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..82189
+                     /gene=ENSG00000012048.15
+                     /locus_tag="BRCA1"
+                     /note="breast cancer 1, early onset [Source:HGNC
+                     Symbol;Acc:1100]"
+ORIGIN
+//

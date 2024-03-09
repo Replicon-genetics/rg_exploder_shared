@@ -1,0 +1,31 @@
+{
+    "Reference_sequences": {
+        "TP53": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "28-FEB-2022",
+            "Region": "GRCh37:17:7564097:7591856:-1",
+            "Locus_range": "1001:26760",
+            "is_join_complement": false,
+            "LRG_id": "321",
+            "Ensembl_id": "ENSG00000141510.11",
+            "mRNA": {
+                "TP53-269305(MANE_Select)": "ENST00000269305.4",
+                "TP53-359597": "ENST00000359597.4",
+                "TP53-413465": "ENST00000413465.2",
+                "TP53-420246": "ENST00000420246.2",
+                "TP53-445888": "ENST00000445888.2",
+                "TP53-455263": "ENST00000455263.2",
+                "TP53-503591": "ENST00000503591.1",
+                "TP53-508793": "ENST00000508793.1",
+                "TP53-509690": "ENST00000509690.1",
+                "TP53-514944": "ENST00000514944.1",
+                "TP53-576024": "ENST00000576024.1",
+                "TP53-604348": "ENST00000604348.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "TP53-269305(MANE_Select)"
+            }
+        }
+    }
+}
