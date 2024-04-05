@@ -1,3 +1,4 @@
+// This is a GUI for Synthetic Reads Generator developed for Replicon Genetics 2021-24  © Replicon Genetics 
 <template>
 <div>
   <Header :title="jsonConfig.stringconstants.title_label" />
@@ -41,7 +42,7 @@
 
   <div class="container">
     <div class="container__child">
-      <h3>{{ jsonConfig.stringconstants.reference_header }}</h3>
+      <h3>{{ jsonConfig.stringconstants.reference_gene }}</h3>
       <BaseSelect
         v-if="selectedGene"
         v-model="selectedGene"
@@ -103,7 +104,7 @@
       />
     </div>
     <div v-if="mutfreqs" class="container__child">
-      <h3>{{ jsonConfig.stringconstants.variants_header }}</h3>
+      <h3>{{ jsonConfig.stringconstants.reference_haplotype }}</h3>
       <BaseSelect
         v-if="selectedTranscript"
         v-model="selectedTranscript"
@@ -245,7 +246,7 @@
     <div class="container__child3">
       <div class="details">
     <h1 style="font-size: 1.25rem">
-      {{ "Create a New " +  jsonConfig.stringconstants.variants_label }}
+      {{ "Create a New " +this.selectedGene +" "+jsonConfig.stringconstants.variants_label }}
     </h1>
     </div>
       <div class="container__child-subtitle">
@@ -284,7 +285,7 @@
           />
         </div>
         <div class="column">
-          <BaseNumberShow
+          <BaseStringShow
             v-if="tbv_abs_Begin"
             v-model="tbv_abs_Begin.txt"
             :label="tbv_abs_Begin.label"
@@ -314,7 +315,7 @@
           />
         </div>
         <div class="column">
-          <BaseNumberShow
+          <BaseStringShow
             v-if="tbv_abs_End"
             v-model="tbv_abs_End.txt"
             :label="tbv_abs_End.label"
@@ -325,7 +326,7 @@
       <div class="container__child-subtitle">
         <h3>{{ "Define "+tbv_var_name.label.split(' ')[0] }}</h3>
       </div>
-        <BaseStringShow
+        <BaseStringShowWide
         v-if="tbv_ref_subseq"
         v-model="tbv_ref_subseq.viewstring"
         :label="tbv_ref_subseq.label"
@@ -375,10 +376,10 @@ import MessagePanel from '@/components/MessagePanel.vue'
 import BaseNumberInput from '@/components/BaseNumberInput.vue'
 import BaseNumberInputExt from '@/components/BaseNumberInputExt.vue'
 import BaseNumberInputWide from '@/components/BaseNumberInputWide.vue'
-import BaseNumberShow from '@/components/BaseNumberShow.vue'
 import BaseStringInput from '@/components/BaseStringInput.vue'
 import BaseStringInputDNA from '@/components/BaseStringInputDNA.vue'
 import BaseStringShow from '@/components/BaseStringShow.vue'
+import BaseStringShowWide from '@/components/BaseStringShowWide.vue'
 import BaseCheckbox from '@/components/BaseCheckbox.vue'
 import RunButton from '@/components/RunButton.vue'
 import EditVarButton from '@/components/BaseButton.vue'
@@ -394,13 +395,8 @@ var encode = TextEncoder.prototype.encode.bind(new TextEncoder())
 
 streamSaver.mitm = './mitm.html'
 
-// Genbank parser? See https://www.npmjs.com/package/genbank-parser
-//`npm i genbank-parser`
-//const fs = require('fs');
-//const genbankParser = require('genbank-parser');
-
 // The filenames in the /input/ folder, useful for the [mutfreqLabels] & [mutfreq] arrays
-// require.context must have literals, so cannot limit this full listing to subdirectory this.selectedGene, for example
+// require.context must have literals, so cannot limit this full listing to eg:subdirectory this.selectedGene
 const inputGeneKeys = require.context('../public/input/', true, /\.gb$/).keys()
 
 export default {
@@ -412,10 +408,10 @@ export default {
     BaseNumberInput,
     BaseNumberInputExt,
     BaseNumberInputWide,
-    BaseNumberShow,
     BaseStringInput,
     BaseStringInputDNA,
     BaseStringShow,
+    BaseStringShowWide,
     BaseCheckbox,
     RunButton,
     EditVarButton,
@@ -531,9 +527,6 @@ export default {
             //console.log(`selectedGene false item ${item}`)
             return false
           }
-          //console.log(`selectedGene item ${item}`)
-          //const barf1= JSON.stringify(`${item}`.startsWith(`./${this.selectedGene}/`))
-          //console.log(`selectedGene  ${barf1}`)
           return `${item}`.startsWith(`./${this.selectedGene}/`)
         })
         ///this.mutfreqs = keys.map((e, idx) => (idx <= 1 ? 50 : 30))
@@ -632,7 +625,7 @@ export default {
       //console.log(`JL: joinlist change`)
       //console.log(`joinlist: ${this.joinlist}`)
 
-        // Now for the meaty stuff:
+      // Now for the meaty stuff:
       //this.is_join_complement=this.jsonConfig.Reference_sequences[this.selectedGene]["is_join_complement"]
       const Region = this.jsonConfig.Reference_sequences[this.selectedGene]["Region"]
       const abs_start=parseInt(Region.split(":")[2])
@@ -640,6 +633,10 @@ export default {
       this.tbv_ref_strand=parseInt(Region.split(":")[4])
       this.tbv_GRChver_txt=(Region.split(":")[0])
       this.tbv_Chrom=(Region.split(":")[1])
+      // Special catch for non-standard chromosome identifiers such as PTEN_a
+      if (this.tbv_Chrom.length > 2)
+        {this.tbv_Chrom=this.tbv_Chrom.substring(0,3);}
+
       const maxreflen=Math.abs(abs_end-abs_start)+1
 
       this.REFSEQ_len=maxreflen
@@ -796,7 +793,7 @@ export default {
       else{
         ends.push(locus_end)
       }
-      } //    ## End of: if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Locus
+      } // End of: if RG_globals.target_transcript_name == RG_globals.empty_transcript_name: # Locus
     //Finishing off 
     feature_titles.push("Post-Locus")
     if (this.is_join_complement){
@@ -1093,9 +1090,6 @@ export default {
         }
         this.is_join_complement=this.jsonConfig.Reference_sequences[this.selectedGene]["is_join_complement"]
         //console.log(`JM: joinlist is ${this.joinlist}`)
-        //this.tbv_trans_Begin.value= config?.bio_parameters?.target_build_variant?.trans_Begin?.value //Nope!
-        //this.tbv_trans_Begin.value= this.jsonConfig.bio_parameters.target_build_variant.trans_Begin.value //Nope!
-        //this.tbv_trans_Begin.value= parseInt(this.jsonConfig.bio_parameters["target_build_variant"]["trans_Begin"]["value"]) //Nope!
     },
     get_build_data(){
       this.get_tbv_var_name()
@@ -1103,6 +1097,7 @@ export default {
       //console.log(` tbv_local_Begin ${this.tbv_local_Begin}`)
     },
     get_tbv_var_name(){
+      //  Build a default naming string for the variant
       var tbe=""
       var tee=""
       var varfront=""
@@ -1221,25 +1216,12 @@ export default {
                 {modpos= -this.tbv_trans_Begin_ext.value} // alternative to headclip, but does same job here
         else 
                 {modpos= this.tbv_trans_Begin_ext.value}
-        //begin=parseInt(item.split(":")[0])
-       // console.log(`??: this.tbv_trans_Begin.value is ${this.tbv_trans_Begin.value}`)
-        //console.log(`??: this.tbv_trans_Begin_ext.value is ${this.tbv_trans_Begin_ext.value}`)
-        //console.log(`get_abs_begin: modpos is ${modpos}`)
-        //console.log(`v3: this.tbv_local_Begin is ${this.tbv_local_Begin}`)
-        //console.log(`v3a: this.tbv_trans_Begin.value is ${this.tbv_trans_Begin.value}`)
-        //console.log(`v3b: this.mrnapos_lookup[this.tbv_trans_Begin.value] is ${this.mrnapos_lookup[this.tbv_trans_Begin.value]}`)
         this.tbv_local_Begin=parseInt(this.mrnapos_lookup[this.tbv_trans_Begin.value])+modpos
         //console.log(`v4: this.tbv_local_Begin is ${this.tbv_local_Begin}`)
         }
         this.tbv_abs_Begin.value=Math.abs(this.tbv_abs_offset+this.tbv_local_Begin)
         this.tbv_abs_Begin.txt= this.tbv_Chrom+":"+this.tbv_abs_Begin.value
-      //console.log(`get_abs_begin: this.tbv_local_Begin is ${this.tbv_local_Begin}`)
-      //console.log(`get_abs_begin: this.tbv_trans_Begin.value is ${this.tbv_trans_Begin.value}`)
-      //console.log(`get_abs_begin: this.tbv_trans_Begin_ext.value is ${this.tbv_trans_Begin_ext.value}`)
       //console.log(`get_abs_begin: modpos is ${modpos}`)
-
-      //  Build a default naming string for the variant
-      //this.get_tbv_var_name()
       this.get_build_data()
       //console.log(`get_abs_begin: this.tbv_ref_subseq_notretrieved is ${this.tbv_ref_subseq_notretrieved}`)
     },
@@ -1258,11 +1240,7 @@ export default {
         }
         this.tbv_abs_End.value=Math.abs(this.tbv_abs_offset+this.tbv_local_End)
         this.tbv_abs_End.txt= this.tbv_Chrom+":"+this.tbv_abs_End.value
-      //console.log(`get_abs_end: this.tbv_local_End is ${this.tbv_local_End}`)
-      //console.log(`get_abs_end: this.tbv_trans_End.value is ${this.tbv_trans_End.value}`)
-      //console.log(`get_abs_end: this.tbv_trans_End_ext.value is ${this.tbv_trans_End_ext.value}`)
       //console.log(`get_abs_end: modpos is ${modpos}`)
-      //this.get_tbv_var_name()
       this.get_build_data()
     },    
     get_complement_seq:function(instring){
@@ -1274,9 +1252,7 @@ export default {
       return instring.split('').reverse().join('')
     },
     get_rev_complement:function(instring){  
-      //var compstring = instring.split('').reverse().map(this.get_complement_seq).join('')
       //console.log(`get_rev_complement ${compstring}`)
-      //return compstring
       return instring.split('').reverse().map(this.get_complement_seq).join('')
     },
     check_revcomp:function(instring){

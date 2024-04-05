@@ -1,6 +1,6 @@
 <template>
   <div class="baseinput">
-    <label v-if="label"> {{ label }} </label>
+    <label v-if="label"></label>
     <input
       v-bind="$attrs"
       :value="modelValue"
@@ -15,7 +15,7 @@ export default {
   props: {
     modelValue: {
       type: String,
-      default: 'AAAAAAA'
+      default: ''
     },
     label: {
       type: String,
@@ -29,8 +29,7 @@ export default {
   //emits: ['update:modelValue'],
   watch: {
     modelValue: function() {
-      console.log(`${this.label} is now ${this.modelValue}`)
-      // Some logic here to constrain string content?
+      //console.log(`${this.label} is now ${this.modelValue}`)
     }
   }
 }
@@ -42,11 +41,11 @@ export default {
   font-size: var(--fnt-normal);
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: left;
 }
 
 input {
-  width: 30em;
-  text-indent: 3px;
+  text-align:right;
+  width: 8em;
 }
 </style>
