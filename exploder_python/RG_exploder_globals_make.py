@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="06-Mar-2024"
+#Prg_verDate="05-Apr-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -745,7 +745,7 @@ def set_Reference_sequences_configs_GRCh38_1000():
 def set_Reference_sequences_configs_GRCh37_1000_public2():
     global DatasetIDText,Reference_sequences
     #DatasetIDText="Open Access GRCh37_0005_02 ; September 2022"
-    DatasetIDText="EB dataset GRCh37_0006_01; March 2024"
+    DatasetIDText="EB dataset GRCh37_0007_01; April 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -756,7 +756,7 @@ def set_Reference_sequences_configs_GRCh37_1000_public2():
 def set_Reference_sequences_configs_GRCh38_1000_public2():
     global CustomerIDText,DatasetIDText,Reference_sequences
     #DatasetIDText="Open Access GRCh38_0005_02; September 2022"
-    DatasetIDText="EB dataset GRCh38_0006_01; March 2024"
+    DatasetIDText="EB dataset GRCh38_0007_01; April 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
