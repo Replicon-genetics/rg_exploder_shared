@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="7-Mar-2024"
+#ProgverDate="31-Mar-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -99,7 +99,8 @@ def modify_seq_in_record(inseq,SeqRec):
     CopySeqRec.endlocus=copy.copy(SeqRec.endlocus)
     CopySeqRec.rev_endlocus=copy.copy(SeqRec.rev_endlocus)
     CopySeqRec.Generated_Fragcount=copy.copy(SeqRec.Generated_Fragcount)
-    CopySeqRec.Saved_Fragcount=copy.copy(SeqRec.Saved_Fragcount)   
+    CopySeqRec.Saved_Fragcount=copy.copy(SeqRec.Saved_Fragcount)
+    CopySeqRec.Unpaired_Fragcount=copy.copy(SeqRec.Unpaired_Fragcount)
     success,CopySeqRec=set_seqrec_absolutes(CopySeqRec) #Must do this even if RG_globals.is_use_absolute == False
     return CopySeqRec
 
