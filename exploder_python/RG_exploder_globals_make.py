@@ -745,7 +745,7 @@ def set_Reference_sequences_configs_GRCh38_1000():
 def set_Reference_sequences_configs_GRCh37_1000_public2():
     global DatasetIDText,Reference_sequences
     #DatasetIDText="Open Access GRCh37_0005_02 ; September 2022"
-    DatasetIDText="EB dataset GRCh37_0007_01; April 2024"
+    DatasetIDText="EB dataset GRCh37_0008_01; April 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -756,7 +756,7 @@ def set_Reference_sequences_configs_GRCh37_1000_public2():
 def set_Reference_sequences_configs_GRCh38_1000_public2():
     global CustomerIDText,DatasetIDText,Reference_sequences
     #DatasetIDText="Open Access GRCh38_0005_02; September 2022"
-    DatasetIDText="EB dataset GRCh38_0007_01; April 2024"
+    DatasetIDText="EB dataset GRCh38_0008_01; April 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
