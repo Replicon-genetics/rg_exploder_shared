@@ -21,8 +21,8 @@ def set_config_consts():
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
 
     ######## Revisit these three each time a data set is renewed ########
-    #GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
-    GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
+    GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
+    #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
     #CustomerIDText="EBaker"
     CustomerIDText="Public"
