@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_26_01.py"
-ProgverDate="04-Apr-2024"
+Progver="RG_exploder_main_27_01.py"
+ProgverDate="17-Apr-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -882,7 +882,7 @@ def write_samheader(ThisSeqr,Rname):
 
 def write_frag_samout(qname,flag,pos,cigar,rnext,pnext,tlen,forseq):
     # Writes a fragment sequence entry to sam format.
-    # pos parameter is 1-based reference offset !!
+    # pos and pnext parameters sent here to be 0-based !!
     global samout,is_append_samfile,REFSEQ_RECORD,Ref_file_name
     global Mapq_Min,Mapq_Max
     #print("ThisSeqr.id %s"%ThisSeqr.id)
@@ -907,10 +907,14 @@ def close_seqout(SeqRec):
 
     extralabel,strandlabel=RG_globals.get_strand_extra_label()
     update_readme("\nProgram output metadata files:\n%s%s%s%s\t- This file"%(locus_transcript,readmehead,extralabel,readmeend))
-    journaltxt="\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(in_ref_src_title)
-    update_readme("%s%s%s%s%s"%(locus_transcript,journhead,extralabel,journend,journaltxt))
+    #journaltxt="\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(in_ref_src_title)
+    journalname="%s%s%s%s"%(locus_transcript,journhead,extralabel,journend)
+    #update_readme("%s%s"%(journalname,journaltxt))
+
+    update_readme("%s\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(journalname,in_ref_src_title))
+    
     if is_htm_journal:
-        update_readme("%s%s%s%s.htm%s (html version)"%(locus_transcript,journhead,extralabel,journend,journaltxt))
+        update_readme("%s.htm\t- html version of Journal file"%journalname)
     update_readme("%s%s%s%s\t- contains configuration data for this run"%(locus_transcript,config_json_head,extralabel,config_json_end))
     sam_fastfile=""
 
@@ -1583,18 +1587,24 @@ def make_allvars_in_one_seq(SeqRec,label):
     return VarSeqRec
 # end of def make_allvars_in_one_seq(SeqRec,label)
 
-def refseq_to_frags3(mutrecs):
+def refseq_to_frags4(mutrecs):
     global REFSEQ_RECORD
     if not RG_globals.is_fastq_random:
         RG_process.make_fastq_slice()
+    is_success= True
     if RG_globals.is_frg_paired_end:
-        generate_multisource_paired_frags(REFSEQ_RECORD,mutrecs,RG_globals.Fraglen,RG_globals.Fragdepth)
+        if RG_globals.gauss_mean < RG_globals.Fraglen:
+                update_journal(" *** Processing halted *** Requested %s length %s is higher than the %s of %s"%
+                               (RG_globals.read_annotation,RG_globals.Fraglen,RG_globals.bio_parameters["gauss_mean"]["label"],RG_globals.gauss_mean))
+                is_success= False
+        else:
+            generate_multisource_paired_frags(REFSEQ_RECORD,mutrecs,RG_globals.Fraglen,RG_globals.Fragdepth)
     elif RG_globals.is_onefrag_out:
         generate_multisource_all_frags(REFSEQ_RECORD,mutrecs,RG_globals.Fraglen)
     else:
         generate_multisource_random_frags(REFSEQ_RECORD,mutrecs,RG_globals.Fraglen,RG_globals.Fragdepth)
-    return
-# end of def refseq_to_frags3()
+    return is_success
+# end of def refseq_to_frags4()
 # =====================================================
 # End of sequence manipulation routines
 # =====================================================
@@ -1655,11 +1665,11 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
                 mutlabel_count+=1
                 # Ideally would assign item.Saved_Fragcount+=1 - but this cannot be done in generate_multisource_random_frags, so not doing here
                 Saved_Fragcount+=1
-                label_and_saveg("f",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item,0,0,True,False)
+                label_and_saveg("f",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item,0,0,True,False,False)
                 mutfragcount[mutrec_index]+=1
                 if RG_globals.is_duplex: # Just repeat with reverse_complement
                     Saved_Fragcount+=1
-                    label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item,0,0,True,False)
+                    label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item,0,0,True,False,False)
                     mutfragcount[mutrec_index]+=1                        
         mutrec_index+=1
     journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,0)
@@ -1732,36 +1742,34 @@ def normalise_mutfreqs(mutrecs):
     update_journal(" Normalised ratios: [%s]"%(normratiostring[:-1]))
     return normutfreq
 
-def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,RefRec,pnext,tlen,read1,tworeads):
+def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,RefRec,pnext,tlen,is_read1,is_tworeads,is_paired_end):
     # A common label_and_saveg() for generate_multisource_random_frags, generate_multisource_all_frags, generate_multisource_paired_frags
 
     id_label="%s%s"%(RG_globals.frag_annotation,label_count)
-    
-    flag=2 # aligned (for SAM output)
-    if not tworeads:
-        flag+=8 # read2 unmapped, so bitwise for this non=paired read (read 1) reflects this
-        pnext=0
-    else:
+    flag=3 # +2 aligned (for SAM output); +1 to verify other flag additions (not that I understand this)
+
+    if is_paired_end:
         pnext+=1 # paired-ends
-        
+        if is_read1:
+            flag+=64 # Read 1 first segment in the template (for SAM output)
+        else:
+            flag+=128 # Read 2 last segment in the template (for SAM output)
+
+    if not is_tworeads:
+        pnext=0
+        flag+=8 # next read unmapped, so bitwise for this non=paired read reflects this
+
     if in_dupstr == "pf":
         loc_fragseq,dupstr,dir_label=get_fwd_fragseq(in_fragseq) # dir_label equivalent to R1 - fwd
         loc_cigar_label=fwd_cigar_label
-        if tworeads:
-            if read1:
-                flag+=64  # Read 1 first segment in the template (for SAM output): means "read coming from R1 / forward sequencing in a paired-end experiment"
-            else:
-                flag+=128 # Read 2 last segment in the template (for SAM output): means "read coming from R2 / forward sequencing in a paired-end experiment"
+        if is_tworeads:
+            flag+=32  #+32 next segment being reverse complemented (for SAM output)
 
     elif in_dupstr == "pr":
         loc_fragseq,dupstr,dir_label=get_rev_fragseq(in_fragseq) # dir_label equivalent to R2 - fwd
         loc_cigar_label=rev_cigar_label
-        if tworeads:
-            if read1:
-                flag+=80 # +64 for read 1; +16 reverse complement (for SAM output)
-            else:
-                flag+=160 # +128 for read 2; +32 reverse complement (for SAM output)
-            
+        flag+=16  #+16 reverse complement (for SAM output)
+         
     elif in_dupstr=="fr":
         loc_fragseq,dupstr,dir_label=get_fragseq(in_fragseq) # 50% chance of returning a "f" or "r" sequence
         if dupstr == "f":
@@ -1781,7 +1789,6 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
     else:
         program_exit("Incorrect call to label_and_saveg")
 
-    
     if RG_globals.is_frg_label:
         id_label="%s_%s"%(id_label,RefRec.mutlabel)
         FragSeqRec=RG_process.annotate_frag_to_record(loc_fragseq,id_label)
@@ -1833,10 +1840,13 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
     # SAM emulates the completed mapping, so only the forward information is retained
         # Do NOT use absolutes in SAM output
         # Make sure to use in_fragseq, not loc_fragseq (*** FragSeqRec.seq holds loc_fragseq***)
-        if "p" in in_dupstr and tworeads:
-            write_frag_samout(FragSeqRec.id,flag,ref_offset+1,fwd_cigar_label,"=",pnext,tlen,in_fragseq)
+        # Use ref_offset, not ref_offset+1 for 0-based
+        if pnext>0:
+            pnext-=1 #take pnext down by 1 for 0-based
+        if "p" in in_dupstr and is_tworeads:
+            write_frag_samout(FragSeqRec.id,flag,ref_offset,fwd_cigar_label,"=",pnext,tlen,in_fragseq)
         else:
-            write_frag_samout(FragSeqRec.id,flag,ref_offset+1,fwd_cigar_label,"*",pnext,tlen,in_fragseq)
+            write_frag_samout(FragSeqRec.id,flag,ref_offset,fwd_cigar_label,"*",pnext,0,in_fragseq)
  
     ###### end of  function label_and_save_g() ########################
 
@@ -1888,7 +1898,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
                 trimseq=mutrecs[mutrec_index].seq[start:end] # Trim the sequence to get a fragment
                 mutfragcount[mutrec_index]+=1
                 Saved_Fragcount+=1
-                label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],0,0,True,False)
+                label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],0,0,True,False,False)
     journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,0)
     return
 # end of def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth)
@@ -1896,7 +1906,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
 
 def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     # fraglen must have been tested as OK with validate_fraglength to get here
-    global NormaliseUpper,Paired_insert_Max
+    global NormaliseUpper,Paired_insert_Max,Paired_insert_Min
     
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
     Paired_Fragcount=0
@@ -1904,36 +1914,21 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     noread_count=0
     unpaired_count=0
     mutseqend=[] # The sequence end of each mutseq
-    headpop=RG_globals.bio_parameters["target_build_variant"]["headclip"] # Add fraglen?
+    headpop=RG_globals.bio_parameters["target_build_variant"]["headclip"]
 
-    def update_fragcount(mutrec_index):
-        nonlocal  last_Saved_Fragcount,Saved_Fragcount,Paired_Fragcount,mutfragcount
-        mutfragcount[mutrec_index]+=1
-        if last_Saved_Fragcount==Saved_Fragcount: # It didn't change previously, eg: for forward_seq -because it was excluded: either it didn't have a mut_cigar or for_frag false
-            Saved_Fragcount+=1 # Was not incremented in saving forward_seq
-        else:# both forward and reverse frags were generated, but Saved_Fragcount remains the same; it's used for shared name 
-            Paired_Fragcount+=1 # Have to tally the pairs in order to sum with Saved_Fragcount on return
-
-    def label_and_save(pquote,mutrec_index,seq_start,seq_end,oppstart,tlen,firstread,tworeads):
-        nonlocal Saved_Fragcount,mutrecs,Generated_Fragcount
-        ''' nonlocal headpop,mutseqend,forstart,mutrecs ''' #Testing
+    def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads):
+        nonlocal Generated_Fragcount,Saved_Fragcount,Paired_Fragcount
         Generated_Fragcount+=1
         ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,seq_start,fraglen)
-        pnext,barf1,barf2=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,oppstart,fraglen)# Doozy!
-        #print("pquote:%s; ref_offset %s; pnext %s"%(pquote,ref_offset,pnext))
-        #print("pquote:%s; seq_start:%s; oppstart:%s || this_refstart:%s; opp_refstart:%s"%(pquote,seq_start,oppstart,this_refstart,opp_refstart))
         if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
-            update_fragcount(mutrec_index)
-            inseq=mutrecs[mutrec_index].seq[seq_start:seq_end]
-            label_and_saveg(pquote,inseq,Saved_Fragcount,seq_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],pnext,tlen,firstread,tworeads)
-        '''  #Testing  
-        if (seq_start < headpop) or seq_start > mutseqend[mutrec_index] :
-                print("pquote:%s; label:%s, forstart:%s; firstread:%s; seq_start: %s ; headpop:%s "%(pquote,mutrecs[mutrec_index].mutlabel,forstart,firstread,seq_start,headpop))
-        if (seq_end > mutseqend[mutrec_index]) or seq_end < headpop :
-                print("pquote:%s; label:%s,  forstart:%s; firstread:%s; seq_end:%s; mutseqend:%s; diff %s "%(pquote,mutrecs[mutrec_index].mutlabel,forstart,firstread,seq_end,mutseqend[mutrec_index],seq_end-mutseqend[mutrec_index]))
-        '''  #Testing      
-        firstread=False
-        return firstread
+            mutfragcount[mutrec_index]+=1
+            if last_Saved_Fragcount==Saved_Fragcount: # Not incremented from previous pair or singleton
+                Saved_Fragcount+=1 
+            else:# Keep Saved_Fragcount the same to share a name-pair
+                Paired_Fragcount+=1 # Have to tally the pairs in order to sum with Saved_Fragcount            
+            inseq=mutrecs[mutrec_index].seq[seq_start:seq_start+fraglen-1]
+            label_and_saveg(pquote,inseq,Saved_Fragcount,seq_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],pnext,tlen,is_R1,is_tworeads,True)
+        return
 
     # Calculate an expected fragtotal using un-modified spliced-reference
     fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen))
@@ -1969,62 +1964,71 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                 
             while True:
                 insert_len=int(np.random.normal(loc = RG_globals.gauss_mean, scale=RG_globals.gauss_SD, size=None)) # Gaussian distribution frequencies
-                if Paired_insert_Min <= insert_len <=Paired_insert_Max:
+                if (Paired_insert_Min <= insert_len <=Paired_insert_Max) and (fraglen < insert_len):
                     break
             #insert_len=randint(Paired_insert_Min,Paired_insert_Max) # Flat distribution frequencies
 
             # Constrain the range position to the defined locus range and fraglen
             start=randint(headpop,endpop)
 
-            # 50% chance of the position start being the forward read's start-point or the reverse-read's end-point
+            # 50% chance of the position start being the forward read's (S1) start-point (_start or the reverse-read's end-point
             if random() < 0.5: # Position is the forward-read's start point
-                fwd_start=start  
-                rev_end=start-insert_len # Will be < headpop if outside the locus
-                forstart=True
+                R1_start=start
+                R1_end=R1_start+fraglen-1
+                
+                R2_end=R1_start+insert_len-1
+                R2_start=R2_end-fraglen #  R2_start=start+insert_len-fraglen -1 #  R2_start=start-1+(insert_len-fraglen)
+                # Will be < headpop if outside the locus
             else: # Position is reverse-read's end-point
-                fwd_start=start+insert_len # Will be > mutseqend[mutrec_index] if outside the locus
-                rev_end=start
-                forstart=False
-            
-            # Calculate other end cases # Mostly within locus because have already constrained start and end values
-            rev_start=rev_end-fraglen 
-            fwd_end=fwd_start+fraglen 
+                R2_start=start
+                R2_end=R2_start+fraglen-1
+                
+                R1_start=R2_end-insert_len  #  R1_start=start-insert_len+fraglen -1 #  R1_start=start-1-(insert_len-fraglen)
+                R1_end=R1_start+fraglen-1 # R1_end= start-insert_len+fraglen -1 +fraglen -1 # R1_end= start-2 -(insert_len-2*fraglen)
 
-            for_frag=(headpop < fwd_start <= endpop) or (headpop < fwd_end <= endpop) # Allow one end to go into pop areas, not both
-            #if not for_frag: print("for_frag: fwd_start:%s; fwd_end:%s; endpop:%s"%(fwd_start,fwd_end,endpop))
+            R1_frag=(headpop < R1_start <= endpop) or (headpop < R1_end <= endpop) # Allow one end to go into pop areas, not both
+            #if not R1_frag: print("R1_frag: R1_start:%s; R1_end:%s; endpop:%s"%(R1_start,R1_end,endpop))
 
-            rev_frag=(headpop < rev_start <= endpop) or (headpop < rev_end <= endpop) # Allow one end to go into pop areas, not both
-            #if not rev_frag: print("rev_frag: rev_start:%s; rev_end:%s; endpop:%s"%(rev_start,rev_end,endpop))
-            # Range outside locus when for_frag or rev_frag is False; mate becomes unpaired
+            R2_frag=(headpop < R2_start <= endpop) or (headpop < R2_end <= endpop) # Allow one end to go into pop areas, not both
+            #if not R2_frag: print("R2_frag: R2_start:%s; R2_end:%s; endpop:%s"%(R2_start,R2_end,endpop))
+            # Range outside locus when R1_frag or R2_frag is False; mate becomes unpaired
 
             # Detect whether two reads are being produced
-            tworeads=for_frag and rev_frag
-            if not tworeads:
-                unpaired_count+=1  #print("Single read at %s"%(Saved_Fragcount+1))
-                #if not for_frag and not rev_frag:
+            is_tworeads=R1_frag and R2_frag
+            if not is_tworeads:
+                unpaired_count+=1
+                #print("Single read at %s"%(Saved_Fragcount+1))
+                #if not R1_frag and not R2_frag:
                     #noread_count+=1 # Not needed beyond future curiosity, should be zero if the above range-cutoffs are working
-                    #print("No reads at next %s"%(Saved_Fragcount+1))                   
+                    #print("No reads at next %s"%(Saved_Fragcount+1))
 
-            read1=True # When label_and_save results in a save, this value sets to False
-            
-            # Need to put forward and reverse in random order, not always forward-first!
+            #print("R1_start=%s;R1_end=%s;R2_start=%s;R2_end=%s;inner=%s;headpop=%s;endpop=%s"%(R1_start,R1_end,R2_start,R2_end,(R2_start-R1_end-1),headpop,endpop))
+
+            def do_r1():
+                if R1_frag: # Process a forward sequencing fragment
+                    pnext,barf1,barf2=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# Just to get pnext
+                    label_and_save("pf",mutrec_index,R1_start,pnext,insert_len,True,is_tworeads)
+                    
+            def do_r2():
+                if R2_frag: # Process a reverse sequencing fragment
+                    pnext,barf1,barf2=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# Just to get pnext
+                    label_and_save("pr",mutrec_index,R2_start,pnext,-insert_len,False,is_tworeads) 
+
+            # Need to put forward and reverse in random order, not always R1-first!
             if random() < 0.5:
                 # Do a forward, then a reverse, 50% of the time
-                if for_frag: # Process a forward sequencing fragment first
-                    read1=label_and_save("pf",mutrec_index,fwd_start,fwd_end,rev_start,insert_len,read1,tworeads)
-                if rev_frag: # Process a reverse sequencing fragment second; it will be first read if not(for_frag)
-                    read1=label_and_save("pr",mutrec_index,rev_start,rev_end,fwd_start,-insert_len,read1,tworeads) 
+                do_r1()
+                do_r2()
+
             else:
                 # Do a reverse, then a forward, 50% of the time
-                if rev_frag: # Process a reverse sequencing fragment first
-                    read1=label_and_save("pr",mutrec_index,rev_start,rev_end,fwd_start,-insert_len,read1,tworeads) 
-                if for_frag: # Process a forward sequencing fragment second; it will be first read if not(rev_frag)
-                    read1=label_and_save("pf",mutrec_index,fwd_start,fwd_end,rev_start,insert_len,read1,tworeads)
+                do_r2()
+                do_r1()
                     
     journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount+Paired_Fragcount,mutfragcount,unpaired_count)
     #print("noread_count: %s ; unpaired_count %s "%(noread_count,unpaired_count))
     return
-# end of def generate_multisource_paired_frags3(RefRec,mutrecs,fraglen,fragdepth)
+# end of def generate_multisource_paired_frags4(RefRec,mutrecs,fraglen,fragdepth)
 
 
 #==========================End of section dealing with generate_multisource_random_frags and generate_multisource_all_frags===========================
@@ -2460,7 +2464,7 @@ def run_processing(is_get_new_refseq):
                                (RG_globals.read_annotation,RG_globals.Fraglen,RG_globals.variants_label,short_label,shortest))
                 is_success= False
             elif (RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out) :
-                refseq_to_frags3(Mutrecs)
+                is_success=refseq_to_frags4(Mutrecs)
                 close_seqout(REFSEQ_RECORD)
             else:
                 close_seqout(REFSEQ_RECORD)
