@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_27_01.py"
-ProgverDate="17-Apr-2024"
+ProgverDate="22-Apr-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -860,15 +860,21 @@ def write_refseq(RefRecord,which):
 # end of write_refseq(RefRecord,which)
 
 
-def write_samheader(ThisSeqr,Rname):
+def write_samheader(ThisSeqr):
     # Writes a header to sam format,unless is_append_samfile already True
     global samout,is_append_samfile,out_sa_file,in_ref_src
-    global REFSEQ_RECORD
+    global REFSEQ_RECORD,Rname
+    Rname="chrX"
     if not is_append_samfile:
         out_samfile="%s%s"%(Outfilepath,out_sa_file)
         samout = RG_io.open_write(out_samfile)
         is_append_samfile=True
         label,genass,chromnum,start,stop,pole= ThisSeqr.firstid.split(":")
+        if genass==RG_globals.GRCh37_txt:
+            genass="hg19"
+        else:
+            genass="hg38"
+        Rname="chr%s"%chromnum # Sets global for reuse by write_frag_samout
         head1="@HD\tVN:1.6\tSO:coordinate\n"
         head2="@SQ\tSN:%s\tLN:%i\tAS:%s\tUR:%s.fasta\n"%(Rname,REFSEQ_RECORD.spliced_length,genass,in_ref_src)
         head3="@CO\tACCESSION:\t%s\n"%(ThisSeqr.firstid)
@@ -884,11 +890,10 @@ def write_frag_samout(qname,flag,pos,cigar,rnext,pnext,tlen,forseq):
     # Writes a fragment sequence entry to sam format.
     # pos and pnext parameters sent here to be 0-based !!
     global samout,is_append_samfile,REFSEQ_RECORD,Ref_file_name
-    global Mapq_Min,Mapq_Max
+    global Mapq_Min,Mapq_Max,Rname
     #print("ThisSeqr.id %s"%ThisSeqr.id)
-    Rname="ref"# Put in json.config?
     if not is_append_samfile:
-        write_samheader(REFSEQ_RECORD,Rname)
+        write_samheader(REFSEQ_RECORD)
     if qname =="": qname="barf"
     mapq=randint(Mapq_Min,Mapq_Max)
     qual="*"
@@ -1926,7 +1931,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                 Saved_Fragcount+=1 
             else:# Keep Saved_Fragcount the same to share a name-pair
                 Paired_Fragcount+=1 # Have to tally the pairs in order to sum with Saved_Fragcount            
-            inseq=mutrecs[mutrec_index].seq[seq_start:seq_start+fraglen-1]
+            inseq=mutrecs[mutrec_index].seq[seq_start:seq_start+fraglen]
             label_and_saveg(pquote,inseq,Saved_Fragcount,seq_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],pnext,tlen,is_R1,is_tworeads,True)
         return
 
@@ -2006,12 +2011,12 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
 
             def do_r1():
                 if R1_frag: # Process a forward sequencing fragment
-                    pnext,barf1,barf2=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# Just to get pnext
+                    pnext,barf1=RG_process.trimcigarbox(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# Just to get pnext
                     label_and_save("pf",mutrec_index,R1_start,pnext,insert_len,True,is_tworeads)
                     
             def do_r2():
                 if R2_frag: # Process a reverse sequencing fragment
-                    pnext,barf1,barf2=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# Just to get pnext
+                    pnext,barf1=RG_process.trimcigarbox(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# Just to get pnext
                     label_and_save("pr",mutrec_index,R2_start,pnext,-insert_len,False,is_tworeads) 
 
             # Need to put forward and reverse in random order, not always R1-first!
