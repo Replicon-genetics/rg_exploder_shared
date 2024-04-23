@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="22-Apr-2024"
+#Prg_verDate="23-Apr-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -19,8 +19,12 @@ import RG_exploder_io as RG_io # File input/output
 def set_config_consts():
     global exploder_root
     global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
+    global MAINVER,DATEVER
 
     ######## Revisit these three each time a data set is renewed ########
+    MAINVER="v.27_02"
+    DATEVER="April 2024"
+    
     GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
     #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
@@ -743,9 +747,10 @@ def set_Reference_sequences_configs_GRCh38_1000():
         sys.exit()
 
 def set_Reference_sequences_configs_GRCh37_1000_public2():
-    global DatasetIDText,Reference_sequences
-    #DatasetIDText="Open Access GRCh37_0005_02 ; September 2022"
-    DatasetIDText="EB dataset GRCh37_0008_01; April 2024"
+    global CustomerIDText,DatasetIDText,Reference_sequences,MAINVER,DATEVER
+    DatasetIDText="Demo GRCh37"
+    CustomerIDText="%s %s %s"%(CustomerIDText,MAINVER,DATEVER)
+    #DatasetIDText="EB dataset GRCh37_0008_01; April 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -754,9 +759,10 @@ def set_Reference_sequences_configs_GRCh37_1000_public2():
         sys.exit()
 
 def set_Reference_sequences_configs_GRCh38_1000_public2():
-    global CustomerIDText,DatasetIDText,Reference_sequences
-    #DatasetIDText="Open Access GRCh38_0005_02; September 2022"
-    DatasetIDText="EB dataset GRCh38_0008_01; April 2024"
+    global CustomerIDText,DatasetIDText,Reference_sequences,MAINVER,DATEVER
+    DatasetIDText="Demo GRCh38"
+    CustomerIDText="%s %s %s"%(CustomerIDText,MAINVER,DATEVER)
+    #DatasetIDText="EB dataset GRCh38_0008_01; April 2024"
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
@@ -889,6 +895,7 @@ if __name__ == "__main__":
 
     global is_pygui_browser,GRCH_dataset,infilepathroot,outfilepathroot,pygui_outfilepathroot
     global exploder_root,rootdatadir,rootapplicationdir,roothelpscriptdir
+    global MAINVER,DATEVER
     set_config_consts()
 
     if GRCH_dataset == "GRCh38":
@@ -914,4 +921,5 @@ if __name__ == "__main__":
     pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
     process_file_configs_python()
-    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_pygui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s"%(exploder_root,is_pygui_browser,GRCH_dataset,CustomerIDText))
+    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_pygui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n 'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s"
+          %(exploder_root,is_pygui_browser,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER))
