@@ -310,6 +310,8 @@ def get_config_limits():
     RG_globals.Fragdepth=config_limit_vals[2]
     RG_globals.Qualmin=config_limit_vals[3]
     RG_globals.Qualmax=config_limit_vals[4]
+    RG_globals.gauss_mean=config_limit_vals[5]
+    RG_globals.gauss_SD=config_limit_vals[6]
 
     # Checks if the min & max require inversion
     if RG_globals.Qualmax < RG_globals.Qualmin:
