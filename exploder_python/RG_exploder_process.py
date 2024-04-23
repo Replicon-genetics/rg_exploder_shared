@@ -1159,7 +1159,7 @@ def get_trimmed_cigars(cigarbox,mut_box,start,length):
 # NB: cigarbox is returned changed if popped directly
     def popleads(trimbox):
         clear=False
-        while not clear:# Pop leading Ns from cigarbox
+        while not clear and len(trimbox)>2:# Pop leading Ns from cigarbox
             if "N" in trimbox[2]:
                 trimbox.pop(1)
                 trimbox.pop(1)
@@ -1168,16 +1168,14 @@ def get_trimmed_cigars(cigarbox,mut_box,start,length):
 
     def popends(trimbox):
         clear=False
-        while not clear:# Pop trailing Ns from cigarbox
+        while not clear and len(trimbox)>2:# Pop trailing Ns from cigarbox
             if "N" in trimbox[-2]:
                 trimbox.pop(-2)
                 trimbox.pop(-2)
             else:
                 clear=True
-
     fwd_offset,fwdcigarbox=trimcigarbox(cigarbox,mut_box,start,length)
     revcigarbox=reverse_cigarbox(fwdcigarbox)
-    
     popleads(fwdcigarbox)
     fwd_cigar=get_untrimmed_cigar(fwdcigarbox)
     popleads(revcigarbox)
