@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="05-Apr-2024"
+#Prg_verDate="22-Apr-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -530,7 +530,7 @@ def make_bio_parameters_configs():
             "local_begin":0,
             "local_end":0,
             "joinlist":"",
-            "refseq":"TTCAATGTCATTTTTCTAGCTTAGATTATCTAAAAAAAATGCCACAACAGGGGATACAAA",  #  Test value. Should be ""
+            "refseq":"ATGC",  #  Test value. Should be ""
 
             "abs_Begin":{
                 "label":"Absolute Begin",
@@ -828,17 +828,24 @@ def set_vars_seq_limits_defaults():
     while len(mutfreqs) < len(mutlabels):
         mutfreqs.append(mutfreqs[-1])
 
-    global gauss_mean,gauss_SD, gauss_mean_Max,gauss_mean_Min,gauss_SD_Max,gauss_SD_Min
-    gauss_mean=200
-    gauss_SD=2
-    gauss_mean_Min=100
-    gauss_mean_Max=400
-    gauss_SD_Min=0
-    gauss_SD_Max=20
-
     global Paired_insert_Min,Paired_insert_Max
     Paired_insert_Min=40
     Paired_insert_Max=850
+    
+    global gauss_mean,gauss_SD, gauss_mean_Max,gauss_mean_Min,gauss_SD_Max,gauss_SD_Min
+    gauss_mean=200
+    gauss_SD=2
+    gauss_mean_Min=Paired_insert_Min
+    gauss_mean_Max=Paired_insert_Max
+
+    if gauss_mean > Paired_insert_Max:
+        gauss_mean=Paired_insert_Max
+    elif gauss_mean < Paired_insert_Min:
+        gauss_mean=Paired_insert_Min
+        
+    gauss_SD_Min=0
+    gauss_SD_Max=20
+
     
 #end of set_vars_seq_limits_defaults
 
