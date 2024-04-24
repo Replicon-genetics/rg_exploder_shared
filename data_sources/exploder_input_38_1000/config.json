@@ -1,8 +1,8 @@
 {
     "stringconstants": {
-        "DatasetIDText": "EB dataset GRCh38_0005_03; February 2024",
-        "CustomerIDText": "Public",
-        "CopyrightText": "Copyright \u00a9 Replicon Genetics & Cary O'Donnell 2021-2024. All rights reserved.",
+        "DatasetIDText": "Demo GRCh38",
+        "CustomerIDText": "Public v.27_02 April 2024",
+        "CopyrightText": "Copyright \u00a9 Replicon Genetics 2021-2024. All rights reserved.",
         "seq_polarity_plus": "1",
         "seq_polarity_minus": "-1",
         "seq_polarity_none": "0",
@@ -19,7 +19,8 @@
         "GRCh37_txt": "GRCh37",
         "LRG_txt": "LRG",
         "title_label": "Synthetic Reads Generator",
-        "reference_header": "Reference Gene",
+        "reference_gene": "Reference Gene",
+        "reference_haplotype": "Reference Haplotype",
         "variants_header": "Haplotype Template",
         "variants_label": "Haplotype Variant",
         "frequency_label": "Source Ratio",
@@ -139,7 +140,7 @@
             "local_begin": 0,
             "local_end": 0,
             "joinlist": "",
-            "refseq": "TTCAATGTCATTTTTCTAGCTTAGATTATCTAAAAAAAATGCCACAACAGGGGATACAAA",
+            "refseq": "ATGC",
             "abs_Begin": {
                 "label": "Absolute Begin",
                 "value": 0
@@ -248,11 +249,11 @@
             "value": false
         },
         "is_frg_label": {
-            "label": "- Annotate source positions...",
+            "label": "- Add source coordinates...",
             "value": true
         },
         "is_use_absolute": {
-            "label": "- ... plus absolute position",
+            "label": "- ... plus genome coordinates",
             "value": true
         },
         "is_fastacigar_out": {
@@ -284,11 +285,11 @@
             "max": 93
         },
         "is_write_ref_fasta": {
-            "label": "Save Template Sequence",
+            "label": "Save Reference Haplotype",
             "value": false
         },
         "is_mut_out": {
-            "label": "Save Source Sequences",
+            "label": "Save Haplotype Variants",
             "value": false
         },
         "is_write_ref_ingb": {
@@ -302,8 +303,8 @@
         "gauss_mean": {
             "label": "Mean insert size",
             "value": 200,
-            "min": 100,
-            "max": 400
+            "min": 40,
+            "max": 850
         },
         "gauss_SD": {
             "label": "SD insert size",
