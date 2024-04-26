@@ -1,5 +1,5 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_27_02.py"
+Progver="RG_exploder_main_27_03.py"
 ProgverDate="26-Apr-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
