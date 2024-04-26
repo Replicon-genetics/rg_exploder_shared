@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_27_02.py"
-ProgverDate="23-Apr-2024"
+ProgverDate="26-Apr-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -875,6 +875,7 @@ def write_samheader(ThisSeqr):
         else:
             genass="hg38"
         Rname="chr%s"%chromnum # Sets global for reuse by write_frag_samout
+        #Rname="chr%s:%s-%s"%(chromnum,start,stop) # Sets global for reuse by write_frag_samout
         head1="@HD\tVN:1.6\tSO:coordinate\n"
         head2="@SQ\tSN:%s\tLN:%i\tAS:%s\tUR:%s.fasta\n"%(Rname,REFSEQ_RECORD.spliced_length,genass,in_ref_src)
         head3="@CO\tACCESSION:\t%s\n"%(ThisSeqr.firstid)
@@ -888,7 +889,8 @@ def write_samheader(ThisSeqr):
 
 def write_frag_samout(qname,flag,pos,cigar,rnext,pnext,tlen,forseq):
     # Writes a fragment sequence entry to sam format.
-    # pos and pnext parameters sent here to be 0-based !!
+    # pos and pnext parameters sent here are 0-based, but SAM is 1-based
+    # Does Rname need to be in format chr:start-end eg: chr2:172936693-172938111 ??
     global samout,is_append_samfile,REFSEQ_RECORD,Ref_file_name
     global Mapq_Min,Mapq_Max,Rname
     #print("ThisSeqr.id %s"%ThisSeqr.id)
@@ -897,7 +899,7 @@ def write_frag_samout(qname,flag,pos,cigar,rnext,pnext,tlen,forseq):
     if qname =="": qname="barf"
     mapq=randint(Mapq_Min,Mapq_Max)
     qual="*"
-    head1="%s\t%i\t%s\t%i\t%i\t%s\t%s\t%i\t%i\t%s\t%s\n"%(qname,flag,Rname,pos,mapq,cigar,rnext,pnext,tlen,str(forseq),qual)
+    head1="%s\t%i\t%s\t%i\t%i\t%s\t%s\t%i\t%i\t%s\t%s\n"%(qname,flag,Rname,pos+1,mapq,cigar,rnext,pnext+1,tlen,str(forseq),qual)
     samout.write(head1)
     return
 # end of def write_frag_samout
@@ -1845,9 +1847,8 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
     # SAM emulates the completed mapping, so only the forward information is retained
         # Do NOT use absolutes in SAM output
         # Make sure to use in_fragseq, not loc_fragseq (*** FragSeqRec.seq holds loc_fragseq***)
-        # Use ref_offset, not ref_offset+1 for 0-based
-        if pnext>0:
-            pnext-=1 #take pnext down by 1 for 0-based
+        # Use ref_offset+1, for SAM 1-based
+        # At this point PNEXT and ref_offset are 0-based
         if "p" in in_dupstr and is_tworeads:
             write_frag_samout(FragSeqRec.id,flag,ref_offset,fwd_cigar_label,"=",pnext,tlen,in_fragseq)
         else:
