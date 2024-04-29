@@ -1,42 +1,42 @@
-LOCUS       11 0 bp DNA HTG 18-APR-2021
-DEFINITION  Homo sapiens chromosome 11 GRCh38 partial sequence 108222332..108369602
+LOCUS       11 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 11 GRCh38 partial sequence 108222044..108370102
             reannotated via EnsEMBL
-ACCESSION   chromosome:GRCh38:11:108222332:108369602:1
-VERSION     chromosome:GRCh38:11:108222332:108369602:1
+ACCESSION   chromosome:GRCh38:11:108222044:108370102:1
+VERSION     chromosome:GRCh38:11:108222044:108370102:1
 COMMENT     /consequence annotation by Replicon Genetics from public domain sources
 FEATURES             Location/Qualifiers
-     source          1..147271
+     source          1..148059
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
-     gene            501..146771
-                     /gene=ENSG00000149311.19
+     gene            1001..147059
+                     /gene=ENSG00000149311.20
                      /locus_tag="ATM"
                      /note="ATM serine/threonine kinase [Source:HGNC
                      Symbol;Acc:HGNC:795]"
 
-     variation       66680..66680
+     variation       66968..66968
                      /replace="C/T"
                      /db_xref="dbSNP:rs55859590"
                      /consequence="dbSNP:coding_sequence_variant,missense_variant,genic_downstream_transcript_variant"
                      /consequence="dbSNP:non_coding_transcript_variant"
 
-     variation       80584..80584
+     variation       80872..80872
                      /replace="G/C"
                      /db_xref="dbSNP:rs188362115"
                      /consequence="dbSNP:genic_downstream_transcript_variant,3_prime_UTR_variant"
                      /consequence="dbSNP:non_coding_transcript_variant,coding_sequence_variant,synonymous_variant"
 
-     variation       87835..87835
+     variation       88123..88123
                      /replace="T/C"
                      /db_xref="dbSNP:rs1060504280"
                      /consequence="dbSNP:genic_downstream_transcript_variant,intron_variant,synonymous_variant"
                      /consequence="dbSNP:non_coding_transcript_variant,coding_sequence_variant"
 
-     variation       123466..123466
+     variation       123754..123754
                      /replace="C/T"
                      /db_xref="dbSNP:rs587781363"
                      /consequence="dbSNP:coding_sequence_variant,genic_downstream_transcript_variant,stop_gained,intron_variant"
-     variation       123466..123466
+     variation       123754..123754
                      /replace="HGMD_MUTATION"
                      /db_xref="HGMD-PUBLIC:CM063854"
 ORIGIN

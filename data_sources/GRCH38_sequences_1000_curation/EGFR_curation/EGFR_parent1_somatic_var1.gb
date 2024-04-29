@@ -1,34 +1,34 @@
-LOCUS       7 0 bp DNA HTG 21-APR-2021
-DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 55018517..55212128 reannotated
+LOCUS       7 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 55018017..55212628 reannotated
             via EnsEMBL
-ACCESSION   chromosome:GRCh38:7:55018517:55212128:1
-VERSION     chromosome:GRCh38:7:55018517:55212128:1
+ACCESSION   chromosome:GRCh38:7:55018017:55212628:1
+VERSION     chromosome:GRCh38:7:55018017:55212628:1
 COMMENT     /consequence and /comment annotation by Replicon Genetics from public domain sources
 FEATURES             Location/Qualifiers
-     source          1..193612
+     source          1..194612
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
-     gene            501..193112
-                     /gene=ENSG00000146648.19
+     gene            1001..193612
+                     /gene=ENSG00000146648.20
                      /locus_tag="EGFR"
                      /note="epidermal growth factor receptor [Source:HGNC
                      Symbol;Acc:HGNC:3236]"
 
-     variation       155518..155518
+     variation       156018..156018
                      /replace="G/A"
                      /db_xref="dbSNP:rs55959834"
                      /consequence="dbSNP:synonymous_variant,genic_downstream_transcript_variant"
                      /consequence="dbSNP:coding_sequence_variant"
                      /comment=”ensembl:minor allele exon18, synonymous variant at v low freq 0.001”
 
-     variation       156256..156270
+     variation       156756..156770
                      /replace="GGAATTAAGAGAAGC/-"
                      /db_xref="dbSNP:rs121913421"
                      /consequence="dbSNP:genic_downstream_transcript_variant,inframe_deletion"
                      /consequence="dbSNP:coding_sequence_variant"
                      /db_xref="COSMIC_M:COSM6223"
 
-     variation       160011..160011
+     variation       160511..160511
                      /replace="G/A"
                      /db_xref="dbSNP:rs62457092"
                      /consequence="dbSNP:genic_downstream_transcript_variant,intron_variant"

@@ -2,7 +2,8 @@ LOCUS       16 0 bp DNA HTG 27-FEB-2022
 DEFINITION  Homo sapiens chromosome 16 GRCh38 partial sequence 10865222..10944021 reannotated
             via EnsEMBL
 ACCESSION   chromosome:GRCh38:16:10865222:10944021:1
-COMMENT     additional annotation by Replicon Genetics Mar-2022 & Feb-2024
+VERSION     chromosome:GRCh38:16:10865222:10944021:1
+COMMENT     additional annotation by Replicon Genetics Mar-2024
 FEATURES             Location/Qualifiers
      source          1..78800
                      /organism="Homo sapiens"

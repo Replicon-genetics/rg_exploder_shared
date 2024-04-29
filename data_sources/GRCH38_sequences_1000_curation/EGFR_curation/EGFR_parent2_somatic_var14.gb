@@ -1,37 +1,37 @@
-LOCUS       7 0 bp DNA HTG 21-APR-2021
-DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 55018517..55212128 reannotated
+LOCUS       7 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 55018017..55212628 reannotated
             via EnsEMBL
-ACCESSION   chromosome:GRCh38:7:55018517:55212128:1
-VERSION     chromosome:GRCh38:7:55018517:55212128:1
-COMMENT     /comment annotation by Replicon Genetics from public domain sources
+ACCESSION   chromosome:GRCh38:7:55018017:55212628:1
+VERSION     chromosome:GRCh38:7:55018017:55212628:1
+COMMENT     /consequence and /comment annotation by Replicon Genetics from public domain sources
 COMMENT     /db_xref="exon19:tab14" annotation by Replicon Genetics
 FEATURES             Location/Qualifiers
-     source          1..193612
+     source          1..194612
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
-     gene            501..193112
-                     /gene=ENSG00000146648.19
+     gene            1001..193612
+                     /gene=ENSG00000146648.20
                      /locus_tag="EGFR"
                      /note="epidermal growth factor receptor [Source:HGNC
                      Symbol;Acc:HGNC:3236]"
 
-     variation       156258..156274
+     variation       156758..156774
                      /replace="AATTAAGAGAAGCAACA/TTGCT"
                      /db_xref="dbexon19:tab14" 
 
-     variation       159298..159298
+     variation       159798..159798
                      /replace="A/G"
                      /db_xref="dbSNP:rs845552"
                      /consequence="dbSNP:intron_variant,genic_downstream_transcript_variant"
                      /comment=”ensembl:intron_variant 19_20 minor allele at 0.45”
 
-     variation       162854..162854
-                     /replace="G/A/"
+     variation       163354..163354
+                     /replace="G/A"
                      /db_xref="dbSNP:rs1050171"
                      /consequence="dbSNP:genic_downstream_transcript_variant,synonymous_variant"
                      /consequence="dbSNP:missense_variant,non_coding_transcript_variant"
                      /consequence="dbSNP:coding_sequence_variant"
                      /comment=”ensembl:minor allele exon 20, synonymous variant at 0.43”
+
 ORIGIN
 //
-

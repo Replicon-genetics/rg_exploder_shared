@@ -1,35 +1,35 @@
-LOCUS       12 0 bp DNA HTG 20-APR-2021
-DEFINITION  Homo sapiens chromosome 12 GRCh38 partial sequence 25204746..25251436 reannotated
+LOCUS       12 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 12 GRCh38 partial sequence 25204246..25251936 reannotated
             via EnsEMBL
-ACCESSION   chromosome:GRCh38:12:25204746:25251436:-1
-VERSION     chromosome:GRCh38:12:25204746:25251436:-1
+ACCESSION   chromosome:GRCh38:12:25204246:25251936:-1
+VERSION     chromosome:GRCh38:12:25204246:25251936:-1
 FEATURES             Location/Qualifiers
-     source          1..46691
+     source          1..47691
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
-     gene            501..46191
-                     /gene=ENSG00000133703.13
+     gene            1001..46691
+                     /gene=ENSG00000133703.14
                      /locus_tag="KRAS"
                      /note="KRAS proto-oncogene, GTPase [Source:HGNC
                      Symbol;Acc:HGNC:6407]"
 
-     variation       680..680
+     variation       1180..1180
                      /replace="C/T"
                      /db_xref="dbSNP:rs1272894387"
 
-     variation       660..660
+     variation       1160..1160
                      /replace="A/AA"
                      /db_xref="dbSNP:rs1303313730"
 
-     variation       520..520
+     variation       1020..1020
                      /replace="G/A"
                      /db_xref="dbSNP:rs190218019"
 
-     variation       507..507
+     variation       1007..1007
                      /replace="G/A"
                      /db_xref="dbSNP:rs1310197451"
 
-     variation       506..506
+     variation       1006..1006
                      /replace="A/C"
                      /db_xref="dbSNP:rs566873674"
 

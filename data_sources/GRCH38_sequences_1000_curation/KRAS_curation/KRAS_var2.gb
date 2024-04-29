@@ -1,16 +1,16 @@
-LOCUS       12 0 bp DNA HTG 20-APR-2021
-DEFINITION  Homo sapiens chromosome 12 GRCh38 partial sequence 25204746..25251436 reannotated
+LOCUS       12 0 bp DNA HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 12 GRCh38 partial sequence 25204246..25251936 reannotated
             via EnsEMBL
-ACCESSION   chromosome:GRCh38:12:25204746:25251436:1
-VERSION     chromosome:GRCh38:12:25204746:25251436:1
+ACCESSION   chromosome:GRCh38:12:25204246:25251936:1
+VERSION     chromosome:GRCh38:12:25204246:25251936:1
 COMMENT     /consequence annotation by Replicon Genetics from public domain sources
 COMMENT     db_xref="RG: ... annotation by Replicon Genetics
 FEATURES             Location/Qualifiers
-     source          1..46691
+     source          1..47691
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
-     gene            complement(501..46191)
-                     /gene=ENSG00000133703.13
+     gene            complement(1001..46691)
+                     /gene=ENSG00000133703.14
                      /locus_tag="KRAS"
                      /note="KRAS proto-oncogene, GTPase [Source:HGNC
                      Symbol;Acc:HGNC:6407]"
@@ -19,32 +19,32 @@ FEATURES             Location/Qualifiers
                      /replace="-/N"
                      /db_xref="RG:testerB"
 
-     variation       148..148
+     variation       648..648
                      /replace="T/-"
                      /db_xref="dbSNP:rs1407373668"
                      /consequence="dbSNP:3_prime_UTR_variant,downstream_transcript_variant"
 
-     variation       198..201
+     variation       698..701
                      /replace="CTAA/-"
                      /db_xref="dbSNP:rs1332572816"
                      /consequence="dbSNP:3_prime_UTR_variant,downstream_transcript_variant"
 
-     variation       204..203
+     variation       704..703
                      /replace="-/GGT"
                      /db_xref="dbSNP:rs1338403308"
                      /consequence="dbSNP:3_prime_UTR_variant,downstream_transcript_variant"
 
-     variation       2770..2769
+     variation       3270..3269
                      /replace="-/A"
                      /db_xref="dbSNP:rs1491195115"
                      /consequence="dbSNP:3_prime_UTR_variant"
 
-     variation       2772..2772
+     variation       3272..3272
                      /replace="A/C"
                      /db_xref="dbSNP:rs1340259682"
                      /consequence="dbSNP:3_prime_UTR_variant"
 
-     variation       46686..46685
+     variation       47686..47685
                      /replace="-/N"
                      /db_xref="RG:testerA"
 ORIGIN
