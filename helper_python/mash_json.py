@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 Progver="mash_json.py"
 ProgverDate="02-Mar-2022"
-# This merges the content of all the individual {locus}_transcripts.json files in the 'curation' directory
+# This merges the content of all the individual {locus}_transcrupts.json files in the 'curation' directory
 # into a single file loci.json. It is a source for RG_exploder_globals_make.py to create config.json
 # which in turn is a source of variable values required to run RG_exploder_main.py
 # with a bit more development work, the need for loci.json can be eliminated,

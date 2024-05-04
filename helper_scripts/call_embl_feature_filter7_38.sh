@@ -1,6 +1,7 @@
 # Shell script to list the Ensemble downloaded GB zipped files and run the filter program 
-datadir="GRCH38_sequences_1000"
-thispath="/Users/caryodonnell/Desktop/Replicon/"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootdatadir=$rootapplicationdir"data_sources/"
+
 jsonfile="_transcripts.json"
 ensembl="_ensembl"
 curation="_curation"
@@ -11,37 +12,45 @@ jopt="-j"
 # -gopt to correctly label release
 gopt="38"
 
-cd $thispath$datadir
+cd $rootdatadir$thisdata
 pw=$PWD
 /bin/ls $1 | while read dir
 do
+modlocus=`echo $dir | sed -e "s/$dirtxt//" `
 locus=`echo $dir  | cut -f1 -d"_"`
+echo $modlocus  $locus
 cd $pw/$1/$dir
 mv ensembl.txt.gz $locus$ensembl.gz
 gunzip $locus$ensembl.gz
-#python3 /Users/caryodonnell/mytools/embl_feature_filter7.py -i $locus$ensembl -a
-
 python3 /Users/caryodonnell/mytools/embl_feature_filter7.py -i $locus$ensembl -a $jopt -g $gopt
-cp -p $locus$jsonfile ../../$datadir$curation/$locus$curation/.
+cp -p $locus$jsonfile ../../$thisdata$curation/$modlocus$curation/.
 done
+cd  $pw
 
-prelocus="PTEN"
-locus="PTEN_a"
-cd $locus$dirtxt
-python3 /Users/caryodonnell/mytools/embl_feature_filter7.py -i $prelocus$ensembl -a $jopt -g $gopt
-sed -i -- 's/PTEN/PTEN_a/g' $prelocus$jsonfile
-cp -p $prelocus$jsonfile ../../$datadir$curation/$locus$curation/$locus$jsonfile
-/bin/rm $prelocus$jsonfile--
-cd ..
+locus="PTEN"
+modlocus="PTEN_a"
+cd $modlocus$dirtxt
+sed -i -- "s/$locus/$modlocus/g" $locus$jsonfile
+cp -p $locus$jsonfile ../../$thisdata$curation/$modlocus$curation/$modlocus$jsonfile
+/bin/rm ../../$thisdata$curation/$modlocus$curation/$locus$jsonfile
+/bin/rm $locus$jsonfile--
+cd  $pw
 
-prelocus="KRAS"
-locus="KRAS_minus"
-cd $locus$dirtxt
-python3 /Users/caryodonnell/mytools/embl_feature_filter7.py -i $prelocus$ensembl -a $jopt -g $gopt
-sed -i -- 's/KRAS/KRAS_minus/g' $prelocus$jsonfile
-cp -p $prelocus$jsonfile ../../$datadir$curation/$locus$curation/$locus$jsonfile
-/bin/rm $prelocus$jsonfile--
-cd ..
+locus="KRAS"
+modlocus="KRAS_minus"
+cd $modlocus$dirtxt
+sed -i -- "s/$locus/$modlocus/g" $locus$jsonfile
+cp -p $locus$jsonfile ../../$thisdata$curation/$modlocus$curation/$modlocus$jsonfile
+/bin/rm ../../$thisdata$curation/$modlocus$curation/$locus$jsonfile
+/bin/rm $locus$jsonfile--
+cd  $pw
 
+locus="BRCA2"
+modlocus="BRCA2_minus"
+cd $modlocus$dirtxt
+sed -i -- "s/$locus/$modlocus/g" $locus$jsonfile
+cp -p $locus$jsonfile ../../$thisdata$curation/$modlocus$curation/$modlocus$jsonfile
+/bin/rm ../../$thisdata$curation/$modlocus$curation/$locus$jsonfile
+/bin/rm $locus$jsonfile--
 cd  $pw
 # Next step is: sh call_mash_json_38.sh

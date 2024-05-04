@@ -1,39 +1,41 @@
 # Shell script to create input directory heirarchies from curation ones
+
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootdatadir=$rootapplicationdir"data_sources/"
+
 baseindir="GRCH37_sequences_1000"
-base_input_seq="/Users/caryodonnell/exploder_input_37_1000"
+base_input_seq=$rootdatadir"exploder_input_37_1000"
+
 cd $base_input_seq
 pw=$PWD
-thispath="/Users/caryodonnell/Desktop/Replicon/"
 curation="_curation"
-curationdir=$baseindir$curation
+targetdir=$baseindir$curation
 dirtxt="_dir"
-hap0="_000000.gb"
+hap0="_00000.gb"
 noseq="_noseq.gb"
 locseq="_locseq.gb"
 ensembl="_ensembl"
 
-/bin/ls ../$curationdir | while read dir
+jsonfile="_transcripts.json"
+/bin/ls ../$targetdir | while read dir
 do
 locus=`echo $dir  | cut -f1 -d"_"`
 mkdir $locus
 cd $locus
-ln -s ../../$curationdir/$locus$curation $locus$dirtxt
-ln -s $locus$dirtxt/$locus*.gb .
-mv $locus$noseq $locus$hap0
-rm *modified*.*
+ln -s ../../$targetdir/$locus$curation $locus$dirtxt
+ln -s $locus$dirtxt/$locus$noseq $locus$hap0
+ln -s $locus$dirtxt/$locus$locseq .
 cd ..
 done
 
-/bin/rm -r loci.json/*
-/bin/rmdir loci.json
+rm -r loci.json
 
 locus="KRAS_minus"
 mkdir $locus
 cd $locus
-ln -s ../../$curationdir/$locus$curation $locus$dirtxt
-ln -s $locus$dirtxt/$locus*.gb .
-mv $locus$noseq $locus$hap0
-rm *modified*.*
+ln -s ../../$targetdir/$locus$curation $locus$dirtxt
+ln -s $locus$dirtxt/$locus$noseq $locus$hap0
+ln -s $locus$dirtxt/$locus$locseq .
 cd ..
 cd $pw
 
@@ -43,4 +45,4 @@ echo "$dir :"
 grep VERSION $dir/*$hap0
 done
 
-/bin/ln -s ../$curationdir/loci.json .
+

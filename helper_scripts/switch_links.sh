@@ -1,7 +1,6 @@
 # Shell script to switch links of input & output directories between 37 & 38 - takes 1 parameter, defaults to 38
-rootdatadir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/"
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/exploder_python"
-
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootdatadir=$rootapplicationdir"data_sources/"
 inputdirhead="exploder_input_"
 inputdirtail="_1000"
 input37="37"
@@ -23,6 +22,3 @@ fi
 
 ln -s $rootdatadir$outputdirhead$outputdir$outputdirtail output
 ln -s $rootdatadir$inputdirhead$inputdir$inputdirtail input
-
-echo 'input directory is now softlinked to '$rootdatadir$outputdirhead$outputdir$inputdirtail
-echo 'output directory is now softlinked to '$rootdatadir$outputdirhead$outputdir$outputdirtail

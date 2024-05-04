@@ -1,6 +1,11 @@
 # Shell script to create output directory heirarchies from input ones
-outputdir="/Users/caryodonnell/Replicon/exploder_output_37_1000"
-inputdir="/Users/caryodonnell/input_sequences_ex03"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootdatadir=$rootapplicationdir"data_sources/"
+enddatadir="_37_1000"
+
+inputdir=$rootdatadir"exploder_input"$enddatadir
+outputdir=$rootdatadir"exploder_output"$enddatadir
+
 cd $outputdir
 
 /bin/ls $inputdir | grep -v json | while read locus

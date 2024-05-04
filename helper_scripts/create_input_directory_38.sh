@@ -1,11 +1,13 @@
 # Shell script to create input directory heirarchies from curation ones
-#baseindir="GRCH37_sequences_1000"
-#base_input_seq="/Users/caryodonnell/input_sequences_ex03"
+
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootdatadir=$rootapplicationdir"data_sources/"
+
 baseindir="GRCH38_sequences_1000"
-base_input_seq="/Users/caryodonnell/exploder_input_38_1000"
+base_input_seq=$rootdatadir"exploder_input_38_1000"
+
 cd $base_input_seq
 pw=$PWD
-thispath="/Users/caryodonnell/Desktop/Replicon/"
 curation="_curation"
 targetdir=$baseindir$curation
 dirtxt="_dir"

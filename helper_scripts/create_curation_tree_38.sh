@@ -1,12 +1,15 @@
 # Shell script to create curation heirarchies
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootdatadir=$rootapplicationdir"data_sources/"
+
 targetdir="GRCH38_sequences_1000"
-thispath="/Users/caryodonnell/Desktop/Replicon/"
+
 curation="_curation"
 dirtxt="_dir"
 noseq="_noseq.gb"
 locseq="_locseq.gb"
 ensembl="_ensembl"
-cd $thispath$targetdir$curation
+cd $rootdatadir$targetdir$curation
 pw=$PWD
 
 jsonfile="_transcripts.json"
