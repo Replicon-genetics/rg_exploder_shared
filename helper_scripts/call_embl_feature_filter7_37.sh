@@ -1,5 +1,6 @@
 # Shell script to list the Ensemble downloaded GB zipped files and run the filter program 
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 rootdatadir=$rootapplicationdir"data_sources/"
 
 jsonfile="_transcripts.json"

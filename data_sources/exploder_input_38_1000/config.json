@@ -50,7 +50,7 @@
     "IOconstants": {
         "infilepathroot": "input/",
         "outfilepathroot": "output/",
-        "pygui_outfilepathroot": "/Users/caryodonnell/Replicon/exploder_output_38_1000/",
+        "pygui_outfilepathroot": "/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/exploder_output_38_1000/",
         "journhead": "_001",
         "journend": "_journal",
         "readmehead": "_000",

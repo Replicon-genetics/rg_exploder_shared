@@ -1,5 +1,6 @@
 # Shell script to create curation heirarchies
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 rootdatadir=$rootapplicationdir"data_sources/"
 
 targetdir="GRCH38_sequences_1000"

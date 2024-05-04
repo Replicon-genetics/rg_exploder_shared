@@ -1,6 +1,6 @@
 # Shell script to run mash_json.py from curation directory
-
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 rootdatadir=$rootapplicationdir"data_sources/"
 datadir="GRCH37_sequences_1000"
 curation="_curation"

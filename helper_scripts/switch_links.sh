@@ -1,5 +1,6 @@
 # Shell script to switch links of input & output directories between 37 & 38 - takes 1 parameter, defaults to 38
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 rootdatadir=$rootapplicationdir"data_sources/"
 inputdirhead="exploder_input_"
 inputdirtail="_1000"

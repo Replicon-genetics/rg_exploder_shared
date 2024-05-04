@@ -1,5 +1,6 @@
 # Shell script to switch which Biopython_fix version is used; takes 1 parameter, defaults to current
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
+rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 inputmetro="metro"
 inputretro="retro"
 fixhead="Biopython_fix"
