@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="26-Apr-2024"
+#Prg_verDate="04-May-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -18,48 +18,34 @@ import RG_exploder_io as RG_io # File input/output
 
 def set_config_consts():
     global exploder_root
-    global is_pygui_browser,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
+    global is_use_TKinter,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
     global MAINVER,DATEVER
 
     ######## Revisit these three each time a data set is renewed ########
     MAINVER="v.27_03"
     DATEVER="April 2024"
     
-    #GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
-    GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
+    GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
+    #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
 
     #CustomerIDText="EBaker"
     CustomerIDText="Public"
 
-    is_pygui_browser=True  # When setting up to use the Python GUI : RG_exploder_gui.py
-    #is_pygui_browser=False   # When setting up to use the Vue.js GUI
-
-    is_rg_exploder_shared=True # When setting up to use the Shared Python GitHub source
-    #is_rg_exploder_shared=False # When setting up to use the snowlizardz_rg_exploder GitHub source. Fix this to make it equivalent to prior!!
+    is_use_TKinter=True  # When setting up to use the Python GUI : RG_exploder_gui.py
+    #is_use_TKinter=False   # When setting up to use the Vue.js GUI
     
     ######## End of: Revisit these each time a data set is renewed ########
-
-    #### One-off customisation of set_exploder_root per installation. ####
-    
-    if not is_pygui_browser or is_rg_exploder_shared:
-        set_exploder_root="../" # Do it relative, as for App.vue setup
-    else:
-        set_exploder_root="/Users/caryodonnell/snowlizardz_rg_exploder/" # snowlizardz_rg_exploder version
-
-    exploder_root="%s/"%os.path.abspath(set_exploder_root) # Ensure this is defined as full path, required to support the hyperlinks to results in the Python GUI
-
+ 
     #### Should not need changing unless modify throughout other code ####
 
     global config_file_output,config_file_reference_seqs
     global rootdatadir,rootapplicationdir,roothelpscriptdir
 
-    if is_rg_exploder_shared:
-        rootdatadir="%sdata_sources"%exploder_root
-        rootapplicationdir="%sexploder_python"%exploder_root # rg_exploder_shared version
-    else:
-        rootdatadir="/Users/caryodonnell/Replicon" # snowlizardz_rg_exploder version and as for App.vue setup
-        rootapplicationdir="%s"%exploder_root # snowlizardz_rg_exploder version and as for App.vue setup
-        
+    set_exploder_root="../" # Do it relative
+    exploder_root="%s/"%os.path.abspath(set_exploder_root) # Ensure this is defined as full path, required to support the hyperlinks to results in the Python GUI
+
+    rootdatadir="%sdata_sources"%exploder_root
+    rootapplicationdir="%sexploder_python"%exploder_root # Not used for App.vue setup            
     roothelpscriptdir="%shelper_scripts"%exploder_root
 
     config_file_output="input/config.json"
@@ -893,7 +879,7 @@ def set_dynamic_vars_defaults():
 # =================================================================
 if __name__ == "__main__":
 
-    global is_pygui_browser,GRCH_dataset,infilepathroot,outfilepathroot,pygui_outfilepathroot
+    global is_use_TKinter,GRCH_dataset,infilepathroot,outfilepathroot,pygui_outfilepathroot
     global exploder_root,rootdatadir,rootapplicationdir,roothelpscriptdir
     global MAINVER,DATEVER
     set_config_consts()
@@ -908,7 +894,7 @@ if __name__ == "__main__":
         print(" GRCH_dataset is unset or incorrect - retry!")
         exit()
 
-    if is_pygui_browser:
+    if is_use_TKinter:
         subprocess.run(["/bin/rm","input"])
         subprocess.run(["/bin/rm","output"])
         subprocess.run(["cd","%s"%rootapplicationdir])
@@ -921,5 +907,5 @@ if __name__ == "__main__":
     pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
     process_file_configs_python()
-    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_pygui_browser':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n 'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s"
-          %(exploder_root,is_pygui_browser,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER))
+    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_use_TKinter':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n 'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s"
+          %(exploder_root,is_use_TKinter,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER))
