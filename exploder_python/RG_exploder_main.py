@@ -500,7 +500,7 @@ def read_refseqrecord(embl_or_genbank):
             SEQ_record.rev_endlocus=0
             SEQ_record.Generated_Fragcount=0
             SEQ_record.Saved_Fragcount=0
-            SEQ_record.Unpaired_Fragcount=0
+            SEQ_record.Saved_Unpaired_Fragcount=0
             
             exists,SEQ_record=RG_process.set_seqrec_absolutes(SEQ_record) # must do this even if RG_globals.is_use_absolute== False
             if RG_globals.is_write_ref_ingb:
@@ -899,7 +899,7 @@ def write_frag_samout(qname,flag,pos,cigar,rnext,pnext,tlen,forseq):
     if qname =="": qname="barf"
     mapq=randint(Mapq_Min,Mapq_Max)
     qual="*"
-    head1="%s\t%i\t%s\t%i\t%i\t%s\t%s\t%i\t%i\t%s\t%s\n"%(qname,flag,Rname,pos+1,mapq,cigar,rnext,pnext+1,tlen,str(forseq),qual)
+    head1="%s\t%i\t%s\t%i\t%i\t%s\t%s\t%i\t%i\t%s\t%s\n"%(qname,flag,Rname,pos,mapq,cigar,rnext,pnext,tlen,str(forseq),qual)
     samout.write(head1)
     return
 # end of def write_frag_samout
@@ -1051,30 +1051,31 @@ def journal_final_summary():
     if not(RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out):
         journals_update(" ... Rolling tumbleweed ...")
     else:
+        readstxt="%s"%RG_globals.read_annotation
         if RG_globals.is_frg_paired_end:
-            plextxt="paired "
-            endplex="; unpaired %ss = %s"%(RG_globals.read_annotation,REFSEQ_RECORD.Unpaired_Fragcount)
+            plextxt="%s pairs "%readstxt
+            endplex="; unpaired %ss = %s"%(readstxt,REFSEQ_RECORD.Saved_Unpaired_Fragcount)
         else:
-            plextxt=""
+            plextxt="%ss"%readstxt
             endplex=""
-        journals_update(" %s=%i\n Total number of %s%ss=%s%s"%(bio_parameters["Fraglen"]["label"],
-                                                            RG_globals.Fraglen,plextxt,RG_globals.read_annotation,REFSEQ_RECORD.Saved_Fragcount,endplex))
+        journals_update(" %s=%i\n Total number of %s=%s%s"%(bio_parameters["Fraglen"]["label"],
+                                                            RG_globals.Fraglen,plextxt,REFSEQ_RECORD.Saved_Fragcount,endplex))
         spliceouts=REFSEQ_RECORD.splicecount
         if spliceouts > 0:
             addtxt=", shown in %s CIGAR as 'N'"%RG_globals.read_annotation
         else:
             addtxt=""
         journals_update(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
+
         if RG_globals.is_frg_paired_end:
-            plextxt="paired ends"
-            endtxt="" 
+            plextxt=bio_parameters["is_frg_paired_end"]["label"]
+            endtxt=""
+        elif RG_globals.is_duplex:
+            plextxt=bio_parameters["is_duplex"]["label"]
+            endtxt="forward and reverse-complement" 
         else:
-            if RG_globals.is_duplex:
-                plextxt="dual strand:"
-                endtxt="forward and reverse-complement"       
-            else:
-                plextxt="single strand:"
-                endtxt="forward only"
+            plextxt=bio_parameters["is_simplex"]["label"]
+            endtxt="forward only"                
         journals_update(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
 # end of def journal_final_summary
 
@@ -1679,7 +1680,7 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
                     label_and_saveg("r",trimseq,mutlabel_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,item,0,0,True,False,False)
                     mutfragcount[mutrec_index]+=1                        
         mutrec_index+=1
-    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,0)
+    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,0,0)
     return
 # end of def generate_multisource_all_frags(RefRec,mutrecs,fraglen)
 
@@ -1763,7 +1764,7 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
             flag+=128 # Read 2 last segment in the template (for SAM output)
 
     if not is_tworeads:
-        pnext=0
+        pnext=0 # 
         flag+=8 # next read unmapped, so bitwise for this non=paired read reflects this
 
     if in_dupstr == "pf":
@@ -1848,13 +1849,13 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
         # Do NOT use absolutes in SAM output
         # Make sure to use in_fragseq, not loc_fragseq (*** FragSeqRec.seq holds loc_fragseq***)
         # Use ref_offset+1, for SAM 1-based
-        # At this point PNEXT and ref_offset are 0-based
+        # At this point ref_offset is 0-based but PNEXT is 1-based
         if "p" in in_dupstr and is_tworeads:
-            write_frag_samout(FragSeqRec.id,flag,ref_offset,fwd_cigar_label,"=",pnext,tlen,in_fragseq)
+            write_frag_samout(FragSeqRec.id,flag,ref_offset+1,fwd_cigar_label,"=",pnext,tlen,in_fragseq)
         else:
-            write_frag_samout(FragSeqRec.id,flag,ref_offset,fwd_cigar_label,"*",pnext,0,in_fragseq)
+            write_frag_samout(FragSeqRec.id,flag,ref_offset+1,fwd_cigar_label,"*",pnext,0,in_fragseq)
  
-    ###### end of  function label_and_save_g() ########################
+    ###### end of  function label_and_saveg() ########################
 
 
 def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
@@ -1905,7 +1906,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
                 mutfragcount[mutrec_index]+=1
                 Saved_Fragcount+=1
                 label_and_saveg("fr",trimseq,Saved_Fragcount,start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],0,0,True,False,False)
-    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,0)
+    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,0,0)
     return
 # end of def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth)
 
@@ -1919,14 +1920,19 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     last_Saved_Fragcount=0
     noread_count=0
     unpaired_count=0
+    saved_unpaired=0
     mutseqend=[] # The sequence end of each mutseq
     headpop=RG_globals.bio_parameters["target_build_variant"]["headclip"]
+    is_one_mut=False
 
-    def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads):
-        nonlocal Generated_Fragcount,Saved_Fragcount,Paired_Fragcount
+    def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads,is_one_mut):
+        nonlocal Generated_Fragcount,Saved_Fragcount,Paired_Fragcount,saved_unpaired
         Generated_Fragcount+=1
         ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,seq_start,fraglen)
-        if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
+        if not RG_globals.is_muts_only or is_one_mut:
+            if not is_tworeads:
+                saved_unpaired+=1
+        #if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
             mutfragcount[mutrec_index]+=1
             if last_Saved_Fragcount==Saved_Fragcount: # Not incremented from previous pair or singleton
                 Saved_Fragcount+=1 
@@ -1935,6 +1941,14 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             inseq=mutrecs[mutrec_index].seq[seq_start:seq_start+fraglen]
             label_and_saveg(pquote,inseq,Saved_Fragcount,seq_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],pnext,tlen,is_R1,is_tworeads,True)
         return
+
+    def do_r1_save():# Save the forward sequencing fragment
+        if R1_frag:
+            label_and_save("pf",mutrec_index,R1_start,R1pnext,insert_len,True,is_tworeads,is_one_mut)
+ 
+    def do_r2_save():# Save the reverse sequencing fragment
+        if R2_frag:
+            label_and_save("pr",mutrec_index,R2_start,R2pnext,-insert_len,False,is_tworeads,is_one_mut)
 
     # Calculate an expected fragtotal using un-modified spliced-reference
     fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen))
@@ -2007,31 +2021,41 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                 #if not R1_frag and not R2_frag:
                     #noread_count+=1 # Not needed beyond future curiosity, should be zero if the above range-cutoffs are working
                     #print("No reads at next %s"%(Saved_Fragcount+1))
-
             #print("R1_start=%s;R1_end=%s;R2_start=%s;R2_end=%s;inner=%s;headpop=%s;endpop=%s"%(R1_start,R1_end,R2_start,R2_end,(R2_start-R1_end-1),headpop,endpop))
 
-            def do_r1():
-                if R1_frag: # Process a forward sequencing fragment
-                    pnext,barf1=RG_process.trimcigarbox(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# Just to get pnext
-                    label_and_save("pf",mutrec_index,R1_start,pnext,insert_len,True,is_tworeads)
+            # Determine if one of the reads in the pair contains a variant, in case we are filtering on variants-only
+            # Even if only one of the reads in a pair is variant, we need to retain both reads, otherwise the paired-end bit is pointless
                     
-            def do_r2():
-                if R2_frag: # Process a reverse sequencing fragment
-                    pnext,barf1=RG_process.trimcigarbox(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# Just to get pnext
-                    label_and_save("pr",mutrec_index,R2_start,pnext,-insert_len,False,is_tworeads) 
+            if R1_frag: # Get pnext and is_cigar_mut for forward sequencing fragment
+                R2pnext,R1fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# pnext and cigar
+            else:
+                R2pnext=0
+                R1fwdcigar=""
 
-            # Need to put forward and reverse in random order, not always R1-first!
+            if R2_frag: # Get pnext and is_cigar_mut for reverse sequencing fragment
+                R1pnext,R2fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# pnext and cigar
+            else:
+                R1pnext=0
+                R2fwdcigar=""
+                
+            if RG_globals.is_muts_only:
+                R1_is_mut=RG_process.is_mut_cigar(R1fwdcigar)
+                R2_is_mut=RG_process.is_mut_cigar(R2fwdcigar)
+                is_one_mut=R1_is_mut or R2_is_mut
+                #if not is_tworeads:
+                #    print("single read at: %s; R1_is_mut %s; R1fwdcigar %s; R2_is_mut %s; R2fwdcigar %s"%(Saved_Fragcount+1,R1_is_mut,R1fwdcigar,R2_is_mut,R2fwdcigar))
+
+            # Need to save forward and reverse in random order, not always R1-first!
             if random() < 0.5:
                 # Do a forward, then a reverse, 50% of the time
-                do_r1()
-                do_r2()
-
+                do_r1_save()
+                do_r2_save()
             else:
                 # Do a reverse, then a forward, 50% of the time
-                do_r2()
-                do_r1()
+                do_r2_save()
+                do_r1_save()
                     
-    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount+Paired_Fragcount,mutfragcount,unpaired_count)
+    journal_frags(mutrecs,Generated_Fragcount,Paired_Fragcount,mutfragcount,unpaired_count,saved_unpaired)
     #print("noread_count: %s ; unpaired_count %s "%(noread_count,unpaired_count))
     return
 # end of def generate_multisource_paired_frags4(RefRec,mutrecs,fraglen,fragdepth)
@@ -2039,21 +2063,21 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
 
 #==========================End of section dealing with generate_multisource_random_frags and generate_multisource_all_frags===========================
 
-def journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired):
+def journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired,saved_unpaired):
     # This to catch a division-by-zero error. Needs a tidy-up
     min_norm=0
     if len(mutfragcount)>0:
         #min_norm=min(mutfragcount)
-        try: # If all are 0, this will fail 
+        try: # If all are 0, this will fail # Try is not good for pyodide
             min_norm=min([i for i in mutfragcount if i > 0])
         except: # Failed, so make sure it goes nowhere
             min_norm=0
     if min_norm > 0:
-        journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired)
+        journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired,saved_unpaired)
     else:
         journals_update(" No %ss meet the filter criteria eg: option '%s'"%(RG_globals.read_annotation,RG_globals.bio_parameters["is_muts_only"]["label"]))
         
-def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired):
+def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired,saved_unpaired):
     global REFSEQ_RECORD
     global DOC_precision
     # DOC: Depth of sequencing should be = (total number of reads * average read length) / total length of reference sequence (which is the genomic region covered, or the exome).
@@ -2086,7 +2110,10 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     else:
         str7="s"
     if RG_globals.is_onefrag_out:
-        str0=""; str1="%s single"%Generated_Fragcount ; str4="each possible"; str4a="for"; str2=""
+        str0=""; str1+=" single"; str2=""; str4="each possible"; str4a="for"
+
+    if RG_globals.is_frg_paired_end:
+        str1="%s paired-%ss and %s unpaired"%(Generated_Fragcount-unpaired,RG_globals.read_annotation,unpaired)
 
     journals_update("\n%s\n Generated %s %ss of length %s bases at %s starting position%s %s %s %s%s: %s"
                    %(str0,str1,RG_globals.read_annotation,str3,str4,str2,str4a,str5,str6,str7,mutlistlabels))
@@ -2096,21 +2123,22 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
                        %(bio_parameters["is_duplex"]["label"],bio_parameters["is_onefrag_out"]["label"],RG_globals.read_annotation,RG_globals.read_annotation))
 
     if RG_globals.is_muts_only:
-        if RG_globals.is_duplex:
-            plextxt="Dual"
+        if RG_globals.is_frg_paired_end:
+            plextxt=bio_parameters["is_frg_paired_end"]["label"]
+        elif RG_globals.is_duplex:
+            plextxt=bio_parameters["is_duplex"]["label"]
         else:
-            plextxt="Single"
-        journals_update("\tReference-only-sequence %ss were excluded, leaving %s variant-containing %ss. %s strand production."%(RG_globals.read_annotation,
-                                                                                                                                Saved_Fragcount,RG_globals.read_annotation,plextxt))
+            plextxt=bio_parameters["is_simplex"]["label"]
+        journals_update("\tReference-only-sequence %ss were excluded, leaving %s variant-containing %ss. %s production."%(RG_globals.read_annotation,
+                                                                                                                        Saved_Fragcount,RG_globals.read_annotation,plextxt))
     journals_update(" source(count):\n\t%s"%(fragtallystring[:-1]))
     journals_update(" source(count-ratio):\n\t%s"%(fragratio[:-1]))
     journals_update(" source(length):\n\t%s"%(fragsourcelen[:-1]))
     journals_update(" source('%s'=count*%s/template_length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-1]))
     REFSEQ_RECORD.Generated_Fragcount=Generated_Fragcount
     REFSEQ_RECORD.Saved_Fragcount=Saved_Fragcount
-    REFSEQ_RECORD.Unpaired_Fragcount=unpaired
-    return
-# end of journal_frags()
+    REFSEQ_RECORD.Saved_Unpaired_Fragcount=saved_unpaired
+# end of journal_frags2()
 
 def split_with_char(instring,splitchar):
     # This routine only created to compensate for Pyodide/Python inconsistency
@@ -2439,7 +2467,6 @@ def make_reference_files1():
                                                                                                                templatetxt,
                                                                                                                bio_parameters["is_write_ref_fasta"]["label"],
                                                                                                                RG_globals.is_write_ref_fasta))
-    return
 
 # run_processing was formerly the way of starting the batch run.
 # It has been adapted into a function to support repeated-calling from a GUI module
