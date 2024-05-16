@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_builder16_gui.py"
-ProgverDate="07-Mar-2024"
+ProgverDate="16-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -1463,7 +1463,6 @@ def get_mutlabs(): # Get list of non-ref files in target-input folder
             #print("mutlabel: %s"%mutlabel)
             mutlabs.append(mutlabel)
         mutlabs.sort()
-    #update_journal(" Identified presence of %s variant files for %s up to %s"%(peekcount,RG_globals.target_locus,last_inlabel))
     mutlabs=add_mutlabs(mutlabs)
     RG_process.mutfreqs_extend(mutlabs) # Extend mutfreqs if necessary
     #print("mutlabs %s"%mutlabs)
