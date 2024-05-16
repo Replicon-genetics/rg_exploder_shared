@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="04-May-2024"
+#Prg_verDate="16-May-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -22,8 +22,8 @@ def set_config_consts():
     global MAINVER,DATEVER
 
     ######## Revisit these three each time a data set is renewed ########
-    MAINVER="v.27_03"
-    DATEVER="April 2024"
+    MAINVER="v.27_04"
+    DATEVER="May 2024"
     
     GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
     #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
