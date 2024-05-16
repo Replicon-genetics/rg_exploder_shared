@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_27_03.py"
-ProgverDate="26-Apr-2024"
+Progver="RG_exploder_main_27_04.py"
+ProgverDate="16-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -336,41 +336,41 @@ def initialise_journal():
     global journout,is_append_journalfile,is_joindata_in_json
     if not is_append_journalfile:
         extralabel,strandlabel=RG_globals.get_strand_extra_label()
-        journal_outfilename="%s%s%s%s%s"%(Outfilepath,locus_transcript,journhead,extralabel,journend)
-        journout = RG_io.open_write(journal_outfilename, 0)
+        journal_name="%s%s%s%s"%(locus_transcript,journhead,extralabel,journend)
         is_append_journalfile=True
+        journout = RG_io.open_write("%s%s"%(Outfilepath,journal_name), 0)
+        journout.write("This journal file %s"%journal_name)
         if is_htm_journal:
-            initialise_journal_htm()
-        update_journal("This journal file %s%s%s%s is created by %s %s starting on %s"%(locus_transcript,journhead,extralabel,journend,Progver,ProgverDate,RG_globals.getime()))
-        update_journal("Read in conjunction with %s%s%s%s"%(locus_transcript,readmehead,extralabel,readmeend))
-        update_journal("User ID:%s"%(RG_globals.CustomerIDText))
-        update_journal("Data set:%s"%(RG_globals.DatasetIDText))
-        update_journal("Selected %s: %s; Selected %s: %s; Selected %s: %s"%(bio_parameters["target_locus"]["label"],
+            initialise_journal_htm(journal_name)
+        journals_update(" is created by %s %s starting on %s"%(Progver,ProgverDate,RG_globals.getime()))
+        journals_update("Read in conjunction with %s%s%s%s"%(locus_transcript,readmehead,extralabel,readmeend))
+        journals_update("User ID:%s"%(RG_globals.CustomerIDText))
+        journals_update("Data set:%s"%(RG_globals.DatasetIDText))
+        journals_update("Selected %s: %s; Selected %s: %s; Selected %s: %s"%(bio_parameters["target_locus"]["label"],
                                                            RG_globals.target_locus,
                                                            bio_parameters["target_transcript_name"]["label"],
                                                            RG_globals.target_transcript_name,
                                                            bio_parameters["is_CDS"]["label"],
                                                            RG_globals.is_CDS))
         if is_joindata_in_json:
-            update_journal("Joinlist read from config file for %s"%RG_globals.target_locus)
+            journals_update("Joinlist read from config file for %s"%RG_globals.target_locus)
         elif not is_joindata_in_json:
-            update_journal("Joinlist derived from Refseq for %s;is_joindata_in_json %s "%(RG_globals.target_locus,is_joindata_in_json))
+            journals_update("Joinlist derived from Refseq for %s;is_joindata_in_json %s "%(RG_globals.target_locus,is_joindata_in_json))
         else:
-            update_journal("Unexpected:is_joindata_in_json undefined")
+            journals_update("Unexpected:is_joindata_in_json undefined")
             
-        update_journal("If this is the last line, then something has gone wrong reading the source files")
+        journals_update("If this is the last line, then something has gone wrong reading the source files")
     return
 # End of initialise_journal()
 
-def initialise_journal_htm():
-    global journout_htm,is_append_journalfile_htm
-    extralabel,strandlabel=RG_globals.get_strand_extra_label()
-    journal_outtitle="%s%s%s"%(locus_transcript,journhead,extralabel)
-    journal_outfilename="%s%s%s.htm"%(Outfilepath,journal_outtitle,journend)
-    journout_htm = RG_io.open_write(journal_outfilename, 0)
+def initialise_journal_htm(journal_name):
+    global Outfilepath,journout_htm,is_append_journalfile_htm
+    journout_htm = RG_io.open_write("%s%s.htm"%(Outfilepath,journal_name), 0)
     is_append_journalfile_htm=True
-    outstring="<!DOCTYPE html>\n<html>\n<head><title>%s</title></head>\n<body>\n<pre>"%journal_outtitle
+    outstring="<!DOCTYPE html>\n<html>\n<head><title>%s.htm</title></head>\n<body>\n<pre>"%journal_name
     journout_htm.write(outstring)
+    journout_htm.write("This journal file %s.htm"%journal_name)
+
 # End of initialise_journal_htm()
 
 def close_journal_htm():
@@ -381,13 +381,16 @@ def close_journal_htm():
         journout_htm.close()
         is_append_journalfile_htm=False
 
+def journals_update(instring):
+    update_journal_htm(instring)
+    update_journal(instring)
+
 def update_journal_htm(instring):
     #Prior declared globals
     global journout_htm,is_append_journalfile_htm
     #Updates the metadata htm file with progress report
-    instring="%s\n"%(instring)
     if is_append_journalfile_htm:
-        journout_htm.write(instring)
+        journout_htm.write("%s\n"%instring)
     return
 # end of update_journal_htm(instring)
 
@@ -395,11 +398,8 @@ def update_journal(instring):
     #Prior declared globals
     global journout,is_append_journalfile,is_htm_journal
     #Updates the metadata file with progress report
-    if is_htm_journal:
-        update_journal_htm(instring)
-    instring=instring+"\n"
     if is_append_journalfile:
-        journout.write(instring)
+        journout.write("%s\n"%instring)
     return
 # end of update_journal(instring)
 
@@ -458,7 +458,7 @@ def set_maxrefs(SEQ_record):
         SEQ_record.howmany="all"
         MaxVarPos=MaxRefPos
         msgtxt="full sequence length of"
-    update_journal(" MaxVarPos set to %s %s bases from %s %s"%(msgtxt,MaxVarPos,in_ref_src_title,in_ref_src))
+    journals_update(" MaxVarPos set to %s %s bases from %s %s"%(msgtxt,MaxVarPos,in_ref_src_title,in_ref_src))
     return SEQ_record
 
 def read_refseqrecord(embl_or_genbank):
@@ -473,16 +473,16 @@ def read_refseqrecord(embl_or_genbank):
         exists=False
         program_exit("%s file %s has no sequence"%(in_ref_src_title,ingb_file))
     else:
-        update_journal(" %s %s Range defined as: %s" %(in_ref_src,in_ref_src_title,SEQ_record.firstid.replace("chromosome:","")))
+        journals_update(" %s %s Range defined as: %s" %(in_ref_src,in_ref_src_title,SEQ_record.firstid.replace("chromosome:","")))
         if RG_globals.is_flip_strand:
-            update_journal(" NB: %ss will be reverse-complemented prior to fragmentation because '%s' selected"%(RG_globals.variants_label,bio_parameters["is_flip_strand"]["label"]))
+            journals_update(" NB: %ss will be reverse-complemented prior to fragmentation because '%s' selected"%(RG_globals.variants_label,bio_parameters["is_flip_strand"]["label"]))
             
         numvarfeats=len(RG_process.get_varfeature_index(SEQ_record))
         if numvarfeats > 0:
             exists=False
             program_exit(" *** Variant feature definitions found in %s ***"%in_ref_src_title)
         else:
-            update_journal(" %s %s correctly includes %s variant features"%(in_ref_src,in_ref_src_title,numvarfeats))
+            journals_update(" %s %s correctly includes %s variant features"%(in_ref_src,in_ref_src_title,numvarfeats))
             SEQ_record=set_maxrefs(SEQ_record)
             ''' By definition Refseq CIGAR is all Ms'''
             SEQ_record.cigar=str(MaxVarPos)+"M"
@@ -506,7 +506,7 @@ def read_refseqrecord(embl_or_genbank):
             if RG_globals.is_write_ref_ingb:
                 write_refseq(SEQ_record,"long")
             else:
-                update_journal(" NOTE: Feature-definition files for: %s and '%ss', NOT saved because option '%s' is set to %s"
+                journals_update(" NOTE: Feature-definition files for: %s and '%ss', NOT saved because option '%s' is set to %s"
                                %(in_ref_src_title,RG_globals.variants_label,bio_parameters["is_write_ref_ingb"]["label"],RG_globals.is_write_ref_ingb))
     return SEQ_record,exists
 # end of read_refseqrecord(embl_or_genbank)
@@ -523,16 +523,16 @@ def read_seqrecord(infile,embl_or_genbank,out_head,msg):
     SEQ_record=""
     exists = RG_io.is_file(full_filename)
     if exists:
-        update_journal("\nReading %s file %s"%(msg,msgfilename))
+        journals_update("\nReading %s file %s"%(msg,msgfilename))
         update_readme("%s - %s"%(msgfilename,msg))
         # second returned parameter "exists" is really a "success" for the file-read, but want to overwrite "exists" to return an overall success/fail condition here
         SEQ_record,exists = read_single_record_input(full_filename,embl_or_genbank)
         if exists:
             SEQ_record.mutlabel=out_head
         else:
-            update_journal("Failure reading ACCESSION line")
+            journals_update("Failure reading ACCESSION line")
     else:
-        update_journal(" \n*** %s file not found: %s ***"%(msg,msgfilename))
+        journals_update(" \n*** %s file not found: %s ***"%(msg,msgfilename))
         exists=False
     return SEQ_record,exists
 # end of read_seqrecord(infilename,embl_or_genbank,out_head)
@@ -578,12 +578,12 @@ def read_mutrecord(label,embl_or_genbank):
 def merge_ref_with_mut(REF_record,Mut_record,label):     
     mergefeatures,accept,messages=RG_process.purl_features(REF_record,Mut_record) # Returns a feature table with only the variant features from Mut_Record
                                                                                   # added to all features (excluding variant features) from REF_record
-    update_journal(messages) 
+    journals_update(messages) 
     if accept: # Overwrite the features in Mut_record
         Mut_record.features=mergefeatures    
         Mut_record,messages=RG_process.merge_seqvar_records(REF_record,Mut_record,label)
         if messages !="":
-            update_journal(messages) # The return message might not be the same for each merge
+            journals_update(messages) # The return message might not be the same for each merge
         # Set absolutes
         exists=RG_process.set_seqrec_absolutes(Mut_record) # must do this even if RG_globals.is_use_absolute== False
         # Now write out input variant file as its post-merged interpretation, if modified
@@ -633,7 +633,7 @@ def write_gb_features(SeqRec,out_file,readmetxt,style):
             CopySeqRec.features=RG_process.get_varfeatures(SeqRec)
 
     out_gbfile="%s%s"%(Outfilepath,out_file)
-    update_journal(" Writing %s"%out_file)
+    journals_update(" Writing %s"%out_file)
     gbout = RG_io.open_write(out_gbfile)
     out_handle=StringIO()
     SeqIO.write(CopySeqRec,out_handle,Seq_Format)
@@ -663,7 +663,7 @@ def write_fastaout(ThisSeqr):
         out_fastafile="%s%s"%(Outfilepath,out_fa_file)
         fastaout = RG_io.open_write(out_fastafile)
         is_append_fastafile=True
-        update_journal("\nWriting FASTA %ss to %s"%(RG_globals.read_annotation,out_fa_file))
+        journals_update("\nWriting FASTA %ss to %s"%(RG_globals.read_annotation,out_fa_file))
     out_handle=StringIO()
     SeqIO.write(ThisSeqr,out_handle, "fasta")
     out_data = out_handle.getvalue()
@@ -679,14 +679,14 @@ def write_fastqout(ThisSeqr):
         out_fastqfile="%s%s"%(Outfilepath,out_fq_file)
         fastqout = RG_io.open_write(out_fastqfile)
         is_append_fastqfile=True
-        update_journal("Writing FASTQ %ss to %s"%(RG_globals.read_annotation,out_fq_file))
-        update_journal("        FASTQ quality range %s to %s"%(RG_globals.Qualmin,RG_globals.Qualmax))
+        journals_update("Writing FASTQ %ss to %s"%(RG_globals.read_annotation,out_fq_file))
+        journals_update("        FASTQ quality range %s to %s"%(RG_globals.Qualmin,RG_globals.Qualmax))
 
         if RG_globals.is_fastq_random:
             msgtxt="has"
         else: 
             msgtxt="does NOT have"
-        update_journal("        FASTQ quality range %s randomly-assigned quality values in each %s"%(msgtxt,RG_globals.read_annotation)) 
+        journals_update("        FASTQ quality range %s randomly-assigned quality values in each %s"%(msgtxt,RG_globals.read_annotation)) 
     out_handle=StringIO()
     SeqIO.write(ThisSeqr,out_handle, "fastq")
     out_data = out_handle.getvalue()
@@ -714,7 +714,7 @@ def writemut(seq_record,label):
         seq_record.description=seq_record.description+" "+cigar_txt
         '''
         seq_record.description=seq_record.description+" "+seq_record.cigar
-    update_journal(" Writing %s_%s FASTA to %s.fasta"%(locus_transcript,label,out_mut))
+    journals_update(" Writing %s_%s FASTA to %s.fasta"%(locus_transcript,label,out_mut))
     if not is_append_mutfile:
         out_mutfile="%s%s.fasta"%(Outfilepath,out_mut)
         mutout= RG_io.open_write(out_mutfile)
@@ -734,7 +734,7 @@ def writeprotmut(seq_record,label):
     is_do_complement = (RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"] and not RG_globals.is_flip_strand) \
                        or (not RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"] and RG_globals.is_flip_strand)
     #Write mutated reference sequence as protein in defined circumstances
-    update_journal(" Writing %s FASTA protein to %s"%(label,out_mutprot))
+    journals_update(" Writing %s FASTA protein to %s"%(label,out_mutprot))
     if not is_append_mutprotfile:
         out_mutprotfile="%s%s.fasta"%(Outfilepath,out_mutprot)
         mutprotout= RG_io.open_write(out_mutprotfile)
@@ -776,7 +776,7 @@ def write_refseq(RefRecord,which):
 
     #global VSeqRecREC # testing only
     def writeref_fasta(record,out_file):
-        update_journal(" Writing %s.fasta"%(out_file))
+        journals_update(" Writing %s.fasta"%(out_file))
         out_filename="%s%s.fasta"%(Outfilepath,out_file)
         refout= RG_io.open_write(out_filename)
         out_handle=StringIO()
@@ -791,18 +791,18 @@ def write_refseq(RefRecord,which):
     if which==Ref_file_name: # Saving Locseq
         LSeqRec=RG_process.annotate_seq_to_record(RefRecord,RefRecord.seq,in_ref_src,RefRecord.name)
         if RG_globals.is_flip_strand:
-            update_journal(" Reverse-complementing %s because '%s' selected"%(in_ref_src,bio_parameters["is_flip_strand"]["label"]))
+            journals_update(" Reverse-complementing %s because '%s' selected"%(in_ref_src,bio_parameters["is_flip_strand"]["label"]))
             LSeqRec=RG_process.switch_Rec_polarity(LSeqRec)
-            update_journal(" %s %s Range re-defined as: %s" %(in_ref_src,in_ref_src_title,LSeqRec.firstid.replace("chromosome:","")))
+            journals_update(" %s %s Range re-defined as: %s" %(in_ref_src,in_ref_src_title,LSeqRec.firstid.replace("chromosome:","")))
             
         LSeqRec.description="%s %i nucleotides from %s"%(LSeqRec.howmany,len(LSeqRec.seq),LSeqRec.firstid)
         writeref_fasta(LSeqRec,Out_Ref_Source)
-        update_journal(" %s Location: %s; length: %s %i of %i bases"
+        journals_update(" %s Location: %s; length: %s %i of %i bases"
                        %(in_ref_src,LSeqRec.firstid.replace("chromosome:",""),LSeqRec.howmany,MaxVarPos,MaxRefPos))
     elif which=="long":
         out_file="%s%sin"%(in_ref_src,Seq_IO_file_ext)
         readmetxt="\t- Feature definitions from the %s %s"%(in_ref_src_title,in_ref_src)
-        update_journal("  Feature definitions for %s %s saved as %s"%(in_ref_src_title,in_ref_src,out_file))
+        journals_update("  Feature definitions for %s %s saved as %s"%(in_ref_src_title,in_ref_src,out_file))
         write_gb_features(RefRecord,out_file,readmetxt,"long")
 
     elif which=="spliced_fasta":
@@ -829,10 +829,10 @@ def write_refseq(RefRecord,which):
             
             #outfile="%s_%s"%(outref,id_label)
             writeref_fasta(VSeqRec,outfile)
-            update_journal("  %s, Length: %s bases, is the %s for the %s%s"
+            journals_update("  %s, Length: %s bases, is the %s for the %s%s"
                                %(outfile,len(VSeqRec.seq),reftxt,reftxt2,reftxt3))
         else:
-            update_journal(" Un-trimmed, and un-spliced, %s %s. Using sequence outside %s boundary for paired ends"%(in_ref_src_title,in_ref_src,bio_parameters["target_transcript_name"]["label"]))
+            journals_update(" Un-trimmed, and un-spliced, %s %s. Using sequence outside %s boundary for paired ends"%(in_ref_src_title,in_ref_src,bio_parameters["target_transcript_name"]["label"]))
 
     elif which=="force_Out_Ref_Source": # Forcing save of the correct Reference for mRNA or CDS-based fragments, which is the trimmed Primary Source, never the mRNA or CDS Template
                                         # Should only happen when choosing 'Reads Type' other than paired-ends
@@ -842,7 +842,7 @@ def write_refseq(RefRecord,which):
             prior_transcript_name=RG_globals.target_transcript_name
             RG_globals.target_transcript_name=RG_globals.empty_transcript_name # swap to force a trimmed-only when calling splice_refseq(RefRecord)
             # NB: Retaining current value for locus_transcript - important part of the force
-            update_journal("\n Writing sequence files for both '%s' and '%s' for %s because option '%s' is set to %s and %s '%s' is not '%s'"
+            journals_update("\n Writing sequence files for both '%s' and '%s' for %s because option '%s' is set to %s and %s '%s' is not '%s'"
                            %(RG_globals.reference_gene,
                              RG_globals.reference_haplotype,
                              locus_transcript,
@@ -855,7 +855,7 @@ def write_refseq(RefRecord,which):
             RG_globals.target_transcript_name=prior_transcript_name # Now swap-back to restore correct template settings
         
     else:
-        update_journal(" Invalid parameter %s to write_refseq"%which)
+        journals_update(" Invalid parameter %s to write_refseq"%which)
     return
 # end of write_refseq(RefRecord,which)
 
@@ -883,7 +883,7 @@ def write_samheader(ThisSeqr):
         samout.write(head1)
         samout.write(head2)
         samout.write(head3)
-        update_journal("\nWriting %ss in SAM format to %s"%(RG_globals.read_annotation,out_sa_file))
+        journals_update("\nWriting %ss in SAM format to %s"%(RG_globals.read_annotation,out_sa_file))
     return
 # end of def write_samheader
 
@@ -993,7 +993,7 @@ def close_seqout(SeqRec):
         
     if not(RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out):
         txt=" NB: All 'Output Options: %ss in FASTA/FASTQ/SAM format' are de-selected, so not a lot happened"%RG_globals.read_annotation.capitalize()
-        update_journal(txt)
+        journals_update(txt)
         update_readme(txt)
     return
 
@@ -1026,11 +1026,11 @@ def journalise_dels():
     #Prior declared globals
     global is_dels_to_dots,is_include_indels
     if not is_include_indels:
-        update_journal(" WARNING: deletions and insertions will be ** ignored **. Typically test-purposes only")
+        journals_update(" WARNING: deletions and insertions will be ** ignored **. Typically test-purposes only")
     if is_dels_to_dots:
-        update_journal(" WARNING: deleted bases will be shown as '.' in sequence. Typically test-purposes only, as this destroys position-calculations")
+        journals_update(" WARNING: deleted bases will be shown as '.' in sequence. Typically test-purposes only, as this destroys position-calculations")
     if RG_globals.is_vars_to_lower:
-        update_journal(" WARNING: substituted bases from SNVs, inserts and delins will be shown as lower case in sequence %ss"%RG_globals.read_annotation)
+        journals_update(" WARNING: substituted bases from SNVs, inserts and delins will be shown as lower case in sequence %ss"%RG_globals.read_annotation)
     return
 # end of def journalise_dels()
 
@@ -1049,7 +1049,7 @@ def journal_final_summary():
     #Prior declared globals
     global Progver,journout,REFSEQ_RECORD
     if not(RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out):
-        update_journal(" ... Rolling tumbleweed ...")
+        journals_update(" ... Rolling tumbleweed ...")
     else:
         if RG_globals.is_frg_paired_end:
             plextxt="paired "
@@ -1057,14 +1057,14 @@ def journal_final_summary():
         else:
             plextxt=""
             endplex=""
-        update_journal(" %s=%i\n Total number of %s%ss=%s%s"%(bio_parameters["Fraglen"]["label"],
+        journals_update(" %s=%i\n Total number of %s%ss=%s%s"%(bio_parameters["Fraglen"]["label"],
                                                             RG_globals.Fraglen,plextxt,RG_globals.read_annotation,REFSEQ_RECORD.Saved_Fragcount,endplex))
         spliceouts=REFSEQ_RECORD.splicecount
         if spliceouts > 0:
             addtxt=", shown in %s CIGAR as 'N'"%RG_globals.read_annotation
         else:
             addtxt=""
-        update_journal(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
+        journals_update(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
         if RG_globals.is_frg_paired_end:
             plextxt="paired ends"
             endtxt="" 
@@ -1075,7 +1075,7 @@ def journal_final_summary():
             else:
                 plextxt="single strand:"
                 endtxt="forward only"
-        update_journal(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
+        journals_update(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
 # end of def journal_final_summary
 
 def close_journal(no_error):
@@ -1084,11 +1084,11 @@ def close_journal(no_error):
     if no_error:
         journal_final_summary()
     else:
-        update_journal("\n******  Warning or Error report ******")
-    update_journal("\nEnding %s at %s "%(Progver,RG_globals.getime()))
+        journals_update("\n******  Warning or Error report ******")
+    journals_update("\nEnding %s at %s "%(Progver,RG_globals.getime()))
     elapsed= time.time()- Start_time
-    update_journal("Total time taken:%s"%elapsed)
-    update_journal("%s"%RG_globals.CopyrightText)
+    journals_update("Total time taken:%s"%elapsed)
+    journals_update("%s"%RG_globals.CopyrightText)
     journout.close()
     return
 # end of def close_journal    
@@ -1118,7 +1118,7 @@ def program_exit(exitstring):
     # Trapped IO failures should redirect to here
     global is_append_journalfile
     if is_append_journalfile:
-        update_journal("\nProgram halted with error: %s "%exitstring)
+        journals_update("\nProgram halted with error: %s "%exitstring)
     else:
         print("\nProgram halted with error: %s "%exitstring)
     # Sending False to the closure routine indicates error
@@ -1164,10 +1164,10 @@ def get_mutrecords(REF_record,embl_or_genbank):
         return accept
    #end of def local_add_mutrec(Seq_rec,label)
         
-    #update_journal("\nReading %s (feature) files..."%RG_globals.variants_label)
-    update_journal("\nReading '%s' files..."%RG_globals.variants_label)
+    #journals_update("\nReading %s (feature) files..."%RG_globals.variants_label)
+    journals_update("\nReading '%s' files..."%RG_globals.variants_label)
     if not RG_globals.is_mut_out:
-        update_journal(" NOTE: Sequence of '%s'(s) not saved to %s.fasta because option '%s' is set to %s"
+        journals_update(" NOTE: Sequence of '%s'(s) not saved to %s.fasta because option '%s' is set to %s"
                        %(RG_globals.variants_label,out_mut,bio_parameters["is_mut_out"]["label"],RG_globals.is_mut_out))
     
     RG_process.mutfreqs_extend(RG_globals.mutlabels) # First Check, then set, mutfreqs at same length as mutlabels
@@ -1179,20 +1179,20 @@ def get_mutrecords(REF_record,embl_or_genbank):
             if label in addmut_labels: # Look for user-defined
                 Seq_record,exists=RG_process.make_addmut(REF_record,label) 
                 if exists:
-                    update_journal("\n'%s' %s_%s found as user-defined %s"%(RG_globals.variants_label,RG_globals.target_locus,label,RG_globals.variants_label))
+                    journals_update("\n'%s' %s_%s found as user-defined %s"%(RG_globals.variants_label,RG_globals.target_locus,label,RG_globals.variants_label))
                     accept=local_add_mutrec(Seq_record,label,mutfreq)
                     if not accept:
                         #print("barf")
-                        update_journal(" %s definition not accepted"%label)
+                        journals_update(" %s definition not accepted"%label)
             else: # Look for data in input directory
                 Seq_record,exists = read_mutrecord(label,embl_or_genbank) # Read from input directory
                 if exists:
                     accept=local_add_mutrec(Seq_record,label,mutfreq) # Add to mutrecs
                     if not accept:
                         #print("barf")
-                        update_journal(" %s definition not accepted"%label)
+                        journals_update(" %s definition not accepted"%label)
             if  not exists:
-                update_journal(" %s failed to load "%label)
+                journals_update(" %s failed to load "%label)
                 
     # end of loop for label in RG_globals.mutlabels:
     if accept:
@@ -1204,7 +1204,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
         label=RG_globals.mutlabels[0]
         Seq_record,exists = read_mutrecord(label,embl_or_genbank)
         if exists:
-                update_journal(" No haplotypes with frequency >0, so setting the first:%s to %s to get something!"%(RG_globals.mutlabels[0],RG_globals.mutfreqs[0]))
+                journals_update(" No haplotypes with frequency >0, so setting the first:%s to %s to get something!"%(RG_globals.mutlabels[0],RG_globals.mutfreqs[0]))
                 mutfreq=RG_globals.mutfreqs[0]
                 local_add_mutrec(Seq_record,label,mutfreq)
                 is_success=exists  
@@ -1217,7 +1217,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
     else:
         addtxt=""
 
-    update_journal("\nProcessing %s %s%s with frequency >0 : %s"%(mutcount,RG_globals.variants_label,addtxt,mutlistlabels))
+    journals_update("\nProcessing %s %s%s with frequency >0 : %s"%(mutcount,RG_globals.variants_label,addtxt,mutlistlabels))
     journalise_dels()
     # Protection part 2 - switch back this flag, on leaving this routine
     is_dels_to_dots=save_idd
@@ -1451,7 +1451,7 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
                                         # is_journal_subs means "document the replacements"
         if not matchvardef:
             msgtxt_mvs="*** WARNING: %s ***"%msgtxt_mvs
-        update_journal(msgtxt_mvs)
+        journals_update(msgtxt_mvs)
         
     return VSeq,cigarbox
 # end of def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox)
@@ -1485,7 +1485,7 @@ def no_splice_refseq(SeqRec):
         write_refseq(SeqRec,Ref_file_name)
     else:
         addtxt="would be"
-    update_journal("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the %ss in %s, %s and %s"\
+    journals_update("  %s.fasta, Length: %s bases, %s the ** Reference Sequence ** for the %ss in %s, %s and %s"\
                    %(Out_Ref_Source,SeqRec.clipped_length,addtxt,RG_globals.read_annotation,out_fa_file,out_fq_file,out_sa_file))
 
 def splice_refseq(SeqRec):
@@ -1518,7 +1518,7 @@ def splice_refseq(SeqRec):
             addtxt=""
         else:
             addtxt="un"
-        update_journal(" NOTE: A reference file for the %ss: '%s_hapvars.fasta', derived from %strimmed %s %s sequence, is not saved because option '%s' is set to %s"
+        journals_update(" NOTE: A reference file for the %ss: '%s_hapvars.fasta', derived from %strimmed %s %s sequence, is not saved because option '%s' is set to %s"
                            %(RG_globals.variants_label,locus_transcript,addtxt,in_ref_src_title,in_ref_src,
                              bio_parameters["is_write_ref_fasta"]["label"],RG_globals.is_write_ref_fasta))
     return CopyRec
@@ -1551,10 +1551,10 @@ def make_allvars_in_one_seq(SeqRec,label):
     in_label="%s_%s"%(RG_globals.target_locus,label)
     out_label="%s_%s"%(locus_transcript,label)
 
-    #update_journal(" Merging all variants from %s with Source"%(out_label))
-    update_journal(" %smatch between Source Ranges for %s and %s"%(msgtxt,in_label,in_ref_src))
+    #journals_update(" Merging all variants from %s with Source"%(out_label))
+    journals_update(" %smatch between Source Ranges for %s and %s"%(msgtxt,in_label,in_ref_src))
     if err:
-        update_journal(" %s mismatched Source Range: %s" %(in_label,SeqRec.firstid.replace("chromosome:","")))
+        journals_update(" %s mismatched Source Range: %s" %(in_label,SeqRec.firstid.replace("chromosome:","")))
     
     #VarSeq=MutableSeq(str(SeqRec.seq),generic_dna)#generic_dna # Deprecated from Biopython 1.78 (September 2020)
     #VarSeq=MutableSeq(str(SeqRec.seq))
@@ -1574,11 +1574,11 @@ def make_allvars_in_one_seq(SeqRec,label):
     #print("IN switch: %s"%VarSeqRec.seq[0:5])
     # Addition of is_flip_strand July 2022.
     if RG_globals.is_flip_strand:
-        update_journal(" Reverse-complementing %s because '%s' selected"%(label,bio_parameters["is_flip_strand"]["label"]))
+        journals_update(" Reverse-complementing %s because '%s' selected"%(label,bio_parameters["is_flip_strand"]["label"]))
         
         VarSeqRec=RG_process.switch_Rec_polarity(VarSeqRec)
         if label == "REF": # For the case where this is called from write_refseq
-            update_journal("  *** %s %s Range re-defined as: %s ***" %(in_ref_src,in_ref_src_title,VarSeqRec.firstid.replace("chromosome:","")))
+            journals_update("  *** %s %s Range re-defined as: %s ***" %(in_ref_src,in_ref_src_title,VarSeqRec.firstid.replace("chromosome:","")))
         cigarbox=RG_process.reverse_cigarbox(cigarbox)
 
     cigar_label=RG_process.get_untrimmed_cigar(cigarbox) 
@@ -1587,9 +1587,9 @@ def make_allvars_in_one_seq(SeqRec,label):
         VarSeqRec.cigarbox=cigarbox
         VarSeqRec.mutbox=RG_process.haveamutbox(cigarbox) 
     else:
-        update_journal(" *** CIGAR is blank - error ***")
-        update_journal(" cigar %s, cigarbox %s\n mutbox %s"%(VarSeqRec.cigar,VarSeqRec.cigarbox,VarSeqRec.mutbox))
-    update_journal(" %s length: %i bases. %s\n %s CIGAR(wrt %s): %s"%(out_label,len(VarSeq),subst_txt,out_label,in_ref_src,VarSeqRec.cigar))
+        journals_update(" *** CIGAR is blank - error ***")
+        journals_update(" cigar %s, cigarbox %s\n mutbox %s"%(VarSeqRec.cigar,VarSeqRec.cigarbox,VarSeqRec.mutbox))
+    journals_update(" %s length: %i bases. %s\n %s CIGAR(wrt %s): %s"%(out_label,len(VarSeq),subst_txt,out_label,in_ref_src,VarSeqRec.cigar))
      #print("OUT switch: %s"%VarSeqRec.seq[0:5])
     return VarSeqRec
 # end of def make_allvars_in_one_seq(SeqRec,label)
@@ -1601,7 +1601,7 @@ def refseq_to_frags4(mutrecs):
     is_success= True
     if RG_globals.is_frg_paired_end:
         if RG_globals.gauss_mean < RG_globals.Fraglen:
-                update_journal(" *** Processing halted *** Requested %s length %s is higher than the %s of %s"%
+                journals_update(" *** Processing halted *** Requested %s length %s is higher than the %s of %s"%
                                (RG_globals.read_annotation,RG_globals.Fraglen,RG_globals.bio_parameters["gauss_mean"]["label"],RG_globals.gauss_mean))
                 is_success= False
         else:
@@ -1653,7 +1653,7 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
 
     mutrec_index=0
     mutlabel_count=0
-    update_journal(" Relative frequency values ignored because option '%s' selected"%bio_parameters["is_onefrag_out"]["label"])
+    journals_update(" Relative frequency values ignored because option '%s' selected"%bio_parameters["is_onefrag_out"]["label"])
 
     for item in mutrecs: # Pick each mutrecs entry in turn to be VarSeq
         for start in range(0,len(item.seq)-fraglen+1):
@@ -1744,9 +1744,9 @@ def normalise_mutfreqs(mutrecs):
         ratiofreq=normutfreq[index]/min_norm
         normratiostring+=str(int((ratiofreq+half_adj)*doc_mult)/doc_mult)+","
         index+=1
-    update_journal(" Relative frequency values   : [%s]"%(mutfreqstring[:-1]))
-    update_journal(" Normalised proportion values: [%s]"%(normfreqstring[:-1]))
-    update_journal(" Normalised ratios: [%s]"%(normratiostring[:-1]))
+    journals_update(" Relative frequency values   : [%s]"%(mutfreqstring[:-1]))
+    journals_update(" Normalised proportion values: [%s]"%(normfreqstring[:-1]))
+    journals_update(" Normalised ratios: [%s]"%(normratiostring[:-1]))
     return normutfreq
 
 def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_label,rev_cigar_label,RefRec,pnext,tlen,is_read1,is_tworeads,is_paired_end):
@@ -2051,7 +2051,7 @@ def journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpai
     if min_norm > 0:
         journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired)
     else:
-        update_journal(" No %ss meet the filter criteria eg: option '%s'"%(RG_globals.read_annotation,RG_globals.bio_parameters["is_muts_only"]["label"]))
+        journals_update(" No %ss meet the filter criteria eg: option '%s'"%(RG_globals.read_annotation,RG_globals.bio_parameters["is_muts_only"]["label"]))
         
 def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired):
     global REFSEQ_RECORD
@@ -2088,11 +2088,11 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     if RG_globals.is_onefrag_out:
         str0=""; str1="%s single"%Generated_Fragcount ; str4="each possible"; str4a="for"; str2=""
 
-    update_journal("\n%s\n Generated %s %ss of length %s bases at %s starting position%s %s %s %s%s: %s"
+    journals_update("\n%s\n Generated %s %ss of length %s bases at %s starting position%s %s %s %s%s: %s"
                    %(str0,str1,RG_globals.read_annotation,str3,str4,str2,str4a,str5,str6,str7,mutlistlabels))
 
     if RG_globals.is_duplex and RG_globals.is_onefrag_out:
-        update_journal("\tSelecting option '%s' with '%s' doubles the %s total, by creating a reverse-complement for each %s"
+        journals_update("\tSelecting option '%s' with '%s' doubles the %s total, by creating a reverse-complement for each %s"
                        %(bio_parameters["is_duplex"]["label"],bio_parameters["is_onefrag_out"]["label"],RG_globals.read_annotation,RG_globals.read_annotation))
 
     if RG_globals.is_muts_only:
@@ -2100,12 +2100,12 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
             plextxt="Dual"
         else:
             plextxt="Single"
-        update_journal("\tReference-only-sequence %ss were excluded, leaving %s variant-containing %ss. %s strand production."%(RG_globals.read_annotation,
+        journals_update("\tReference-only-sequence %ss were excluded, leaving %s variant-containing %ss. %s strand production."%(RG_globals.read_annotation,
                                                                                                                                 Saved_Fragcount,RG_globals.read_annotation,plextxt))
-    update_journal(" source(count):\n\t%s"%(fragtallystring[:-1]))
-    update_journal(" source(count-ratio):\n\t%s"%(fragratio[:-1]))
-    update_journal(" source(length):\n\t%s"%(fragsourcelen[:-1]))
-    update_journal(" source('%s'=count*%s/template_length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-1]))
+    journals_update(" source(count):\n\t%s"%(fragtallystring[:-1]))
+    journals_update(" source(count-ratio):\n\t%s"%(fragratio[:-1]))
+    journals_update(" source(length):\n\t%s"%(fragsourcelen[:-1]))
+    journals_update(" source('%s'=count*%s/template_length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-1]))
     REFSEQ_RECORD.Generated_Fragcount=Generated_Fragcount
     REFSEQ_RECORD.Saved_Fragcount=Saved_Fragcount
     REFSEQ_RECORD.Unpaired_Fragcount=unpaired
@@ -2240,7 +2240,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
     if splice_trigger=="gene":
         settxt=RG_globals.reference_gene
         
-    update_journal("\n Searching feature table to set '%s' Sequence"%settxt)
+    journals_update("\n Searching feature table to set '%s' Sequence"%settxt)
     # First match the locus id (format eg: 'KRAS') to determine what the local name is, format eg:ENSG00000133703.11
     
     for (index, features) in enumerate (seq_record.features):
@@ -2253,7 +2253,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
                 #print("ensembl_geneid for %s is %s"%(target_loc,RG_globals.ensembl_geneid))
                 last_start,last_end,last_first,last_second=call_skipit(this_feature,RG_globals.Exome_extend)
                 # call_skipit seems to return 0-based position for last_start. Correction needed for last_start, but I am wary of implication
-                update_journal("  Locus %s matches gene id %s from %s Range: %s - %s ; global : %s - %s; length: %s bases"
+                journals_update("  Locus %s matches gene id %s from %s Range: %s - %s ; global : %s - %s; length: %s bases"
                                %(target_loc,target_gene,in_ref_src,last_start+1,last_end,RG_process.get_absolute_position(seq_record,last_start+1),
                                  RG_process.get_absolute_position(seq_record,last_end),last_end-last_start))
                 this_ref_offset=last_start
@@ -2272,7 +2272,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
             extra_record_features=[] # Re-setting is necessary to cancel the trim
     else:
         # When left with RG_globals.target_transcript_name != RG_globals.empty_transcript_name, find a splice definition for the same target gene 
-        update_journal("  Looking for %s feature in %s to match %s:%s "%(splice_trigger,target_gene,RG_globals.target_transcript_name,RG_globals.target_transcript_id))
+        journals_update("  Looking for %s feature in %s to match %s:%s "%(splice_trigger,target_gene,RG_globals.target_transcript_name,RG_globals.target_transcript_id))
         splicetotal=0; splice_joinlist = [] ; splice_joinlist_txt = []; extra_record_features=[] # Re-setting because call_skipit was used for gene feature, above
         #mirror=[] #Hiding mirror. Mirror needs clearing, just like extra_record_features
         for (index, features) in enumerate (seq_record.features):
@@ -2301,7 +2301,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
                             message=feature_qualifier
                             this_transcript_id=this_feature.qualifiers.get(feature_qualifier)[0]
                     except:
-                        update_journal(" *** ERROR missing %s qualifier in feature definition ***"%feature_qualifier)
+                        journals_update(" *** ERROR missing %s qualifier in feature definition ***"%feature_qualifier)
                         
                     # Check if the found transcript id matches the targeted one, ignoring version 
                     if split_with_char(this_transcript_id,'.') == split_with_char(RG_globals.target_transcript_id,'.'):
@@ -2350,7 +2350,7 @@ def splice_a_sequence(seq_record,target_loc):
             #msgtxt="is now"
 
         #template_length=last_second-last_first+1
-        update_journal("  With option '%s'=%s, %s Range from %s %s: %s - %s ; global : %s - %s; length: %s bases"%(
+        journals_update("  With option '%s'=%s, %s Range from %s %s: %s - %s ; global : %s - %s; length: %s bases"%(
                     bio_parameters["Exome_extend"]["label"],
                     RG_globals.Exome_extend,
                     bio_parameters["target_transcript_name"]["label"],
@@ -2360,7 +2360,7 @@ def splice_a_sequence(seq_record,target_loc):
                     RG_process.get_absolute_position(seq_record,last_first+1),
                     RG_process.get_absolute_position(seq_record,last_second),
                     template_length))
-        update_journal("  %s %s has %s bases; %s spliced-out regions compared to %s %s with %s bases"%(bio_parameters["target_transcript_name"]["label"],
+        journals_update("  %s %s has %s bases; %s spliced-out regions compared to %s %s with %s bases"%(bio_parameters["target_transcript_name"]["label"],
                                                                                                        locus_transcript,template_length,splicetotal,in_ref_src_title,
                                                                                                        in_ref_src,clip_length))
 
@@ -2375,7 +2375,7 @@ def splice_a_sequence(seq_record,target_loc):
                 msgtxt=" NOT"
             else:
                 msgtxt=""
-            update_journal(" Reference Source sequence is%s trimmed to locus definition for a Reference sequence, because system-config option 'is_trim_to_gene' is set to %s"
+            journals_update(" Reference Source sequence is%s trimmed to locus definition for a Reference sequence, because system-config option 'is_trim_to_gene' is set to %s"
                                %(msgtxt,RG_globals.is_trim_to_gene))
             '''
             if RG_globals.is_trim_to_gene:
@@ -2385,7 +2385,7 @@ def splice_a_sequence(seq_record,target_loc):
                 msgtxt=", even with '%s' selected, "%(bio_parameters["is_CDS"]["label"])
             else:
                 msgtxt=" "
-            update_journal(" No splicing of exon boundaries%sbecause '%s' is set to '%s'"
+            journals_update(" No splicing of exon boundaries%sbecause '%s' is set to '%s'"
                            %(msgtxt,RG_globals.reference_haplotype,RG_globals.target_transcript_name))
         else:
             if RG_globals.is_CDS:
@@ -2403,12 +2403,12 @@ def splice_a_sequence(seq_record,target_loc):
                 success_text="and"
                 within_text=" "
 
-            update_journal(" Searched gene %s features for %s, %s found %s which appears%sto match %s:%s"
+            journals_update(" Searched gene %s features for %s, %s found %s which appears%sto match %s:%s"
                            %(target_gene,message,success_text,transcript_id,within_text,RG_globals.target_transcript_name,RG_globals.target_transcript_id))
             sac_update(len(spliceseq),seq_record.clipped_length)
  
     else:
-        update_journal(" No trimming nor splicing of exon boundaries because system-config option 'is_make_exome' is set to %s"%(RG_globals.is_make_exome))
+        journals_update(" No trimming nor splicing of exon boundaries because system-config option 'is_make_exome' is set to %s"%(RG_globals.is_make_exome))
 
     return (is_spliced,splicetotal,spliceseq,extra_record_features,this_ref_offset,this_ref_endclip)
 # end of def splice_a_sequence(seq_record,target_loc)
@@ -2428,12 +2428,12 @@ def make_reference_files1():
             templatetxt=", and '%s' %s.fasta, "%(RG_globals.reference_haplotype,Out_Ref_Source)
             addtxt="s"
 
-        #update_journal(" NOTE: Sequence files for: %s %s.fasta, and 'Reference %s' %s.fasta, NOT saved because option '%s' is set to %s"%(in_ref_src_title,in_ref_src,
+        #journals_update(" NOTE: Sequence files for: %s %s.fasta, and 'Reference %s' %s.fasta, NOT saved because option '%s' is set to %s"%(in_ref_src_title,in_ref_src,
         #                                                                                                                                 bio_parameters["target_transcript_name"]["label"],
         #                                                                                                                                 Out_Ref_Source,bio_parameters["is_write_ref_fasta"]["label"],
         #                                                                                                                                 RG_globals.is_write_ref_fasta))
 
-        update_journal(" NOTE: Sequence file%s for: %s %s.fasta %sNOT saved because option '%s' is set to %s"%(addtxt,
+        journals_update(" NOTE: Sequence file%s for: %s %s.fasta %sNOT saved because option '%s' is set to %s"%(addtxt,
                                                                                                                in_ref_src_title,
                                                                                                                Out_Ref_Source,
                                                                                                                templatetxt,
@@ -2466,7 +2466,7 @@ def run_processing(is_get_new_refseq):
         if is_success:
             is_fraglength_OK,shortest,short_label=validate_fraglength(Mutrecs,RG_globals.Fraglen)
             if not is_fraglength_OK:
-                update_journal(" *** Processing halted *** Requested %s length %s is more than half the shortest '%s' %s with sequence length %s"%
+                journals_update(" *** Processing halted *** Requested %s length %s is more than half the shortest '%s' %s with sequence length %s"%
                                (RG_globals.read_annotation,RG_globals.Fraglen,RG_globals.variants_label,short_label,shortest))
                 is_success= False
             elif (RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out) :
