@@ -8,8 +8,8 @@ Note added 16-Oct-2022:
     The calls to RG_main.call_exploder_main() are to support the Vue.js GUI version available at
     https://repliconevaluation.wordpress.com/replicon-genetics/ngs-emulator-sets
 
-    The objective is to minimise the amount of coding required in the App.vue front end where this coding can be carried out in RG_main.call_exploder_main
-    and any calculated variables communicated to the js as parameters. If only this were possible!
+    The objective is to minimise the amount of coding required in the GUI where this coding can be carried out in RG_main.call_exploder_main
+    If only it were possible to send calculated variables to the js as parameters.in App.vue ... Not in Dockered version
     
     There may be some other features that would be improved in the same way and eliminate the need for some of the config.json file
     
