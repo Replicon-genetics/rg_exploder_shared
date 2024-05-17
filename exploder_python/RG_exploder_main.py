@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_27_04.py"
-ProgverDate="16-May-2024"
+ProgverDate="17-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -2042,8 +2042,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                 R1_is_mut=RG_process.is_mut_cigar(R1fwdcigar)
                 R2_is_mut=RG_process.is_mut_cigar(R2fwdcigar)
                 is_one_mut=R1_is_mut or R2_is_mut
-                #if not is_tworeads:
-                #    print("single read at: %s; R1_is_mut %s; R1fwdcigar %s; R2_is_mut %s; R2fwdcigar %s"%(Saved_Fragcount+1,R1_is_mut,R1fwdcigar,R2_is_mut,R2fwdcigar))
+                # Use BRCA1_hap2 at 850 insert length, 200 read length, variant-only, high DOC, to find cases of unpaired reads including variants 
 
             # Need to save forward and reverse in random order, not always R1-first!
             if random() < 0.5:
