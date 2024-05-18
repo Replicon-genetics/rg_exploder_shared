@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="16-May-2024"
+#ProgverDate="18-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -1133,19 +1133,17 @@ def fill_cigar(cigarbox,var_start,var_end,mut_type,length):
 # end of def fill_cigar(cigarbox,var_start,var_end,mut_type,length)
 
 def pad_cigarbox(cigarbox):
-    '''
-    Checks if any remaining unmutated-places from last-mutated to first position.
-    Effectively pads front end of a CIGAR with Ms
-    '''
+    # Pads the front end of a CIGAR box with Ms
+    # Called by RG_main.make_allvars_in_one_seq
     if cigarbox[0] > 0:
         cigarbox.insert(1,"M")
         cigarbox.insert(1,cigarbox[0])
-        ''' Protect it from further manipulation by this function'''
-        cigarbox[0]=0
+        #Protect it from further manipulation by this function by ending cigarbox with 0
+        cigarbox[0]=0 
     return
 
 def get_untrimmed_cigar(cigarbox):
-    # Builds a CIGAR string based on contents of the 'cigarbox' list previously built in eg: MutateVarSeq
+    # Builds a CIGAR string based on contents of the 'cigarbox' list previously built in RG_main.make_allvars_in_one_seq & RG_main.MutateVarSeq
     cigar=""
     index=1; 
     while index<len(cigarbox)-2:
@@ -1174,6 +1172,7 @@ def get_trimmed_cigars(cigarbox,mut_box,start,length):
                 trimbox.pop(-2)
             else:
                 clear=True
+                
     fwd_offset,fwdcigarbox=trimcigarbox(cigarbox,mut_box,start,length)
     revcigarbox=reverse_cigarbox(fwdcigarbox)
     popleads(fwdcigarbox)
@@ -1255,9 +1254,8 @@ def haveamutbox(cigarbox):
 
 
 def trimcigarbox(cigarbox,mut_box,start,length):
-    #Take an existing cigar string and slice it accurately.
+    #Take an existing cigar box and slice it accurately.
     #This is tricksy, begging for an easier-to-follow algorithm
-
     seqpos=start
     end=start+length
     added=False
@@ -1317,89 +1315,6 @@ def trimcigarbox(cigarbox,mut_box,start,length):
     return ref_offset,newcigarbox
 # end of trimcigarbox(cigarbox,mut_box,start,length)
 
-def trimcigar(cigarbox,mut_box,start,length):
-
-    '''
-    Take an existing cigar string and slice it accurately.
-    This is tricksy, begging for an easier-to-follow algorithm
-    Historical development in modcigar.py, most of which failed.
-    '''
-    ''' Monitor is trigger to print intermediate values
-        (may be commented out)
-        Useful in debugging. Set monitor to 0 to silence the print'''
-    monitor=1
-    seqpos=start
-    end=start+length
-    added=False
-    ref_offset=start
-    mutboxindex=1
-    newcigarpack=[0,0]
-    while mutboxindex<len(mut_box)-2:
-        length=0
-        mut_pos=mut_box[mutboxindex]
-        mut_type=mut_box[mutboxindex+1]
-        cig_len=cigarbox[mutboxindex]
-        if (mut_pos < seqpos):
-            ''' Haven't reached target, accumulate reference offsets from omissions ...'''
-            if (mut_type == "D") or (mut_type == "N"):
-                ref_offset+=cig_len
-                ''' ... and also negative reference offsets from inserts'''
-            elif mut_type=="I":
-                ref_offset-=cig_len
-            '''skip to next '''
-        else:
-            if mut_pos >= end:
-                length = end-seqpos
-                newcigarpack.insert(len(newcigarpack)-1,length)
-                newcigarpack.insert(len(newcigarpack)-1,mut_type)
-                ''' Reached end: terminate the while loop '''
-                mutboxindex=len(mut_box)
-            elif (mut_type == "D") or (mut_type == "N"):
-                '''Where CIGAR includes omissions: omit when at start and accumulate in offset '''
-                if not added:
-                    ref_offset+=cig_len
-                    newcigarpack.insert(len(newcigarpack)-1,cig_len)
-                    newcigarpack.insert(len(newcigarpack)-1,mut_type)
-                else:
-                    ''' Append omissions at full length. '''
-                    newcigarpack.insert(len(newcigarpack)-1,cig_len)
-                    newcigarpack.insert(len(newcigarpack)-1,mut_type)
-            else:
-                length=mut_pos-seqpos
-                if length > 0:
-                    ''' Append CIGAR to the length of the (non-omission) feature'''
-                    newcigarpack.insert(len(newcigarpack)-1,length)
-                    newcigarpack.insert(len(newcigarpack)-1,mut_type)
-                    if (not added):
-                        added = True
-                        if (mut_type == "I"):
-                            ''' accumulate negative offset'''
-                            ioffset=cig_len-length
-                            ref_offset-=ioffset
-                elif (mut_type == "I"):
-                    ''' Another special case where length=0 at end of I-run, must kill the offset as if feature skipped
-                        at mut_pos < seqpos. Omit this and the Is get handled incorrectly'''
-                    ref_offset-=cig_len
-        if mut_pos > seqpos:
-            seqpos=mut_pos
-        mutboxindex+=2
-        # end of while mutboxindex<len(mut_box)-2 loop
-    ''' To create an output string consistent in format with front- and tail-spliced CIGAR strings,
-        may wish to create a tail to the new cigar. Requires calculation of offset from "end" to actual end of the sequence
-        Not currently implemented '''
-    '''
-    if cigarbox[len(cigarbox)-2] == "N":
-    tailNpack=cigarbox[len(cigarbox)-1]
-    '''
-    fwd_cigar=get_untrimmed_cigar(newcigarpack)
-    if monitor and is_mut_cigar(fwd_cigar):
-        print("cigarbox %s"%cigarbox)
-        print("mutbox %s"%mut_box)
-        print("newcigarpack %s"%newcigarpack)
-        print("fwd_cigar %s"%fwd_cigar)
-        print("ref_offset %s\n"%ref_offset)
-    return ref_offset,fwd_cigar
-# end of trimcigar2(cigarbox,mut_box,start,length)
 
 def is_mut_cigar(cigar):
     ''' Mutation types declared in CIGAR: Deletion, Insertion, X - variant '''
