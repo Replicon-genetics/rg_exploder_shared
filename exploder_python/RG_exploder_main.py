@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_27_04.py"
-ProgverDate="17-May-2024"
+ProgverDate="18-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -1930,7 +1930,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
         Generated_Fragcount+=1
         ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,seq_start,fraglen)
         if not RG_globals.is_muts_only or is_one_mut:
-            if not is_tworeads:
+            if not is_tworeads: # We have an unpaired read
                 saved_unpaired+=1
         #if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
             mutfragcount[mutrec_index]+=1
@@ -1979,7 +1979,6 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                 if lottowin <= lottoline[i]:
                     mutrec_index=i
                     break
-           #print("normalised %i %s %i %i "%(lottowin,RG_globals.mutlabels[mutrec_index],normutfreq[mutrec_index],lottoline[mutrec_index]))
             endpop=mutseqend[mutrec_index]                
                 
             while True:
@@ -1991,41 +1990,24 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             # Constrain the range position to the defined locus range and fraglen
             start=randint(headpop,endpop)
 
-            # 50% chance of the position start being the forward read's (S1) start-point (_start or the reverse-read's end-point
+            # 50% chance of the position start being the forward read's (R1) start-point or the reverse-read's (R2) end-point
             if random() < 0.5: # Position is the forward-read's start point
-                R1_start=start
-                R1_end=R1_start+fraglen-1
-                
-                R2_end=R1_start+insert_len-1
-                R2_start=R2_end-fraglen #  R2_start=start+insert_len-fraglen -1 #  R2_start=start-1+(insert_len-fraglen)
+                R1_start=start; R1_end=R1_start+fraglen-1
+                R2_end=R1_start+insert_len-1;   R2_start=R2_end-fraglen
                 # Will be < headpop if outside the locus
             else: # Position is reverse-read's end-point
-                R2_start=start
-                R2_end=R2_start+fraglen-1
-                
-                R1_start=R2_end-insert_len  #  R1_start=start-insert_len+fraglen -1 #  R1_start=start-1-(insert_len-fraglen)
-                R1_end=R1_start+fraglen-1 # R1_end= start-insert_len+fraglen -1 +fraglen -1 # R1_end= start-2 -(insert_len-2*fraglen)
+                R2_start=start; R2_end=R2_start+fraglen-1
+                R1_start=R2_end-insert_len; R1_end=R1_start+fraglen-1
 
             R1_frag=(headpop < R1_start <= endpop) or (headpop < R1_end <= endpop) # Allow one end to go into pop areas, not both
-            #if not R1_frag: print("R1_frag: R1_start:%s; R1_end:%s; endpop:%s"%(R1_start,R1_end,endpop))
-
             R2_frag=(headpop < R2_start <= endpop) or (headpop < R2_end <= endpop) # Allow one end to go into pop areas, not both
-            #if not R2_frag: print("R2_frag: R2_start:%s; R2_end:%s; endpop:%s"%(R2_start,R2_end,endpop))
-            # Range outside locus when R1_frag or R2_frag is False; mate becomes unpaired
-
+            
             # Detect whether two reads are being produced
             is_tworeads=R1_frag and R2_frag
             if not is_tworeads:
                 unpaired_count+=1
-                #print("Single read at %s"%(Saved_Fragcount+1))
-                #if not R1_frag and not R2_frag:
-                    #noread_count+=1 # Not needed beyond future curiosity, should be zero if the above range-cutoffs are working
-                    #print("No reads at next %s"%(Saved_Fragcount+1))
-            #print("R1_start=%s;R1_end=%s;R2_start=%s;R2_end=%s;inner=%s;headpop=%s;endpop=%s"%(R1_start,R1_end,R2_start,R2_end,(R2_start-R1_end-1),headpop,endpop))
 
-            # Determine if one of the reads in the pair contains a variant, in case we are filtering on variants-only
-            # Even if only one of the reads in a pair is variant, we need to retain both reads, otherwise the paired-end bit is pointless
-                    
+            # We need to get the reference-based start position, as a pnext for the other read in the pair, which we get by traversing the CIGAR                     
             if R1_frag: # Get pnext and is_cigar_mut for forward sequencing fragment
                 R2pnext,R1fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# pnext and cigar
             else:
@@ -2037,23 +2019,31 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             else:
                 R1pnext=0
                 R2fwdcigar=""
-                
+
+            # With the CIGARs, if we are filtering for  variants-only, we need to determine if just one of the reads in the pair contains a variant. 
+            # If so, we need to retain both reads, otherwise the paired-end bit is pointless.
             if RG_globals.is_muts_only:
                 R1_is_mut=RG_process.is_mut_cigar(R1fwdcigar)
                 R2_is_mut=RG_process.is_mut_cigar(R2fwdcigar)
                 is_one_mut=R1_is_mut or R2_is_mut
-                # Use BRCA1_hap2 at 850 insert length, 200 read length, variant-only, high DOC, to find cases of unpaired reads including variants 
-
+                if not is_tworeads: # We have an unpaired read
+                    # Check values for the unpaired read: R1 expected to be at high end of reefrence, R2 at near end
+                    # Use BRCA1_hap2 at 850 insert length, 200 read length, variant-only, >20 DOC, to find cases of unpaired reads that include variants
+                    '''
+                    if R1_frag:
+                        print("R1 is unpaired with CIGAR %s, starting %s"%(R1fwdcigar,R2pnext))
+                    else:
+                        print("R2 is unpaired with CIGAR %s, starting %s"%(R2fwdcigar,R1pnext))
+                    '''
             # Need to save forward and reverse in random order, not always R1-first!
+            # Also have a suspicion that we need to do one more 50% random: reverse complement both sequences / keep
+            # in order to emulate insert-orientation. The question is ... does it make any difference?
             if random() < 0.5:
                 # Do a forward, then a reverse, 50% of the time
-                do_r1_save()
-                do_r2_save()
+                do_r1_save(); do_r2_save()
             else:
                 # Do a reverse, then a forward, 50% of the time
-                do_r2_save()
-                do_r1_save()
-                    
+                do_r2_save(); do_r1_save()     
     journal_frags(mutrecs,Generated_Fragcount,Paired_Fragcount,mutfragcount,unpaired_count,saved_unpaired)
     #print("noread_count: %s ; unpaired_count %s "%(noread_count,unpaired_count))
     return
