@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_27_04.py"
-ProgverDate="18-May-2024"
+ProgverDate="21-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -2602,7 +2602,7 @@ def get_muttranscripts(redo_locus):
 
     # NB: redo_locus isn't used!
     # Very importantly the values set here to pass back to the calling GUI are:
-    # mrnapos_lookup,abs_offset,ref_strand,max_seqlength,GRChver_txt
+    # mrnapos_lookup,abs_offset,ref_strand,max_seqlength,GRChver_txt,headclip,tailclip
     # plus feature_titles (non-critical)
     
     is_join_complement=RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
@@ -2828,7 +2828,7 @@ def get_joinlist():
     try: # Are the joins defined in globals via the json file?
         barf=RG_globals.Reference_sequences[RG_globals.target_locus]["CDS_join"] # tests if it exists
         success,splice_joinlist_txt=get_transcript_data_json()
-    except: # Failed, so read the Reference file
+    except: # Failed, so read the Reference file # Works for python, but always define i json for pyodide because pyodide doesn't like a fail  
         success,splice_joinlist_txt=get_transcript_data_process(True)
     if success:
         #RG_globals.bio_parameters["target_build_variant"]["splice_joinlist_txt"]=splice_joinlist_txt
@@ -2980,30 +2980,22 @@ def save_add_var():
         '''
         #  End of: Not essential ...
     else:
-        is_success=False
-        
-    # Is RG_exploder_gui.add_mutlabs code required here for App.js?
+        is_success=False        
     return is_success
 
 def get_add_saves():
-    is_do_complment=is_make_addvar_complement()
+    is_do_complement=is_make_addvar_complement()
     varname_save=RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"],
-    if is_do_complment== None:
+    if is_do_complement== None:
         ref_save="-"
         var_save="-"
         varname_save="Quack"
-    elif is_do_complment:
-        #print("is_make_addvar_complement")
-        #print("ref_subseq %s, var_subseq %s"%(RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"],
-        #                                     RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]))
+    elif is_do_complement:
         ref_save=RG_process.get_revcomp(RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"])
         var_save=RG_process.get_revcomp(RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"])
     else:
         ref_save=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"]
         var_save=RG_globals.bio_parameters["target_build_variant"]["var_subseq"]["value"]
-        #print("NOT is_make_addvar_complement")
-        #print("ref_save %s, var_save %s"%(ref_save,var_save))
-
     return (ref_save,var_save,varname_save)
 
 def save_add_var2():
