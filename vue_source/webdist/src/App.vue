@@ -475,8 +475,9 @@ export default {
       // Can be changed here by Reference_sequences.selectedGene... data - initialised from json
       tbv_GRChver_txt: config?.bio_parameters?.target_build_variant?.GRChver_txt,
       tbv_is_save_var: config?.bio_parameters?.target_build_variant?.is_save_var,
-      //tbv_headclip:config?.bio_parameters?.target_build_variant?.headclip, // Hidden for TEST PURPOSES
-      tbv_headclip:0,
+      tbv_headclip:config?.bio_parameters?.target_build_variant?.headclip, 
+      //tbv_headclip:0,
+      //tbv_tailclip:config?.bio_parameters?.target_build_variant?.tailclip,
       mrnapos_lookup:config?.bio_parameters?.target_build_variant?.mrnapos_lookup,
       tbv_transcript_view:config?.bio_parameters?.target_build_variant?.transcript_view,
       tbv_abs_offset:config?.bio_parameters?.target_build_variant?.abs_offset,
@@ -658,8 +659,8 @@ export default {
 
 
       // Need to store an offset for case of generating variants from *clipped* genomic sequence, so the offset is the Headclip length
-      const headclip=locus_begin-1
-      const tailclip=maxreflen-locus_end
+      this.tbv_headclip=locus_begin-1
+      this.tbv_tailclip=maxreflen-locus_end
 
       var exon_total=0
       var intron_total=0
@@ -686,13 +687,13 @@ export default {
       {
         starts.push(maxreflen)
         ends.push(locus_end+1)
-        exon_length.push(tailclip)
+        exon_length.push(this.tbv_tailclip)
       }
       else
       {
         starts.push(1)
         ends.push(locus_begin-1)
-        exon_length.push(headclip)
+        exon_length.push(this.tbv_headclip)
       }
       // set Locus ranges
       if (this.selectedTranscript == this.jsonConfig.stringconstants.empty_transcript_name) // Locus
@@ -799,12 +800,12 @@ export default {
     if (this.is_join_complement){
         starts.push(locus_begin-1)
         ends.push(1)
-        exon_length.push(headclip)
+        exon_length.push(this.tbv_headclip)
       }
     else{
         starts.push(locus_end+1)
         ends.push(maxreflen)
-        exon_length.push(tailclip)
+        exon_length.push(this.tbv_tailclip)
       }
     template_cumulative_length.push("-")
     // This to catch where there's no downstream because exon boundary coincides with locus boundary
