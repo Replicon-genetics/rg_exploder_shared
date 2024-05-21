@@ -1,5 +1,5 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_27_04.py"
+Progver="RG_exploder_main_27_05.py"
 ProgverDate="21-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -501,6 +501,7 @@ def read_refseqrecord(embl_or_genbank):
             SEQ_record.Generated_Fragcount=0
             SEQ_record.Saved_Fragcount=0
             SEQ_record.Saved_Unpaired_Fragcount=0
+            SEQ_record.Saved_Paired_Fragcount=0
             
             exists,SEQ_record=RG_process.set_seqrec_absolutes(SEQ_record) # must do this even if RG_globals.is_use_absolute== False
             if RG_globals.is_write_ref_ingb:
@@ -1051,18 +1052,14 @@ def journal_final_summary():
     if not(RG_globals.is_fasta_out or RG_globals.is_fastq_out or RG_globals.is_sam_out):
         journals_update(" ... Rolling tumbleweed ...")
     else:
-        readstxt="%s"%RG_globals.read_annotation
-        if RG_globals.is_frg_paired_end:
-            plextxt="%s pairs "%readstxt
-            endplex="; unpaired %ss = %s"%(readstxt,REFSEQ_RECORD.Saved_Unpaired_Fragcount)
-        else:
-            plextxt="%ss"%readstxt
-            endplex=""
-        journals_update(" %s=%i\n Total number of %s=%s%s"%(bio_parameters["Fraglen"]["label"],
-                                                            RG_globals.Fraglen,plextxt,REFSEQ_RECORD.Saved_Fragcount,endplex))
+        readtxt="%s"%RG_globals.read_annotation
+        plextxt1="%ss=%s"%(readtxt,REFSEQ_RECORD.Saved_Fragcount)
+        endplex1=""
+        plextxt2=""
+            
         spliceouts=REFSEQ_RECORD.splicecount
         if spliceouts > 0:
-            addtxt=", shown in %s CIGAR as 'N'"%RG_globals.read_annotation
+            addtxt=", shown in %s CIGAR as 'N'"%readtxt
         else:
             addtxt=""
         journals_update(" %s sections from the Reference Sequence are removed%s"%(spliceouts,addtxt))
@@ -1070,13 +1067,26 @@ def journal_final_summary():
         if RG_globals.is_frg_paired_end:
             plextxt=bio_parameters["is_frg_paired_end"]["label"]
             endtxt=""
+            plextxt1="%s pairs=%s"%(readtxt,REFSEQ_RECORD.Saved_Paired_Fragcount)
+            endplex1="; unpaired %ss = %s"%(readtxt,REFSEQ_RECORD.Saved_Unpaired_Fragcount)
+            plextxt2="; %s=%s"%(bio_parameters["gauss_mean"]["label"],RG_globals.gauss_mean)
+
         elif RG_globals.is_duplex:
             plextxt=bio_parameters["is_duplex"]["label"]
             endtxt="forward and reverse-complement" 
+
         else:
             plextxt=bio_parameters["is_simplex"]["label"]
-            endtxt="forward only"                
+            endtxt="forward only"
+
         journals_update(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
+        journals_update(" %s=%i%s\n Total number of %s%s"%(bio_parameters["Fraglen"]["label"],RG_globals.Fraglen,plextxt2,
+                                                            plextxt1,endplex1))
+        
+        if not REFSEQ_RECORD.Saved_Paired_Fragcount and not REFSEQ_RECORD.Saved_Unpaired_Fragcount:
+            journals_update(" *** No reads saved to files on this run ***")
+            
+
 # end of def journal_final_summary
 
 def close_journal(no_error):
@@ -1916,28 +1926,26 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     global NormaliseUpper,Paired_insert_Max,Paired_insert_Min
     
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
-    Paired_Fragcount=0
     last_Saved_Fragcount=0
     noread_count=0
     unpaired_count=0
     saved_unpaired=0
     mutseqend=[] # The sequence end of each mutseq
-    headpop=RG_globals.bio_parameters["target_build_variant"]["headclip"]
+    locus_begin,locus_end=RG_globals.Reference_sequences[RG_globals.target_locus]["Locus_range"].split(":")
+    headpop=int(locus_begin)+1
     is_one_mut=False
 
     def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads,is_one_mut):
-        nonlocal Generated_Fragcount,Saved_Fragcount,Paired_Fragcount,saved_unpaired
+        nonlocal Generated_Fragcount,Saved_Fragcount,saved_unpaired
         Generated_Fragcount+=1
         ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,seq_start,fraglen)
-        if not RG_globals.is_muts_only or is_one_mut:
+        if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
             if not is_tworeads: # We have an unpaired read
                 saved_unpaired+=1
         #if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
             mutfragcount[mutrec_index]+=1
             if last_Saved_Fragcount==Saved_Fragcount: # Not incremented from previous pair or singleton
-                Saved_Fragcount+=1 
-            else:# Keep Saved_Fragcount the same to share a name-pair
-                Paired_Fragcount+=1 # Have to tally the pairs in order to sum with Saved_Fragcount            
+                Saved_Fragcount+=1             
             inseq=mutrecs[mutrec_index].seq[seq_start:seq_start+fraglen]
             label_and_saveg(pquote,inseq,Saved_Fragcount,seq_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],pnext,tlen,is_R1,is_tworeads,True)
         return
@@ -2044,7 +2052,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             else:
                 # Do a reverse, then a forward, 50% of the time
                 do_r2_save(); do_r1_save()     
-    journal_frags(mutrecs,Generated_Fragcount,Paired_Fragcount,mutfragcount,unpaired_count,saved_unpaired)
+    journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired_count,saved_unpaired)
     #print("noread_count: %s ; unpaired_count %s "%(noread_count,unpaired_count))
     return
 # end of def generate_multisource_paired_frags4(RefRec,mutrecs,fraglen,fragdepth)
@@ -2094,6 +2102,7 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     
     str0="For a '%s' target value of %s, based on reference length %s:"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fragdepth,ref_doc_len)
     str1=str(Generated_Fragcount); str2="s";str3=str(RG_globals.Fraglen) ; str4="random";str4a="within" ; str5=str(fragtallycount); str6=RG_globals.variants_label;
+    str8="sequence"
     if fragtallycount <2 :
         str7=""
     else:
@@ -2102,7 +2111,8 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
         str0=""; str1+=" single"; str2=""; str4="each possible"; str4a="for"
 
     if RG_globals.is_frg_paired_end:
-        str1="%s paired-%ss and %s unpaired"%(Generated_Fragcount-unpaired,RG_globals.read_annotation,unpaired)
+        str4="paired"
+        str8="%s %ss or un%s"%(str4,RG_globals.read_annotation,str4)
 
     journals_update("\n%s\n Generated %s %ss of length %s bases at %s starting position%s %s %s %s%s: %s"
                    %(str0,str1,RG_globals.read_annotation,str3,str4,str2,str4a,str5,str6,str7,mutlistlabels))
@@ -2110,16 +2120,16 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     if RG_globals.is_duplex and RG_globals.is_onefrag_out:
         journals_update("\tSelecting option '%s' with '%s' doubles the %s total, by creating a reverse-complement for each %s"
                        %(bio_parameters["is_duplex"]["label"],bio_parameters["is_onefrag_out"]["label"],RG_globals.read_annotation,RG_globals.read_annotation))
-
+    
     if RG_globals.is_muts_only:
-        if RG_globals.is_frg_paired_end:
-            plextxt=bio_parameters["is_frg_paired_end"]["label"]
-        elif RG_globals.is_duplex:
-            plextxt=bio_parameters["is_duplex"]["label"]
-        else:
-            plextxt=bio_parameters["is_simplex"]["label"]
-        journals_update("\tReference-only-sequence %ss were excluded, leaving %s variant-containing %ss. %s production."%(RG_globals.read_annotation,
-                                                                                                                        Saved_Fragcount,RG_globals.read_annotation,plextxt))
+        str9="excluded"
+        str10=", leaving ..."
+    else:
+        str9="included"
+        str10=""
+    journals_update(" Reference-only %s %ss are %s because option '%s' is set to %s%s"%(str8,RG_globals.read_annotation,str9,
+                                                                                      bio_parameters["is_muts_only"]["label"],RG_globals.is_muts_only,str10))
+    
     journals_update(" source(count):\n\t%s"%(fragtallystring[:-1]))
     journals_update(" source(count-ratio):\n\t%s"%(fragratio[:-1]))
     journals_update(" source(length):\n\t%s"%(fragsourcelen[:-1]))
@@ -2127,6 +2137,7 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     REFSEQ_RECORD.Generated_Fragcount=Generated_Fragcount
     REFSEQ_RECORD.Saved_Fragcount=Saved_Fragcount
     REFSEQ_RECORD.Saved_Unpaired_Fragcount=saved_unpaired
+    REFSEQ_RECORD.Saved_Paired_Fragcount=Saved_Fragcount-saved_unpaired
 # end of journal_frags2()
 
 def split_with_char(instring,splitchar):
