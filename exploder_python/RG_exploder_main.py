@@ -991,7 +991,7 @@ def close_seqout(SeqRec):
         update_readme(txt)
 
     elif not REFSEQ_RECORD.Saved_Paired_Fragcount and not REFSEQ_RECORD.Saved_Unpaired_Fragcount:
-        txt=" *** No %s saved to files on this run ***"%RG_globals.read_annotation
+        txt=" *** No %ss saved to files on this run ***"%RG_globals.read_annotation
         journals_update(txt)
         update_readme(txt)
     return
@@ -2092,7 +2092,7 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
             fragratio=fragratio+srclab+str(int((ratiofreq+half_adj)*doc_mult)/doc_mult)+"), "
             fragtallycount+=1
     
-    str0="For a '%s' target value of %s, based on reference length %s:"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fragdepth,ref_doc_len)
+    str0="For a '%s' target value of %s, based on template length %s:"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fragdepth,ref_doc_len)
     str1=str(Generated_Fragcount); str2="s";str3=str(RG_globals.Fraglen) ; str4="random";str4a="within" ; str5=str(fragtallycount); str6=RG_globals.variants_label;
     str8="sequence"
     if fragtallycount <2 :
