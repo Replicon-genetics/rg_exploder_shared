@@ -1,7 +1,7 @@
 {
     "stringconstants": {
         "DatasetIDText": "Demo GRCh38",
-        "CustomerIDText": "Public v.27_03 April 2024",
+        "CustomerIDText": "Public v.27_05, May 2024",
         "CopyrightText": "Copyright \u00a9 Replicon Genetics 2021-2024. All rights reserved.",
         "seq_polarity_plus": "1",
         "seq_polarity_minus": "-1",
