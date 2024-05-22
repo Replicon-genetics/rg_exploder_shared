@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="21-May-2024"
+#Prg_verDate="22-May-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -18,24 +18,14 @@ import RG_exploder_io as RG_io # File input/output
 
 def set_config_consts():
     global exploder_root
-    global is_use_TKinter,GRCH_dataset,CustomerIDText #   These are most likely to need resetting between runs
-    global MAINVER,DATEVER
-
-    ######## Revisit these three each time a data set is renewed ########
-    MAINVER="v.27_05"
-    DATEVER="May 2024"
+    global is_use_TKinter,CustomerIDText,MAINFILE #   These are most likely to need resetting between runs
     
-    GRCH_dataset="GRCh38"   #GRCH_dataset is used in set_defaults
-    #GRCH_dataset="GRCh37"   #GRCH_dataset is used in set_defaults
-
+    ######## Revisit these each time a data set is renewed. Now down to 2 as MAINVER, DATEVER, GRCH_dataset derived ########
     #CustomerIDText="EBaker"
     CustomerIDText="Public"
-
-    #is_use_TKinter=True  # When setting up to use the Python GUI : RG_exploder_gui.py
-    is_use_TKinter=False   # When setting up to use the Vue.js GUI
-    
+    vuedir="mravn" # Solely to define how is_use_TKinter is set
     ######## End of: Revisit these each time a data set is renewed ########
- 
+
     #### Should not need changing unless modify throughout other code ####
 
     global config_file_output,config_file_reference_seqs
@@ -50,9 +40,17 @@ def set_config_consts():
 
     config_file_output="input/config.json"
     config_file_reference_seqs="input/loci.json"
+    MAINFILE="RG_exploder_main.py"
+
+    if vuedir in exploder_root:
+        is_use_TKinter=False  # When setting up to use the Vue.js GUI
+    else:
+        is_use_TKinter=True  # When setting up to use the Python GUI : RG_exploder_gui.py
+        
+    set_defaults()
 
 def config_file_out():
-    set_defaults()
+    #set_defaults()
     out_data=make_out_data()
     with RG_io.open_write(config_file_output) as write_file:
         json.dump(out_data, write_file,indent=4)
@@ -68,6 +66,20 @@ def config_file_in(in_file):
     return config_exists,config_in_data
 # end of config_file_in()
 
+
+def main_file_read(in_file):
+    main_exists = RG_io.is_file(in_file)
+    line2=""; line3=""
+    if main_exists:
+        #print("main_exists %s"%main_exists)
+        with RG_io.open_read(in_file) as main_file:
+            main_file.readline()
+            line2=main_file.readline()
+            line3=main_file.readline()
+        main_file.close()
+    return main_exists,line2,line3
+# end of main_file_read()
+
 def process_file_configs_python(): # Only create config-file if file not already present (manual deletion necessary)
     global infilepathroot
     config_exists = RG_io.is_file(config_file_output)
@@ -80,6 +92,21 @@ def process_file_configs_python(): # Only create config-file if file not already
 # end of process_file_configs_python()
 
 def set_defaults():
+    global CustomerIDText
+    set_string_defaults()
+    set_io_defaults()
+    set_diagnostic_defaults()
+    set_constants_defaults()
+    set_gui_vars_defaults()
+    set_vars_seq_limits_defaults()
+    if CustomerIDText=="Public":
+        set_Reference_sequences_configs_public3()
+    else:
+        print("No set up for CustomerIDText==%s"%CustomerIDText)
+        exit()
+# end of set_defaults
+
+def set_defaults1():
     global GRCH_dataset, CustomerIDText
     set_string_defaults()
     set_io_defaults()
@@ -100,7 +127,7 @@ def set_defaults():
         else:
             set_Reference_sequences_configs_GRCh38_1000()
     set_dynamic_vars_defaults()
-# end of set_defaults
+# end of set_defaults1
 
 def make_out_data():
     global ReadsList
@@ -709,73 +736,36 @@ def make_bio_parameters_configs():
     ReadsList.append(bio_parameters["is_frg_paired_end"]["label"])
     ReadsList.append(bio_parameters["is_duplex"]["label"])
     ReadsList.append(bio_parameters["is_simplex"]["label"])
-
 # end of make_bio_parameters_configs()
 
-def set_Reference_sequences_configs_GRCh37_1000():
-    global DatasetIDText,Reference_sequences
-    DatasetIDText="EB dataset GRCh37_0003_03; September 2022"
-    exists,stuff=config_file_in(config_file_reference_seqs)
-    if exists:
-        Reference_sequences=stuff["Reference_sequences"]
-    else:
-        print("Fail")
-        sys.exit()
-        
-def set_Reference_sequences_configs_GRCh38_1000():
-    global DatasetIDText,Reference_sequences
-    DatasetIDText="EB dataset GRCh38_0005_03; September 2022"
-    exists,stuff=config_file_in(config_file_reference_seqs)
-    if exists:
-        Reference_sequences=stuff["Reference_sequences"]
-    else:
-        print("Fail")
-        sys.exit()
 
-def set_Reference_sequences_configs_GRCh37_1000_public2():
+def set_Reference_sequences_configs_public3():
     global CustomerIDText,DatasetIDText,Reference_sequences,MAINVER,DATEVER
-    DatasetIDText="Demo GRCh37"
-    CustomerIDText="%s %s %s"%(CustomerIDText,MAINVER,DATEVER)
-    #DatasetIDText="EB dataset GRCh37_0008_01; April 2024"
+    global GeneList,GRCH_dataset,MAINFILE
     exists,stuff=config_file_in(config_file_reference_seqs)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
+        set_dynamic_vars_defaults()
+        # Get the GRCH_dataset version from loci.json file
+        region=Reference_sequences[GeneList[0]]["Region"]
+        GRCH_dataset=region.split(":")[0]
+        DatasetIDText="Demo %s"%GRCH_dataset
+        main_exists,line2,line3=main_file_read(MAINFILE)
+        # Get the MAINVER and DATEVER directly from the main python code 
+        if main_exists:
+            date=line3.split('"')[1]
+            DATEVER=date.split("-")[1]+" "+date.split("-")[2]
+            
+            main=line2.split('"')[1]
+            main2=main.split('.')[0]
+            MAINVER=main2.split('_')[3]+'_'+main2.split('_')[4]
+            CustomerIDText="%s v.%s, %s"%(CustomerIDText,MAINVER,DATEVER)
+        else:
+            print("Fail: %s does not exist"%mainfile)
+            sys.exit() 
     else:
-        print("Fail")
+        print("Fail: %s does not exist"%config_file_reference_seqs)
         sys.exit()
-
-def set_Reference_sequences_configs_GRCh38_1000_public2():
-    global CustomerIDText,DatasetIDText,Reference_sequences,MAINVER,DATEVER
-    DatasetIDText="Demo GRCh38"
-    CustomerIDText="%s %s %s"%(CustomerIDText,MAINVER,DATEVER)
-    #DatasetIDText="EB dataset GRCh38_0008_01; April 2024"
-    exists,stuff=config_file_in(config_file_reference_seqs)
-    if exists:
-        Reference_sequences=stuff["Reference_sequences"]
-    else:
-        print("Fail")
-        sys.exit()
-
-def set_Reference_sequences_configs_GRCh37_1000_public():
-    global DatasetIDText,Reference_sequences
-    DatasetIDText="Open Access GRCh37_0005_03 ; September 2022"
-    exists,stuff=config_file_in(config_file_reference_seqs)
-    if exists:
-        Reference_sequences=stuff["Reference_sequences"]
-    else:
-        print("Fail")
-        sys.exit()
-
-def set_Reference_sequences_configs_GRCh38_1000_public():
-    global CustomerIDText,DatasetIDText,Reference_sequences
-    DatasetIDText="Open Access GRCh38_0005_03; September 2022"
-    exists,stuff=config_file_in(config_file_reference_seqs)
-    if exists:
-        Reference_sequences=stuff["Reference_sequences"]
-    else:
-        print("Fail")
-        sys.exit()
-
 
 def set_vars_seq_limits_defaults():
     # ====================================================================
