@@ -2,13 +2,14 @@
 #rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
 rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 rootdatadir=$rootapplicationdir"data_sources/"
+rootprogdir=$rootapplicationdir"exploder_python/"
 inputdirhead="exploder_input_"
 inputdirtail="_1000"
 input37="37"
 input38="38"
 outputdirhead="exploder_output_"
 outputdirtail="_1000"
-cd $rootapplicationdir
+cd $rootprogdir
 rm output # Don't worry about 'not found' warnings
 rm input # Don't worry about 'not found' warnings
 echo $1
@@ -21,5 +22,5 @@ else
     inputdir=$input38
 fi
 
-ln -s $rootdatadir$outputdirhead$outputdir$outputdirtail output
-ln -s $rootdatadir$inputdirhead$inputdir$inputdirtail input
+ln -s $rootprogdir$outputdirhead$outputdir$outputdirtail output
+ln -s $rootprogdir$inputdirhead$inputdir$inputdirtail input
