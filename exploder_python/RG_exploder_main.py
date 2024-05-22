@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_27_05.py"
-ProgverDate="21-May-2024"
+ProgverDate="22-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -205,8 +205,8 @@ def initialise_global_consts():
     from RG_exploder_globals import Ref_file_name
     global Ref_file_name
 
-    from RG_exploder_globals import journhead,journend,readmehead,readmeend,config_json_head,config_json_end # CONSTANTS: stub names for journal and readme files
-    global journhead,journend,readmehead,readmeend,config_json_head,config_json_end
+    from RG_exploder_globals import journhead,journend,readmehead,readmeend # CONSTANTS: stub names for journal and readme files
+    global journhead,journend,readmehead,readmeend
 
     from RG_exploder_globals import MaxVarPos # The maximum length of Refseq used.
     # Unusual exception: Local global MaxVarPos is reset to RG_globals.MaxVarPos in initialise_module_globals at each new reference-file load
@@ -326,8 +326,7 @@ def initialise_module_outfiles():
 def initialise_journal():
     #Prior declared globals
     global Progver,ProgverDate
-    global journhead,journend
-    global readmehead,readmeend
+    global journhead,journend,readmehead,readmeend,journal_name,readme_name
     global Outfilepath
     global locus_transcript
     global is_htm_journal,is_joindata_in_json
@@ -337,13 +336,14 @@ def initialise_journal():
     if not is_append_journalfile:
         extralabel,strandlabel=RG_globals.get_strand_extra_label()
         journal_name="%s%s%s%s"%(locus_transcript,journhead,extralabel,journend)
+        readme_name="%s%s%s%s"%(locus_transcript,readmehead,extralabel,readmeend)
         is_append_journalfile=True
         journout = RG_io.open_write("%s%s"%(Outfilepath,journal_name), 0)
         journout.write("This journal file %s"%journal_name)
         if is_htm_journal:
-            initialise_journal_htm(journal_name)
+            initialise_journal_htm()
         journals_update(" is created by %s %s starting on %s"%(Progver,ProgverDate,RG_globals.getime()))
-        journals_update("Read in conjunction with %s%s%s%s"%(locus_transcript,readmehead,extralabel,readmeend))
+        journals_update("Read in conjunction with %s"%readme_name)
         journals_update("User ID:%s"%(RG_globals.CustomerIDText))
         journals_update("Data set:%s"%(RG_globals.DatasetIDText))
         journals_update("Selected %s: %s; Selected %s: %s; Selected %s: %s"%(bio_parameters["target_locus"]["label"],
@@ -363,14 +363,13 @@ def initialise_journal():
     return
 # End of initialise_journal()
 
-def initialise_journal_htm(journal_name):
-    global Outfilepath,journout_htm,is_append_journalfile_htm
+def initialise_journal_htm():
+    global Outfilepath,journout_htm,is_append_journalfile_htm,journal_name
     journout_htm = RG_io.open_write("%s%s.htm"%(Outfilepath,journal_name), 0)
     is_append_journalfile_htm=True
     outstring="<!DOCTYPE html>\n<html>\n<head><title>%s.htm</title></head>\n<body>\n<pre>"%journal_name
     journout_htm.write(outstring)
     journout_htm.write("This journal file %s.htm"%journal_name)
-
 # End of initialise_journal_htm()
 
 def close_journal_htm():
@@ -406,8 +405,7 @@ def update_journal(instring):
 def initialise_readme():
     # Prior declared globals
     global Progver,ProgverDate
-    global readmehead,readmeend
-    global journhead,journend
+    global journal_name,readme_name
     global Outfilepath
     global locus_transcript
     #Writes a metadata file explaining the files present in output directory
@@ -415,11 +413,10 @@ def initialise_readme():
     global readmeout,is_append_readmefile
     if not is_append_readmefile:
         extralabel,strandlabel=RG_globals.get_strand_extra_label()
-        readme_outfilename="%s%s%s%s"%(locus_transcript,readmehead,extralabel,readmeend)
-        readmeout = RG_io.open_write("%s%s"%(Outfilepath,readme_outfilename), 0)
+        readmeout = RG_io.open_write("%s%s"%(Outfilepath,readme_name), 0)
         is_append_readmefile=True
-        update_readme("This readme file %s is written by Program %s %s starting on %s"%(readme_outfilename,Progver,ProgverDate,RG_globals.getime()))
-        update_readme("Read in conjunction with %s%s%s%s"%(locus_transcript,journhead,extralabel,journend))
+        update_readme("This readme file %s is written by Program %s %s starting on %s"%(readme_name,Progver,ProgverDate,RG_globals.getime()))
+        update_readme("Read in conjunction with %s"%(journal_name))
         update_readme("Program input files:")
     return
 # end of def initialise_readme()
@@ -910,20 +907,16 @@ def close_seqout(SeqRec):
     global fastaout,fastqout,is_append_fastafile,is_append_fastqfile
     global samout,is_append_samfile, mutout, is_append_mutfile, mutprotout, is_append_mutprotfile
     global mutlistlabels,outfilestring
-    global config_json_head,config_json_end
-    global locus_transcript
+    global locus_transcript,readme_name,journal_name,user_config_file
 
     extralabel,strandlabel=RG_globals.get_strand_extra_label()
-    update_readme("\nProgram output metadata files:\n%s%s%s%s\t- This file"%(locus_transcript,readmehead,extralabel,readmeend))
-    #journaltxt="\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(in_ref_src_title)
-    journalname="%s%s%s%s"%(locus_transcript,journhead,extralabel,journend)
-    #update_readme("%s%s"%(journalname,journaltxt))
+    update_readme("\nProgram output metadata files:\n%s\t- This file"%readme_name)
 
-    update_readme("%s\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(journalname,in_ref_src_title))
+    update_readme("%s\t- Journal file documenting runtime messages & metadata including %s headers, program parameters"%(journal_name,in_ref_src_title))
     
     if is_htm_journal:
-        update_readme("%s.htm\t- html version of Journal file"%journalname)
-    update_readme("%s%s%s%s\t- contains configuration data for this run"%(locus_transcript,config_json_head,extralabel,config_json_end))
+        update_readme("%s.htm\t- html version of Journal file"%journal_name)
+    update_readme("%s\t- contains configuration data for this run"%user_config_file)
     sam_fastfile=""
 
     update_readme(outfilestring)
@@ -971,7 +964,7 @@ def close_seqout(SeqRec):
             addtxt="spliced "
         else:
             addtxt=""
-        update_readme("%s\t- FASTA sequence %ss from all %s%s%s"%(out_fa_file,RG_globals.read_annotation,addtxt,add_txt0,mutlistlabels))
+        update_readme("%s\t- FASTA sequence %ss from each selected %s%s%s"%(out_fa_file,RG_globals.read_annotation,addtxt,add_txt0,mutlistlabels))
 
     if is_append_fastqfile:
         fastqout.close()
@@ -996,8 +989,12 @@ def close_seqout(SeqRec):
         txt=" NB: All 'Output Options: %ss in FASTA/FASTQ/SAM format' are de-selected, so not a lot happened"%RG_globals.read_annotation.capitalize()
         journals_update(txt)
         update_readme(txt)
-    return
 
+    elif not REFSEQ_RECORD.Saved_Paired_Fragcount and not REFSEQ_RECORD.Saved_Unpaired_Fragcount:
+        txt=" *** No %s saved to files on this run ***"%RG_globals.read_annotation
+        journals_update(txt)
+        update_readme(txt)
+    return
 # end of def close_seqout
 
 
@@ -1082,11 +1079,6 @@ def journal_final_summary():
         journals_update(" Saved %ss created as %s %s"%(RG_globals.read_annotation,plextxt,endtxt))
         journals_update(" %s=%i%s\n Total number of %s%s"%(bio_parameters["Fraglen"]["label"],RG_globals.Fraglen,plextxt2,
                                                             plextxt1,endplex1))
-        
-        if not REFSEQ_RECORD.Saved_Paired_Fragcount and not REFSEQ_RECORD.Saved_Unpaired_Fragcount:
-            journals_update(" *** No reads saved to files on this run ***")
-            
-
 # end of def journal_final_summary
 
 def close_journal(no_error):
@@ -1105,10 +1097,10 @@ def close_journal(no_error):
 # end of def close_journal    
 
 def close_readme(no_error):
-    global readmeout #  Prior declared filehandle for readme file
+    global readmeout,readme_name #  Prior declared filehandle and name for readme file
     global Progver,Start_time
     if not no_error:
-        update_readme(" *** Warning or Error report in %s%s%s *** "%(locus_transcript,journhead,journend))
+        update_readme(" *** Warning or Error report in %s *** "%readme_name)
     update_readme("Ending %s at %s "%(Progver,RG_globals.getime()))
     elapsed= time.time()- Start_time
     update_readme("Total time taken:%s"%elapsed)
@@ -1171,7 +1163,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
             Seq_rec.clipped_length=len(Seq_rec.seq)
             mutrecs.append(Seq_rec)
             mutcount+=1
-            mutlistlabels=mutlistlabels+" "+label+","
+            mutlistlabels=mutlistlabels+" "+RG_globals.target_locus+"_"+label+","
         return accept
    #end of def local_add_mutrec(Seq_rec,label)
         
@@ -1204,10 +1196,9 @@ def get_mutrecords(REF_record,embl_or_genbank):
                         journals_update(" %s definition not accepted"%label)
             if  not exists:
                 journals_update(" %s failed to load "%label)
-                
     # end of loop for label in RG_globals.mutlabels:
-    if accept:
-        mutlistlabels=mutlistlabels[:-1]
+    #if accept:
+    #    mutlistlabels=mutlistlabels[:-1]
     if mutcount < 1:
         #print("special case mutcount %s "%mutcount)
         # Check special case when there is only 1 mutrec and freq is set to zero. Set freq to 1 to avoid nul run. It keeps tripping me up!
@@ -1222,7 +1213,7 @@ def get_mutrecords(REF_record,embl_or_genbank):
         else:
             program_exit("\t- Unable to read a minimum of 1 %s"%RG_globals.variants_label)
             is_success=False
-
+    mutlistlabels=mutlistlabels[:-1]
     if mutcount > 1:
         addtxt="s"
     else:
@@ -2092,12 +2083,13 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
         min_norm=min([i for i in mutfragcount if i > 0])
     for item in mutrecs:
         if item.mutfreq >0:
-            fragtallystring=fragtallystring+item.mutlabel+"("+str(mutfragcount[fragtallycount])+"),"
+            srclab=RG_globals.target_locus+"_"+item.mutlabel+"("
+            fragtallystring=fragtallystring+srclab+str(mutfragcount[fragtallycount])+"), "
             doc=mutfragcount[fragtallycount]*RG_globals.Fraglen/ref_doc_len
-            fragdocstring=fragdocstring+item.mutlabel+"("+str(int((doc+half_adj)*doc_mult)/doc_mult)+"),"
-            fragsourcelen=fragsourcelen+item.mutlabel+"("+str(len(item.seq))+"),"
+            fragdocstring=fragdocstring+srclab+str(int((doc+half_adj)*doc_mult)/doc_mult)+"), "
+            fragsourcelen=fragsourcelen+srclab+str(len(item.seq))+"), "
             ratiofreq=mutfragcount[fragtallycount]/min_norm    
-            fragratio=fragratio+item.mutlabel+"("+str(int((ratiofreq+half_adj)*doc_mult)/doc_mult)+"),"
+            fragratio=fragratio+srclab+str(int((ratiofreq+half_adj)*doc_mult)/doc_mult)+"), "
             fragtallycount+=1
     
     str0="For a '%s' target value of %s, based on reference length %s:"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fragdepth,ref_doc_len)
@@ -2130,10 +2122,10 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     journals_update(" Reference-only %s %ss are %s because option '%s' is set to %s%s"%(str8,RG_globals.read_annotation,str9,
                                                                                       bio_parameters["is_muts_only"]["label"],RG_globals.is_muts_only,str10))
     
-    journals_update(" source(count):\n\t%s"%(fragtallystring[:-1]))
-    journals_update(" source(count-ratio):\n\t%s"%(fragratio[:-1]))
-    journals_update(" source(length):\n\t%s"%(fragsourcelen[:-1]))
-    journals_update(" source('%s'=count*%s/template_length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-1]))
+    journals_update(" source(count):\n\t%s"%(fragtallystring[:-2]))
+    journals_update(" source(count-ratio):\n\t%s"%(fragratio[:-2]))
+    journals_update(" source(length):\n\t%s"%(fragsourcelen[:-2]))
+    journals_update(" source('%s'=count*%s/template_length):\n\t%s"%(bio_parameters["Fragdepth"]["label"],RG_globals.Fraglen,fragdocstring[:-2]))
     REFSEQ_RECORD.Generated_Fragcount=Generated_Fragcount
     REFSEQ_RECORD.Saved_Fragcount=Saved_Fragcount
     REFSEQ_RECORD.Saved_Unpaired_Fragcount=saved_unpaired
@@ -2471,9 +2463,9 @@ def make_reference_files1():
 # run_processing was formerly the way of starting the batch run.
 # It has been adapted into a function to support repeated-calling from a GUI module
 def run_processing(is_get_new_refseq):
-    global REFSEQ_RECORD,Seq_Format,in_ref_src_title,in_ref_src,Out_Ref_Source
+    global REFSEQ_RECORD,Seq_Format,in_ref_src_title,in_ref_src,Out_Ref_Source,user_config_file
     # Save the latest configs first
-    RG_globals.save_user_configs()
+    user_config_file=RG_globals.save_user_configs()
     is_success=True
     if is_get_new_refseq:
         REFSEQ_RECORD,exists=read_refseqrecord(Seq_Format)
