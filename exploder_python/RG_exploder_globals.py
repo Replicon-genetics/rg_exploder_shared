@@ -45,19 +45,20 @@ def get_locus_transcript():
         locus_transcript="%s-%s"%(locus_transcript,CDS_trigger)
     else:
         locus_transcript="%s-%s"%(locus_transcript,mRNA_trigger)
-        
     return locus_transcript
 
 def save_user_configs():
     global GUI_ConfigText,config_json_end,config_json_head
     extralabel,strandlabel=get_strand_extra_label()
     #user_config_file="%s%s/%s%s%s"%(outfilepathroot,target_locus,config_json_head,get_locus_transcript(),config_json_end)
-    user_config_file="%s%s/%s%s%s%s"%(outfilepathroot,target_locus,get_locus_transcript(),config_json_head,extralabel,config_json_end)
+    #user_config_file="%s%s/%s%s%s%s"%(outfilepathroot,target_locus,get_locus_transcript(),config_json_head,extralabel,config_json_end)
+    user_config_file="%s%s%s%s"%(get_locus_transcript(),config_json_head,extralabel,config_json_end)
     GUI_ConfigText="Configuration at %s"%(getime())
     config_out_data=make_out_user_data()
-    with RG_io.open_write(user_config_file) as write_file:
+    with RG_io.open_write("%s%s/%s"%(outfilepathroot,target_locus,user_config_file)) as write_file:
         json.dump(config_out_data, write_file,indent=4)
     write_file.close()
+    return user_config_file
 # end of save_user_configs()
 
 def config_file_in():
