@@ -1,18 +1,14 @@
 #!/usr/bin/python3
 Progver="RG_builder16_gui.py"
-ProgverDate="16-May-2024"
+ProgverDate="25-May-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
-Note added 16-Oct-2022:
-    The calls to RG_main.call_exploder_main() are to support the Vue.js GUI version available at
-    https://repliconevaluation.wordpress.com/replicon-genetics/ngs-emulator-sets
+Note added 25-May-2024:
+    The objects in RG_gui_addon are were once part of this GUI code, but moved to RG_main when these sections starting calling RG_main objects.
+    When it became clear that much of these blocks of code added no value to RG_main as part of the App.vue / Vue.js GUI version, they
+    were moved out of RG_main to RG_gui_addon. This to lighten the code burden on RG_main
 
-    The objective is to minimise the amount of coding required in the GUI where this coding can be carried out in RG_main.call_exploder_main
-    If only it were possible to send calculated variables to the js as parameters.in App.vue ... Not in Dockered version
-    
-    There may be some other features that would be improved in the same way and eliminate the need for some of the config.json file
-    
     The 'build' function is the original developer's name for the GUI function allowing the addition of further haplotypes,
     created after the initial 'explode' function ie: the fragmentation of sequence into reads
 
@@ -21,6 +17,7 @@ import re
 import RG_exploder_io as RG_io  # File input/output
 import RG_exploder_globals as RG_globals  # Configurable constants and preset defaults for user-configurable variables
 import RG_exploder_main as RG_main
+import RG_exploder_gui_addon as RG_gui_addon
 import RG_exploder_process as RG_process
 
 import tkinter as tk
@@ -34,7 +31,6 @@ def initialise_stuff():
     initialise_modulevalues()
     return
 # End of initialise_stuff()
-
 
 # =================   GUI module setups =========================
 def initialise_modulevalues():
@@ -964,7 +960,7 @@ def src_sliders_instantiate_build(window):
         ##RG_globals.bio_parameters["target_build_variant"]["is_join_complement"]=is_join_complement # vestigial
         
         RG_globals.bio_parameters["target_build_variant"]["is_get_ref"]=True
-        success=RG_main.call_exploder_main()
+        success=RG_gui_addon.call_buildstuff()
         
         ref_range=RG_globals.bio_parameters["target_build_variant"]["ref_subseq"]["value"]
         
@@ -1034,11 +1030,6 @@ def src_sliders_instantiate_build(window):
             if var_seq=="":
                 var_seq="-"
 
-            #is_do_complement=RG_main.is_make_addvar_complement()
-            #if is_do_complement :
-            #    ref_seq=RG_process.get_revcomp(ref_seq)
-            #    var_seq=RG_process.get_revcomp(var_seq)
-            
             var_name=varnameseqtxt.get('0.3',tk.END)
             var_name = var_name[:-1]
 
@@ -1050,7 +1041,7 @@ def src_sliders_instantiate_build(window):
             RG_globals.bio_parameters["target_build_variant"]["var_name"]["value"]=var_name
             RG_globals.bio_parameters["target_build_variant"]["hap_name"]["value"]=hap_name
             RG_globals.bio_parameters["target_build_variant"]["is_save_var"]=True
-            is_success=RG_main.call_exploder_main() # Success only if the ref_seq and var_seq differ
+            is_success=RG_gui_addon.call_buildstuff() # Success only if the ref_seq and var_seq differ
                 
             if is_success:
                 if abs_End > abs_Begin:
@@ -1058,7 +1049,7 @@ def src_sliders_instantiate_build(window):
                 else:
                     abs_maptxt="%s..%s"%(abs_End,abs_Begin)
                 spacer="                     /"
-                ref_save,var_save,var_name=RG_main.get_add_saves()
+                ref_save,var_save,var_name=RG_gui_addon.get_add_saves()
                 if var_name=="Quack":
                     local_begin=1; local_end=1
                 msgtxt= 'Haplotype Name: %s\n     variation       %s..%s\n%sreplace="%s/%s"\n%sabsolute_map="%s"\n%scomment="%s"\n'\
@@ -1476,7 +1467,7 @@ def get_muttranscripts(redo_locus): # Derive the transcript tables
     global max_seqlength,min_seqlength
     # Do the call to return the above global values, plus a journaling text 'transcript_view' . Send value of redo_locus?
     RG_globals.bio_parameters["target_build_variant"]["is_get_muttranscripts"]=True
-    success=RG_main.call_exploder_main()
+    success=RG_gui_addon.call_buildstuff()
     # Setting those global values in this module from RG_globals calculated in get_muttranscripts inside RG_main
     #mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"] # Appears to work having it set as a global from here
     #abs_offset=RG_globals.bio_parameters["target_build_variant"]["abs_offset"] # Doesn't work having it set as a global from here
