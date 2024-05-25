@@ -14,6 +14,7 @@ cd $rootdevpythondir
 cp -p RG_exploder_globals.py $rootsharepythondir$same
 cp -p RG_exploder_globals_make.py $rootsharepythondir$same
 cp -p RG_exploder_gui.py $rootsharepythondir$same
+cp -p RG_exploder_gui_addon.py $rootsharepythondir$same
 cp -p RG_exploder_io.py $rootsharepythondir$same
 cp -p RG_exploder_main.py $rootsharepythondir$same
 cp -p RG_exploder_process.py $rootsharepythondir$same
