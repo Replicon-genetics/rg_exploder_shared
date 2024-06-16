@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="22-May-2024"
+#Prg_verDate="14-Jun-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -18,11 +18,12 @@ import RG_exploder_io as RG_io # File input/output
 
 def set_config_consts():
     global exploder_root
-    global is_use_TKinter,CustomerIDText,MAINFILE #   These are most likely to need resetting between runs
+    global is_use_TKinter,CustomerIDText,PublicIDText,MAINFILE #   These are most likely to need resetting between runs
     
     ######## Revisit these each time a data set is renewed. Now down to 2 as MAINVER, DATEVER, GRCH_dataset derived ########
     #CustomerIDText="EBaker"
-    CustomerIDText="Public"
+    PublicIDText="Public"
+    CustomerIDText=PublicIDText # Set to this to override a CustomerIDText
     vuedir="mravn" # Solely to define how is_use_TKinter is set
     ######## End of: Revisit these each time a data set is renewed ########
 
@@ -92,18 +93,18 @@ def process_file_configs_python(): # Only create config-file if file not already
 # end of process_file_configs_python()
 
 def set_defaults():
-    global CustomerIDText
+    global CustomerIDText,PublicIDText
     set_string_defaults()
     set_io_defaults()
     set_diagnostic_defaults()
     set_constants_defaults()
     set_gui_vars_defaults()
     set_vars_seq_limits_defaults()
-    if CustomerIDText=="Public":
-        set_Reference_sequences_configs_public3()
+    if CustomerIDText==PublicIDText:
+        set_Reference_sequences_configs_public3(PublicIDText)
     else:
         print("No set up for CustomerIDText==%s"%CustomerIDText)
-        exit()
+        set_Reference_sequences_configs_public3(CustomerIDText)
 # end of set_defaults
 
 def set_defaults1():
@@ -380,7 +381,8 @@ def set_diagnostic_defaults():
                           #  Jan-2022 - is_mutate_ref not used as originally intended with make_ref_varseq() deprecated
 
     global is_fastq_random  # When set to True, this implements an all-positions random in FASTQ output
-    is_fastq_random= True   # When False it implements a much faster "slice" routine: using a single random string cut at a random position
+    #is_fastq_random= True   # When False it implements a much faster "slice" routine: using a single random string cut at a random position
+    is_fastq_random= False
 
     global is_show_infilepath
     is_show_infilepath=False # The Journal file will show full path name of input files when True. Use True for debugging.
@@ -397,10 +399,6 @@ def set_diagnostic_defaults():
                      
     global is_htm_journal # Experimental - save an htm version of the journal file when set to True 
     is_htm_journal =True
-
-    global is_make_reference_files1
-    is_make_reference_files1=True
-    
     
 
 # end of set_diagnostic_defaults()
@@ -419,7 +417,6 @@ def make_diagnostic_vars():
         "is_show_infilepath":is_show_infilepath,
         "MaxVarPos":MaxVarPos,
         "is_htm_journal":is_htm_journal,
-        "is_make_reference_files1":is_make_reference_files1
         }
 #print("diagnostic_vars %s"%diagnostic_vars)
 #end of make_diagnostic_vars()
@@ -442,7 +439,8 @@ def set_constants_defaults():
     FraglenMin=4  # Smaller numbers for test purposes
     FraglenMax=2000
     FragdepthMin=1
-    FragdepthMax=500
+    #FragdepthMax=500 # original
+    FragdepthMax=800 # Christophe Roos
 
     global NormaliseUpper # Figure for normalising mutfreqs values
     NormaliseUpper=1000
@@ -739,10 +737,11 @@ def make_bio_parameters_configs():
 # end of make_bio_parameters_configs()
 
 
-def set_Reference_sequences_configs_public3():
+def set_Reference_sequences_configs_public3(custtext):
     global CustomerIDText,DatasetIDText,Reference_sequences,MAINVER,DATEVER
     global GeneList,GRCH_dataset,MAINFILE
     exists,stuff=config_file_in(config_file_reference_seqs)
+    print("Setting up for CustomerIDText==%s"%CustomerIDText)
     if exists:
         Reference_sequences=stuff["Reference_sequences"]
         set_dynamic_vars_defaults()
@@ -776,7 +775,7 @@ def set_vars_seq_limits_defaults():
 
     global Qualmin,Qualmax  # ''' Initialise the range of FASTQ quality values that are set at random in get_quality_list '''
                             # NB: QualMIN,QualMAX are the absolute limits for when choosing
-    Qualmin=15
+    Qualmin=35
     Qualmax=50
 
     global Exome_extend  # If is_make_exome, this value enables extension of the join region by this value.
