@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="07-Mar-2024"
+#Prg_verDate="13-Jun-2024"
 # © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 
 import time  # Used in getime()
@@ -39,7 +39,9 @@ def get_locus_transcript():
     if '(' in locus_transcript:
         splitters=locus_transcript.split('(')
         locus_transcript=splitters[0]
-    if locus_transcript == empty_transcript_name or is_frg_paired_end:# Forcing when is_frg_paired_end
+    #if locus_transcript == empty_transcript_name: # When paired-end is working for mRNA & CDS
+    if locus_transcript == empty_transcript_name or is_frg_paired_end: # Forcing to genomic when is_frg_paired_end
+
         locus_transcript="%s-%s"%(target_locus,empty_transcript_name.lower())
     elif is_CDS:
         locus_transcript="%s-%s"%(locus_transcript,CDS_trigger)
@@ -306,7 +308,7 @@ def set_diagnostic_configs():
     global is_mutate_ref,is_make_exome,is_trim_to_gene
     global is_fastq_random
     global is_show_infilepath
-    global MaxVarPos,is_htm_journal,is_make_reference_files1
+    global MaxVarPos,is_htm_journal
     global config_in_data
     
     diagnostic_vars=config_in_data["diagnostic_vars"]
@@ -321,7 +323,6 @@ def set_diagnostic_configs():
     is_show_infilepath=diagnostic_vars["is_show_infilepath"]
     MaxVarPos=diagnostic_vars["MaxVarPos"]
     is_htm_journal=diagnostic_vars["is_htm_journal"]
-    is_make_reference_files1=diagnostic_vars["is_make_reference_files1"]
 
 # end of set_diagnostic_configs()
 
