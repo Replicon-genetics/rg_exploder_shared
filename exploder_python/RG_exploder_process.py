@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="18-May-2024"
+#ProgverDate="16-June-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -137,14 +137,7 @@ def annotate_frag_to_record(inseq,seq_id):
         ThisSeqr.letter_annotations=get_quality_list(ThisSeqr)
     return ThisSeqr
 # end of annotate_frag_to_record(inseq,seq_id)
-
-def make_fastq_slice():
-    global fastq_slice
-    fastq_slice= []
-    for x in range(2*RG_globals.Fraglen):
-        fastq_slice.append(randint(RG_globals.Qualmin,RG_globals.Qualmax))
-    #print("fastq_slice %s"%fastq_slice)
-    
+   
 def get_quality_list(Seqrec):
     if RG_globals.is_fastq_random:
         phred_dict=get_quality_list_random(Seqrec)
@@ -177,14 +170,25 @@ def get_quality_list_random(Seqrec):
     '''
 # end of get_quality_list_random0(Seqrec)
 
+def make_fastq_slice():
+    global fastq_slice, slice_range
+    slice_factor=9
+    slice_range=(slice_factor+1)*RG_globals.Fraglen
+    if slice_range > 3*RG_globals.FraglenMax:# Don't let it run away
+        slice_range=3*RG_globals.FraglenMax
+    fastq_slice= []
+    for x in range(slice_range):
+        fastq_slice.append(randint(RG_globals.Qualmin,RG_globals.Qualmax))
+    #print("slice_range %s"%(slice_range))
+    #print("fastq_slice %s"%(fastq_slice))
+
 def get_quality_list_slice(Seqrec):
-    global fastq_slice
-    
+    global fastq_slice,slice_range
     # Return a slice from a previously-created randomly-generated list.
     # It is measurably quicker than get_quality_list_random: at all fragment-length and DOC values;
     # being comparable to the FASTA-only output speeds until high DOC values
-    
-    start=randint(0,RG_globals.Fraglen-1)# 0-based
+    start=randint(0,slice_range-RG_globals.Fraglen-1)# 0-based
+    #print("slice_start=%s"%start)
     phred_dict = {
         "phred_quality":fastq_slice[start:start+RG_globals.Fraglen]
     }
@@ -693,7 +697,7 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
                     mask=True
 
                 else:
-                    ''' Leaving 10, 12, 15 and 17 which need to be masked completely'''
+                    ''' Leaving 9, 10, 11, 12, 14, 15, 16, 17, 18, 20, 22  which are masked completely'''
                     ''' NB: 23, 24 and 25 are non-overlaps and don't get here'''
                     mask=True
 
