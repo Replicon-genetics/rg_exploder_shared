@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_27_06.py"
-ProgverDate="25-May-2024"
+Progver="RG_exploder_main_28_0.py"
+ProgverDate="16-Jun-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -77,6 +77,9 @@ is_append_journalfile_htm=False
 
 global is_append_readmefile
 is_append_readmefile=False ## This is a file-open flag for output readme file
+
+global is_pair_monitor
+is_pair_monitor=False ## True drops an extra counting paired-end starts in a separate file; checking Christophe Roos claim of many duplicate start points
 
 # =================================================================
 # Start of initialising routines for global variables and constants
@@ -264,7 +267,7 @@ def initialise_module_outflags():
     # ''' Initialise all is_append_x (file-handling) flags to False.
     # ''' These are set to True when an output file is opened, ready to be appended-to . Could call these is_open_x I suppose.
 
-    global fastaout,fastqout, mutout, samout, journout  # ''' These are global file handles '''
+    global fastaout,fastqout,fastqout_R1,fastqout_R2,mutout, samout, journout  # ''' These are global file handles '''
     global is_append_fastafile, is_append_fastqfile      # ''' These are file-open flags for fasta & fastq output files '''
     is_append_fastafile=False; is_append_fastqfile=False
 
@@ -285,13 +288,20 @@ def initialise_module_outflags():
 # End of initialise_module_outflags()
 
 def initialise_module_outfiles():
-    #Sequence output filename derivations
-    global out_fa_file, out_fq_file
+    #Sequence output filename derivations.
+    # Don't know at this stage whether they will be written-to (eg:run may generate zero sequences), so do not open at this point.
+    global out_fa_file, out_fa_file_R1,out_fa_file_R2,out_fq_file,out_fq_file_R1,out_fq_file_R2
     global locus_transcript
+    global pair_monitor_out,is_pair_monitor
 
     extralabel,strandlabel=RG_globals.get_strand_extra_label()
-    out_fa_file="%s%s_%ss.fasta"%(locus_transcript,extralabel,RG_globals.read_annotation,)
+    out_fa_file="%s%s_%ss.fasta"%(locus_transcript,extralabel,RG_globals.read_annotation)
+    out_fa_file_R1="%s%s_%ss_R1.fasta"%(locus_transcript,extralabel,RG_globals.read_annotation)
+    out_fa_file_R2="%s%s_%ss_R2.fasta"%(locus_transcript,extralabel,RG_globals.read_annotation)    
+    
     out_fq_file="%s%s_%ss.fastq"%(locus_transcript,extralabel,RG_globals.read_annotation)
+    out_fq_file_R1="%s%s_%ss_R1.fastq"%(locus_transcript,extralabel,RG_globals.read_annotation)
+    out_fq_file_R2="%s%s_%ss_R2.fastq"%(locus_transcript,extralabel,RG_globals.read_annotation)    
 
     global in_ref_src,in_ref_src_title
     in_ref_src="%s_%s"%(RG_globals.target_locus,Ref_file_name)
@@ -308,7 +318,13 @@ def initialise_module_outfiles():
     Out_Ref_Source="%s%s_REF"%(locus_transcript,strandlabel)
     if RG_globals.is_frg_paired_end: # Over-riding for SAM format reference
         Out_Ref_Source=in_ref_src
-        
+        if is_pair_monitor:
+        # Adding pair_monitor
+            pair_monitor="%s%s_%ss_pairmonitor.txt"%(locus_transcript,extralabel,RG_globals.read_annotation)
+            pair_monitor_out = RG_io.open_write("%s%s"%(Outfilepath,pair_monitor), 0)
+            pair_monitor_out.write("This pair_monitor file %s\n"%pair_monitor)
+            pair_monitor_out.write("%s\t%s\t%s\t%s\t%s\n"%("start","R1_start","R2_start","R1_frag","R2_frag"))
+
     global out_mut,out_mutprot
     #mutxt=RG_globals.bio_parameters["is_mut_out"]["label"].split(" ")[1].lower()
     mutxt="hapvar"
@@ -634,54 +650,75 @@ def write_gb_features(SeqRec,out_file,readmetxt,style):
     return
 # end of write_gb_features(SeqRec,out_file,readmetxt,style)
 
-def write_frag_fastout(seqrec):
-    #Opens or appends a sequence entry to two new files/overwrites in Fasta, Fastq
+def seqwrite(seqrec,outfile,seqtype):
+    out_handle=StringIO()
+    SeqIO.write(seqrec,out_handle,seqtype)
+    out_data = out_handle.getvalue()
+    out_handle.close()    
+    outfile.write(out_data)
+
+def write_frag_fastout(seqrec,is_R1):
+    #Opens or appends a sequence entry to two new files/overwrites in Fasta, Fastq        
     if RG_globals.is_fasta_out:
-        write_fastaout(seqrec)
+        write_fastaout(seqrec,is_R1)
     if RG_globals.is_fastq_out:
-        write_fastqout(seqrec)
+        write_fastqout(seqrec,is_R1)
     return
 # end of def write_frag_fastout # was def write_fragseqout
 
-def write_fastaout(ThisSeqr):
-    #Writes a sequence entry to Fasta format. First call sets is_append_fastafile flag
-    global fastaout,is_append_fastafile,Outfilepath,out_fa_file
-            
+def write_fastaout(ThisSeqr,is_R1):
+    #Writes a sequence entry to Fasta format. First call sets the is_append_fastafile flag
+    global fastaout,fastaout_R1,fastaout_R2,is_append_fastafile,Outfilepath,out_fafile,out_fa_file_R1,out_fa_file_R2
     if not is_append_fastafile:
-        out_fastafile="%s%s"%(Outfilepath,out_fa_file)
-        fastaout = RG_io.open_write(out_fastafile)
         is_append_fastafile=True
-        journals_update("\nWriting FASTA %ss to %s"%(RG_globals.read_annotation,out_fa_file))
-    out_handle=StringIO()
-    SeqIO.write(ThisSeqr,out_handle, "fasta")
-    out_data = out_handle.getvalue()
-    fastaout.write(out_data)
-    out_handle.close()
+        if RG_globals.is_frg_paired_end:
+            fastaout_R1 =  RG_io.open_write("%s%s"%(Outfilepath,out_fa_file_R1))
+            fastaout_R2 =  RG_io.open_write("%s%s"%(Outfilepath,out_fa_file_R2))
+            journals_update("Writing FASTA paired end %ss to %s and %s"%(RG_globals.read_annotation,out_fa_file_R1,out_fa_file_R2))
+        else:
+            fastaout = RG_io.open_write("%s%s"%(Outfilepath,out_fa_file))
+            journals_update("Writing FASTA %ss to %s"%(RG_globals.read_annotation,out_fa_file))
+            
+    if not RG_globals.is_frg_paired_end:
+        seqwrite(ThisSeqr,fastaout,"fasta")
+    elif is_R1:
+        seqwrite(ThisSeqr,fastaout_R1,"fasta")
+    else:
+        seqwrite(ThisSeqr,fastaout_R2,"fasta")
     return
 # end of def write_fastaout
 
-def write_fastqout(ThisSeqr):
+
+def write_fastqout(ThisSeqr,is_R1):
     #Writes a sequence entry to Fastq format. First call sets the is_append_fastqfile flag
-    global fastqout,is_append_fastqfile,Outfilepath,out_fqfile
+    global fastqout,fastqout_R1,fastqout_R2,is_append_fastqfile,Outfilepath,out_fqfile,out_fq_file_R1,out_fq_file_R2
     if not is_append_fastqfile:
-        out_fastqfile="%s%s"%(Outfilepath,out_fq_file)
-        fastqout = RG_io.open_write(out_fastqfile)
         is_append_fastqfile=True
-        journals_update("Writing FASTQ %ss to %s"%(RG_globals.read_annotation,out_fq_file))
+        if RG_globals.is_frg_paired_end:
+            fastqout_R1 =  RG_io.open_write("%s%s"%(Outfilepath,out_fq_file_R1))
+            fastqout_R2 =  RG_io.open_write("%s%s"%(Outfilepath,out_fq_file_R2))
+            journals_update("Writing FASTQ paired end %ss to %s and %s"%(RG_globals.read_annotation,out_fq_file_R1,out_fq_file_R2))
+        else:
+            fastqout = RG_io.open_write("%s%s"%(Outfilepath,out_fq_file))
+            journals_update("Writing FASTQ %ss to %s"%(RG_globals.read_annotation,out_fq_file))
+
         journals_update("        FASTQ quality range %s to %s"%(RG_globals.Qualmin,RG_globals.Qualmax))
 
         if RG_globals.is_fastq_random:
-            msgtxt="has"
+            msgtxt=""
         else: 
-            msgtxt="does NOT have"
-        journals_update("        FASTQ quality range %s randomly-assigned quality values in each %s"%(msgtxt,RG_globals.read_annotation)) 
-    out_handle=StringIO()
-    SeqIO.write(ThisSeqr,out_handle, "fastq")
-    out_data = out_handle.getvalue()
-    fastqout.write(out_data)
-    out_handle.close()
+            msgtxt="sort-of-"
+        journals_update("        FASTQ quality range has %srandomly-assigned quality values in each %s"%(msgtxt,RG_globals.read_annotation)) 
+
+    if not RG_globals.is_frg_paired_end:
+        seqwrite(ThisSeqr,fastqout,"fastq")
+    elif is_R1:
+        seqwrite(ThisSeqr,fastqout_R1,"fastq")
+    else:
+        seqwrite(ThisSeqr,fastqout_R2,"fastq")
     return
 # end of def write_fastqout
+
 
 def writemut(seq_record,label):
     global out_mut,Outfilepath,is_append_mutfile, mutout
@@ -893,8 +930,8 @@ def write_frag_samout(qname,flag,pos,cigar,rnext,pnext,tlen,forseq):
 # end of def write_frag_samout
 
 def close_seqout(SeqRec):
-    global in_ref_src_title,in_ref_src,out_fa_file,out_fq_file,out_sa_file,out_mut,out_mutprot,Ref_file_name
-    global fastaout,fastqout,is_append_fastafile,is_append_fastqfile
+    global in_ref_src_title,in_ref_src,out_fa_file,out_fa_file_R1,out_fa_file_R2,out_fq_file,out_fq_file_R1,out_fq_file_R2,out_sa_file,out_mut,out_mutprot,Ref_file_name
+    global fastaout,fastqout,fastqout_R1,fastqout_R2,is_append_fastafile,is_append_fastqfile
     global samout,is_append_samfile, mutout, is_append_mutfile, mutprotout, is_append_mutprotfile
     global mutlistlabels,outfilestring
     global locus_transcript,readme_name,journal_name,user_config_file
@@ -932,6 +969,7 @@ def close_seqout(SeqRec):
                 update_readme("%s\t- FASTA file%s; the template sequence for all %s"%(out_spliced,add_extra_tem,RG_globals.variants_label))
 
     add_txt0="'%s' with frequency >0:"%RG_globals.variants_label
+
     if is_append_mutfile:
         add_txt1=""
         if SeqRec.is_ref_spliced:
@@ -945,29 +983,61 @@ def close_seqout(SeqRec):
         mutprotout.close()
         is_append_mutprotfile = False
 
+    if SeqRec.is_ref_spliced and ((SeqRec.splicecount-SeqRec.endclipcount) !=0):
+        addtxt="spliced "
+    else:
+        addtxt=""
+
+    sub_select="from each selected %s%s%s"%(addtxt,add_txt0,mutlistlabels)
+
     if is_append_fastafile:
-        fastaout.close()
         is_append_fastafile = False
-        sam_fastfile=out_fa_file
         
-        if SeqRec.is_ref_spliced and ((SeqRec.splicecount-SeqRec.endclipcount) !=0):
-            addtxt="spliced "
+        if RG_globals.is_frg_paired_end:
+            sam_fastfile=out_fa_file_R1
+            fastaout_R1.close()
+            fastaout_R2.close()
+            update_readme("%s\t- FASTA sequence R1 %ss %s"%(out_fa_file_R1,RG_globals.read_annotation,sub_select))
+            update_readme("%s\t- FASTA sequence R2 %ss %s"%(out_fa_file_R2,RG_globals.read_annotation,sub_select))
         else:
-            addtxt=""
-        update_readme("%s\t- FASTA sequence %ss from each selected %s%s%s"%(out_fa_file,RG_globals.read_annotation,addtxt,add_txt0,mutlistlabels))
+            sam_fastfile=out_fa_file
+            fastaout.close()
+            update_readme("%s\t- FASTA sequence %ss %s"%(out_fa_file,RG_globals.read_annotation,sub_select))
 
     if is_append_fastqfile:
-        fastqout.close()
         is_append_fastqfile = False
-        
-        if sam_fastfile == "":
-            sam_fastfile=out_fq_file
-            sub_fastq=""
+
+        if RG_globals.is_fastq_random:
+            msgtxt=""
+        else: 
+            msgtxt="sort-of-"
+            
+        if RG_globals.is_frg_paired_end:
+            if sam_fastfile == "":
+                sam_fastfile=out_fq_file_R1
+                sub_fastq=sub_select
+            else:
+                sub_fastq= "from %s"%out_fa_file_R1
+            fastqout_R1.close()
+            fastqout_R2.close()
+
+            update_readme("%s\t- FASTQ sequence R1 %ss %s with a %srandom quality score between %i-%i at each base"
+                      %(out_fq_file_R1,RG_globals.read_annotation,sub_fastq,msgtxt,RG_globals.Qualmin,RG_globals.Qualmax))
+            update_readme("%s\t- FASTQ sequence R2 %ss %s with a %srandom quality score between %i-%i at each base"
+                      %(out_fq_file_R2,RG_globals.read_annotation,sub_fastq,msgtxt,RG_globals.Qualmin,RG_globals.Qualmax))
         else:
-            sub_fastq= " from %s"%out_fa_file
-        update_readme("%s\t- FASTQ sequence %ss%s with a random quality score between %i-%i at each base"
-                      %(out_fq_file,RG_globals.read_annotation,sub_fastq,RG_globals.Qualmin,RG_globals.Qualmax))
-        
+            if sam_fastfile == "":
+                sam_fastfile=out_fq_file
+                sub_fastq=sub_select
+            else:
+                sub_fastq= "from %s"%out_fa_file
+            fastqout.close()
+            update_readme("%s\t- FASTQ sequence %ss %s with a %srandom quality score between %i-%i at each base"
+                      %(out_fq_file, RG_globals.read_annotation,sub_fastq,msgtxt,RG_globals.Qualmin,RG_globals.Qualmax))
+
+    if is_pair_monitor:
+        pair_monitor_out.close()
+    
     if is_append_samfile:
         samout.close()
         is_append_samfile = False
@@ -1227,14 +1297,14 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
     matchvardef=True  # Default to matching variant definitions are true because it should be set to False when found.
     msgtxt_mvs=""
     is_indel=False; is_insert=False; is_deletion=False; is_complex=False
+    # To report Source position for local coord
+    feat_trim= -RG_globals.bio_parameters["target_build_variant"]["headclip"]
  
     #xref_ids,reference,replace,replace_string,feat_start,feat_end,feat_polarity,replace_type=RG_process.get_varfeats(this_feature)
     # Longer, but easier-to-follow:
     featurelist=RG_process.get_varfeats2(this_feature)      
     xref_ids=featurelist["xref_ids"];  replace=featurelist["replace"]; replace_string=featurelist["replace_string"]
     feat_start=featurelist["feat_start"]; feat_end=featurelist["feat_end"];feat_polarity=featurelist["feat_polarity"];replace_type=featurelist["replace_type"]
-    # To report Source position for local coord
-    feat_trim= -RG_globals.bio_parameters["target_build_variant"]["headclip"]
     '''  Try using this instead? (although you'll get the lot) :  for k, v in d.iteritems(): locals()[k]=v'''
     mod_abs_start,mod_abs_end=RG_process.get_absolute_pairs(feat_start,feat_end,REFSEQ_RECORD.offset,REFSEQ_RECORD.polarity)
     
@@ -1729,7 +1799,6 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
 
     id_label="%s%s"%(RG_globals.frag_annotation,label_count)
     flag=3 # +2 aligned (for SAM output); +1 to verify other flag additions (not that I understand this)
-
     if is_paired_end:
         pnext+=1 # paired-ends
         if is_read1:
@@ -1805,7 +1874,7 @@ def label_and_saveg(in_dupstr,in_fragseq,label_count,start,ref_offset,fwd_cigar_
     else:
         FragSeqRec.description+="%s%s"%(RG_globals.spaceman,dir_label)
 
-    write_frag_fastout(FragSeqRec)
+    write_frag_fastout(FragSeqRec,is_read1)
 
     if RG_globals.is_sam_out and in_dupstr != "r":
     # Avoid putting an actual reverse-complement in SAM file!
@@ -1879,6 +1948,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
 def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     # fraglen must have been tested as OK with validate_fraglength to get here
     global NormaliseUpper,Paired_insert_Max,Paired_insert_Min
+    global pair_monitor_out,is_pair_monitor
     
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
     last_Saved_Fragcount=0
@@ -1886,9 +1956,17 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     unpaired_count=0
     saved_unpaired=0
     mutseqend=[] # The sequence end of each mutseq
+    mutseqendpop=[] # The read boundary
     locus_begin,locus_end=RG_globals.Reference_sequences[RG_globals.target_locus]["Locus_range"].split(":")
-    headpop=int(locus_begin)+1
+    headpop=int(locus_begin)
     is_one_mut=False
+    mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]
+    mrnapos_lookup_len=len(mrnapos_lookup)-1
+ 
+    if is_pair_monitor:
+        pass
+        #pair_monitor_out.write("headpop: %s\n"%(headpop))
+        #pair_monitor_out.write("mrnapos_lookup: %s; last: %s\n"%(mrnapos_lookup,mrnapos_lookup[mrnapos_lookup_len]))
 
     def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads,is_one_mut):
         nonlocal Generated_Fragcount,Saved_Fragcount,saved_unpaired
@@ -1923,7 +2001,11 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     for item in mutrecs:
         # Length of each mutseq differs, so end-point varies, unlike head
         # Constraining the end position, for a random position, to align with original locus range - fraglen, not full source sequence
-        mutseqend.append(len(item.seq)-headpop-fraglen) # Make a lookup to avoid repeat calculations later
+        mutseqend.append(len(item.seq))
+        mutseqendpop.append(len(item.seq)-headpop-fraglen) # Make a lookup to avoid repeat calculations later
+        if is_pair_monitor:
+            pass
+            #pair_monitor_out.write("mutseqend:%s\n"%(mutseqend))
            
     if len(normutfreq)>0:
         # Sum the normalised frequencies progressively to create number-ranges in lottoline
@@ -1942,7 +2024,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                 if lottowin <= lottoline[i]:
                     mutrec_index=i
                     break
-            endpop=mutseqend[mutrec_index]                
+            endpop=mutseqendpop[mutrec_index]                
                 
             while True:
                 insert_len=int(np.random.normal(loc = RG_globals.gauss_mean, scale=RG_globals.gauss_SD, size=None)) # Gaussian distribution frequencies
@@ -1950,9 +2032,18 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                     break
             #insert_len=randint(Paired_insert_Min,Paired_insert_Max) # Flat distribution frequencies
 
-            # Constrain the range position to the defined locus range and fraglen
-            start=randint(headpop,endpop)
-
+            start=randint(headpop,endpop) # Forces genomic, even if mRNA or CDS selected
+            
+            # Implemention of this bit requires another bit of code to modify, otherwise it only works for reference sequence, not variants
+            # See also RG_exploder_globals in setting the output file names:
+            # if locus_transcript == empty_transcript_name: # or is_frg_paired_end:# Forcing when is_frg_paired_end
+            '''# Constrain the range position to the defined locus range and fraglen
+            if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
+                start=randint(headpop,endpop) # For genomic
+            else:
+                start=mrnapos_lookup[randint(1,mrnapos_lookup_len)] # For exomic # random.choice(mrnapos_lookup) preferable?, but may not be present in App.vue build
+            '''
+            
             # 50% chance of the position start being the forward read's (R1) start-point or the reverse-read's (R2) end-point
             if random() < 0.5: # Position is the forward-read's start point
                 R1_start=start; R1_end=R1_start+fraglen-1
@@ -1961,10 +2052,18 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             else: # Position is reverse-read's end-point
                 R2_start=start; R2_end=R2_start+fraglen-1
                 R1_start=R2_end-insert_len; R1_end=R1_start+fraglen-1
-
+            '''# Hmm .. have this totally wrong?
             R1_frag=(headpop < R1_start <= endpop) or (headpop < R1_end <= endpop) # Allow one end to go into pop areas, not both
             R2_frag=(headpop < R2_start <= endpop) or (headpop < R2_end <= endpop) # Allow one end to go into pop areas, not both
-            
+            '''
+
+            R1_frag=(0 < R1_start <= endpop) and (headpop < R1_end <= mutseqend[mutrec_index])
+            R2_frag=(0 < R2_start <= endpop) and (headpop < R2_end <= mutseqend[mutrec_index])
+
+            if is_pair_monitor:
+                if R1_frag or R2_frag:
+                    pair_monitor_out.write("%s\t%s\t%s\t%s\t%s\n"%(start,R1_start,R2_start,R1_frag,R2_frag))
+
             # Detect whether two reads are being produced
             is_tworeads=R1_frag and R2_frag
             if not is_tworeads:
@@ -1998,15 +2097,17 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                     else:
                         print("R2 is unpaired with CIGAR %s, starting %s"%(R2fwdcigar,R1pnext))
                 '''
-            # Need to save forward and reverse in random order, not always R1-first!
+            do_r1_save(); do_r2_save() # Always save R1 first, R2 second
+            # OR: save forward and reverse in random order, not always R1-first!
             # Also have a suspicion that we need to do one more 50% random: reverse complement both sequences / keep
             # in order to emulate insert-orientation. The question is ... does it make any difference?
-            if random() < 0.5:
-                # Do a forward, then a reverse, 50% of the time
-                do_r1_save(); do_r2_save()
-            else:
-                # Do a reverse, then a forward, 50% of the time
-                do_r2_save(); do_r1_save()     
+            #if random() < 0.5:
+            #    # Do a forward, then a reverse, 50% of the time
+            #    do_r1_save(); do_r2_save()
+            #else:
+            #    # Do a reverse, then a forward, 50% of the time
+            #    do_r2_save(); do_r1_save()
+                
     journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired_count,saved_unpaired)
     #print("noread_count: %s ; unpaired_count %s "%(noread_count,unpaired_count))
     return
