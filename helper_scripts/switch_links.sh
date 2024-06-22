@@ -13,7 +13,7 @@ cd $rootprogdir
 rm output # Don't worry about 'not found' warnings
 rm input # Don't worry about 'not found' warnings
 echo $1
-if [ $1 == $input37 ]
+if [ "$1" == $input37 ]
 then
     outputdir=$input37
     inputdir=$input37
