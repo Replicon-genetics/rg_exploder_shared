@@ -33,7 +33,6 @@ As such they must be defined first, being impractical to be called by subroutine
 from io import StringIO #python 3
 #from StringIO import StringIO #python 2
 import numpy as np
-import copy
 
 import time  # Used in a few functions
 import sys # Used in program_exit for sys.exit
@@ -62,6 +61,7 @@ import RG_exploder_io as RG_io
 
 import RG_exploder_globals as RG_globals  # Configurable constants
 import RG_exploder_process as RG_process # Seqrecord Processing
+import RG_exploder_builder as RG_builder # For mrnapos_lookup
 
 global mut_types #  Use as a trigger to identify if initialise_global_text_constants() has been called
 mut_types=""
@@ -2539,7 +2539,10 @@ def run_processing(is_get_new_refseq):
             REFSEQ_RECORD=splice_refseq(REFSEQ_RECORD)
         (Mutrecs,is_success)=get_mutrecords(REFSEQ_RECORD,Seq_Format)
         #print("run_processing: Mutrecs[0].clipped_length) %s"%Mutrecs[0].clipped_length)
-           
+        #print("mrnapos_lookup %s"%RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"])
+        if RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]==[0] and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
+            RG_builder.get_muttranscripts2(True)
+        
         if is_success:
             is_fraglength_OK,shortest,short_label=validate_fraglength(Mutrecs,RG_globals.Fraglen)
             if not is_fraglength_OK:
