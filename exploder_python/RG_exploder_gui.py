@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_exploder_gui_19.py"
-ProgverDate="22-Jun-2024"
+ProgverDate="23-Jun-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -487,7 +487,7 @@ def save_and_go():
 
     increment_run()
     write_GUI_text("Running Exploder on %s- run number %s\n"%(RG_globals.target_locus,run_count))
-    #is_successful=RG_main.exploder_initiate(True)
+    ##RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]=[0] # testing that setting mrnapos_lookup to empty will force a re-run in main
     is_successful=RG_main.call_exploder_main()
     time_stamp=RG_globals.getime()
     #print("is_successful %s"%is_successful)
@@ -861,8 +861,8 @@ class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
 
     # Extra in builder
     def complement_check(self,*args):
-        abs_offset=RG_globals.bio_parameters["target_build_variant"]["abs_offset"] # This needs to be here, not a global set in get_muttranscripts,probably because initial setup value required
-        mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"] # This could be a global instead, but not sure why it doesn't fail like abs_offset when it is 
+        abs_offset=RG_globals.bio_parameters["target_build_variant"]["abs_offset"]
+        mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]
         self.extension=int(self.entry2var.get())
         if self.entry.get() == self.blank:
             self.entry.delete(0,"end")
