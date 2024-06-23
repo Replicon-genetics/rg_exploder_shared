@@ -78,9 +78,6 @@ is_append_journalfile_htm=False
 global is_append_readmefile
 is_append_readmefile=False ## This is a file-open flag for output readme file
 
-global is_pair_monitor
-is_pair_monitor=False ## True drops an extra counting paired-end starts in a separate file; checking Christophe Roos claim of many duplicate start points
-
 # =================================================================
 # Start of initialising routines for global variables and constants
 # =================================================================
@@ -292,7 +289,7 @@ def initialise_module_outfiles():
     # Don't know at this stage whether they will be written-to (eg:run may generate zero sequences), so do not open at this point.
     global out_fa_file, out_fa_file_R1,out_fa_file_R2,out_fq_file,out_fq_file_R1,out_fq_file_R2
     global locus_transcript
-    global pair_monitor_out,is_pair_monitor
+    global pair_monitor_out,pair_monitor_file
 
     extralabel,strandlabel=RG_globals.get_strand_extra_label()
     out_fa_file="%s%s_%ss.fasta"%(locus_transcript,extralabel,RG_globals.read_annotation)
@@ -318,11 +315,11 @@ def initialise_module_outfiles():
     Out_Ref_Source="%s%s_REF"%(locus_transcript,strandlabel)
     if RG_globals.is_frg_paired_end: # Over-riding for SAM format reference
         Out_Ref_Source=in_ref_src
-        if is_pair_monitor:
+        if RG_globals.is_pair_monitor:
         # Adding pair_monitor
-            pair_monitor="%s%s_%ss_pairmonitor.txt"%(locus_transcript,extralabel,RG_globals.read_annotation)
-            pair_monitor_out = RG_io.open_write("%s%s"%(Outfilepath,pair_monitor), 0)
-            pair_monitor_out.write("This pair_monitor file %s\n"%pair_monitor)
+            pair_monitor_file="%s%s_%ss_pair_monitor.txt"%(locus_transcript,extralabel,RG_globals.read_annotation)
+            pair_monitor_out = RG_io.open_write("%s%s"%(Outfilepath,pair_monitor_file), 0)
+            pair_monitor_out.write("This pair_monitor file %s\n"%pair_monitor_file)
             pair_monitor_out.write("%s\t%s\t%s\t%s\t%s\n"%("start","R1_start","R2_start","R1_frag","R2_frag"))
 
     global out_mut,out_mutprot
@@ -934,7 +931,7 @@ def close_seqout(SeqRec):
     global fastaout,fastqout,fastqout_R1,fastqout_R2,is_append_fastafile,is_append_fastqfile
     global samout,is_append_samfile, mutout, is_append_mutfile, mutprotout, is_append_mutprotfile
     global mutlistlabels,outfilestring
-    global locus_transcript,readme_name,journal_name,user_config_file
+    global locus_transcript,readme_name,journal_name,user_config_file,pair_monitor_file
 
     extralabel,strandlabel=RG_globals.get_strand_extra_label()
     update_readme("\nProgram output metadata files:\n%s\t- This file"%readme_name)
@@ -944,8 +941,11 @@ def close_seqout(SeqRec):
     if is_htm_journal:
         update_readme("%s.htm\t- html version of Journal file"%journal_name)
     update_readme("%s\t- contains configuration data for this run"%user_config_file)
-    sam_fastfile=""
 
+    if RG_globals.is_pair_monitor:
+        update_readme("%s\t-  contains start-points for each paired read"%(pair_monitor_file))
+        
+    sam_fastfile=""
     update_readme(outfilestring)
 
     update_readme("\nProgram output sequence files:")
@@ -1035,7 +1035,7 @@ def close_seqout(SeqRec):
             update_readme("%s\t- FASTQ sequence %ss %s with a %srandom quality score between %i-%i at each base"
                       %(out_fq_file, RG_globals.read_annotation,sub_fastq,msgtxt,RG_globals.Qualmin,RG_globals.Qualmax))
 
-    if is_pair_monitor:
+    if RG_globals.is_pair_monitor:
         pair_monitor_out.close()
     
     if is_append_samfile:
@@ -1948,7 +1948,7 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
 def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     # fraglen must have been tested as OK with validate_fraglength to get here
     global NormaliseUpper,Paired_insert_Max,Paired_insert_Min
-    global pair_monitor_out,is_pair_monitor
+    global pair_monitor_out
     
     Generated_Fragcount,Saved_Fragcount,mutfragcount=zero_mutfragcount(mutrecs)
     last_Saved_Fragcount=0
@@ -1963,10 +1963,6 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]
     mrnapos_lookup_len=len(mrnapos_lookup)-1
  
-    if is_pair_monitor:
-        pair_monitor_out.write("headpop: %s\n"%(headpop))
-        pair_monitor_out.write("mrnapos_lookup: %s; last: %s\n"%(mrnapos_lookup,mrnapos_lookup[mrnapos_lookup_len]))
-
     def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads,is_one_mut):
         nonlocal Generated_Fragcount,Saved_Fragcount,saved_unpaired
         Generated_Fragcount+=1
@@ -2002,8 +1998,9 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
         # Constraining the end position, for a random position, to align with original locus range - fraglen, not full source sequence
         mutseqend.append(len(item.seq))
         mutseqendpop.append(len(item.seq)-headpop-fraglen) # Make a lookup to avoid repeat calculations later
-        if is_pair_monitor:
-            pair_monitor_out.write("mutseqend:%s\n"%(mutseqend))
+        if RG_globals.is_pair_monitor:
+            #pair_monitor_out.write("mutseqend:%s\n"%(mutseqend))
+            pass
            
     if len(normutfreq)>0:
         # Sum the normalised frequencies progressively to create number-ranges in lottoline
@@ -2058,7 +2055,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             R1_frag=(0 < R1_start <= endpop) and (headpop < R1_end <= mutseqend[mutrec_index])
             R2_frag=(0 < R2_start <= endpop) and (headpop < R2_end <= mutseqend[mutrec_index])
 
-            if is_pair_monitor:
+            if RG_globals.is_pair_monitor:
                 if R1_frag or R2_frag:
                     pair_monitor_out.write("%s\t%s\t%s\t%s\t%s\n"%(start,R1_start,R2_start,R1_frag,R2_frag))
 
