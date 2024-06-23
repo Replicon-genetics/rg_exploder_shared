@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_28_0.py"
-ProgverDate="16-Jun-2024"
+Progver="RG_exploder_main_29_0.py"
+ProgverDate="22-Jun-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -1964,9 +1964,8 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
     mrnapos_lookup_len=len(mrnapos_lookup)-1
  
     if is_pair_monitor:
-        pass
-        #pair_monitor_out.write("headpop: %s\n"%(headpop))
-        #pair_monitor_out.write("mrnapos_lookup: %s; last: %s\n"%(mrnapos_lookup,mrnapos_lookup[mrnapos_lookup_len]))
+        pair_monitor_out.write("headpop: %s\n"%(headpop))
+        pair_monitor_out.write("mrnapos_lookup: %s; last: %s\n"%(mrnapos_lookup,mrnapos_lookup[mrnapos_lookup_len]))
 
     def label_and_save(pquote,mutrec_index,seq_start,pnext,tlen,is_R1,is_tworeads,is_one_mut):
         nonlocal Generated_Fragcount,Saved_Fragcount,saved_unpaired
@@ -2004,8 +2003,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
         mutseqend.append(len(item.seq))
         mutseqendpop.append(len(item.seq)-headpop-fraglen) # Make a lookup to avoid repeat calculations later
         if is_pair_monitor:
-            pass
-            #pair_monitor_out.write("mutseqend:%s\n"%(mutseqend))
+            pair_monitor_out.write("mutseqend:%s\n"%(mutseqend))
            
     if len(normutfreq)>0:
         # Sum the normalised frequencies progressively to create number-ranges in lottoline
@@ -2522,6 +2520,11 @@ def make_reference_files1():
 # It has been adapted into a function to support repeated-calling from a GUI module
 def run_processing(is_get_new_refseq):
     global REFSEQ_RECORD,Seq_Format,in_ref_src_title,in_ref_src,Out_Ref_Source,user_config_file
+
+    # Ensure that mrnapos_lookup is re-calculated; main scenario is return from App.vue which does not send mrnapos_lookup at present
+    if RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]==[0] and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
+            success=RG_builder.get_muttranscripts2(True)
+
     # Save the latest configs first
     user_config_file=RG_globals.save_user_configs()
     is_success=True
@@ -2540,8 +2543,6 @@ def run_processing(is_get_new_refseq):
         (Mutrecs,is_success)=get_mutrecords(REFSEQ_RECORD,Seq_Format)
         #print("run_processing: Mutrecs[0].clipped_length) %s"%Mutrecs[0].clipped_length)
         #print("mrnapos_lookup %s"%RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"])
-        if RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]==[0] and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
-            RG_builder.get_muttranscripts2(True)
         
         if is_success:
             is_fraglength_OK,shortest,short_label=validate_fraglength(Mutrecs,RG_globals.Fraglen)
