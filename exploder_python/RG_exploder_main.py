@@ -157,7 +157,7 @@ def initialise_flags_output_configs():
     from RG_exploder_globals import bio_parameters # A sledgehammer
     global bio_parameters
 
-    from RG_exploder_globals import is_fastacigar_out,is_onefrag_out,is_muts_only,is_frg_paired_end,is_flip_strand,is_duplex,is_frg_label,is_journal_subs,is_mutate_ref,is_fastq_random,is_make_exome,is_trim_to_gene
+    from RG_exploder_globals import is_fastacigar_out,is_onefrag_out,is_muts_only,is_frg_paired_end,is_flip_strand,is_duplex,is_frg_label,is_journal_subs,is_mutate_ref,is_fastq_random,is_make_exome,is_trim_to_gene,is_exome_paired_end,is_pair_monitor
     #global is_fastacigar_out,is_onefrag_out,is_muts_only,is_frg_label,is_journal_subs,is_mutate_ref,is_make_exome
 
     from RG_exploder_globals import is_show_infilepath  
@@ -2030,7 +2030,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             # Accurate implemention of this bit requires another bit of code to provide a modified mrnapos_lookup for each mutrecs[mutrec_index],
             # otherwise it only works for reference sequence, not variants
             # Constrain the range position to a defined locus range for genomic: headpop & endpop or select a position in mrnapos_lookup
-            if RG_globals.target_transcript_name == RG_globals.empty_transcript_name or not RG_globals.is_exome_paired_end:
+            if (RG_globals.target_transcript_name == RG_globals.empty_transcript_name) or not RG_globals.is_exome_paired_end:
                 start=randint(headpop,endpop) # For genomic; force when not RG_globals.is_exome_paired_end, even if mRNA or CDS selected
             else:
                 start=mrnapos_lookup[randint(1,mrnapos_lookup_len)] # For exomic # random.choice(mrnapos_lookup) preferable?, but may not be present in App.vue build
