@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="14-Jun-2024"
+#Prg_verDate="22-Jun-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -24,6 +24,7 @@ def set_config_consts():
     #CustomerIDText="EBaker"
     PublicIDText="Public"
     CustomerIDText=PublicIDText # Set to this to override a CustomerIDText
+    #CustomerIDText="C Roos" # See also: is_exome_paired_end ; is_pair_monitor
     vuedir="mravn" # Solely to define how is_use_TKinter is set
     ######## End of: Revisit these each time a data set is renewed ########
 
@@ -42,6 +43,7 @@ def set_config_consts():
     config_file_output="input/config.json"
     config_file_reference_seqs="input/loci.json"
     MAINFILE="RG_exploder_main.py"
+    #MAINFILE="RG_exploder_main_roos.py"
 
     if vuedir in exploder_root:
         is_use_TKinter=False  # When setting up to use the Vue.js GUI
@@ -344,7 +346,11 @@ def set_diagnostic_defaults():
     # Setting admin-configurable diagnostic switches for development-testing-only
     # Ensure each is set to "User-config default" or expect trouble
     # ===========================================================================
-    global is_include_indels, is_dels_to_dots, is_dels_to_dots_override
+    global is_include_indels, is_dels_to_dots, is_dels_to_dots_override,is_exome_paired_end,is_pair_monitor
+
+    is_exome_paired_end=False # False to force paired-end for mRNA & CDS; True to enable exomic paired-end
+    is_pair_monitor=False # True to save monitor file with paired ends; False - no monitor file 
+
     is_include_indels=True      #  Set is_include_indels False to ignore indel definitions in variant feature table.
                                 #  User-config default should be True
     is_dels_to_dots=False       # Deleted bases are converted to dots in MutateVarSeq when is_dels_to_dots flag is True .
@@ -406,6 +412,8 @@ def set_diagnostic_defaults():
 def make_diagnostic_vars():
     global diagnostic_vars
     diagnostic_vars ={
+        "is_exome_paired_end":is_exome_paired_end,
+        "is_pair_monitor":is_pair_monitor,
         "is_include_indels":is_include_indels,
         "is_dels_to_dots":is_dels_to_dots,
         "is_dels_to_dots_override":is_dels_to_dots_override,
@@ -760,7 +768,7 @@ def set_Reference_sequences_configs_public3(custtext):
             MAINVER=main2.split('_')[3]+'_'+main2.split('_')[4]
             CustomerIDText="%s v.%s, %s"%(CustomerIDText,MAINVER,DATEVER)
         else:
-            print("Fail: %s does not exist"%mainfile)
+            print("Fail: %s does not exist"%MAINFILE)
             sys.exit() 
     else:
         print("Fail: %s does not exist"%config_file_reference_seqs)
@@ -896,5 +904,5 @@ if __name__ == "__main__":
     pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
     process_file_configs_python()
-    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_use_TKinter':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n 'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s"
-          %(exploder_root,is_use_TKinter,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER))
+    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_use_TKinter':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n 'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s\n 'is_exome_paired_end':%s\n 'is_pair_monitor':%s"
+          %(exploder_root,is_use_TKinter,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER,is_exome_paired_end,is_pair_monitor))
