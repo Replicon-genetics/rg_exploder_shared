@@ -49,7 +49,6 @@ def set_config_consts():
         is_use_TKinter=False  # When setting up to use the Vue.js GUI
     else:
         is_use_TKinter=True  # When setting up to use the Python GUI : RG_exploder_gui.py
-        
     set_defaults()
 
 def config_file_out():
@@ -346,10 +345,12 @@ def set_diagnostic_defaults():
     # Setting admin-configurable diagnostic switches for development-testing-only
     # Ensure each is set to "User-config default" or expect trouble
     # ===========================================================================
-    global is_include_indels, is_dels_to_dots, is_dels_to_dots_override,is_exome_paired_end,is_pair_monitor
+    global is_include_indels, is_dels_to_dots, is_dels_to_dots_override,is_exome_paired_end,is_pair_monitor,is_use_TKinter
 
-    is_exome_paired_end=False # False to force paired-end for mRNA & CDS; True to enable exomic paired-end
-    is_pair_monitor=False # True to save monitor file with paired ends; False - no monitor file 
+    is_exome_paired_end=True # False to force paired-end for mRNA & CDS; True to enable exomic paired-end
+    is_pair_monitor=False # True to save monitor file with paired ends; False - no monitor file
+    if not is_use_TKinter: # Way too slow for high parameter values giving big files in Vue.js
+        is_pair_monitor=False
 
     is_include_indels=True      #  Set is_include_indels False to ignore indel definitions in variant feature table.
                                 #  User-config default should be True
@@ -893,6 +894,7 @@ if __name__ == "__main__":
         exit()
 
     if is_use_TKinter:
+        
         subprocess.run(["/bin/rm","input"])
         subprocess.run(["/bin/rm","output"])
         subprocess.run(["cd","%s"%rootapplicationdir])
