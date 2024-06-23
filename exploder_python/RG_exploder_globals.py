@@ -80,7 +80,8 @@ def make_out_user_data():
     config_out_user_data={
         "custom_stringconstants":custom_stringconstants,
         "bio_parameters":bio_parameters2,
-        "Reference_sequences":Reference_sequences2
+        "Reference_sequences":Reference_sequences2,
+        "diagnostic_vars":config_in_data["diagnostic_vars"]
         }
     return config_out_user_data
 # end of make_out_user_data()
@@ -112,7 +113,7 @@ def make_bio_parameters_configs3():
     bio_parameters["is_flip_strand"]["value"]=is_flip_strand
     bio_parameters["is_frg_paired_end"]["value"]=is_frg_paired_end
     bio_parameters["is_duplex"]["value"]=is_duplex
-    #bio_parameters["is_simplex"]["value"] does not change. Only used as a label
+    bio_parameters["is_simplex"]["value"] #does not change. Only used as a label
     bio_parameters["is_fasta_out"]["value"]=is_fasta_out
     bio_parameters["is_onefrag_out"]["value"]=is_onefrag_out
     bio_parameters["is_muts_only"]["value"]=is_muts_only
@@ -132,7 +133,9 @@ def make_bio_parameters_configs3():
     bio_parameters["gauss_SD"]["value"]=gauss_SD
 
     bio_parameters_tmp=copy.deepcopy(bio_parameters)
-    if not is_pair_monitor:
+    if is_pair_monitor:
+        bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]="%s"%bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]
+    else:
         bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]="hidden" # mrnapos_lookup is not typically end-use informative
  
     # Set varfreqs as a single object instead of two: mutlabels & mutfreqs (legacy stuff)
@@ -324,8 +327,8 @@ def set_diagnostic_configs():
     is_trim_to_gene=diagnostic_vars["is_trim_to_gene"]
     is_fastq_random=diagnostic_vars["is_fastq_random"]
     is_show_infilepath=diagnostic_vars["is_show_infilepath"]
-    MaxVarPos=diagnostic_vars["MaxVarPos"]
     is_htm_journal=diagnostic_vars["is_htm_journal"]
+    MaxVarPos=diagnostic_vars["MaxVarPos"]
 
 # end of set_diagnostic_configs()
 
