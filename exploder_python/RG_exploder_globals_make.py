@@ -395,6 +395,9 @@ def set_diagnostic_defaults():
                             # Only the stub (without infilepathroot) is shown when set to False.
                             #  User-config default should be False
 
+    global is_htm_journal # Save an htm version of the journal file when set to True 
+    is_htm_journal =True
+
     global MaxVarPos # The maximum length of Refseq used. It is set to the length of the reference sequence in read_refseqrecord, unless set here > 0''' 
     MaxVarPos=0      #  Set it here for testing purposes eg: MaxVarPos=250 to truncate the sequence that is read in'''
                      #  User-config default should be zero
@@ -403,9 +406,7 @@ def set_diagnostic_defaults():
                      #     abs_pos=seq_record.offset+seq_record.strand_mod*seqpos
                      #     AttributeError: 'SeqRecord' object has no attribute 'offset'
                      
-    global is_htm_journal # Experimental - save an htm version of the journal file when set to True 
-    is_htm_journal =True
-    
+
 
 # end of set_diagnostic_defaults()
 
@@ -423,8 +424,8 @@ def make_diagnostic_vars():
         "is_trim_to_gene":is_trim_to_gene,
         "is_fastq_random":is_fastq_random,
         "is_show_infilepath":is_show_infilepath,
-        "MaxVarPos":MaxVarPos,
         "is_htm_journal":is_htm_journal,
+        "MaxVarPos":MaxVarPos
         }
 #print("diagnostic_vars %s"%diagnostic_vars)
 #end of make_diagnostic_vars()
