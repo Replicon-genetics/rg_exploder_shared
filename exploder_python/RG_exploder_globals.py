@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="13-Jun-2024"
+#Prg_verDate="22-Jun-2024"
 # © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 
 import time  # Used in getime()
@@ -39,9 +39,8 @@ def get_locus_transcript():
     if '(' in locus_transcript:
         splitters=locus_transcript.split('(')
         locus_transcript=splitters[0]
-    #if locus_transcript == empty_transcript_name: # When paired-end is working for mRNA & CDS
-    if locus_transcript == empty_transcript_name or is_frg_paired_end: # Forcing to genomic when is_frg_paired_end
-
+    if locus_transcript == empty_transcript_name or (not is_exome_paired_end and is_frg_paired_end) : # Force to genomic when is_frg_paired_end unless is_exome_paired_end set
+    #if locus_transcript == empty_transcript_name or is_frg_paired_end : # Forcing to genomic when is_frg_paired_end
         locus_transcript="%s-%s"%(target_locus,empty_transcript_name.lower())
     elif is_CDS:
         locus_transcript="%s-%s"%(locus_transcript,CDS_trigger)
@@ -133,7 +132,8 @@ def make_bio_parameters_configs3():
     bio_parameters["gauss_SD"]["value"]=gauss_SD
 
     bio_parameters_tmp=copy.deepcopy(bio_parameters)
-    bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]="hidden" # mrnapos_lookup is not typically end-use informative
+    if not is_pair_monitor:
+        bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]="hidden" # mrnapos_lookup is not typically end-use informative
  
     # Set varfreqs as a single object instead of two: mutlabels & mutfreqs (legacy stuff)
     varfreqs=dict()
@@ -303,6 +303,7 @@ def set_io_configs():
 # end of set_io_configs()
 
 def set_diagnostic_configs():
+    global is_exome_paired_end,is_pair_monitor
     global is_include_indels, is_dels_to_dots, is_dels_to_dots_override
     global is_print_diagnostics
     global is_mutate_ref,is_make_exome,is_trim_to_gene
@@ -312,6 +313,8 @@ def set_diagnostic_configs():
     global config_in_data
     
     diagnostic_vars=config_in_data["diagnostic_vars"]
+    is_exome_paired_end=diagnostic_vars["is_exome_paired_end"]
+    is_pair_monitor=diagnostic_vars["is_pair_monitor"]
     is_include_indels=diagnostic_vars["is_include_indels"]
     is_dels_to_dots=diagnostic_vars["is_dels_to_dots"]
     is_dels_to_dots_override=diagnostic_vars["is_dels_to_dots_override"]
