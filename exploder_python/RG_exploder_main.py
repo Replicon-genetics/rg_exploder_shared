@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_29_0.py"
-ProgverDate="22-Jun-2024"
+ProgverDate="23-Jun-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -2027,17 +2027,13 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                     break
             #insert_len=randint(Paired_insert_Min,Paired_insert_Max) # Flat distribution frequencies
 
-            start=randint(headpop,endpop) # Forces genomic, even if mRNA or CDS selected
-            
-            # Implemention of this bit requires another bit of code to modify, otherwise it only works for reference sequence, not variants
-            # See also RG_exploder_globals in setting the output file names:
-            # if locus_transcript == empty_transcript_name: # or is_frg_paired_end:# Forcing when is_frg_paired_end
-            '''# Constrain the range position to the defined locus range and fraglen
-            if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
-                start=randint(headpop,endpop) # For genomic
+            # Accurate implemention of this bit requires another bit of code to provide a modified mrnapos_lookup for each mutrecs[mutrec_index],
+            # otherwise it only works for reference sequence, not variants
+            # Constrain the range position to a defined locus range for genomic: headpop & endpop or select a position in mrnapos_lookup
+            if RG_globals.target_transcript_name == RG_globals.empty_transcript_name or not RG_globals.is_exome_paired_end:
+                start=randint(headpop,endpop) # For genomic; force when not RG_globals.is_exome_paired_end, even if mRNA or CDS selected
             else:
                 start=mrnapos_lookup[randint(1,mrnapos_lookup_len)] # For exomic # random.choice(mrnapos_lookup) preferable?, but may not be present in App.vue build
-            '''
             
             # 50% chance of the position start being the forward read's (R1) start-point or the reverse-read's (R2) end-point
             if random() < 0.5: # Position is the forward-read's start point
