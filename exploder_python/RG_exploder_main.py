@@ -717,13 +717,16 @@ def write_fastqout(ThisSeqr,is_R1):
             fastqout = RG_io.open_write("%s%s"%(Outfilepath,out_fq_file))
             journals_update("Writing FASTQ %ss to %s"%(RG_globals.read_annotation,out_fq_file))
 
-        journals_update("        FASTQ quality range %s to %s"%(RG_globals.Qualmin,RG_globals.Qualmax))
+        if RG_globals.Qualmin!=RG_globals.Qualmax:
+            if RG_globals.is_fastq_random:
+                msgtxt=""
+            else: 
+                msgtxt="sort-of-"
+            msgtxt="%srandomly-assigned a value between %s and %s in each %s"%(msgtxt,RG_globals.Qualmin,RG_globals.Qualmax,RG_globals.read_annotation)
+        else:
+            msgtxt="identical throughout at a value of %s"%RG_globals.Qualmax
 
-        if RG_globals.is_fastq_random:
-            msgtxt=""
-        else: 
-            msgtxt="sort-of-"
-        journals_update("        FASTQ quality range has %srandomly-assigned quality values in each %s"%(msgtxt,RG_globals.read_annotation)) 
+        journals_update("        FASTQ quality scores are %s"%msgtxt)
 
     if not RG_globals.is_frg_paired_end:
         seqwrite(ThisSeqr,fastqout,"fastq")
