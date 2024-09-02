@@ -137,9 +137,9 @@ def make_bio_parameters_configs3():
     bio_parameters["gauss_SD"]["value"]=gauss_SD
 
     if is_pair_monitor:
-        bio_parameters["target_build_variant"]["exonpos_lookup"]=exonpos_lookup
+        bio_parameters["target_build_variant"]["exonplus_lookup"]=exonplus_lookup
     else:
-        bio_parameters["target_build_variant"]["exonpos_lookup"]="hidden" # exonpos_lookup is not typically end-use informative
+        bio_parameters["target_build_variant"]["exonplus_lookup"]="hidden" # exonplus_lookup is not typically end-use informative
 
     bio_parameters_tmp=copy.deepcopy(bio_parameters)
     # Set varfreqs as a single object instead of two: mutlabels & mutfreqs (legacy stuff)
@@ -359,7 +359,7 @@ def set_bio_parameters_configs():
     global target_transcript_name,target_transcript_id,is_CDS
 
     global Exome_extend,Exome_extend_Min,Exome_extend_Max,Fraglen,FraglenMin,FraglenMax
-    global Fragdepth,FragdepthMin,FragdepthMax,Qualmin,QualMIN,Qualmax,QualMAX,exonpos_lookup
+    global Fragdepth,FragdepthMin,FragdepthMax,Qualmin,QualMIN,Qualmax,QualMAX,exonplus_lookup
     
     bio_parameters=config_in_data["bio_parameters"]
     
@@ -413,7 +413,7 @@ def set_bio_parameters_configs():
     Qualmax=bio_parameters["Qualmax"]["value"]
     QualMAX=bio_parameters["Qualmax"]["max"]
 
-    exonpos_lookup=bio_parameters["target_build_variant"]["exonpos_lookup"]
+    exonplus_lookup=bio_parameters["target_build_variant"]["exonplus_lookup"]
 # end of set_bio_parameters_configs
 
 def getime():

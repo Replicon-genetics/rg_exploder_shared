@@ -497,7 +497,7 @@ def read_refseqrecord(embl_or_genbank):
             SEQ_record.cigar=str(MaxVarPos)+"M"
             SEQ_record.cigarbox=[0, int(MaxVarPos), 'M', int(MaxVarPos)]
             SEQ_record.mutbox=RG_process.haveamutbox(SEQ_record.cigarbox)
-            # Copying in a modified version of RG_globals.bio_parameters["target_build_variant"]["exonpos_lookup"] which will be inherited by each variant entry
+            # Copying in a modified version of RG_globals.bio_parameters["target_build_variant"]["exonplus_lookup"] which will be inherited by each variant entry
             # This is later modified in each variant haplotype to create a lookup table for creating paired-end exomic reads 
             SEQ_record.exonplus_lookup=copy.copy(RG_globals.exonplus_lookup)
             if len(SEQ_record.exonplus_lookup)>1:
@@ -2546,7 +2546,7 @@ def make_reference_files1():
 def run_processing(is_get_new_refseq):
     global REFSEQ_RECORD,Seq_Format,in_ref_src_title,in_ref_src,Out_Ref_Source,user_config_file
 
-    # Ensure that exonplus_lookup is calculated, which could differ from exonpos_lookup; intially because return from App.vue does not send exonpos_lookup
+    # Ensure that exonplus_lookup is calculated, which could differ from exonplus_lookup; intially because return from App.vue does not send exonplus_lookup
     #if RG_globals.exonplus_lookup==[0] and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
     # Forcing this to recalculate each time. Really need to detect if the value of RG_globals.Exome_extend has changed, or new refseq
     if is_get_new_refseq:

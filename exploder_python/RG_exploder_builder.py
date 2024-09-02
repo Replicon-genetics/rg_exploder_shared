@@ -94,7 +94,7 @@ def get_transcript_data_process(redo_locus):
         else:
             splice_joinlist_txt=splice_joinlist_txt_mRNA
     # This reverse is a fix solely to reinstate consistency between reading from config.json and the section in splice_a_sequence2 that already flips the join for is_join_complement=True
-    # The other way to do it is to change both config.json AND the exonpos_lookup assignment
+    # The other way to do it is to change both config.json AND the exonplus_lookup assignment
     if RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:
         splice_joinlist_txt.reverse()
 
@@ -294,7 +294,7 @@ def get_muttranscripts2(extend_exon):
             begin=int(begin)
             end=int(end)
             # This is where there's a divergence in the outcome depending on if it's called from
-            # a) RG_exploder_gui.py to set RG_globals.exonpos_lookup (for use in mRNA/CDS coordinate-setting)
+            # a) RG_exploder_gui.py to set RG_globals.exonplus_lookup (for use in mRNA/CDS coordinate-setting)
             #    Or when called from
             # b) RG_exploder_main.py to set RG_globals.exonplus_lookup (for use in paired-end exome output)
             if extend_exonb: # Expand the lookup range for each pair
@@ -388,8 +388,8 @@ def get_muttranscripts2(extend_exon):
         RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
         RG_globals.bio_parameters["target_build_variant"]["tailclip"]=tailclip
         # This is all that is essential to send back to GUI
-        #print("get_muttranscripts2: exonpos_lookup %s"%exonpos_lookup)
-        #RG_globals.bio_parameters["target_build_variant"]["exonpos_lookup"]=exonpos_lookup
+        #print("get_muttranscripts2: exonplus_lookup %s"%exonplus_lookup)
+        #RG_globals.bio_parameters["target_build_variant"]["exonplus_lookup"]=exonplus_lookup
         RG_globals.bio_parameters["target_build_variant"]["abs_offset"]=abs_offset
         RG_globals.bio_parameters["target_build_variant"]["ref_strand"]=ref_strand
         RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["max"]=max_seqlength

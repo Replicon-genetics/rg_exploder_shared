@@ -273,7 +273,7 @@ def modify_seq_in_record(inseq,SeqRec):
     CopySeqRec.cigar=copy.copy(SeqRec.cigar)
     CopySeqRec.cigarbox=copy.copy(SeqRec.cigarbox)
     CopySeqRec.mutbox=copy.copy(SeqRec.mutbox)
-    #CopySeqRec.exonpos_lookup=copy.copy(SeqRec.exonpos_lookup) # Not needed once make_exonplus_lookups is fully implemented
+    #CopySeqRec.exonplus_lookup=copy.copy(SeqRec.exonplus_lookup) # Not needed once make_exonplus_lookups is fully implemented
     CopySeqRec.Headclip=copy.copy(SeqRec.Headclip)
     CopySeqRec.Tailclip=copy.copy(SeqRec.Tailclip)
     CopySeqRec.splicecount=copy.copy(SeqRec.splicecount)

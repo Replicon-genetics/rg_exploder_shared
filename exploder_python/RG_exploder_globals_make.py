@@ -548,7 +548,7 @@ def make_bio_parameters_configs():
             "CDS_join":"",
             "headclip":0,
             "tailclip":0,
-            "exonpos_lookup":[0],
+            "exonplus_lookup":[0],
             "transcript_view":"",
             "abs_offset":0,
             "ref_strand":1,
