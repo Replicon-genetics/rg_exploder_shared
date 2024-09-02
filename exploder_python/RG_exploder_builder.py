@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_exploder_builder.py"
-ProgverDate="22-Jun-2024"
+ProgverDate="25-Aug-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -9,10 +9,6 @@ ProgverDate="22-Jun-2024"
     
     When it became clear that much of these blocks of code added no value to RG_main as part of the App.vue / Vue.js GUI version, they
     were moved out of RG_main to here. This to lighten the code burden on RG_main
-
-    BUT: need to call this after return from App.vue to regenerate mrnapos_lookup
-
-    Has not escaped my notice that there's an adjunct to using mrnapos_lookup (reference haplotype only): use CIGAR box to support position-lookups for variant haplotypes.
 
     The 'build' function is the original developer's name for the GUI function allowing the addition of further haplotypes,
     created after the initial 'explode' function ie: the fragmentation of sequence into reads
@@ -98,7 +94,7 @@ def get_transcript_data_process(redo_locus):
         else:
             splice_joinlist_txt=splice_joinlist_txt_mRNA
     # This reverse is a fix solely to reinstate consistency between reading from config.json and the section in splice_a_sequence2 that already flips the join for is_join_complement=True
-    # The other way to do it is to change both config.json AND the mrnapos_lookup assignment
+    # The other way to do it is to change both config.json AND the exonpos_lookup assignment
     if RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:
         splice_joinlist_txt.reverse()
 
@@ -206,14 +202,16 @@ def get_ref_subseq3(sub_begin,sub_end):
     return subref,success
 
 
-def get_muttranscripts2(redo_locus):
+def get_muttranscripts2(extend_exon):
     # Derive the transcript tables
     # It might be obvious to use Refseq.abs_start, Refseq.abs_end, Refseq.polarity
     # But at this point we have not necessarily read in the sequence file yet. Data are from config.json
 
     # Very importantly the values set here to pass back to the calling GUI are:
-    # mrnapos_lookup,abs_offset,ref_strand,max_seqlength,GRChver_txt,headclip,tailclip
+    # exonmap_lookup,abs_offset,ref_strand,max_seqlength,GRChver_txt,headclip,tailclip
     # plus feature_titles (non-critical)
+
+    extend_exonb=extend_exon and (RG_globals.Exome_extend > 0)# modified Boolean to avoid repeat in for count in range loop
     
     is_join_complement=RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]
     Region=RG_globals.Reference_sequences[RG_globals.target_locus]["Region"]
@@ -238,15 +236,12 @@ def get_muttranscripts2(redo_locus):
     headclip=locus_begin-1
     tailclip=maxreflen-locus_end
     
-    RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
-    RG_globals.bio_parameters["target_build_variant"]["tailclip"]=tailclip
-
     exon_total=0; intron_total=0; feature_titles=["Pre-Locus"]; starts=[]; ends=[]
-    abs_starts=[]; abs_ends=[]; mrnapos_lookup=[0]; exon_length=[0];max_seqlength=0;
+    abs_starts=[]; abs_ends=[]; exonmap_lookup=[0]; exon_length=[0];max_seqlength=0;
     template_length=0;template_cumulative_length=["-"]
 
     run_success,splice_joinlist_txt=get_joinlist()
-
+    
     # set Pre-Locus range
     if is_join_complement:
         #headclip,tailclip=tailclip,headclip
@@ -276,7 +271,7 @@ def get_muttranscripts2(redo_locus):
     # or set introns & exons ranges
     else:
         feature_titles.append("Upstream")
-        #mrnapos_lookup.append(0)
+        #exonmap_lookup.append(0)
         exon_length.append(0)
         template_cumulative_length.append("-")
         if is_join_complement:
@@ -298,6 +293,13 @@ def get_muttranscripts2(redo_locus):
             begin,end=this_pair.split(":")
             begin=int(begin)
             end=int(end)
+            # This is where there's a divergence in the outcome depending on if it's called from
+            # a) RG_exploder_gui.py to set RG_globals.exonpos_lookup (for use in mRNA/CDS coordinate-setting)
+            #    Or when called from
+            # b) RG_exploder_main.py to set RG_globals.exonplus_lookup (for use in paired-end exome output)
+            if extend_exonb: # Expand the lookup range for each pair
+                begin=begin-RG_globals.Exome_extend
+                end=end+RG_globals.Exome_extend
 
             #print("begin %s \n end %s"%(begin,end)) # Validation check
             #Last intron / upstream
@@ -325,9 +327,9 @@ def get_muttranscripts2(redo_locus):
                 this_exon.reverse()
             #print("exon %s: %s"%(exon_total,this_exon))
             for item2 in this_exon:
-                mrnapos_lookup.append(item2)
+                exonmap_lookup.append(item2)
             
-            #print("Locus: %s mrnapos_lookup %s"%(RG_globals.target_locus,mrnapos_lookup))
+            #print("Locus: %s exonmap_lookup %s"%(RG_globals.target_locus,exonmap_lookup))
             #print(" locus %s ; transcript %s; begin %s ; end %s ; exon_len %s "%(RG_globals.target_locus,RG_globals.target_transcript_name,begin,end,exon_len))
 
             if is_join_complement:
@@ -346,7 +348,7 @@ def get_muttranscripts2(redo_locus):
             feature_titles.append(intron_text+str(intron_total)+"-"+str(intron_total+1))
             template_cumulative_length.append(template_length)
             
-            #print("%s"%mrnapos_lookup[(len(mrnapos_lookup)-10):-1])
+            #print("%s"%exonmap_lookup[(len(exonmap_lookup)-10):-1])
         ## End of: for item in splice_joinlist_txt
         ## End of: for count in range(len(splice_joinlist_txt))
         feature_titles[-1]="Downstream"
@@ -381,52 +383,59 @@ def get_muttranscripts2(redo_locus):
          
     #print("feature_titles %s \n starts %s \n ends %s"%(feature_titles,starts,ends)) # Validation check
 
-    # This is all that is essential to send back to GUI
-    RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]=mrnapos_lookup
-    RG_globals.bio_parameters["target_build_variant"]["abs_offset"]=abs_offset
-    RG_globals.bio_parameters["target_build_variant"]["ref_strand"]=ref_strand
-    RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["max"]=max_seqlength
-    RG_globals.bio_parameters["target_build_variant"]["trans_End"]["max"]=max_seqlength
+    # This section only for Python GUI call: the exon coordinates used in variant-definitions. Do not want these values over-written by a call to set paired-end exomics 
+    if not extend_exon:
+        RG_globals.bio_parameters["target_build_variant"]["headclip"]=headclip
+        RG_globals.bio_parameters["target_build_variant"]["tailclip"]=tailclip
+        # This is all that is essential to send back to GUI
+        #print("get_muttranscripts2: exonpos_lookup %s"%exonpos_lookup)
+        #RG_globals.bio_parameters["target_build_variant"]["exonpos_lookup"]=exonpos_lookup
+        RG_globals.bio_parameters["target_build_variant"]["abs_offset"]=abs_offset
+        RG_globals.bio_parameters["target_build_variant"]["ref_strand"]=ref_strand
+        RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["max"]=max_seqlength
+        RG_globals.bio_parameters["target_build_variant"]["trans_End"]["max"]=max_seqlength
 
-    # The following is only to build transcript_view for user-notification via RG_globals.bio_parameters["target_build_variant"]["transcript_view"]
-    # It recreates the intron/exon table as seen in Ensembl transcript view. Ideally put in journal somehow
-    for count in range(len(ends)):
-        abs_starts.append(abs(starts[count]+abs_offset))
-        abs_ends.append(abs(ends[count]+abs_offset))
+        # The following is only to build transcript_view for user-notification via RG_globals.bio_parameters["target_build_variant"]["transcript_view"]
+        # It recreates the intron/exon table as seen in Ensembl transcript view. Ideally put in journal somehow
+        for count in range(len(ends)):
+            abs_starts.append(abs(starts[count]+abs_offset))
+            abs_ends.append(abs(ends[count]+abs_offset))
 
-    if RG_globals.is_CDS and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
-        add="_CDS"
-    else:
-        add=""
+        if RG_globals.is_CDS and (RG_globals.target_transcript_name != RG_globals.empty_transcript_name):
+            add="_CDS"
+        else:
+            add=""
 
-    if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
-        trans_text="DNA"
-    elif RG_globals.is_CDS:
-        trans_text="CDS"
-    else:
-        trans_text="mRNA"
+        if RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
+            trans_text="DNA"
+        elif RG_globals.is_CDS:
+            trans_text="CDS"
+        else:
+            trans_text="mRNA"
 
-    transcript_view="Locus: %s, %s: %s%s,\tLength: %s\n Source %s\n"%(RG_globals.target_locus,trans_text,RG_globals.target_transcript_name,add,max_seqlength,
+        transcript_view="Locus: %s, %s: %s%s,\tLength: %s\n Source %s\n"%(RG_globals.target_locus,trans_text,RG_globals.target_transcript_name,add,max_seqlength,
                                                                              RG_globals.Reference_sequences[RG_globals.target_locus]["Region"])
     
-    transcript_view+=" Label\t\t Local\t\t| Global\t\t| Length| Template (Cumulative)\n"
+        transcript_view+=" Label\t\t Local\t\t| Global\t\t| Length| Template (Cumulative)\n"
 
-    for count in range(len(feature_titles)):
-        loc_start=starts[count]
-        loc_end=ends[count]
-        glob_start=abs_starts[count]
-        glob_end=abs_ends[count]
-        this_len=abs(ends[count]-starts[count])+1
-        if this_len==1: this_len = 0
-        #print("%s; start %s; end %s; this_len %s; templ %s"%(feature_titles[count],starts[count],ends[count],this_len,template_cumulative_length[count]))
+        for count in range(len(feature_titles)):
+            loc_start=starts[count]
+            loc_end=ends[count]
+            glob_start=abs_starts[count]
+            glob_end=abs_ends[count]
+            this_len=abs(ends[count]-starts[count])+1
+            if this_len==1: this_len = 0
+            #print("%s; start %s; end %s; this_len %s; templ %s"%(feature_titles[count],starts[count],ends[count],this_len,template_cumulative_length[count]))
             
-        transcript_view+=" %s:\t %s - %s\t| %s - %s\t| %s\t | %s\n"%(feature_titles[count],loc_start,loc_end,glob_start,glob_end,
+            transcript_view+=" %s:\t %s - %s\t| %s - %s\t| %s\t | %s\n"%(feature_titles[count],loc_start,loc_end,glob_start,glob_end,
                                                                      this_len,template_cumulative_length[count])
-    transcript_view+="\n"
+        transcript_view+="\n"
 
-    RG_globals.bio_parameters["target_build_variant"]["transcript_view"]=transcript_view #Not essential - only used for GUI information
-    # End of user-notification section. 
-    return run_success
+        RG_globals.bio_parameters["target_build_variant"]["transcript_view"]=transcript_view #Not essential - only used for GUI information
+    # End of user-notification section.
+    #print("exonmap_lookup[:10]%s; \n [-10:]%s"%(exonmap_lookup[:10],exonmap_lookup[-10:]))
+    # NB: exonmap_lookup has 1-based positions
+    return run_success,exonmap_lookup
 
 def get_joinlist():
     global is_joindata_in_json
@@ -435,7 +444,7 @@ def get_joinlist():
     try: # Are the joins defined in globals via the json file?
         barf=RG_globals.Reference_sequences[RG_globals.target_locus]["CDS_join"] # tests if it exists
         success,splice_joinlist_txt=get_transcript_data_json()
-    except: # Failed, so read the Reference file # Works for python, but always define i json for pyodide because pyodide doesn't like a fail  
+    except: # Failed, so read the Reference file # Works for python, but always define in config.json for pyodide because pyodide doesn't like an except  
         success,splice_joinlist_txt=get_transcript_data_process(True)
     if success:
         #RG_globals.bio_parameters["target_build_variant"]["splice_joinlist_txt"]=splice_joinlist_txt
