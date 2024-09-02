@@ -1,7 +1,7 @@
 {
     "stringconstants": {
         "DatasetIDText": "Demo GRCh38",
-        "CustomerIDText": "Public v.27_05, May 2024",
+        "CustomerIDText": "Public v.30_3, Sep 2024",
         "CopyrightText": "Copyright \u00a9 Replicon Genetics 2021-2024. All rights reserved.",
         "seq_polarity_plus": "1",
         "seq_polarity_minus": "-1",
@@ -62,6 +62,8 @@
         "Ref_file_name": "locseq"
     },
     "diagnostic_vars": {
+        "is_exome_paired_end": true,
+        "is_pair_monitor": false,
         "is_include_indels": true,
         "is_dels_to_dots": false,
         "is_dels_to_dots_override": false,
@@ -71,9 +73,8 @@
         "is_trim_to_gene": true,
         "is_fastq_random": true,
         "is_show_infilepath": false,
-        "MaxVarPos": 0,
         "is_htm_journal": true,
-        "is_make_reference_files1": true
+        "MaxVarPos": 0
     },
     "admin_constants": {
         "NormaliseUpper": 1000,
@@ -131,7 +132,7 @@
             "CDS_join": "",
             "headclip": 0,
             "tailclip": 0,
-            "mrnapos_lookup": [
+            "exonplus_lookup": [
                 0
             ],
             "transcript_view": "",
@@ -212,7 +213,7 @@
             "label": "Depth of cover",
             "value": 3,
             "min": 1,
-            "max": 500
+            "max": 800
         },
         "Exome_extend": {
             "label": "(Exome) Extension",
@@ -274,13 +275,13 @@
         },
         "Qualmin": {
             "label": "- FASTQ quality min",
-            "value": 15,
+            "value": 40,
             "min": 0,
             "max": 93
         },
         "Qualmax": {
             "label": "- FASTQ quality max",
-            "value": 50,
+            "value": 40,
             "min": 0,
             "max": 93
         },
