@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="16-June-2024"
+#ProgverDate="2-Sep-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -31,6 +31,7 @@ As such they must be defined first, being impractical to be called by subroutine
 from random import randint # COD: Used in get_quality_list # re-instated
 from collections import OrderedDict
 import copy
+import time
 '''
 BioPython imports
 '''
@@ -49,6 +50,190 @@ import RG_exploder_globals as RG_globals
 # Seqrecord manipulation
 # =====================================================
 
+def make_exonplus_lookups(ref_lookup,mutrecs):
+    # NB: Incoming ref_lookup and cigarbox are both 1-based sequence counts
+    
+    def print_counts():
+        print("seqlen:%s,seqtype:%s,new_seqcount:%s,old_scount:%s,carry:%s"%(seqlen,seqtype,new_seqcount,old_scount,carry))
+
+    def get_keys(value,first,last):
+        #nonlocal elapsed_time
+        #print("get_keys: value %s,first %s,last %s"%(value,first,last))
+        nonlocal this_lookup
+        start_time=time.time()
+        begin=0; end=0
+        if last > last_lookup:
+            last=last_lookup
+            #print("last mod: value %s,first %s,last %s"%(value,first,last))
+        success1=False; success2=False
+        begin_idx=0
+        end_idx=0
+        for begin in range(first,last+1):
+            if begin in this_lookup:
+                success1=True
+                break
+        #print("first %s,last %s, begin %s"%(first,last,begin))    
+            
+        for end in range(last,begin,-1):
+            if end in this_lookup:
+                success1=True
+                break
+        #print(" begin %s,end %s"%(begin,end))
+        success=success1 and success2
+        if success:
+            begin_idx=this_lookup.index(begin)
+            end_idx=this_lookup.index(end)
+            #print("begin: %s; end: %s"%(this_lookup[begin_idx],this_lookup[end_idx]))
+        finish_time=time.time()
+        #print("time: %s"%(finish_time-start_time))
+        #print("begin:%s; end:%s"%(begin,end))
+        return begin_idx,end_idx,success              
+
+
+    def modify_lists(value):
+        #value is "H" for hide; or carry, an integer
+        first=last_old_scount+1;last=old_scount
+        #print("first %s, last %s, value %s"%(first,last,value))# Hiding unnecessary diagnostics code
+        if str(value) in "DX":
+            ''' # Hiding unnecessary diagnostics code
+            hidden_key="%s,%s"%(first,last)
+            hidden_list.setdefault(hidden_key,value)
+            '''
+
+            begin_idx,end_idx,success=get_keys(value,first,last)
+            if success:
+                listpos_key="%s,%s"%(begin_idx,end_idx)
+                hidden_listpos.setdefault(listpos_key,value)
+                '''
+                # Hiding unnecessary diagnostics code
+                valpos_key="%s,%s"%(this_lookup[begin_idx],this_lookup[end_idx])
+                hidden_valpos.setdefault(valpos_key,value)
+                '''
+        else:
+            ''' # Hiding unnecessary diagnostics code
+            carry_key="%s,%s"%(first,last)
+            carry_list.setdefault(carry_key,value)
+            '''
+            
+            if value !=0:
+                begin_idx,end_idx,success=get_keys(value,first,last)
+                if success:
+                    listpos_key="%s,%s"%(begin_idx,end_idx)
+                    carry_listpos.setdefault(listpos_key,value)
+                    '''
+                    # Hiding unnecessary diagnostics code
+                    valpos_key="%s,%s"%(this_lookup[begin_idx],this_lookup[end_idx])
+                    carry_valpos.setdefault(valpos_key,value)
+                    '''
+                    
+    def modify_lookup():
+        modify_lookup_carry()
+        modify_lookup_hide()
+        #print("this_lookup:%s"%this_lookup)
+        #print("mutrecs[rec_index].id:%s"%mutrecs[rec_index].id)
+        #print("length this_lookup: %s"%(len(this_lookup))) # # Hiding unnecessary diagnostics code
+        #print("rec_index:%s,len(mutrecs[rec_index].exonplus_lookup: %s"%(rec_index,len(mutrecs[rec_index].exonplus_lookup))) # # Hiding unnecessary diagnostics code
+    
+    def modify_lookup_carry():
+        nonlocal this_lookup
+        for key in carry_listpos:
+            #print(" key:%s; value:%s"%(key,carry_listpos[key])) # # Hiding unnecessary diagnostics code
+            value=carry_listpos[key]
+            start,end=key.split(',')
+            for num in range(int(start),int(end)+1):
+                this_lookup[num]+=value
+                
+    def modify_lookup_hide():
+        nonlocal elapsed_time
+        nonlocal this_lookup
+        #print("length this_lookup: %s"%len(this_lookup))
+        #begin_time=time.time()
+        expanded_hidden_listpos=[]
+        for key in hidden_listpos:
+            #print(" key:%s; value:%s"%(key,hidden_listpos[key])) # # Hiding unnecessary diagnostics code
+            start,end=key.split(',')
+            expanded_hidden_listpos = list(range(int(start),int(end)+1))
+            expanded_hidden_listpos.reverse()# Reverses.
+        for num in expanded_hidden_listpos:# Do it in reverse, so array positions are maintained after deletion
+            del(this_lookup[num]) # this_lookup[num]=0 # is faster with remove .reverse() above, but downstream cost?
+        #end_time=time.time()
+        #elapsed_time=elapsed_time+end_time-begin_time
+
+    def modify_to_zero_based():# Add -1 to each position for zero-based sequence positions
+        nonlocal this_lookup
+        this_lookup = [item - 1 for item in this_lookup] # list comprehension
+        
+    #print(" CLEAR\n\n")
+    #print(" Reflookup:%s\n" %ref_lookup)
+    elapsed_time=0
+    begin_time=time.time()
+    if len(ref_lookup)>1:
+        for mutrec_index in range(len(mutrecs)):
+            #print("mutrecs[mutrec_index].id:%s"%mutrecs[mutrec_index].id)
+            #print("mutrecs[mutrec_index].exonplus_lookup[2] %s"%mutrecs[mutrec_index].exonplus_lookup[2])
+            #print("mutrecs[mutrec_index].id:%s; mutrecs[mutrec_index].mutlabel:%s;\n mutrecs[mutrec_index].cigar:%s;\n mutrecs[mutrec_index].mutbox:%s;\n
+            #print("mutrecs[mutrec_index].cigarbox:%s"%mutrecs[mutrec_index].cigarbox)
+            this_lookup=copy.copy(ref_lookup)
+            first_lookup=this_lookup[0]
+            last_lookup=this_lookup[-1]
+            old_scount=0; new_seqcount=0; carry=0
+            carry_listpos=dict()
+            hidden_listpos=dict()
+            
+            ''' # Hiding unnecessary diagnostics code
+            carry_list=dict()
+            hidden_list=dict()
+            hidden_valpos=dict()
+            carry_valpos=dict()
+            '''
+            for recpos in range(1, len(mutrecs[mutrec_index].cigarbox)-1, 2):
+                seqlen=mutrecs[mutrec_index].cigarbox[recpos]
+                seqtype=mutrecs[mutrec_index].cigarbox[recpos+1]
+                last_old_scount=old_scount
+                if seqtype in "D":
+                    for item in range(int(seqlen)):
+                        carry-=1
+                        old_scount+=1
+                        #print_counts()
+                    modify_lists("D")      
+                elif seqtype in "I":
+                    for item in range(int(seqlen)):
+                        carry+=1
+                        new_seqcount+=1
+                        #print_counts()
+                elif seqtype in "X":
+                    for item in range(int(seqlen)):
+                        new_seqcount+=1
+                        old_scount+=1
+                        #print_counts()
+                    modify_lists("X")
+                else:
+                    new_seqcount+=seqlen
+                    old_scount+=seqlen
+                    modify_lists(carry)
+                    #print_counts()
+            '''# Hiding unnecessary diagnostics code
+            print("hidden_list%s"%hidden_list)
+            print("hidden_listpos%s"%hidden_listpos)
+            print("hidden_valpos%s"%hidden_valpos)
+            print("carry_list%s"%carry_list)
+            print("carry_listpos%s"%carry_listpos)
+            print("carry_valpos%s"%carry_valpos)
+            '''
+            modify_lookup()
+            #print("this_lookup[0] %s, this_lookup[:-1] %s"%(this_lookup[0],this_lookup[-1]))
+            modify_to_zero_based()
+            #print("this_lookup[0] %s, this_lookup[:-1] %s"%(this_lookup[0],this_lookup[-1]))
+            # copy the modified lookup into relevant mutrecs
+            mutrecs[mutrec_index].exonplus_lookup=copy.copy(this_lookup)
+            
+            '''
+            print("\n")
+            '''
+        end_time=time.time()
+        elapsed_time=end_time-begin_time
+        #print("elapsed_time:%s"%elapsed_time)
+
 def duplicate_record(SeqRec):
     #CopySeqRec=modify_seq_in_record(SeqRec.seq,SeqRec,SeqRec.howmany)
     CopySeqRec=copy.deepcopy(SeqRec)
@@ -60,7 +245,6 @@ def modify_seq_in_record(inseq,SeqRec):
     # annotate_seq_to_record ignores the features
     #print("at modify_seq_in_record: SeqRec.id %s"%(SeqRec.id))
 
-    
     #CopySeqRec=SeqRecord(Seq(str(inseq),generic_dna)) # Creates an empty record with a given sequence #generic_dna # Deprecated from Biopython 1.78 (September 2020)
     #CopySeqRec=SeqRecord(Seq(str(inseq))) # Creates an empty record with a given sequence
     CopySeqRec=Biopython_fix.fix_SeqRecord(inseq)
@@ -70,7 +254,9 @@ def modify_seq_in_record(inseq,SeqRec):
     # NB: Have not recently tried CopySeqRec=copy.deepcopy(SeqRec) then CopySeqRec.Seq=Seq(str(inseq),generic_dna)
     CopySeqRec.id=copy.copy(SeqRec.id)
     CopySeqRec.firstid=copy.copy(SeqRec.firstid)
+    CopySeqRec.locus_range=copy.copy(SeqRec.locus_range)
     CopySeqRec.name=copy.copy(SeqRec.name)
+    CopySeqRec.mutlabel=copy.copy(SeqRec.mutlabel)
     CopySeqRec.description=copy.copy(SeqRec.description)
     CopySeqRec.polarity=copy.copy(SeqRec.polarity)
     CopySeqRec.offset=copy.copy(SeqRec.offset)
@@ -84,10 +270,10 @@ def modify_seq_in_record(inseq,SeqRec):
     CopySeqRec.annotations=copy.copy(SeqRec.annotations)
     
     CopySeqRec.features=copy.copy(SeqRec.features)
-    #CopySeqRec.features=copy.copy(SeqRec.features)
     CopySeqRec.cigar=copy.copy(SeqRec.cigar)
     CopySeqRec.cigarbox=copy.copy(SeqRec.cigarbox)
     CopySeqRec.mutbox=copy.copy(SeqRec.mutbox)
+    #CopySeqRec.exonpos_lookup=copy.copy(SeqRec.exonpos_lookup) # Not needed once make_exonplus_lookups is fully implemented
     CopySeqRec.Headclip=copy.copy(SeqRec.Headclip)
     CopySeqRec.Tailclip=copy.copy(SeqRec.Tailclip)
     CopySeqRec.splicecount=copy.copy(SeqRec.splicecount)
@@ -104,9 +290,10 @@ def modify_seq_in_record(inseq,SeqRec):
     success,CopySeqRec=set_seqrec_absolutes(CopySeqRec) #Must do this even if RG_globals.is_use_absolute == False
     return CopySeqRec
 
-def annotate_seq_to_record(SeqRec,inseq,seq_id,seq_name):
+def annotate_seq_to_record(SeqRec,inseq,out_label,seq_name,in_label):
     ThisSeqr=modify_seq_in_record(inseq,SeqRec)
-    ThisSeqr.id=seq_id
+    ThisSeqr.id=out_label
+    ThisSeqr.mutlabel=in_label
     ThisSeqr.name=seq_name
     return ThisSeqr
 
@@ -123,7 +310,7 @@ def annotate_seq_to_record1(annotations,inseq,seq_id,seq_name,seq_description,se
     ThisSeqr.annotations=annotations
      #ThisSeqr=add_extra_objects(ThisSeqr)
     return ThisSeqr
-# end of annotate_seq_to_record(seqrec,seq_id,seq_name,seq_description,seq_polarity)
+# end of annotate_seq_to_record1(seqrec,seq_id,seq_name,seq_description,seq_polarity)
 
 def annotate_frag_to_record(inseq,seq_id):
     # Only need minimal annotation for a fragment record
@@ -137,12 +324,24 @@ def annotate_frag_to_record(inseq,seq_id):
         ThisSeqr.letter_annotations=get_quality_list(ThisSeqr)
     return ThisSeqr
 # end of annotate_frag_to_record(inseq,seq_id)
-   
+
+def setup_fastq_quality_list():
+    # Prepare appropriate fastq lookups as necessary. Fastest solutions first
+    global shared_phred_dict
+    if RG_globals.Qualmax == RG_globals.Qualmin:
+        shared_phred_dict=get_quality_list_qualmax()
+    elif not RG_globals.is_fastq_random:
+        make_fastq_slice()
+
 def get_quality_list(Seqrec):
-    if RG_globals.is_fastq_random:
-        phred_dict=get_quality_list_random(Seqrec)
-    else:
+    global shared_phred_dict
+    # Select quality list. Fastest solutions first
+    if RG_globals.Qualmax == RG_globals.Qualmin: # Surprisingly not faster than get_quality_list_slice
+        phred_dict=shared_phred_dict
+    elif not RG_globals.is_fastq_random:
         phred_dict=get_quality_list_slice(Seqrec)
+    else:
+        phred_dict=get_quality_list_random(Seqrec) 
     return phred_dict
 # end of get_quality_list(Seqrec)
 
@@ -189,15 +388,12 @@ def get_quality_list_slice(Seqrec):
     # being comparable to the FASTA-only output speeds until high DOC values
     start=randint(0,slice_range-RG_globals.Fraglen-1)# 0-based
     #print("slice_start=%s"%start)
-    phred_dict = {
-        "phred_quality":fastq_slice[start:start+RG_globals.Fraglen]
-    }
-    return phred_dict
+    return { "phred_quality":fastq_slice[start:start+RG_globals.Fraglen]}
 # end of get_quality_list_slice(Seqrec)
 
-def get_quality_list_qualmax(Seqrec):
+def get_quality_list_qualmax():
     # Just return a list with all equal to highest value.
-    return { "phred_quality": [RG_globals.Qualmax] * len(Seqrec) }
+    return { "phred_quality": [RG_globals.Qualmax] * RG_globals.Fraglen }
 # end of get_quality_qualmax(Seqrec)
 
 def merge_feats(featlist1,featlist2):
@@ -335,7 +531,7 @@ def make_addmut(refseqdonor,label):
             mutstart=item["local_begin"]; mutend=item["local_end"]
             if mutstart > mutend:
                 mutend,mutstart=mutstart,mutend
-            f=SeqFeature(FeatureLocation(mutstart-1,mutend,strand=1),type="variation")
+            f=SeqFeature(FeatureLocation(mutstart-1,mutend,strand=1),type="variation") # Turns mutstart from 1-based to 0-based
             qualifiers=OrderedDict()
             qualifiers["replace"]=["%s/%s"%(item["ref_seq"],item["var_seq"])]
             #qualifiers["comment"]=["%s_%s:%s"%(label,item_count,item["varname"])] # comes out bounded by unwanted braces
@@ -995,9 +1191,15 @@ def add_seqrec_objects(SeqRec,splits):
     # Empirical discovery that need to add +1 to offset when polarity is -1 to get same position-values as +1 polarity
     else:
         offset=int(SeqRec.abs_start)
-    SeqRec.offset=offset
-    # WHOAH!! Different to main.get_muttranscripts(). May explain all the +1/-1 malarkey
+    SeqRec.offset=offset # WHOAH!! Different to main.get_muttranscripts(). May explain all the +1/-1 malarkey
     SeqRec.firstid="%s:%s:%s:%s:%s:%s"%(splits[0],splits[1],splits[2],splits[3],splits[4],splits[5])
+    locus_begin,locus_end=RG_globals.Reference_sequences[RG_globals.target_locus]["Locus_range"].split(":")
+    begin=int(locus_begin)+int(offset)-1; end=int(locus_end)+int(offset)-1
+    if RG_globals.Reference_sequences[RG_globals.target_locus]["is_join_complement"]:
+        pol="reverse"
+    else:
+        pol="forward"
+    SeqRec.locus_range="%s:%s:%s:%s:%s strand"%(splits[1],splits[2],begin,end,pol)
     return SeqRec
 # end of add_seqrec_objects(SeqRec,splits)
 
