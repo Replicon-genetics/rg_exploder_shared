@@ -19,13 +19,15 @@ import RG_exploder_io as RG_io # File input/output
 def set_config_consts():
     global exploder_root
     global is_use_TKinter,CustomerIDText,PublicIDText,MAINFILE #   These are most likely to need resetting between runs
-    
+
+    global is_pair_monitor
     ######## Revisit these each time a data set is renewed. Now down to 2 as MAINVER, DATEVER, GRCH_dataset derived ########
     #CustomerIDText="EBaker"
     PublicIDText="Public"
     CustomerIDText=PublicIDText # Set to this to override a CustomerIDText
     #CustomerIDText="C Roos" # See also: is_exome_paired_end ; is_pair_monitor
     vuedir="mravn" # Solely to define how is_use_TKinter is set
+    sharedir="shared" # To define how 
     ######## End of: Revisit these each time a data set is renewed ########
 
     #### Should not need changing unless modify throughout other code ####
@@ -47,8 +49,14 @@ def set_config_consts():
 
     if vuedir in exploder_root:
         is_use_TKinter=False  # When setting up to use the Vue.js GUI
+        is_pair_monitor=False
     else:
         is_use_TKinter=True  # When setting up to use the Python GUI : RG_exploder_gui.py
+        is_pair_monitor=True # Sets to False when is_use_TKinter=True
+
+    if sharedir in exploder_root:
+        is_pair_monitor=False # True to save monitor file with paired ends; False - no monitor file 
+        
     set_defaults()
 
 def config_file_out():
@@ -348,7 +356,6 @@ def set_diagnostic_defaults():
     global is_include_indels, is_dels_to_dots, is_dels_to_dots_override,is_exome_paired_end,is_pair_monitor,is_use_TKinter
 
     is_exome_paired_end=True # False to force paired-end for mRNA & CDS; True to enable exomic paired-end
-    is_pair_monitor=True # True to save monitor file with paired ends; False - no monitor file
     if not is_use_TKinter: # Way too slow for high parameter values giving big files in Vue.js
         is_pair_monitor=False
 
