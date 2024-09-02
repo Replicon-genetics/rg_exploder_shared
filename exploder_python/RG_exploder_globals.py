@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="22-Jun-2024"
+#Prg_verDate="26-Aug-2024"
 # © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 
 import time  # Used in getime()
@@ -27,14 +27,18 @@ def get_strand_extra_label():
             strandlabel=get_strand_label(bio_parameters["is_simplex"])
             extralabel=strandlabel
         if is_onefrag_out:
-            extralabel+="_each"     
+            extralabel+="_each"   
     if is_muts_only:
         extralabel+="_varonly"
+        
+    if (target_transcript_name != empty_transcript_name) and not is_frg_paired_end:
+            extralabel+="_RNASeq"
+    else:
+        extralabel+="_DNASeq"
     return extralabel,strandlabel
 
 def get_locus_transcript():
 # What's the current value of Reference Sequence?
-
     locus_transcript=target_transcript_name    
     if '(' in locus_transcript:
         splitters=locus_transcript.split('(')
@@ -53,7 +57,7 @@ def save_user_configs():
     extralabel,strandlabel=get_strand_extra_label()
     #user_config_file="%s%s/%s%s%s"%(outfilepathroot,target_locus,config_json_head,get_locus_transcript(),config_json_end)
     #user_config_file="%s%s/%s%s%s%s"%(outfilepathroot,target_locus,get_locus_transcript(),config_json_head,extralabel,config_json_end)
-    user_config_file="%s%s%s%s"%(get_locus_transcript(),config_json_head,extralabel,config_json_end)
+    user_config_file="%s%s%s%s"%(get_locus_transcript(),extralabel,config_json_head,config_json_end)
     GUI_ConfigText="Configuration at %s"%(getime())
     config_out_data=make_out_user_data()
     with RG_io.open_write("%s%s/%s"%(outfilepathroot,target_locus,user_config_file)) as write_file:
@@ -132,12 +136,12 @@ def make_bio_parameters_configs3():
     bio_parameters["gauss_mean"]["value"]=gauss_mean
     bio_parameters["gauss_SD"]["value"]=gauss_SD
 
-    bio_parameters_tmp=copy.deepcopy(bio_parameters)
     if is_pair_monitor:
-        bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]="%s"%bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]
+        bio_parameters["target_build_variant"]["exonpos_lookup"]=exonpos_lookup
     else:
-        bio_parameters_tmp["target_build_variant"]["mrnapos_lookup"]="hidden" # mrnapos_lookup is not typically end-use informative
- 
+        bio_parameters["target_build_variant"]["exonpos_lookup"]="hidden" # exonpos_lookup is not typically end-use informative
+
+    bio_parameters_tmp=copy.deepcopy(bio_parameters)
     # Set varfreqs as a single object instead of two: mutlabels & mutfreqs (legacy stuff)
     varfreqs=dict()
     for index in range(len(mutlabels)):
@@ -155,8 +159,8 @@ def make_bio_parameters_configs3():
 
 def make_Reference_sequences2():
     global Reference_sequences
-
-    try: # Are the joins defined in globals via the json file?
+    # Calculating and saving of CDS_join and mRNA_join looks superfluous
+    try: # Are the joins defined in globals via the json file? Should always be the case for App.vue, as try/except fails in pyodide
         barf=Reference_sequences[target_locus]["CDS_join"][target_transcript_name] # tests if it exists
         CDS_join=Reference_sequences[target_locus]["CDS_join"]
         mRNA_join=Reference_sequences[target_locus]["mRNA_join"]
@@ -355,7 +359,7 @@ def set_bio_parameters_configs():
     global target_transcript_name,target_transcript_id,is_CDS
 
     global Exome_extend,Exome_extend_Min,Exome_extend_Max,Fraglen,FraglenMin,FraglenMax
-    global Fragdepth,FragdepthMin,FragdepthMax,Qualmin,QualMIN,Qualmax,QualMAX
+    global Fragdepth,FragdepthMin,FragdepthMax,Qualmin,QualMIN,Qualmax,QualMAX,exonpos_lookup
     
     bio_parameters=config_in_data["bio_parameters"]
     
@@ -407,7 +411,9 @@ def set_bio_parameters_configs():
     QualMIN=bio_parameters["Qualmin"]["min"]
     
     Qualmax=bio_parameters["Qualmax"]["value"]
-    QualMAX=bio_parameters["Qualmax"]["max"]    
+    QualMAX=bio_parameters["Qualmax"]["max"]
+
+    exonpos_lookup=bio_parameters["target_build_variant"]["exonpos_lookup"]
 # end of set_bio_parameters_configs
 
 def getime():
