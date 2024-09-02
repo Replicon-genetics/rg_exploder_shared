@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 Progver="RG_exploder_gui_19.py"
-ProgverDate="23-Jun-2024"
+ProgverDate="25-Aug-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
 
@@ -487,7 +487,7 @@ def save_and_go():
 
     increment_run()
     write_GUI_text("Running Exploder on %s- run number %s\n"%(RG_globals.target_locus,run_count))
-    ##RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]=[0] # testing that setting mrnapos_lookup to empty will force a re-run in main
+    ##RG_globals.bio_parameters["target_build_variant"]["exonpos_lookup"]=[0] # testing that setting exonpos_lookup to empty will force a re-run in main
     is_successful=RG_main.call_exploder_main()
     time_stamp=RG_globals.getime()
     #print("is_successful %s"%is_successful)
@@ -862,7 +862,7 @@ class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
     # Extra in builder
     def complement_check(self,*args):
         abs_offset=RG_globals.bio_parameters["target_build_variant"]["abs_offset"]
-        mrnapos_lookup=RG_globals.bio_parameters["target_build_variant"]["mrnapos_lookup"]
+        #exonpos_lookup=RG_globals.bio_parameters["target_build_variant"]["exonpos_lookup"]
         self.extension=int(self.entry2var.get())
         if self.entry.get() == self.blank:
             self.entry.delete(0,"end")
@@ -879,7 +879,7 @@ class source_sliders_builder:# The Locus_Begin / Locus_End entry panels
                 modpos=-self.extension # alternative to headclip, but does same job here
             else:
                 modpos=self.extension
-            self.localpos=int(mrnapos_lookup[self.transpos])+int(modpos)
+            self.localpos=int(RG_globals.exonpos_lookup[self.transpos])+int(modpos)
         self.abspos=abs(abs_offset+self.localpos)
     # Extra in builder
         
@@ -1556,10 +1556,10 @@ def get_mutlabs(): # Get list of non-ref files in target-input folder
 def get_muttranscripts(redo_locus): # Derive the transcript tables
     # NB: redo_locus isn't used!
     # Very importantly the globals set here, but calculated in main (simply to allow use of Vue.js GUI version) :
-    # mrnapos_lookup,abs_offset,ref_strand,max_seqlength,min_seqlength
+    # exonpos_lookup,abs_offset,ref_strand,max_seqlength,min_seqlength
     global max_seqlength,min_seqlength
-    # Do the call to return the above global values, plus a journaling text 'transcript_view' . Send value of redo_locus?
-    success=RG_builder.get_muttranscripts2(True)
+    # Do the call to return the above global values, plus a journaling text 'transcript_view'.
+    success,RG_globals.exonpos_lookup=RG_builder.get_muttranscripts2(False) # False is *not* to extend exome for exonpos_lookup
     # Setting those global values in this module from RG_globals calculated in get_muttranscripts
     max_seqlength=RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["max"]
     min_seqlength=RG_globals.bio_parameters["target_build_variant"]["trans_Begin"]["min"]
