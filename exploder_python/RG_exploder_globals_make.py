@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="22-Jun-2024"
+#Prg_verDate="1-Sep-2024"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
@@ -348,7 +348,7 @@ def set_diagnostic_defaults():
     global is_include_indels, is_dels_to_dots, is_dels_to_dots_override,is_exome_paired_end,is_pair_monitor,is_use_TKinter
 
     is_exome_paired_end=True # False to force paired-end for mRNA & CDS; True to enable exomic paired-end
-    is_pair_monitor=False # True to save monitor file with paired ends; False - no monitor file
+    is_pair_monitor=True # True to save monitor file with paired ends; False - no monitor file
     if not is_use_TKinter: # Way too slow for high parameter values giving big files in Vue.js
         is_pair_monitor=False
 
@@ -388,8 +388,8 @@ def set_diagnostic_defaults():
                           #  Jan-2022 - is_mutate_ref not used as originally intended with make_ref_varseq() deprecated
 
     global is_fastq_random  # When set to True, this implements an all-positions random in FASTQ output
-    #is_fastq_random= True   # When False it implements a much faster "slice" routine: using a single random string cut at a random position
-    is_fastq_random= False
+    is_fastq_random= True   # Qualmin==Qualmax is default, and much faster than real random
+    #is_fastq_random= False # When False it implements a faster "slice" routine than a random: using random strings cut at a random position, but this is still slower than Qualmin==Qualmax
 
     global is_show_infilepath
     is_show_infilepath=False # The Journal file will show full path name of input files when True. Use True for debugging.
@@ -548,7 +548,7 @@ def make_bio_parameters_configs():
             "CDS_join":"",
             "headclip":0,
             "tailclip":0,
-            "mrnapos_lookup":[0],
+            "exonpos_lookup":[0],
             "transcript_view":"",
             "abs_offset":0,
             "ref_strand":1,
@@ -785,8 +785,11 @@ def set_vars_seq_limits_defaults():
 
     global Qualmin,Qualmax  # ''' Initialise the range of FASTQ quality values that are set at random in get_quality_list '''
                             # NB: QualMIN,QualMAX are the absolute limits for when choosing
-    Qualmin=35
-    Qualmax=50
+    #Qualmin=35
+    #Qualmax=50
+
+    Qualmin=40 # Default set to same value as Qualmax to make default faster than 
+    Qualmax=40
 
     global Exome_extend  # If is_make_exome, this value enables extension of the join region by this value.
     Exome_extend=0 # This is intended to have eg +3 nt and -3 nt each side of an intron/exon boundary within the "exome" sequence
