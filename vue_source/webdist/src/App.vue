@@ -77,7 +77,7 @@
        <BaseSelect
         v-if="selectedReadType"
         v-model="selectedReadType"
-        :label="jsonConfig.stringconstants.reads_type_label"
+        :label="this.seqtypelabel2"
         :options="Object(readList)"
         :disabled="running"
       />
@@ -122,7 +122,7 @@
         :disabled="running"
       />
       <BaseCheckbox
-        v-if="CDSonly"
+        v-if="this.showCDSonly"
         v-model="CDSonly.value"
         :label="CDSonly.label"
         :disabled="running"
@@ -149,6 +149,34 @@
         v-if="outputFasta"
         v-model="outputFasta.value"
         :label="outputFasta.label"
+        :disabled="running"
+      />
+      <BaseCheckbox
+        v-if="outputFastq"
+        v-model="outputFastq.value"
+        :label="outputFastq.label"
+        :disabled="running"
+      />
+      <BaseNumberInput
+        v-if="qualityMin"
+        v-model="qualityMin.value"
+        :label="qualityMin.label"
+        :min="qualityMin.min.toString()"
+        :max="qualityMin.max.toString()"
+        :disabled="running"
+      />
+      <BaseNumberInput
+        v-if="qualityMax"
+        v-model="qualityMax.value"
+        :label="qualityMax.label"
+        :min="qualityMax.min.toString()"
+        :max="qualityMax.max.toString()"
+        :disabled="running"
+      />
+      <BaseCheckbox
+        v-if="outputSam"
+        v-model="outputSam.value"
+        :label="outputSam.label"
         :disabled="running"
       />
       <BaseCheckbox
@@ -191,34 +219,6 @@
         v-if="journalSubs"
         v-model="journalSubs.value"
         :label="journalSubs.label"
-        :disabled="running"
-      />
-      <BaseCheckbox
-        v-if="outputFastq"
-        v-model="outputFastq.value"
-        :label="outputFastq.label"
-        :disabled="running"
-      />
-      <BaseNumberInput
-        v-if="qualityMin"
-        v-model="qualityMin.value"
-        :label="qualityMin.label"
-        :min="qualityMin.min.toString()"
-        :max="qualityMin.max.toString()"
-        :disabled="running"
-      />
-      <BaseNumberInput
-        v-if="qualityMax"
-        v-model="qualityMax.value"
-        :label="qualityMax.label"
-        :min="qualityMax.min.toString()"
-        :max="qualityMax.max.toString()"
-        :disabled="running"
-      />
-      <BaseCheckbox
-        v-if="outputSam"
-        v-model="outputSam.value"
-        :label="outputSam.label"
         :disabled="running"
       />
        <BaseCheckbox
@@ -477,8 +477,8 @@ export default {
       tbv_is_save_var: config?.bio_parameters?.target_build_variant?.is_save_var,
       tbv_headclip:config?.bio_parameters?.target_build_variant?.headclip, 
       //tbv_headclip:0,
-      //tbv_tailclip:config?.bio_parameters?.target_build_variant?.tailclip,
-      mrnapos_lookup:config?.bio_parameters?.target_build_variant?.mrnapos_lookup,
+      tbv_tailclip:config?.bio_parameters?.target_build_variant?.tailclip,
+      exonplus_lookup:config?.bio_parameters?.target_build_variant?.exonplus_lookup,
       tbv_transcript_view:config?.bio_parameters?.target_build_variant?.transcript_view,
       tbv_abs_offset:config?.bio_parameters?.target_build_variant?.abs_offset,
       tbv_ref_strand:config?.bio_parameters?.target_build_variant?.ref_strand,
@@ -506,6 +506,12 @@ export default {
       REFSEQ_len:0,
       DNA_COMPLEMENT: {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', 'N': 'N', '-': '-'},
       tbv_Chrom:"X",
+      isRNASeq:false,
+      seqtypelabel:config?.stringconstants.reads_type_label,
+      seqtypelabel2:config?.stringconstants.reads_type_label,
+      showCDSonly:false,
+
+      //label="jsonConfig.stringconstants.reads_type_label"
 
       // User-entered
       tbv_var_subseq:config?.bio_parameters.target_build_variant?.var_subseq,
@@ -518,6 +524,22 @@ export default {
     }
   },
   watch: {
+    isRNASeq:{
+      handler() {
+        if (this.isRNASeq)
+        {
+          this.seqtypelabel2=this.seqtypelabel + ' (RNASeq)'
+        }
+        else 
+        {
+        this.seqtypelabel2=this.seqtypelabel + ' (DNASeq)'
+        }
+        //this.join_method()
+        //console.log(` CDO: joinlist is ${this.joinlist}`)
+      },
+      immediate: true,
+      deep: true,
+    },
     selectedGene: {
       /// Finds all the files for the currently selected gene.
       /// Generates two arrays: [mutfreqs] and [mutfreqLabels], and offers these to $data.
@@ -543,16 +565,27 @@ export default {
     },
     selectedReadType: {
       handler(){
+       // if (this.selectedTranscript == this.jsonConfig.stringconstants.empty_transcript_name)
         if (this.selectedReadType.includes(config.bio_parameters.is_frg_paired_end.label))
-        {this.pairedReads.value = true
-         this.duplexReads.value = false
+          {this.pairedReads.value = true
+          this.duplexReads.value = false
+          this.isRNASeq=false
+          }
+        else{
+          if (this.selectedTranscript == this.jsonConfig.stringconstants.empty_transcript_name)
+            {this.isRNASeq=false}
+          else
+            {this.isRNASeq=true}
+
+            if (this.selectedReadType.includes(config.bio_parameters.is_duplex.label))
+            {this.pairedReads.value = false
+              this.duplexReads.value = true
+            }
+            else // 
+            {this.pairedReads.value = false
+              this.duplexReads.value = false
+            }
         }
-        else if (this.selectedReadType.includes(config.bio_parameters.is_duplex.label))
-        {this.pairedReads.value = null
-         this.duplexReads.value = true}
-        else if (this.selectedReadType.includes(config.bio_parameters.is_simplex.label))
-        {this.pairedReads.value = null
-         this.duplexReads.value = false}
       },
       immediate: true,
       deep: true,
@@ -618,7 +651,7 @@ export default {
     },
     joinlist:{
       // Only required values set here are: 
-      // this.mrnapos_lookup, this.tbv_ref_strand, this.tbv_abs_offset, this.tbv_trans_Begin.max,this.tbv_trans_End.max
+      // this.exonplus_lookup, this.tbv_ref_strand, this.tbv_abs_offset, this.tbv_trans_Begin.max,this.tbv_trans_End.max
 
       // Starts, end, exon_length, feature_titles only needed for building transcript_view, to return for journaling 
       handler()
@@ -819,10 +852,10 @@ export default {
     }
       //console.log(` starts: ${starts}`) // Validation check
       //console.log(` ends: ${ends}`) // Validation check
-      //console.log(` this.mrnapos_lookup: ${this.mrnapos_lookup}`) // Validation check
+      //console.log(` this.exonplus_lookup: ${this.exonplus_lookup}`) // Validation check
       //console.log(` feature_titles: ${feature_titles}`) // Validation check
       
-      this.mrnapos_lookup=lookup
+      this.exonplus_lookup=lookup
 
       this.tbv_trans_Begin.value=1
       this.tbv_trans_Begin_ext.value=0
@@ -1074,12 +1107,24 @@ export default {
     },
     join_method() {
         if (!this.transcriptOptions.includes(this.selectedTranscript)) {
-          this.selectedTranscript = this.jsonConfig.stringconstants.empty_transcript_name
+          this.selectedTranscript = this.jsonConfig.stringconstants.empty_transcript_name;
+        }
+        if (this.selectedTranscript != this.jsonConfig.stringconstants.empty_transcript_name)
+        {
+          this.showCDSonly=true
+          if (this.pairedReads.value)
+          {
+          this.isRNASeq = false
+          }
+          else
+          {this.isRNASeq = true}
         }
         // Using this get no change in this.tbv_trans_Begin.label and NaN for genomic calcuations
         if (this.selectedTranscript == this.jsonConfig.stringconstants.empty_transcript_name)
         {this.joinlist=this.jsonConfig.Reference_sequences[this.selectedGene]["Locus_range"].split(',')
         //this.tbv_trans_Begin.label="Genomic"
+        this.isRNASeq = false
+        this.showCDSonly=false
         }
         else if (this.CDSonly.value)
         {this.joinlist=this.jsonConfig.Reference_sequences[this.selectedGene]["CDS_join"][this.selectedTranscript].split(',')
@@ -1217,7 +1262,7 @@ export default {
                 {modpos= -this.tbv_trans_Begin_ext.value} // alternative to headclip, but does same job here
         else 
                 {modpos= this.tbv_trans_Begin_ext.value}
-        this.tbv_local_Begin=parseInt(this.mrnapos_lookup[this.tbv_trans_Begin.value])+modpos
+        this.tbv_local_Begin=parseInt(this.exonplus_lookup[this.tbv_trans_Begin.value])+modpos
         //console.log(`v4: this.tbv_local_Begin is ${this.tbv_local_Begin}`)
         }
         this.tbv_abs_Begin.value=Math.abs(this.tbv_abs_offset+this.tbv_local_Begin)
@@ -1237,7 +1282,7 @@ export default {
                 {modpos= -this.tbv_trans_End_ext.value} // alternative to headclip, but does same job here
         else 
                 {modpos= this.tbv_trans_End_ext.value}
-        this.tbv_local_End=this.mrnapos_lookup[this.tbv_trans_End.value]+modpos
+        this.tbv_local_End=this.exonplus_lookup[this.tbv_trans_End.value]+modpos
         }
         this.tbv_abs_End.value=Math.abs(this.tbv_abs_offset+this.tbv_local_End)
         this.tbv_abs_End.txt= this.tbv_Chrom+":"+this.tbv_abs_End.value
