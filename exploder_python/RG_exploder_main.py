@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_30_3.py"
-ProgverDate="2-Sep-2024"
+Progver="RG_exploder_main_30_5.py"
+ProgverDate="7-Sep-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -905,7 +905,7 @@ def write_refseq(RefRecord,which):
 
 def write_samheader(ThisSeqr):
     # Writes a header to sam format,unless is_append_samfile already True
-    global samout,is_append_samfile,out_sa_file,in_ref_src
+    global samout,is_append_samfile,out_sa_file,in_ref_src,Ref_file_name
     global REFSEQ_RECORD,Rname
     Rname="chrX"
     if not is_append_samfile:
@@ -917,7 +917,8 @@ def write_samheader(ThisSeqr):
             genass="hg19"
         else:
             genass="hg38"
-        Rname=in_ref_src # Sets global for reuse by write_frag_samout
+        #Rname=in_ref_src # Sets global for reuse by write_frag_samout. This is incorrect for RNASeq, which I tried to fix by using this:
+        Rname=RG_process.get_outrefname(REFSEQ_RECORD,Ref_file_name)
         #Rname="chr%s"%chromnum # Sets global for reuse by write_frag_samout
         #Rname="chr%s:%s-%s"%(chromnum,start,stop) # Sets global for reuse by write_frag_samout
         head1="@HD\tVN:1.6\tSO:coordinate\n"
@@ -1147,7 +1148,7 @@ def journal_final_summary():
             plextxt=bio_parameters["is_frg_paired_end"]["label"]
             endtxt=""
             plextxt1="%s pairs=%s"%(readtxt,REFSEQ_RECORD.Saved_Paired_Fragcount)
-            endplex1="; unpaired %ss = %s"%(readtxt,REFSEQ_RECORD.Saved_Unpaired_Fragcount)
+            endplex1="; saved-unpaired %ss = %s, rejected-unpaired %ss = %s"%(readtxt,REFSEQ_RECORD.Saved_Unpaired_Fragcount,readtxt,REFSEQ_RECORD.Unsaved_Unpaired_Fragcount) # Hiding for C Roos version
             plextxt2="; %s=%s"%(bio_parameters["gauss_mean"]["label"],RG_globals.gauss_mean)
 
         elif RG_globals.is_duplex:
@@ -2026,13 +2027,61 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             label_and_saveg(pquote,inseq,Saved_Fragcount,seq_start,ref_offset,fwd_cigar_label,rev_cigar_label,mutrecs[mutrec_index],pnext,tlen,is_R1,is_tworeads,True)
         return
 
-    def do_r1_save():# Save the forward sequencing fragment
+    def do_r1_save(R1pnext):# Save the forward sequencing fragment
         if R1_frag:
             label_and_save("pf",mutrec_index,R1_start,R1pnext,insert_len,True,is_tworeads,is_one_mut)
  
-    def do_r2_save():# Save the reverse sequencing fragment
+    def do_r2_save(R2pnext):# Save the reverse sequencing fragment
         if R2_frag:
             label_and_save("pr",mutrec_index,R2_start,R2pnext,-insert_len,False,is_tworeads,is_one_mut)
+
+    def do_two_reads():
+            nonlocal unpaired_count,is_tworeads
+            ###########  This section to be skipped if excluding unpaired reads ###########
+
+            # We need to get the reference-based start position, as a pnext for the other read in the pair, which we get by traversing the CIGAR                     
+            if R1_frag: # Get pnext and is_cigar_mut for forward sequencing fragment
+                R2pnext,R1fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# pnext and cigar
+            else:
+                R2pnext=0
+                R1fwdcigar=""
+
+            if R2_frag: # Get pnext and is_cigar_mut for reverse sequencing fragment
+                R1pnext,R2fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# pnext and cigar
+            else:
+                R1pnext=0
+                R2fwdcigar=""
+
+            # With the CIGARs, if we are filtering for  variants-only, we need to determine if just one of the reads in the pair contains a variant. 
+            # If so, we need to retain both reads, otherwise the paired-end bit is pointless.
+            if RG_globals.is_muts_only:
+                R1_is_mut=RG_process.is_mut_cigar(R1fwdcigar)
+                R2_is_mut=RG_process.is_mut_cigar(R2fwdcigar)
+                is_one_mut=R1_is_mut or R2_is_mut
+                '''
+                if not is_tworeads: # We have an unpaired read
+                    # Check values for the unpaired read: R1 expected to be at high end of reefrence, R2 at near end
+                    # Use BRCA1_hap2 at 850 insert length, 200 read length, variant-only, >20 DOC, to find cases of unpaired reads that include variants
+                    if R1_frag:
+                        print("R1 is unpaired with CIGAR %s, starting %s"%(R1fwdcigar,R2pnext))
+                    else:
+                        print("R2 is unpaired with CIGAR %s, starting %s"%(R2fwdcigar,R1pnext))
+                '''
+            do_r1_save(R1pnext); do_r2_save(R2pnext) # Always save R1 first, R2 second
+
+            # OR: save forward and reverse in random order, not always R1-first!
+            # Also have a suspicion that we need to do one more 50% random: reverse complement both sequences / keep
+            # in order to emulate insert-orientation. The question is ... does it make any difference?
+            #if random() < 0.5:
+            #    # Do a forward, then a reverse, 50% of the time
+            #    do_r1_save(); do_r2_save()
+            #else:
+            #    # Do a reverse, then a forward, 50% of the time
+            #    do_r2_save(); do_r1_save()
+
+            ###########  END OF: This section to be skipped if excluding unpaired reads ###########
+
+    ###########  END OF def do_two_reads():
 
     # Calculate an expected fragtotal using un-modified spliced-reference
     fragtotal= int(len(mutrecs)*fragdepth*(RefRec.spliced_length/fraglen))
@@ -2092,48 +2141,10 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
                     pair_monitor_out.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n"%(Saved_Fragcount+1,start+1,insert_len,R1_start+1,R2_start+1,R1_end+1,R2_end+1,R1_frag,R2_frag))
             # Detect whether two reads are being produced
             is_tworeads=R1_frag and R2_frag
-            if not is_tworeads:
+            if is_tworeads: # C Roos version to ignore unpaired reads
+                do_two_reads()
+            else:
                 unpaired_count+=1
-
-            # We need to get the reference-based start position, as a pnext for the other read in the pair, which we get by traversing the CIGAR                     
-            if R1_frag: # Get pnext and is_cigar_mut for forward sequencing fragment
-                R2pnext,R1fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R1_start,fraglen)# pnext and cigar
-            else:
-                R2pnext=0
-                R1fwdcigar=""
-
-            if R2_frag: # Get pnext and is_cigar_mut for reverse sequencing fragment
-                R1pnext,R2fwdcigar,revcigar=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,R2_start,fraglen)# pnext and cigar
-            else:
-                R1pnext=0
-                R2fwdcigar=""
-
-            # With the CIGARs, if we are filtering for  variants-only, we need to determine if just one of the reads in the pair contains a variant. 
-            # If so, we need to retain both reads, otherwise the paired-end bit is pointless.
-            if RG_globals.is_muts_only:
-                R1_is_mut=RG_process.is_mut_cigar(R1fwdcigar)
-                R2_is_mut=RG_process.is_mut_cigar(R2fwdcigar)
-                is_one_mut=R1_is_mut or R2_is_mut
-                '''
-                if not is_tworeads: # We have an unpaired read
-                    # Check values for the unpaired read: R1 expected to be at high end of reefrence, R2 at near end
-                    # Use BRCA1_hap2 at 850 insert length, 200 read length, variant-only, >20 DOC, to find cases of unpaired reads that include variants
-                    if R1_frag:
-                        print("R1 is unpaired with CIGAR %s, starting %s"%(R1fwdcigar,R2pnext))
-                    else:
-                        print("R2 is unpaired with CIGAR %s, starting %s"%(R2fwdcigar,R1pnext))
-                '''
-            do_r1_save(); do_r2_save() # Always save R1 first, R2 second
-            # OR: save forward and reverse in random order, not always R1-first!
-            # Also have a suspicion that we need to do one more 50% random: reverse complement both sequences / keep
-            # in order to emulate insert-orientation. The question is ... does it make any difference?
-            #if random() < 0.5:
-            #    # Do a forward, then a reverse, 50% of the time
-            #    do_r1_save(); do_r2_save()
-            #else:
-            #    # Do a reverse, then a forward, 50% of the time
-            #    do_r2_save(); do_r1_save()
-                
     journal_frags(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpaired_count,saved_unpaired)
     #print("noread_count: %s ; unpaired_count %s "%(noread_count,unpaired_count))
     return
@@ -2195,7 +2206,8 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
 
     if RG_globals.is_frg_paired_end:
         str4="paired"
-        str8="%s %ss or un%s"%(str4,RG_globals.read_annotation,str4)
+        #str8="%s %ss or un%s"%(str4,RG_globals.read_annotation,str4)
+        str8=str4
 
     journals_update("\n%s\n Generated %s %ss of length %s bases at %s starting position%s %s %s %s%s: %s"
                    %(str0,str1,RG_globals.read_annotation,str3,str4,str2,str4a,str5,str6,str7,mutlistlabels))
@@ -2220,6 +2232,7 @@ def journal_frags2(mutrecs,Generated_Fragcount,Saved_Fragcount,mutfragcount,unpa
     REFSEQ_RECORD.Generated_Fragcount=Generated_Fragcount
     REFSEQ_RECORD.Saved_Fragcount=Saved_Fragcount
     REFSEQ_RECORD.Saved_Unpaired_Fragcount=saved_unpaired
+    REFSEQ_RECORD.Unsaved_Unpaired_Fragcount=unpaired
     REFSEQ_RECORD.Saved_Paired_Fragcount=Saved_Fragcount-saved_unpaired
 # end of journal_frags2()
 
