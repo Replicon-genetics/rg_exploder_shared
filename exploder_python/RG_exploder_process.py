@@ -518,6 +518,16 @@ def knit_features(seqdonor,vardonor):
 # =====================================================
 # End of Seqrecord manipulation
 # =====================================================
+def get_outrefname(RefRecord,Ref_file_name): # This could replace similar code in RG_main.write_ref_fasta and RG_main.close_seqout, but I got lost
+        extralabel,strandlabel=RG_globals.get_strand_extra_label()
+        if RefRecord.is_ref_spliced and not RG_globals.is_frg_paired_end:            
+            id_label="refhap"
+            if  RG_globals.target_transcript_name == RG_globals.empty_transcript_name:
+                id_label="REF"
+            out_refname="%s%s_%s"%(RG_globals.get_locus_transcript(),strandlabel,id_label)
+        else:
+            out_refname="%s_%s"%(RG_globals.target_locus,Ref_file_name)# Was in_ref_src= ...
+        return out_refname
 
 def make_addmut(refseqdonor,label):
     success=False; item_count=0
