@@ -795,8 +795,8 @@ def set_vars_seq_limits_defaults():
     #Qualmin=35
     #Qualmax=50
 
-    Qualmin=40 # Default set to same value as Qualmax to make default faster than 
-    Qualmax=40
+    Qualmin=42 # Default set to same value as Qualmax to make default faster than 
+    Qualmax=42
 
     global Exome_extend  # If is_make_exome, this value enables extension of the join region by this value.
     Exome_extend=0 # This is intended to have eg +3 nt and -3 nt each side of an intron/exon boundary within the "exome" sequence
