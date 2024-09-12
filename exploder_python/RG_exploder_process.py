@@ -526,7 +526,7 @@ def get_outrefname(RefRecord,Ref_file_name): # This could replace similar code i
                 id_label="REF"
             out_refname="%s%s_%s"%(RG_globals.get_locus_transcript(),strandlabel,id_label)
         else:
-            out_refname="%s_%s"%(RG_globals.target_locus,Ref_file_name)# Was in_ref_src= ...
+            out_refname="%s_%s"%(RG_globals.target_locus,Ref_file_name)# Defined as in_ref_src= in main...
         return out_refname
 
 def make_addmut(refseqdonor,label):
