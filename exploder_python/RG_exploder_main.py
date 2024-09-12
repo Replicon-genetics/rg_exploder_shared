@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_30_5.py"
-ProgverDate="7-Sep-2024"
+ProgverDate="12-Sep-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -917,8 +917,8 @@ def write_samheader(ThisSeqr):
             genass="hg19"
         else:
             genass="hg38"
-        #Rname=in_ref_src # Sets global for reuse by write_frag_samout. This is incorrect for RNASeq, which I tried to fix by using this:
-        Rname=RG_process.get_outrefname(REFSEQ_RECORD,Ref_file_name)
+        Rname=in_ref_src # Sets global for reuse by write_frag_samout. Is this correct for RNASeq? Alternative is RG_process.get_outrefname:
+        #Rname=RG_process.get_outrefname(REFSEQ_RECORD,Ref_file_name)
         #Rname="chr%s"%chromnum # Sets global for reuse by write_frag_samout
         #Rname="chr%s:%s-%s"%(chromnum,start,stop) # Sets global for reuse by write_frag_samout
         head1="@HD\tVN:1.6\tSO:coordinate\n"
@@ -2007,7 +2007,7 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
             extra="s"
         else:
             extra =""
-        journals_update(" *** Adjusting exome parameters on %s variant%s; this can be slow! *** "%(len(mutrecs),extra))
+        journals_update(" *** Adjusting exome parameters on %s variant%s *** "%(len(mutrecs),extra))
         RG_process.make_exonplus_lookups(RefRec.exonplus_lookup,mutrecs)
         #print("is_do_exome %s; head %s; end %s"%(is_do_exome,mutrecs[0].exonplus_lookup[0],mutrecs[0].exonplus_lookup[-1]))
     # End of Generate Booleans once ...
