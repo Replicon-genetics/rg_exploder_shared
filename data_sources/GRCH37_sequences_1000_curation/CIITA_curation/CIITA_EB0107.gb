@@ -14,7 +14,7 @@ FEATURES             Location/Qualifiers
                      /note="class II, major histocompatibility complex,
                      transactivator [Source:HGNC Symbol;Acc:7067]"
 
-     variation       28585..28584
+     variation       28584^28585
                      /replace="-/CTTTTGGAATA"
                      /db_xref="RG001:000031"
                      /comment="RG:EB0107; madeup insert NM_000246.4:c.975_976insCTTTTGGAATA"

@@ -15,7 +15,7 @@ FEATURES             Location/Qualifiers
                      /note="KRAS proto-oncogene, GTPase [Source:HGNC
                      Symbol;Acc:HGNC:6407]"
 
-     variation       5..4
+     variation       4^5
                      /replace="-/N"
                      /db_xref="RG:testerA"
 
@@ -24,12 +24,12 @@ FEATURES             Location/Qualifiers
                      /db_xref="dbSNP:rs1340259682"
                      /consequence="dbSNP:3_prime_UTR_variant"
 
-     variation       44423..44422
+     variation       44422^44423
                      /replace="-/A"
                      /db_xref="dbSNP:rs1491195115"
                      /consequence="dbSNP:3_prime_UTR_variant"
 
-     variation       46989..46988
+     variation       46988^46989
                      /replace="-/GGT"
                      /db_xref="dbSNP:rs1338403308"
                      /consequence="dbSNP:3_prime_UTR_variant,downstream_transcript_variant"
@@ -44,7 +44,7 @@ FEATURES             Location/Qualifiers
                      /db_xref="dbSNP:rs1407373668"
                      /consequence="dbSNP:3_prime_UTR_variant,downstream_transcript_variant"
 
-     variation       47686..47685
+     variation       47685^47686
                      /replace="-/N"
                      /db_xref="RG:testerB"
 

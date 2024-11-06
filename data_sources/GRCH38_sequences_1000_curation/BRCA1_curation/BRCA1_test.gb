@@ -47,12 +47,12 @@ FEATURES             Location/Qualifiers
                      /db_xref="dbSNP:rs1315641969"
                      /comment="Variant type:DELINS;"
 
-     variation       122715..122714
+     variation       122714^122715
                      /replace="-/C"
                      /db_xref="dbSNP:rs201114952"
                      /comment="Variant type:INS; 17:43166008 (GRCh38); 17:41318026 (GRCh37)"
 
-     variation       122605..122604
+     variation       122604^122605
                      /replace="-/TGT"
                      /db_xref="dbSNP:rs200977167"
                      /comment="Variant type:INS; 17:43165898 (GRCh38); 17:41317916 (GRCh37)"
