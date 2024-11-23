@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_30_5.py"
-ProgverDate="12-Sep-2024"
+Progver="RG_exploder_main_30_6.py"
+ProgverDate="07-Nov-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -446,7 +446,7 @@ def initialise_readme():
 def read_single_record_input(infile,seqform):
     with RG_io.open_read(infile) as f:
         seq_record = SeqIO.read(f,seqform)
-        success = RG_process.add_extra_objects(seq_record)
+        seq_record,success = RG_process.add_extra_objects(seq_record)
         #print("infile %s, seq_record.offset %s"%(infile,seq_record.offset))
     return seq_record,success
 # end of read_single_record_input(infile,seqform)

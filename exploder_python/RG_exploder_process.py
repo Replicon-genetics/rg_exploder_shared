@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="2-Sep-2024"
+#ProgverDate="07-Nov-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -1219,7 +1219,7 @@ def add_extra_objects(SeqRec):
     if len(splits) == 6:
         success=True
         SeqRec=add_seqrec_objects(SeqRec,splits)
-    return success,SeqRec
+    return SeqRec,success
 # end of add_extra_objects(SeqRec)
 
 def get_absolute_position(seq_record,seqpos):
