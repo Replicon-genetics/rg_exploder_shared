@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="embl_feature_filter7.py"
-ProgverDate="17-Aug-2022"
+ProgverDate="06-Nov-2024"
 '''
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
@@ -60,6 +60,8 @@ is_cds_store=False
 cds_feat="CDS   "
 cds_feat_line=""
 codon_start="codon_start"
+dots=".."
+carat="^"
 
 today = date.today()
 # Textual month, day and year	
@@ -324,6 +326,7 @@ def main(argv):
     outfeatfile = empty_string
     outvarfile= empty_string
     outj2 = False
+    grchver = empty_string
 
     outreffile_postname="_filtered.gb"
     outfeatfile_postname="_locseq.gb"
@@ -340,7 +343,8 @@ def main(argv):
     '''
     for opt, arg in opts:
         if opt == '-h':
-            print ('usage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile> -g <grchver:37/38> -c {CDS-suppress} -j {alternative json}'%Progver)
+            usage_message("")
+            #print ('usage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile> -g <grchver:37/38> -c {CDS-suppress} -j {alternative json}'%Progver)
             #print ('usage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile>'%Progver)
             sys.exit()
         # Former command line switch for complement, now automatically selected by setjoin()
@@ -395,8 +399,15 @@ def main(argv):
     print ('Output variants file is: %s '%outvarfile)
     print ('Output noseq file is: %s '%outnoseqfile)
 
+
+def usage_message(addtxt):
+    print ('%susage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile> -g <grchver:37/38> -c {CDS-suppress} -j {alternative json}'%(addtxt,Progver))
+    
 def err_and_quit():
-    print ('error: usage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile> -c {CDS-suppress} -j {alternative json}'%Progver)
+    usage_message("error: ")
+    #print ('error: usage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile> -c {CDS-suppress} -j {alternative json}'%Progver)
+    #print ('usage: %s -i <inputfile> -a {all} -f <filterfile> -l <locusfile> -v <outvarfile> -g <grchver:37/38> -c {CDS-suppress} -j {alternative json}'%Progver)
+
     sys.exit(2)
     return
 
@@ -609,12 +620,27 @@ def setjoin():
     print("exclude_complement %s"%exclude_complement)
 
 def test_variants():
-    global line,is_CDS,ignore_var,is_variants,finish
+    global line,is_CDS,ignore_var,is_variants,finish,variation,dots,carat
     if variation in line:
         is_CDS=False
         ignore_var=False
         is_variants=True
-        update_varfile(line)
+        # modify line if start is higher than end - this will be an insert
+        # change format in line from eg: "variation       166..165" to "variation       165^165"
+        # This appears to be BioPython regarding this as 'non-standard' Genbank format, and trying to
+        # trap inconsistencies in linear vs circular DNA. Somehow the high..low format gets caight in this trap
+        # Not an issue in Biopython 1.80, but manifested in Biopython 1.83. This is intended for future protection.
+        if dots in line:
+            splitline=line.split()
+            values=splitline[1].split(dots)
+            #print("splitline %s | values %s"%(splitline,values))
+            if values[0] > values[1]:
+                newline="%s%s%s%s\n"%(variation,values[1],carat,values[0])
+                update_varfile(newline)
+            else:
+                update_varfile(line)  
+        else:
+            update_varfile(line)
     elif Origin in line:
         is_CDS=False
         finish=True
@@ -663,7 +689,7 @@ gene_equal_quote='/gene="'
 GRChid="unset"
 locus_tag="/locus_tag="
 storelines=""
-variation="variation    "
+variation="     variation       "
 translation="/translation="
 db_xref="/db_xref="
 misc_rna="misc_RNA   "
@@ -815,10 +841,7 @@ with _open(inputfile) as f:
                 update_featfile(line)
             
             elif variation in line:
-                is_CDS=False
-                ignore_var=False
-                is_variants=True
-                update_varfile(line)
+                test_variants()
             elif Origin in line:
                 is_CDS=False
                 finish=True
