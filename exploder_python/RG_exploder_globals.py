@@ -8,8 +8,6 @@ import json
 import copy
 # import os #needed to verify file presence using os.path # mravn change
 import RG_exploder_io as RG_io # File input/output
-global config_file
-config_file="input/config.json"
 
 def get_strand_extra_label():
     def get_strand_label(inval):
@@ -66,7 +64,18 @@ def save_user_configs():
     return user_config_file
 # end of save_user_configs()
 
-def config_file_in():
+def config_file_in(infile):
+    global config_in_data,config_json_head
+    config_exists = RG_io.is_file(infile)
+    if config_exists:
+        #print("config_exists %s"%config_exists)
+        with RG_io.open_read(infile) as json_data_file:
+            config_in_data = json.load(json_data_file)
+        set_configs()
+    return config_exists
+# end of config_file_in(infile)
+
+def config_file_in1():
     global config_in_data,config_json_head,config_file
     config_exists = RG_io.is_file(config_file)
     if config_exists:
@@ -185,8 +194,8 @@ def make_Reference_sequences2():
         }
     return Reference_sequences_tmp
 
-def process_file_configs_GUI(): # COD read config.json only for GUI read-only version
-    config_file_in()
+def process_file_configs_GUI(infile): # COD read config.json only for GUI read-only version
+    return config_file_in(infile)
 # end of process_file_configs_webUI()
 
 def set_configs():
@@ -424,4 +433,5 @@ def getime():
 # =================================================================
 # Main
 # =================================================================
-process_file_configs_GUI()
+config_file="input/config.json"
+exists = process_file_configs_GUI(config_file)
