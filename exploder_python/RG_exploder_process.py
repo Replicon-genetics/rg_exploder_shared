@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="07-Nov-2024"
+#ProgverDate="23-Nov-2024"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 '''
@@ -1003,9 +1003,7 @@ def filter_varfeature_index(seq_record):
     source_gene_index=[]
     for (index, feature) in enumerate(seq_record.features):
         feature=seq_record.features[index]
-        '''
-        print(feature.type)
-        '''
+        #print(feature.type)
         if feature.type == 'variation':
             replace=str(feature.qualifiers.get("replace"))
             '''
@@ -1249,7 +1247,7 @@ def set_seqrec_absolutes(seq_record):
     #print("At set_seqrec_absolutes")
     #print("seq_record.features %s"%seq_record.features)
 
-    success,seq_record=add_extra_objects(seq_record)
+    seq_record,success=add_extra_objects(seq_record)
     if success:
         seq_record=set_seqrec_absolutes2(seq_record)
     return success,seq_record
