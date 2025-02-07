@@ -76,4 +76,4 @@ cp -p $locus$jsonfile ../../$thisdata$curation/$modlocus$curation/$modlocus$json
 /bin/rm ../../$thisdata$curation/$modlocus$curation/$locus$jsonfile
 /bin/rm $locus$jsonfile--
 cd  $pw
-# Next step is: 'sh call_mash_json.sh 37' OR 'sh call_mash_json.sh 38'
+# Next step is: 'sh call_mash_json.sh'
