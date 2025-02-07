@@ -2,6 +2,8 @@
 #rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
 rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 rootdatadir=$rootapplicationdir"data_sources/"
+filter8="helper_python/embl_feature_filter8.py"
+filter_revise="helper_python/embl_feature_filter_revise.py"
 
 jsonfile="_transcripts.json"
 ensembl="_ensembl"
@@ -9,9 +11,9 @@ curation="_curation"
 dirtxt="_dir"
 
 #Choose one of two filter programs
-python_filter1="/Users/caryodonnell/mytools/embl_feature_filter8.py"
+python_filter1=$rootapplicationdir$filter8
 # embl_feature_filter8.py is a difficult-to-follow line-by-line parsing of the input file
-python_filter2="/Users/caryodonnell/mytools/embl_feature_filter_revise.py"
+python_filter2=$rootapplicationdir$filter_revise
 # embl_feature_filter_revise.py uses Biopython and the RG_exploder modules to parse the input file
 # The output differs only in the genbank-format output files, whereby there are additional 
 # (blank) fields in KEYWORDS, SOURCE & ORGANISM for the Biopython. There seems no way to remove these
