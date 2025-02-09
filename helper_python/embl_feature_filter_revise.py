@@ -541,7 +541,7 @@ def embl_filter_record(SeqRec,locus_tag):
     CopySeqRec=copy.deepcopy(SeqRec)
     CopySeqRec.features=RG_process.filter_all_features(SeqRec,locus_tag,True)# Overwrite the features
     #print("CopySeqRec.annotations %s"%CopySeqRec.annotations)
-    unwanted_annotations=['keywords','source','organism','taxonomy']
+    unwanted_annotations=['keywords','taxonomy']
     new_annotations={}
 
     for (key) in CopySeqRec.annotations:
