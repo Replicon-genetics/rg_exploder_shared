@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="RG_exploder_main_30_6.py"
-ProgverDate="07-Nov-2024"
+ProgverDate="03-Feb-2025"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -1564,7 +1564,7 @@ def splice_refseq(SeqRec):
     # splice_a_sequence seems overkill for deriving Headclip and Tailclip values - can get these from the gene & source features
     # Importantly though, splice_a_sequence returns all dbxref=gap: features in  "mod_var_features" that implement the splicing events,
     # of which the two clips are just special cases of splicing
-    CopyRec.features=RG_process.get_source_gene_features(SeqRec)+mod_var_features
+    CopyRec.features=RG_process.get_source_gene_features(SeqRec,RG_globals.target_locus)+mod_var_features
     
     CopyRec.endclipcount=0                                                                                            
     if CopyRec.is_ref_spliced:
