@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="23-Nov-2024"
+#ProgverDate="01-Feb-2025"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
 '''
 
 # =================================================
@@ -437,13 +437,10 @@ def purl_features(seqdonor,vardonor):
     #seqdonor is most likely REFSEQ and vardonor is mutseq
     return_message=""
     
-    '''
-    purl_seqrecords takes the vardonor variant (relative) positions and recalculates that position into the
-    seqdonor (relative) positions by first checking the absolute positions are compatible.
-
-    These modified vardonor variant-definitions are then merged with the seqdonor sequence to return a new sequence record
-    '''
-     
+    #purl_seqrecords takes the vardonor variant (relative) positions and recalculates that position into the
+    #seqdonor (relative) positions by first checking the absolute positions are compatible.
+    #These modified vardonor variant-definitions are then merged with the seqdonor sequence to return a new sequence record
+    
     seqdonor_begin=int(seqdonor.abs_start)
     vardonor_begin=int(vardonor.abs_start)
 
@@ -502,8 +499,7 @@ def purl_features(seqdonor,vardonor):
                                                %(xref_vardonor,var_abs_start,var_abs_end,seqdonor_begin,seqdonor_end))                    
     else:
         return_message+=update_journal(" Incompatible GRCh build, chromosome or polarity for sequence: "+seqdonor_version+" vs variants: "+vardonor_version)
-
-        
+    
     newfeatures=knit_features(seqdonor,vardonor)
     return newfeatures,(GRCh_version_match and polarity_match),return_message[:-1]
 # end of purl_features(seqdonor,vardonor)
@@ -942,7 +938,7 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
 # ===============================================================
 # Start of data-structure query functions
 # ===============================================================
-
+    
 def get_varfeature_index(seq_record):
     #print("At get_varfeature_index")
     #print("seq_record.id %s"%seq_record.id)
@@ -952,12 +948,8 @@ def get_varfeature_index(seq_record):
 # end of get_varfeature_index(seq_record)
 
 def get_varfeatures(SeqRec):
-    '''
-    Returns a list of all the filtered variants
-    '''
-    var_feature_index=get_varfeature_index(SeqRec)
-    ''' Next line is unncessary as get_varfeature_index has already called order_featindex '''
-    '''var_feature_index_sorted=order_featindex(var_feature_index,SeqRec)'''
+    #Returns a list of all the filtered variants
+    var_feature_index=get_varfeature_index(SeqRec) # Comes back ordered
     features=[]
     for (index) in var_feature_index:
        features.append(SeqRec.features[index])
@@ -982,17 +974,91 @@ def get_filtered_features(seq_record,total):
     return features
 # end of get_filtered_features(seq_record):
 
-def get_source_gene_features(seq_record):
+def get_source_gene_features(seq_record,locus_name):
     var_feature_index,feature_index,source_gene_index=filter_varfeature_index(seq_record)
     features=[]
     for (index) in source_gene_index:
         features.append(seq_record.features[index])
     return features
 
+def filter_all_features(seq_record,target_loc,with_var):
+    wanted_features=['source','gene','mRNA','CDS']
+    wanted_CDS_db_xref=['CCDS:']
+    '''
+    a) For each feature, check it's one we want to keep
+    b) For each item in the variants table, list positions of wanted ones
+    '''
+    #print("At filter_varfeature_index")
+    #print("seq_record.id %s"%seq_record.id)
+    #print("seq_record.features %s"%seq_record.features)
+
+    found_locus=False
+    features=[]
+    '''
+    source_feature_index=[]
+    gene_feature_index=[]
+    mRNA_feature_index=[]
+    CDS_feature_index=[]
+    '''
+    
+    out_index_count=0
+    #target_locus_match="'"+RG_globals.target_locus+"'"
+    target_locus_match="'"+target_loc+"'"
+    
+    for (index, feature) in enumerate(seq_record.features):
+        feature=seq_record.features[index]
+        if any(x in feature.type for x in wanted_features): 
+            if feature.type == 'source':
+                #source_feature_index.append(out_index_count)
+                features.append(feature); out_index_count+=1
+            elif feature.type == 'gene':
+                for key in feature.qualifiers:
+                    if key=='locus_tag': # Matching the feature groupings to the desired locus, otherwise
+                        locus_txt=str(feature.qualifiers.get(key))
+                        if target_locus_match in locus_txt:
+                            #print("feature.type %s, key %s, value %s; target_locus_match %s"%(feature.type,key,locus_txt,target_locus_match))
+                            found_locus=True
+                        else:
+                            found_locus=False
+                if found_locus:
+                    #print("feature.type %s: feature %s"%(feature.type,feature))
+                    #gene_feature_index.append(out_index_count)
+                    features.append(feature); out_index_count+=1
+                # print("seq_record.features[index]%s "%seq_record.features[index])
+            elif found_locus:
+                if feature.type == 'mRNA':
+                    #mRNA_feature_index.append(out_index_count)
+                    features.append(feature); out_index_count+=1
+                    #print("feature.type %s; feature %s"%(feature.type,feature))
+                else: #feature.type == 'CDS':
+                    new_feature=copy.copy(feature)
+                    new_CDS_qualifiers= {}   
+                    qualifiers=str(feature.qualifiers)
+                    #print("feature.type: %s; qualifiers %s"%(feature.type,qualifiers))                    
+                    for key in feature.qualifiers:
+                        if key !='translation':
+                            if key== 'db_xref':
+                                new_xrefs=[]
+                                for item in feature.qualifiers.get(key):                                
+                                    if any(x in item for x in wanted_CDS_db_xref):
+                                        new_xrefs.append(item)
+                                if len(new_xrefs) > 0:
+                                    new_CDS_qualifiers.update({key:new_xrefs}) 
+                            else:
+                                new_CDS_qualifiers.update({key:feature.qualifiers.get(key)})  
+                    new_feature.qualifiers=new_CDS_qualifiers
+                    #CDS_feature_index.append(out_index_count)
+                    features.append(new_feature); out_index_count+=1 
+    if with_var:
+        varindex=get_varfeature_index(seq_record)# Comes back sorted
+        for (index) in varindex:
+            features.append(seq_record.features[index])
+    #return features,source_feature_index,gene_feature_index,mRNA_feature_index,CDS_feature_index
+    return features
+# end of filter_all_features(seq_record,with_var)
+
 def filter_varfeature_index(seq_record):
-    '''
-    Grab each item in the variants table and list positions of wanted ones
-    '''
+    #Grab each item in the variants table and list positions of wanted ones
 
     #print("At filter_varfeature_index")
     #print("seq_record.id %s"%seq_record.id)
@@ -1006,18 +1072,12 @@ def filter_varfeature_index(seq_record):
         #print(feature.type)
         if feature.type == 'variation':
             replace=str(feature.qualifiers.get("replace"))
-            '''
-            print(replace)
-            '''
-            '''
-            We want to filter out where replace is not what we expect eg:HGMD_MUTATION
-            '''
-            for (item) in RG_globals.unwanted_replace:
-                is_keep_feature=True
-                if (item in replace):
-                    is_keep_feature=False
-                if (is_keep_feature):
-                    varfeat_index.append(index)
+            #print(replace)
+            #We want to filter out where replace is not what we expect eg:HGMD_MUTATION
+            if any(y in replace for y in RG_globals.unwanted_replace):
+                pass
+            else:
+                varfeat_index.append(index)  
         elif feature.type == 'gene' or feature.type == 'source':
                 source_gene_index.append(index)
                 # print("seq_record.features[index]%s "%seq_record.features[index])
@@ -1028,14 +1088,10 @@ def filter_varfeature_index(seq_record):
 # end of filter_varfeature_index(seq_record)
 
 def get_varfeats(this_feature):
-    '''
-    Extracts feature information, returns multiple values
-    Initially to shorten code in main (became MutateVarSeq), but also used by order_featindex
-    '''
+    #Extracts feature information, returns multiple values
+    #Initially to shorten code in main (became MutateVarSeq), but also used by order_featindex
 
-    '''
-    print(this_feature)
-    '''
+    #print(this_feature)
     feat_start=this_feature.location.start
     feat_end=this_feature.location.end
 
@@ -1043,11 +1099,7 @@ def get_varfeats(this_feature):
     elif (this_feature.location.strand == -1):feat_polarity=RG_globals.seq_polarity_minus
     else: feat_polarity=RG_globals.seq_polarity_none
 
-    xref=str(this_feature.qualifiers.get("db_xref"))
-    '''
-    xref_id=xref.strip("[]'")
-    xref_ids=xref_id.split(":")
-    '''
+    xref=str(this_feature.qualifiers.get("db_xref"))    
     xref2=xref.split(",")
     xref_ids=xref2[0].strip("[]'").split(":")
     replace_string=str(this_feature.qualifiers.get("replace")).strip("[]'")
@@ -1084,12 +1136,8 @@ def get_varfeats(this_feature):
 # end of get_varfeats(this_feature)
 
 def get_varfeats2(this_feature):
-    '''
-    Reformats the Genbank feature information into a dictionary list
-    '''
-    '''
-    print(this_feature)
-    '''
+    #Reformats the Genbank feature information into a dictionary list
+    #print(this_feature)
 
     xref_ids,reference,replace,replace_string,feat_start,feat_end,feat_polarity,replace_type=get_varfeats(this_feature)
     #print("Replace_type %s"%replace_type)
@@ -1108,7 +1156,6 @@ def order_featindex(feature_index,seq_record,direction):
     #sorted_feature_index=sorted(feature_index,key=get_key)
     #print("SORTING feature_index")
     return feature_index
-
 # end of order_featindex(feature_index,seq_record)
 
 
@@ -1116,7 +1163,7 @@ def order_featstart(feature_list,direction):
     def get_featkey(feat1):
         f1parts=feat1.location.parts
         for item in f1parts:
-            ''' Only one item, so only does this once '''
+            #Only one item, so only does this once
             f1start=item.start; f1end=item.end
             if f1end < f1start:
                 f1start=f1end
