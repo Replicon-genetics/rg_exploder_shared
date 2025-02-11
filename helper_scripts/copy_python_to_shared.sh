@@ -20,7 +20,7 @@ cp -p Biopython_fix_metro.py $rootsharepythondir/Biopython_fix.py
 
 cd $rootdevhelp_pythondir
 cp -p embl_feature_filter8.py $rootsharehelp_pythondir$same
-cp -p embl_feature_revise.py $rootsharehelp_pythondir$same
+cp -p embl_feature_filter_revise.py $rootsharehelp_pythondir$same
 cp -p mash_json.py $rootsharehelp_pythondir$same
 cp -p RG_exploder_io.py $rootsharehelp_pythondir$same
 cp -p gaussian_test.py $rootsharehelp_pythondir$same
