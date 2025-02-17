@@ -1,0 +1,340 @@
+{
+    "stringconstants": {
+        "DatasetIDText": "Demo GRCh38",
+        "CustomerIDText": "Public v.30_3, Sep 2024",
+        "CopyrightText": "Copyright \u00a9 Replicon Genetics 2021-2024. All rights reserved.",
+        "seq_polarity_plus": "1",
+        "seq_polarity_minus": "-1",
+        "seq_polarity_none": "0",
+        "unwanted_replace": [
+            "HGMD_MUTATION"
+        ],
+        "mut_types": "DIX",
+        "mRNA_trigger": "mRNA",
+        "skip_trigger": "gap",
+        "CDS_trigger": "CDS",
+        "empty_transcript_name": "Gene",
+        "empty_transcript_id": "",
+        "GRCh38_txt": "GRCh38",
+        "GRCh37_txt": "GRCh37",
+        "LRG_txt": "LRG",
+        "title_label": "Synthetic Reads Generator",
+        "reference_gene": "Reference Gene",
+        "reference_haplotype": "Reference Haplotype",
+        "variants_header": "Haplotype Template",
+        "variants_label": "Haplotype Variant",
+        "frequency_label": "Source Ratio",
+        "options_label": "Output Options",
+        "reads_list_label": "Reads Configuration",
+        "reads_type_label": "Reads type",
+        "help_label": "Need help..?",
+        "about_label": "About...",
+        "more_label": "More...",
+        "ensembl38_gene_url": "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;",
+        "ensembl38_transcript_url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;",
+        "ensembl38_view_url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=",
+        "ensembl37_gene_url": "https://grch37.ensembl.org/Homo_sapiens/Gene/Summary?db=core;",
+        "ensembl37_transcript_url": "https://grch37.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;",
+        "ensembl37_view_url": "https://grch37.ensembl.org/Homo_sapiens/Location/View?r=",
+        "lrg_view_url": "https://www.ensembl.org/Homo_sapiens/LRG/Summary?lrg=LRG_",
+        "help_url": "https://repliconevaluation.wordpress.com/replicon-genetics",
+        "about_url": "https://repliconevaluation.wordpress.com/about",
+        "more_url": "https://repliconevaluation.wordpress.com/more",
+        "read_annotation": "read",
+        "frag_annotation": "frg",
+        "spaceman": " ",
+        "rev_label": "/2",
+        "fwd_label": "/1",
+        "IUPAC_codes": "[ACGTRYSWKMBDHVN]"
+    },
+    "IOconstants": {
+        "infilepathroot": "input/",
+        "outfilepathroot": "output/",
+        "pygui_outfilepathroot": "/Users/caryodonnell/Documents/repositories/rg_exploder_shared/data_sources/exploder_output_38_1000/",
+        "journhead": "_001",
+        "journend": "_journal",
+        "readmehead": "_000",
+        "readmeend": "_readme",
+        "config_json_head": "_002",
+        "config_json_end": "_config.txt",
+        "Seq_Format": "genbank",
+        "Seq_IO_file_ext": ".gb",
+        "Ref_file_name": "locseq"
+    },
+    "diagnostic_vars": {
+        "is_exome_paired_end": true,
+        "is_pair_monitor": false,
+        "is_include_indels": true,
+        "is_dels_to_dots": false,
+        "is_dels_to_dots_override": false,
+        "is_print_diagnostics": false,
+        "is_mutate_ref": false,
+        "is_make_exome": true,
+        "is_trim_to_gene": true,
+        "is_fastq_random": true,
+        "is_show_infilepath": false,
+        "is_htm_journal": true,
+        "MaxVarPos": 0
+    },
+    "admin_constants": {
+        "NormaliseUpper": 1000,
+        "Mapq_Min": 15,
+        "Mapq_Max": 30,
+        "mutlabels": [
+            "hap0",
+            "hap1",
+            "hap2",
+            "som1",
+            "som2",
+            "som3",
+            "som4",
+            "som5",
+            "som6",
+            "som7",
+            "som8",
+            "som9"
+        ],
+        "mutfreqs": [
+            0,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50,
+            50
+        ],
+        "DOC_precision": 2,
+        "Paired_insert_Min": 40,
+        "Paired_insert_Max": 850
+    },
+    "bio_parameters": {
+        "target_locus": {
+            "label": "Gene",
+            "value": "AK2"
+        },
+        "target_transcript_name": {
+            "label": "Template",
+            "value": "Gene"
+        },
+        "target_transcript_id": {
+            "value": ""
+        },
+        "target_build_variant": {
+            "is_get_ref": false,
+            "is_save_var": false,
+            "is_get_muttranscripts": false,
+            "mRNA_join": "",
+            "CDS_join": "",
+            "headclip": 0,
+            "tailclip": 0,
+            "exonplus_lookup": [
+                0
+            ],
+            "transcript_view": "",
+            "abs_offset": 0,
+            "ref_strand": 1,
+            "local_begin": 0,
+            "local_end": 0,
+            "joinlist": "",
+            "refseq": "ATGC",
+            "abs_Begin": {
+                "label": "Absolute Begin",
+                "value": 0
+            },
+            "abs_End": {
+                "label": "Absolute End",
+                "value": 0
+            },
+            "trans_Begin": {
+                "label": "Locus",
+                "value": 1,
+                "min": 1,
+                "max": 15
+            },
+            "trans_End": {
+                "label": "Locus",
+                "value": 1,
+                "min": 1,
+                "max": 15
+            },
+            "trans_Begin_ext": {
+                "label": "Begin extension",
+                "value": 0,
+                "min": -50,
+                "max": 50
+            },
+            "trans_End_ext": {
+                "label": "End extension",
+                "value": 0,
+                "min": -50,
+                "max": 50
+            },
+            "ref_subseq": {
+                "label": "Reference Sequence",
+                "value": "",
+                "length": 0,
+                "viewstring": ""
+            },
+            "var_subseq": {
+                "label": "Variant Sequence",
+                "length": 0,
+                "value": ""
+            },
+            "hap_name": {
+                "label": "Source Name",
+                "value": "hapx"
+            },
+            "var_name": {
+                "label": "Variant Name",
+                "value": ""
+            },
+            "AddVars": []
+        },
+        "is_CDS": {
+            "label": "CDS only",
+            "value": false
+        },
+        "mutfreqs": {
+            "label": [],
+            "value": []
+        },
+        "Fraglen": {
+            "label": "Read length",
+            "value": 200,
+            "min": 4,
+            "max": 2000
+        },
+        "Fragdepth": {
+            "label": "Depth of cover",
+            "value": 3,
+            "min": 1,
+            "max": 800
+        },
+        "Exome_extend": {
+            "label": "(Exome) Extension",
+            "value": 0,
+            "min": 0,
+            "max": 50
+        },
+        "is_flip_strand": {
+            "label": "Flip polarity",
+            "value": false
+        },
+        "is_frg_paired_end": {
+            "label": "Paired-end",
+            "value": true
+        },
+        "is_duplex": {
+            "label": "Dual-strand",
+            "value": false
+        },
+        "is_simplex": {
+            "label": "Single-strand",
+            "value": null
+        },
+        "is_fasta_out": {
+            "label": "Reads in FASTA format",
+            "value": true
+        },
+        "is_onefrag_out": {
+            "label": "- Each possible read",
+            "value": false
+        },
+        "is_muts_only": {
+            "label": "- Variant reads only",
+            "value": false
+        },
+        "is_frg_label": {
+            "label": "- Add source coordinates...",
+            "value": true
+        },
+        "is_use_absolute": {
+            "label": "- ... plus genome coordinates",
+            "value": true
+        },
+        "is_fastacigar_out": {
+            "label": "- CIGAR annotation",
+            "value": true
+        },
+        "is_vars_to_lower": {
+            "label": "- Substitutions in lower case",
+            "value": false
+        },
+        "is_journal_subs": {
+            "label": "- Journal the substitutions",
+            "value": false
+        },
+        "is_fastq_out": {
+            "label": "Reads in FASTQ format",
+            "value": false
+        },
+        "Qualmin": {
+            "label": "- FASTQ quality min",
+            "value": 40,
+            "min": 0,
+            "max": 93
+        },
+        "Qualmax": {
+            "label": "- FASTQ quality max",
+            "value": 40,
+            "min": 0,
+            "max": 93
+        },
+        "is_write_ref_fasta": {
+            "label": "Save Reference Haplotype",
+            "value": false
+        },
+        "is_mut_out": {
+            "label": "Save Haplotype Variants",
+            "value": false
+        },
+        "is_write_ref_ingb": {
+            "label": "Save Source Features",
+            "value": false
+        },
+        "is_sam_out": {
+            "label": "Reads in SAM format",
+            "value": false
+        },
+        "gauss_mean": {
+            "label": "Mean insert size",
+            "value": 200,
+            "min": 40,
+            "max": 850
+        },
+        "gauss_SD": {
+            "label": "SD insert size",
+            "value": 2,
+            "min": 0,
+            "max": 20
+        }
+    },
+    "ReadsList": [
+        "Paired-end",
+        "Dual-strand",
+        "Single-strand"
+    ],
+    "Reference_sequences": {
+        "AK2": {
+            "Release": "Ensembl Release 105 (Dec 2021)",
+            "Retrieval_date": "19-AUG-2022",
+            "Region": "GRCh38:1:33006986:33081996:1",
+            "Locus_range": "1001:74011",
+            "is_join_complement": true,
+            "LRG_id": "133",
+            "Ensembl_id": "ENSG00000004455.18",
+            "mRNA": {
+                "AK2-672715(MANE_Select)": "ENST00000672715.1"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "AK2-672715(MANE_Select)"
+            }
+        }
+    }
+}
