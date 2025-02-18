@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="1-Feb-2025"
+#Prg_verDate="12-Feb-2025"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
@@ -169,8 +169,8 @@ def set_string_defaults():
     global seq_polarity_plus,seq_polarity_minus,seq_polarity_none
     seq_polarity_plus="1"; seq_polarity_minus="-1";seq_polarity_none="0"
 
-    global unwanted_replace # ''' list of undesired variant sources that must be filtered out. May want to expand this
-    unwanted_replace=["HGMD_MUTATION"]
+    global unwanted_replace # ''' list of undesired variant substitutions that must be filtered out. May want to expand this
+    unwanted_replace=["HGMD_MUTATION","dbSNP_variant"]
 
     global mut_types,IUPAC_codes
     # mut_types is a pattern object for the mutation types in CIGAR that selects fragments containing them when is_muts_only = True  '''

@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="01-Feb-2025"
+#ProgverDate="12-Feb-2025"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
 '''
@@ -1113,8 +1113,14 @@ def get_varfeats(this_feature):
         replace="err"
     else:
         varts=replace_string.split("/")
-        reference=str(varts[0])
-        replace=str(varts[1])
+        if len(varts)<2:
+            if RG_globals.is_print_diagnostics:
+                print("problem this_feature %s"%this_feature)
+            reference="err"
+            replace="err"
+        else:
+            reference=str(varts[0])
+            replace=str(varts[1])
 
     #if RG_globals.is_print_diagnostics:
     #print("xref %s, reference %s, replace %s | varts %s"%(xref,reference,replace, varts))
