@@ -1,8 +1,0 @@
-package:
-  name: rg_exploder
-  version: '1.0'
-requirements:
-  run:
-  - biopython
-source:
-  path: rg_exploder
