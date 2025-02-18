@@ -1,38 +1,13 @@
 # Shell script to create curation heirarchies
 
-make_curation()
-{
-    prelocus=$1
-    modlocus=$2
-    PW=$3
-    if [[ "$modlocus" == "$dironly" ]]
-        then
-            newlocus=$prelocus
-        else
-            newlocus=$prelocus$undertxt$modlocus
-    fi
+if [ "$rootRG" == "" ]
+then
+    echo "rootRG is unset - exiting script"
+    exit 
+fi
 
-    mkdir $newlocus$curation
-    cd $newlocus$curation
-    ln -s ../../$targetdir/$newlocus$dirtxt/ .
-    ln -s $newlocus$dirtxt/$prelocus$noseq $newlocus$noseq
-    ln -s $newlocus$dirtxt/$prelocus$locseq $newlocus$locseq 
-    ln -s $newlocus$dirtxt/$prelocus$ensembl $newlocus$ensembl
+rootapplicationdir="$rootRG"/
 
-    if [[ "$modlocus" == "$dironly" ]]
-    then
-        /bin/cp -p $newlocus$dirtxt/$prelocus$jsonfile barf
-        sed -e "s/$prelocus/$newlocus/g" barf > $newlocus$jsonfile
-        /bin/rm barf
-    else
-        /bin/cp -p $newlocus$dirtxt/$prelocus$jsonfile $newlocus$jsonfile
-    fi
-    cd $PW
-}
-
-#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
-#rootapplicationdir="/Users/caryodonnell/Desktop/Replicon/"
 rootdatadir=$rootapplicationdir"data_sources/"
 
 targetdir37="GRCH37_sequences_1000"
@@ -40,8 +15,6 @@ targetdir38="GRCH38_sequences_1000"
 
 curation="_curation"
 dirtxt="_dir"
-dironly="dir"
-undertxt="_"
 noseq="_noseq.gb"
 locseq="_locseq.gb"
 ensembl="_ensembl"
@@ -75,11 +48,20 @@ then
     cd $rootdatadir$targetdir$curation
     pw=$PWD
 
-    /bin/ls ../$targetdir | while read dirname
+    /bin/ls ../$targetdir | while read dir
     do
-    first=`echo $dirname  | cut -f1 -d"_"`
-    second=`echo $dirname  | cut -f2 -d"_"`
-    make_curation $first $second $pw
+    modlocus=`echo $dir | sed -e "s/$dirtxt//" `
+    locus=`echo $dir  | cut -f1 -d"_"`
+    echo "modlocus:" $modlocus  "locus:" $locus
+
+    mkdir $modlocus$curation
+    cd $modlocus$curation
+    ln -s ../../$targetdir/$modlocus$dirtxt/ .
+    ln -s $modlocus$dirtxt/$modlocus$noseq .
+    ln -s $modlocus$dirtxt/$modlocus$locseq .
+    ln -s $modlocus$dirtxt/$locus$ensembl $modlocus$ensembl
+    /bin/cp -p $modlocus$dirtxt/$modlocus$jsonfile .
+    cd $pw
     done
 
     cd $pw

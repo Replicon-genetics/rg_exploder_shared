@@ -1,32 +1,42 @@
 # Shell script to run mash_json.py from curation directory
-#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
+
+if [ "$rootRG" == "" ]
+then
+    echo "rootRG is unset - exiting script"
+    exit 
+fi
+
+rootapplicationdir="$rootRG"/
+
 rootdatadir=$rootapplicationdir"data_sources/"
-curation="_curation"
+
+input_seq37=$rootdatadir"exploder_input_37_1000"
+input_seq38=$rootdatadir"exploder_input_38_1000"
+
 app="helper_python/mash_json.py"
 
-GRCHver="stop"
+stopit="stop"
+input37="37"
+input38="38"
 
-input37="GRCH37"
-input38="GRCH38"
-datadir37="GRCH37_sequences_1000"
-datadir38="GRCH38_sequences_1000"
-
-appropriate37=$rootdatadir$datadir37$curation
-appropriate38=$rootdatadir$datadir38$curation
-
-if echo "$PWD" | grep -q "$input37"; then GRCHver=input37 ; fi 
-if echo "$PWD" | grep -q "$input38"; then GRCHver=input38 ; fi 
-
-
-if [ $GRCHver != "stop" ]
+if [ "$1" == $input37 ]
 then
-    echo "valid directory $PWD"
-    ##cd $rootdatadir$datadir$curation
+    inputdir=$input_seq37
+elif [ "$1" == $input38 ]
+    then
+        inputdir=$input_seq38
+    else
+        inputdir=$stopit
+fi
+
+if [[ "$inputdir" != "$stopit" ]]
+then
+    echo "valid directory $inputdir"
+    echo " python3 $rootapplicationdir$app"
+    cd $inputdir
     python3 $rootapplicationdir$app
+
 else
-    echo "$PWD is not an appropriate directory to run this."
-    echo " For $input37 cd to $appropriate37"
-    echo " For $input38 cd to $appropriate38"
+    echo "Parameter entered should be $input37 or $input38, not $1"
 fi
 

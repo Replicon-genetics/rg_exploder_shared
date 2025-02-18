@@ -1,29 +1,13 @@
 # Shell script to create input directory heirarchies from curation ones
 
-fill_curation()
-{
-    prelocus=$1
-    modlocus=$2
-    PW=$3
-    if [[ "$modlocus" == "$dironly" ]]
-        then
-            newlocus=$prelocus
-        else
-            newlocus=$prelocus$undertxt$modlocus
-    fi
+if [ "$rootRG" == "" ]
+then
+    echo "rootRG is unset - exiting script"
+    exit 
+fi
 
-    mkdir $newlocus
-    cd $newlocus
+rootapplicationdir="$rootRG"/
 
-    ln -s ../../$curdir/$newlocus$curation/ .
-    ln -s $newlocus$curation/*.gb .
-    /bin/mv $newlocus$noseq $newlocus$hap0
-    cd $PW
-}
-
-#rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
-rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
-#rootapplicationdir="/Users/caryodonnell/Desktop/Replicon/"
 rootdatadir=$rootapplicationdir"data_sources/"
 
 targetdir37="GRCH37_sequences_1000"
@@ -34,8 +18,6 @@ input_seq38=$rootdatadir"exploder_input_38_1000"
 
 curation="_curation"
 dirtxt="_dir"
-dironly="dir"
-undertxt="_"
 
 hap0="_000000.gb"
 noseq="_noseq.gb"
@@ -50,11 +32,11 @@ input38="38"
 if [ "$1" == $input37 ]
 then
     targetdir=$targetdir37
-    input_seq=$input_seq37
+    inputdir=$input_seq37
 elif [ "$1" == $input38 ]
 then
     targetdir=$targetdir38
-    input_seq=$input_seq38
+    inputdir=$input_seq38
 
 else
     targetdir=$stopit
@@ -63,23 +45,32 @@ fi
 # Do this for 37 & 38
 if [ "$targetdir" != $stopit ] 
 then
-    if [ -e "$input_seq" ]
+    if [ -e "$inputdir" ]
     then 
-        echo $input_seq "exists"
+        echo $inputdir "exists"
     else
-        echo  "creating "$input_seq
-        mkdir $input_seq
+        echo  "creating "$inputdir
+        mkdir $inputdir
     fi
 
-    cd $input_seq
+    cd $inputdir
     pw=$PWD
     curdir=$targetdir$curation
 
-    /bin/ls ../$targetdir | while read dirname
+    /bin/ls ../$targetdir | while read dir
     do
-    first=`echo $dirname  | cut -f1 -d"_"`
-    second=`echo $dirname  | cut -f2 -d"_"`
-    fill_curation $first $second $pw
+    modlocus=`echo $dir | sed -e "s/$dirtxt//" `
+    locus=`echo $dir  | cut -f1 -d"_"`
+    echo "modlocus:" $modlocus  "locus:" $locus
+
+    mkdir $modlocus
+    cd $modlocus
+
+    ln -s ../../$curdir/$modlocus$curation/ .
+    ln -s $modlocus$curation/*.gb .
+    ln -s $modlocus$curation/$modlocus$jsonfile .
+    /bin/mv $modlocus$noseq $modlocus$hap0
+    cd $pw
     done
 
     cd $pw
@@ -89,6 +80,11 @@ then
     echo "$dir :"
     grep VERSION $dir/*.gb
     done
+
+    cd "$rootapplicationdir"/exploder_python
+    /bin/rm input
+    ln -s $inputdir input
+    cd $pw
 
 else
     echo "Parameter entered should be $input37 or $input38, not $1"
