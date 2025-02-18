@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="embl_feature_filter_revise.py"
-ProgverDate="05-Feb-2024"
+ProgverDate="12-Feb-2024"
 '''
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
@@ -37,19 +37,30 @@ import RG_exploder_globals as RG_globals
 import RG_exploder_process as RG_process
 import copy
 import os
+import inspect
+
+from RG_exploder_globals import process_file_configs_GUI
 
 #BioPython imports
 
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord # Used in writing protein sequence
 
-# Initialise config
-if RG_globals.process_file_configs_GUI("config.json"):
-    print("config read")
-    pass
-else:
-    print("config NOT read")
-    pass
+def read_config():
+    #Initialise config
+    #print ("%s"%inspect.getmodule(process_file_configs_GUI))
+    splits=str(inspect.getmodule(process_file_configs_GUI)).split('/')
+    path_to="/"
+    for i in range(1,len(splits)-1):
+        path_to+="%s%s"%(splits[i],"/")
+    #print("%s"%pathonly)
+    if RG_globals.process_file_configs_GUI("%sconfig.json"%path_to):
+        print("config read")
+        #RG_globals.is_print_diagnostics=True # Switch on diasgnostic prints from RG_process
+        pass
+    else:
+        print("*** WARNING: config NOT read ***")
+        pass
 
 global empty_string,inputfile,outfeatfile,outvarfile
 global outtempfile,outreffile,outtmphandle,r_date,mRNA_transcript_list,outfeatfile
@@ -585,6 +596,7 @@ def make_files():
         wanted_features=['source','gene','mRNA','CDS']
         #wanted_transcript_qualifiers=['gene','note','standard_name']
         target_locus_match="'"+target_locus+"'"
+        print("target_locus:%s"%target_locus)
         NewRec=embl_filter_record(SEQ_record,target_locus) # Clean it up to this target_locus
         #print("NewRec: %s"%(NewRec))
         #print("NewRec.id %s"%(NewRec.id))
@@ -696,6 +708,7 @@ def make_files():
     else:
         exit()
 
+read_config()
 make_files()
 clean_up()
 #read_as_text()
