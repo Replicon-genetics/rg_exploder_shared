@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 Progver="mash_json.py"
-ProgverDate="02-Mar-2022"
-# This merges the content of all the individual {locus}_transcrupts.json files in the 'curation' directory
+ProgverDate="13-Feb-2025"
+# This merges the content of all the individual {locus}_transcrupts.json files in directories below the current directory
 # into a single file loci.json. It is a source for RG_exploder_globals_make.py to create config.json
 # which in turn is a source of variable values required to run RG_exploder_main.py
 # with a bit more development work, the need for loci.json can be eliminated,
@@ -15,7 +15,8 @@ from collections import OrderedDict
 global config_file,json_transcripts,merged_transcriptconstants
 config_file="config.json"
 json_transcripts="_transcripts.json"
-curation="_curation"
+#curation="_curation"
+curation="" # Was originally curation="_curation"
 merged_transcriptconstants=OrderedDict()
 #merged_transcriptconstants={}
 
@@ -60,7 +61,8 @@ print("directories %s"%directories)
 for folder in directories:
     infolder=str(folder)
     #print("Folder %s"%infolder)
-    locus=infolder.split(curation)[0]
+    #locus=infolder.split(curation)[0]
+    locus=infolder
     #print("Locus %s"%locus)
     target_file="./%s/%s%s"%(infolder,locus,json_transcripts)
     exists,data=config_file_in(target_file)
