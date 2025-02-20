@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="embl_feature_filter_revise.py"
-ProgverDate="12-Feb-2024"
+ProgverDate="20-Feb-2024"
 '''
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
@@ -620,7 +620,6 @@ def make_files():
         source_mapping="%s:%s:%s:%s:%s"%(splits[1],splits[2],splits[3],splits[4],splits[5])
         #print("Region: %s"%source_mapping)
         #print("grchver:%s"%grchver)
-
                     
         for (index, feature) in enumerate(NewRec.features):
             feature=NewRec.features[index]
@@ -636,23 +635,22 @@ def make_files():
                             print("ensembl_geneid %s"%ensembl_geneid)
                         if key=='locus_tag': # Matching the feature groupings to the desired locus, otherwise
                             locus_txt=str(feature.qualifiers.get(key))
+                            print("locus_txt %s"%locus_txt)
                             if target_locus_match in locus_txt:
                                 found_locus=True
+                                # Now add location
+                                locus_begin,locus_end=str(feature.location).strip("[]").split(":")
+                                locus_end,pol=locus_end.split("]")
+                                begin=int(locus_begin)+1
+                                if pol =="(-)":
+                                    is_join_complement=True
+                                else:
+                                    is_join_complement=False
+                                last_generange=str(begin)+":"+locus_end
+                                #print("locus_begin %s,locus_end %s, pol %s,complement %s"%(locus_begin,locus_end,pol,complement))
                             else:
                                 found_locus=False
-                    if found_locus:
-                        #pass
-                        #print("feature %s"%feature)
-                        locus_begin,locus_end=str(feature.location).strip("[]").split(":")
-                        locus_end,pol=locus_end.split("]")
-                        begin=int(locus_begin)+1
-                        if pol =="(-)":
-                            is_join_complement=True
-                        else:
-                            is_join_complement=False
-                        last_generange=str(begin)+":"+locus_end
-                        #print("locus_begin %s,locus_end %s, pol %s,complement %s"%(locus_begin,locus_end,pol,complement))
-                elif found_locus:
+                elif found_locus :
                     if feature.type == 'mRNA':
                         #pass
                         #print("feature: %s"%(feature))
@@ -662,34 +660,36 @@ def make_files():
                         mRNA_gene_name=str(feature.qualifiers.get('gene')).strip("[]'")
                         #print("mRNA_gene_name: %s"%mRNA_gene_name)
                         #print("standard_name: %s"%feature.qualifiers.get('standard_name'))
-                        mRNA_transcript_name=str(feature.qualifiers.get('standard_name')).strip("[]'")
-                        #print("standard_name: %s"%mRNA_transcript_name)
-                        #mRNA_transcript_list.append(mRNA_transcript_name)
-                        tidname=mRNA_transcript_name.split('.')[0]
-                        truncated_transcript_id=tidname.split('ENST')[1].lstrip("0")
+                        if mRNA_gene_name==ensembl_geneid:
+                            mRNA_transcript_name=str(feature.qualifiers.get('standard_name')).strip("[]'")
+                            #print("standard_name: %s"%mRNA_transcript_name)
+                            #mRNA_transcript_list.append(mRNA_transcript_name)
+                            tidname=mRNA_transcript_name.split('.')[0]
+                            truncated_transcript_id=tidname.split('ENST')[1].lstrip("0")
 
-                        mRNA_key=target_locus+"-"+truncated_transcript_id
-                        mRNA_transcript_list.update({mRNA_key:mRNA_transcript_name})
+                            mRNA_key=target_locus+"-"+truncated_transcript_id
+                            mRNA_transcript_list.update({mRNA_key:mRNA_transcript_name})
                 
-                        #print("feature.location: %s"%(feature.location))
+                            #print("feature.location: %s"%(feature.location))
 
-                        mRNA_joinstring=get_joinstring(feature.location)
-                        mRNA_join_list.update({mRNA_key:mRNA_joinstring})
+                            mRNA_joinstring=get_joinstring(feature.location)
+                            mRNA_join_list.update({mRNA_key:mRNA_joinstring})
  
-                    elif not exclude_CDS: #feature.type == 'CDS': 
+                    elif feature.type == 'CDS' and not exclude_CDS: 
                         #print("feature.type: %s"%(feature.type))
                         #print("gene: %s"%feature.qualifiers.get('gene'))
                         CDS_gene_name=str(feature.qualifiers.get('gene')).strip("[]'")
                         #print("CDS_gene_name: %s"%CDS_gene_name)
                         #print("note: %s"%feature.qualifiers.get('note'))
-                        CDS_note=str(feature.qualifiers.get('note')).strip("[]'")
-                        tidtxt,CDS_transcript_name=CDS_note.split("=")
-                        truncated_CDS_transcript_name=CDS_transcript_name.split('.')[0].split('ENST')[1].lstrip("0")
-                        #print("truncated_transcript_id %s"%truncated_transcript_id)
-                        #print("truncated_CDS_transcript_name: %s"%truncated_CDS_transcript_name)
-                        if truncated_transcript_id == truncated_CDS_transcript_name:
-                            CDS_joinstring=get_joinstring(feature.location)
-                            CDS_join_list.update({mRNA_key:CDS_joinstring})
+                        if CDS_gene_name==ensembl_geneid:
+                            CDS_note=str(feature.qualifiers.get('note')).strip("[]'")
+                            tidtxt,CDS_transcript_name=CDS_note.split("=")
+                            truncated_CDS_transcript_name=CDS_transcript_name.split('.')[0].split('ENST')[1].lstrip("0")
+                            #print("truncated_transcript_id %s"%truncated_transcript_id)
+                            #print("truncated_CDS_transcript_name: %s"%truncated_CDS_transcript_name)
+                            if truncated_transcript_id == truncated_CDS_transcript_name:
+                                CDS_joinstring=get_joinstring(feature.location)
+                                CDS_join_list.update({mRNA_key:CDS_joinstring})
         
         #print("mRNA_transcript_list:%s"%mRNA_transcript_list)
         #print("mRNA_join_list:%s"%mRNA_join_list)
