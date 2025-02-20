@@ -7,14 +7,16 @@ then
 fi
 
 rootapplicationdir="$rootRG"/
+data_sources="data_sources/"
+rootdatadir=$rootapplicationdir$data_sources
 
-rootdatadir=$rootapplicationdir"data_sources/"
+output_37="exploder_output_37_1000"
+output_dir37=$rootdatadir$output_37
+input_dir37=$rootdatadir"exploder_input_37_1000"
 
-output_seq37=$rootdatadir"exploder_output_37_1000"
-input_seq37=$rootdatadir"exploder_input_37_1000"
-
-output_seq38=$rootdatadir"exploder_output_38_1000"
-input_seq38=$rootdatadir"exploder_input_38_1000"
+output_38="exploder_output_38_1000"
+output_dir38=$rootdatadir$output_38
+input_dir38=$rootdatadir"exploder_input_38_1000"
 
 stopit="stop"
 input37="37"
@@ -24,13 +26,15 @@ jsontxt="json"
 
 if [ "$1" == $input37 ]
 then
-    inputdir=$input_seq37
-    outputdir=$output_seq37
+    output=$output_37
+    inputdir=$input_dir37
+    outputdir=$output_dir37
 
 elif [ "$1" == $input38 ]
 then
-    inputdir=$input_seq38
-    outputdir=$output_seq38
+    output=$output_38
+    inputdir=$input_dir38
+    outputdir=$output_dir38
 else
     inputdir=$stopit
 fi
@@ -62,7 +66,9 @@ else
 
     cd "$rootapplicationdir"/exploder_python
     /bin/rm output
-    ln -s $outputdir output
+    linkdir="../$data_sources$output"
+    ln -s $linkdir output
+    cd $pw
 
     cd $pw
 fi
