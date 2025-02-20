@@ -592,6 +592,7 @@ def make_files():
     found_locus=False
     is_join_complement=False
     ensembl_geneid="undefined"
+    match_id="no"
     if exists:
         wanted_features=['source','gene','mRNA','CDS']
         #wanted_transcript_qualifiers=['gene','note','standard_name']
@@ -631,13 +632,14 @@ def make_files():
                 elif feature.type == 'gene':
                     for key in feature.qualifiers:
                         if key=='gene':
-                            ensembl_geneid=str(feature.qualifiers.get(key)).strip("[]'")
-                            print("ensembl_geneid %s"%ensembl_geneid)
+                            match_id=str(feature.qualifiers.get(key)).strip("[]'")
                         if key=='locus_tag': # Matching the feature groupings to the desired locus, otherwise
                             locus_txt=str(feature.qualifiers.get(key))
                             print("locus_txt %s"%locus_txt)
                             if target_locus_match in locus_txt:
                                 found_locus=True
+                                ensembl_geneid=match_id
+                                print("ensembl_geneid %s"%ensembl_geneid)
                                 # Now add location
                                 locus_begin,locus_end=str(feature.location).strip("[]").split(":")
                                 locus_end,pol=locus_end.split("]")
@@ -660,7 +662,7 @@ def make_files():
                         mRNA_gene_name=str(feature.qualifiers.get('gene')).strip("[]'")
                         #print("mRNA_gene_name: %s"%mRNA_gene_name)
                         #print("standard_name: %s"%feature.qualifiers.get('standard_name'))
-                        if mRNA_gene_name==ensembl_geneid:
+                        if mRNA_gene_name==match_id:
                             mRNA_transcript_name=str(feature.qualifiers.get('standard_name')).strip("[]'")
                             #print("standard_name: %s"%mRNA_transcript_name)
                             #mRNA_transcript_list.append(mRNA_transcript_name)
@@ -681,7 +683,7 @@ def make_files():
                         CDS_gene_name=str(feature.qualifiers.get('gene')).strip("[]'")
                         #print("CDS_gene_name: %s"%CDS_gene_name)
                         #print("note: %s"%feature.qualifiers.get('note'))
-                        if CDS_gene_name==ensembl_geneid:
+                        if CDS_gene_name==match_id:
                             CDS_note=str(feature.qualifiers.get('note')).strip("[]'")
                             tidtxt,CDS_transcript_name=CDS_note.split("=")
                             truncated_CDS_transcript_name=CDS_transcript_name.split('.')[0].split('ENST')[1].lstrip("0")
