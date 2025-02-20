@@ -26,5 +26,6 @@ else
     inputdir=$input38
 fi
 
+cd $rootprogdir
 ln -s "../"$data_sources$outputdirhead$outputdir$outputdirtail output
 ln -s "../"$data_sources$inputdirhead$inputdir$inputdirtail input
