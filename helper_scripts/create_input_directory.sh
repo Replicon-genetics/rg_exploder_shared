@@ -7,14 +7,14 @@ then
 fi
 
 rootapplicationdir="$rootRG"/
-
-rootdatadir=$rootapplicationdir"data_sources/"
+data_sources="data_sources/"
+rootdatadir=$rootapplicationdir$data_sources
 
 targetdir37="GRCH37_sequences_1000"
-input_seq37=$rootdatadir"exploder_input_37_1000"
+input_seq37="exploder_input_37_1000"
 
 targetdir38="GRCH38_sequences_1000"
-input_seq38=$rootdatadir"exploder_input_38_1000"
+input_seq38="exploder_input_38_1000"
 
 curation="_curation"
 dirtxt="_dir"
@@ -32,12 +32,12 @@ input38="38"
 if [ "$1" == $input37 ]
 then
     targetdir=$targetdir37
-    inputdir=$input_seq37
+    inputseq=$input_seq37
+    
 elif [ "$1" == $input38 ]
 then
     targetdir=$targetdir38
-    inputdir=$input_seq38
-
+    inputseq=$input_seq38
 else
     targetdir=$stopit
 fi
@@ -45,6 +45,7 @@ fi
 # Do this for 37 & 38
 if [ "$targetdir" != $stopit ] 
 then
+    inputdir=$rootdatadir$inputseq
     if [ -e "$inputdir" ]
     then 
         echo $inputdir "exists"
@@ -52,7 +53,7 @@ then
         echo  "creating "$inputdir
         mkdir $inputdir
     fi
-
+    
     cd $inputdir
     pw=$PWD
     curdir=$targetdir$curation
@@ -83,7 +84,9 @@ then
 
     cd "$rootapplicationdir"/exploder_python
     /bin/rm input
-    ln -s $inputdir input
+
+    linkdir="../$data_sources$inputseq"
+    ln -s $linkdir input
     cd $pw
 
 else
