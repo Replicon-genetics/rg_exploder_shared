@@ -1,8 +1,12 @@
 # Shell script to switch links of input & output directories between 37 & 38 - takes 1 parameter, defaults to 38
 #rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
 rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
+#rootapplicationdir="/Users/caryodonnell/Desktop/Replicon/"
 rootdatadir=$rootapplicationdir"data_sources/"
 rootprogdir=$rootapplicationdir"exploder_python/"
+
+
+data_sources="data_sources/"
 inputdirhead="exploder_input_"
 inputdirtail="_1000"
 input37="37"
@@ -22,5 +26,5 @@ else
     inputdir=$input38
 fi
 
-ln -s $rootdatadir$outputdirhead$outputdir$outputdirtail output
-ln -s $rootdatadir$inputdirhead$inputdir$inputdirtail input
+ln -s "../"$data_sources$outputdirhead$outputdir$outputdirtail output
+ln -s "../"$data_sources$inputdirhead$inputdir$inputdirtail input
