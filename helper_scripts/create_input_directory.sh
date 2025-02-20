@@ -87,6 +87,8 @@ then
 
     linkdir="../$data_sources$inputseq"
     ln -s $linkdir input
+    cd input
+    ln -s "../$curdir/loci.json" .
     cd $pw
 
 else

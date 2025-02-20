@@ -15,8 +15,8 @@ from collections import OrderedDict
 global config_file,json_transcripts,merged_transcriptconstants
 config_file="config.json"
 json_transcripts="_transcripts.json"
-#curation="_curation"
-curation="" # Was originally curation="_curation"
+curation="_curation"
+#curation="" # Was originally curation="_curation"
 merged_transcriptconstants=OrderedDict()
 #merged_transcriptconstants={}
 
@@ -29,9 +29,11 @@ def config_file_in(in_file):
     config_exists = RG_io.is_file(in_file)
     config_in_data=OrderedDict()
     if config_exists:
-        print("config_exists %s as %s"%(config_exists,in_file))
+        #print("config_exists %s as %s"%(config_exists,in_file))
         with RG_io.open_read(in_file) as json_data_file:
             config_in_data = json.load(json_data_file)
+    else:
+        print("%s does not exists"%in_file)
     return config_exists,config_in_data
 # end of config_file_in()
 
@@ -60,16 +62,18 @@ directories=RG_io.list_files('.','*%s'%curation)
 print("directories %s"%directories)
 for folder in directories:
     infolder=str(folder)
-    #print("Folder %s"%infolder)
-    #locus=infolder.split(curation)[0]
-    locus=infolder
+    print("Folder %s"%infolder)
+    locus=infolder.split(curation)[0]
+    #locus=infolder
     #print("Locus %s"%locus)
+    #target_file="./%s/%s%s"%(infolder,locus,json_transcripts)
     target_file="./%s/%s%s"%(infolder,locus,json_transcripts)
     exists,data=config_file_in(target_file)
     if exists:
         locusentry=data["Reference_sequences"][locus]
-        #print(locusentry)
+        #print("found %s"%locusentry)
         #merged_transcriptconstants.update({locus:locusentry})
         merged_transcriptconstants[locus]=locusentry
-
+    else:
+        print("fail %s"%target_file)
 save_merged_json()
