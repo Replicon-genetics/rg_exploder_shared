@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="12-Feb-2025"
+#Prg_verDate="20-Feb-2025"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
@@ -38,6 +38,7 @@ def set_config_consts():
     set_exploder_root="../" # Do it relative
     exploder_root="%s/"%os.path.abspath(set_exploder_root) # Ensure this is defined as full path, required to support the hyperlinks to results in the Python GUI
 
+    root_sources="data_sources"
     rootdatadir="%sdata_sources"%exploder_root
     rootapplicationdir="%sexploder_python"%exploder_root # Not used for App.vue setup            
     roothelpscriptdir="%shelper_scripts"%exploder_root
@@ -337,7 +338,8 @@ def set_io_defaults():
 def make_IOconstants():
     global IOconstants
     IOconstants = {
-        "infilepathroot":"input/","outfilepathroot":"output/",
+        "infilepathroot":"input/",
+        "outfilepathroot":"output/",
         "pygui_outfilepathroot":pygui_outfilepathroot,
         "journhead":journhead,"journend":journend,"readmehead":readmehead,"readmeend":readmeend,
         "config_json_head":config_json_head,
@@ -901,17 +903,6 @@ if __name__ == "__main__":
     else:
         print(" GRCH_dataset is unset or incorrect - retry!")
         exit()
-
-    if is_use_TKinter:
-        
-        subprocess.run(["/bin/rm","input"])
-        subprocess.run(["/bin/rm","output"])
-        subprocess.run(["cd","%s"%rootapplicationdir])
-        subprocess.run(["ln","-s","%s"%infilepathroot,"input"])
-        subprocess.run(["ln","-s","%s"%outfilepathroot,"output"])
-        subprocess.run(["sh","%s"%roothelpscriptdir,"%s"%rootapplicationdir,"%s"%infilepathroot,"%s"%outfilepathroot])
-        print("Created %s/output\n       soft-linked to %s"%(rootapplicationdir,outfilepathroot))
-        print("Created %s/input\n       soft-linked to %s"%(rootapplicationdir,infilepathroot))
     
     pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
