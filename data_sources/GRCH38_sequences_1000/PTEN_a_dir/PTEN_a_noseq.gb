@@ -1,0 +1,26 @@
+LOCUS       CHR_HG2334_PATCH           0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome CHR_HG2334_PATCH GRCh38 partial sequence
+            87862440..87967341 reannotated via EnsEMBL.
+ACCESSION   chromosome:GRCh38:CHR_HG2334_PATCH:87862440:87967341:1
+VERSION     chromosome:GRCh38:CHR_HG2334_PATCH:87862440:87967341:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (https://www.ensembl.org),
+            then filtered using embl_feature_filter_revise.py on 2025 February
+            20.
+FEATURES             Location/Qualifiers
+     source          1..104902
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..103902
+                     /gene="ENSG00000284792.1"
+                     /locus_tag="PTEN"
+                     /note="phosphatase and tensin homolog [Source:HGNC
+                     Symbol;Acc:HGNC:9588]"
+     gene            16255..17989
+                     /gene="ENSG00000283055.1"
+                     /note="novel transcript, sense intronic to PTEN"
+ORIGIN
+//

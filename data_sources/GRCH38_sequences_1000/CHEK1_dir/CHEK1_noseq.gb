@@ -1,16 +1,26 @@
-LOCUS       11 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 11 GRCh38 partial sequence 125624163..125677255
-            reannotated via EnsEMBL
+LOCUS       11                         0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 11 GRCh38 partial sequence
+            125624163..125677255 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh38:11:125624163:125677255:1
 VERSION     chromosome:GRCh38:11:125624163:125677255:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (https://www.ensembl.org),
+            then filtered using embl_feature_filter_revise.py on 2025 February
+            20.
 FEATURES             Location/Qualifiers
      source          1..53093
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..52093
-                     /gene=ENSG00000149554.14
+                     /gene="ENSG00000149554.14"
                      /locus_tag="CHEK1"
                      /note="checkpoint kinase 1 [Source:HGNC
                      Symbol;Acc:HGNC:1925]"
+     gene            complement(975..1718)
+                     /gene="ENSG00000288907.1"
+                     /note="novel transcript, antisense to CHEK1"
 ORIGIN
 //

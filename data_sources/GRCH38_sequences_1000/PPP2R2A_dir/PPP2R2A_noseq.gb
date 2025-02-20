@@ -1,14 +1,21 @@
-LOCUS       8 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 8 GRCh38 partial sequence 26290508..26373680 reannotated
-            via EnsEMBL
+LOCUS       8                          0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 8 GRCh38 partial sequence 26290508..26373680
+            reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh38:8:26290508:26373680:1
 VERSION     chromosome:GRCh38:8:26290508:26373680:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (https://www.ensembl.org),
+            then filtered using embl_feature_filter_revise.py on 2025 February
+            20.
 FEATURES             Location/Qualifiers
      source          1..83173
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..82173
-                     /gene=ENSG00000221914.11
+                     /gene="ENSG00000221914.11"
                      /locus_tag="PPP2R2A"
                      /note="protein phosphatase 2 regulatory subunit Balpha
                      [Source:HGNC Symbol;Acc:HGNC:9304]"

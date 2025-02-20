@@ -1,14 +1,21 @@
-LOCUS       17 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 17 GRCh38 partial sequence 31093927..31383116 reannotated
-            via EnsEMBL
+LOCUS       17                         0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 17 GRCh38 partial sequence
+            31093927..31383116 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh38:17:31093927:31383116:1
 VERSION     chromosome:GRCh38:17:31093927:31383116:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (https://www.ensembl.org),
+            then filtered using embl_feature_filter_revise.py on 2025 February
+            20.
 FEATURES             Location/Qualifiers
      source          1..289190
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..288190
-                     /gene=ENSG00000196712.19
+                     /gene="ENSG00000196712.19"
                      /locus_tag="NF1"
                      /note="neurofibromin 1 [Source:HGNC Symbol;Acc:HGNC:7765]"
 ORIGIN

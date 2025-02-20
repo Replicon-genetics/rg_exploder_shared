@@ -1,1664 +1,1375 @@
-LOCUS       7 40206 bp DNA HTG 20-AUG-2022
-DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 5969925..6010130 reannotated via
-            EnsEMBL
+LOCUS       7                      40206 bp    DNA              HTG 20-AUG-2022
+DEFINITION  Homo sapiens chromosome 7 GRCh38 partial sequence 5969925..6010130
+            reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh38:7:5969925:6010130:1
 VERSION     chromosome:GRCh38:7:5969925:6010130:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (https://www.ensembl.org),
+            then filtered using embl_feature_filter_revise.py on 2025 February
+            20.
 FEATURES             Location/Qualifiers
      source          1..40206
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            complement(1001..39206)
-                     /gene=ENSG00000122512.17
+                     /gene="ENSG00000122512.17"
                      /locus_tag="PMS2"
                      /note="PMS1 homolog 2, mismatch repair system component
                      [Source:HGNC Symbol;Acc:HGNC:9122]"
-     mRNA            join(complement(39073..39125),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1001..3618))
+     mRNA            complement(join(1001..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39125))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000265849.12"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000265849.7"
                      /note="transcript_id=ENST00000265849.12"
                      /db_xref="CCDS:CCDS5343"
-                     /db_xref="RefSeq_mRNA:NM_000535"
-     mRNA            join(complement(39073..39206),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3267..3618),complement(1009..1846))
+     mRNA            complement(join(1009..1846,3267..3618,7664..7833,
+                     8672..8772,12900..13067,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39206))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699928.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(13012..13067))
+     CDS             complement(join(13012..13067,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514693.1"
                      /note="transcript_id=ENST00000699928.1"
-     mRNA            join(complement(39073..39125),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32887),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1018..3618))
+     mRNA            complement(join(1018..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32887,
+                     33766..33868,34048..34134,35968..36102,39073..39125))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699811.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514614.1"
                      /note="transcript_id=ENST00000699811.1"
                      /db_xref="CCDS:CCDS87474"
-                     /db_xref="RefSeq_mRNA:NM_001322003"
-                     /db_xref="RefSeq_mRNA:NM_001322015"
-     mRNA            join(complement(35968..36054),complement(34048..34134),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     29184..29351,32529..32712,34048..34134,35968..36054))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699814.1"
-     CDS             join(complement(35968..36054),complement(34048..34134),
-                     complement(32660..32712))
+     CDS             complement(join(32660..32712,34048..34134,35968..36054))
+                     /codon_start=3
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514615.1"
                      /note="transcript_id=ENST00000699814.1"
-     mRNA            join(complement(39073..39113),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30942..31066),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(24590..24680),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17735),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17735,19876..20031,22049..22133,
+                     24590..24680,27402..27499,29184..29351,30942..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36102,
+                     39073..39113))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699815.1"
-     CDS             join(complement(32529..32660),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514616.1"
                      /note="transcript_id=ENST00000699815.1"
-     mRNA            join(complement(39073..39118),complement(36397..36701),
-                     complement(35968..36107),complement(34048..34134),
-                     complement(33766..33868),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17735),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17735,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,36397..36701,
+                     39073..39118))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699816.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17731..17735))
+     CDS             complement(join(17731..17735,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514617.1"
                      /note="transcript_id=ENST00000699816.1"
-     mRNA            join(complement(39073..39125),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39125))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699752.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514561.1"
                      /note="transcript_id=ENST00000699752.1"
-                     /db_xref="RefSeq_mRNA:NM_001322006"
-     mRNA            join(complement(39073..39125),complement(35968..36107),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     35968..36107,39073..39125))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699817.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(32660..32712))
+     CDS             complement(join(32660..32712,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514618.1"
                      /note="transcript_id=ENST00000699817.1"
-     mRNA            join(complement(38883..39125),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,38883..39125))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699818.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514619.1"
                      /note="transcript_id=ENST00000699818.1"
                      /db_xref="CCDS:CCDS87474"
-                     /db_xref="RefSeq_mRNA:NM_001322005"
-     mRNA            join(complement(38883..39125),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29302),
-                     complement(27402..27499),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     27402..27499,29184..29302,32529..32712,33766..33868,
+                     34048..34134,35968..36107,38883..39125))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699819.1"
-     CDS             join(complement(32529..32647),complement(29184..29302),
-                     complement(27462..27499))
+     CDS             complement(join(27462..27499,29184..29302,32529..32647))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514620.1"
                      /note="transcript_id=ENST00000699819.1"
-     mRNA            join(complement(39073..39137),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29299),
-                     complement(27402..27499),complement(22049..22133),
-                     complement(21790..21911),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,21790..21911,
+                     22049..22133,27402..27499,29184..29299,32529..32712,
+                     33766..33868,34048..34134,35968..36102,39073..39137))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699753.1"
-     CDS             join(complement(32529..32660),complement(29288..29299))
+     CDS             complement(join(29288..29299,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514562.1"
                      /note="transcript_id=ENST00000699753.1"
-     mRNA            join(complement(39073..39140),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     29184..29351,32529..32712,33766..33868,34048..34134,
+                     35968..36107,39073..39140))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699754.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     29184..29351,32529..32712,33766..33868,34048..34134,
+                     35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514563.1"
                      /note="transcript_id=ENST00000699754.1"
-     mRNA            join(complement(39073..39149),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29302),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29302,32529..32712,
+                     33766..33868,34048..34134,35968..36102,39073..39149))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699755.1"
-     CDS             join(complement(32529..32660),complement(29288..29302))
+     CDS             complement(join(29288..29302,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514564.1"
                      /note="transcript_id=ENST00000699755.1"
-     mRNA            join(complement(39073..39149),complement(35968..36107),
-                     complement(34048..34134),complement(33819..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33819..33868,34048..34134,35968..36107,39073..39149))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699756.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33819..33868),
-                     complement(32653..32712))
+     CDS             complement(join(32653..32712,33819..33868,34048..34134,
+                     35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514565.1"
                      /note="transcript_id=ENST00000699756.1"
-     mRNA            join(complement(39073..39160),complement(35968..36102),
-                     complement(34048..34134),complement(29184..29302),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29302,34048..34134,
+                     35968..36102,39073..39160))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699757.1"
-     CDS             join(complement(34048..34082),complement(29184..29302),
-                     complement(27462..27499))
+     CDS             complement(join(27462..27499,29184..29302,34048..34082))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514566.1"
                      /note="transcript_id=ENST00000699757.1"
-     mRNA            join(complement(39073..39160),complement(35968..36107),
-                     complement(34048..34134),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,34048..34134,
+                     35968..36107,39073..39160))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699758.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(29184..29351),
-                     complement(27462..27499))
+     CDS             complement(join(27462..27499,29184..29351,34048..34134,
+                     35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514567.1"
                      /note="transcript_id=ENST00000699758.1"
-     mRNA            join(complement(39073..39172),complement(34048..34134),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     34048..34134,39073..39172))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699760.1"
-     CDS             join(complement(34048..34082),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     34048..34082))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514568.1"
                      /note="transcript_id=ENST00000699760.1"
                      /db_xref="CCDS:CCDS83155"
-                     /db_xref="RefSeq_mRNA:NM_001322007"
-                     /db_xref="RefSeq_mRNA:NM_001322008"
-     mRNA            join(complement(39073..39173),complement(35968..36102),
-                     complement(34048..34134),complement(33819..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33819..33868,34048..34134,35968..36102,39073..39173))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699761.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514569.1"
                      /note="transcript_id=ENST00000699761.1"
                      /db_xref="CCDS:CCDS87474"
-     mRNA            join(complement(39073..39175),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,32529..32712,33766..33868,
+                     34048..34134,35968..36102,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699762.1"
-     CDS             join(complement(32529..32660),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514570.1"
                      /note="transcript_id=ENST00000699762.1"
-                     /db_xref="RefSeq_mRNA:NM_001322011"
-                     /db_xref="RefSeq_mRNA:NM_001322012"
-                     /db_xref="RefSeq_mRNA:NM_001322013"
-     mRNA            join(complement(39073..39175),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(21790..21911),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1031..3618))
+     mRNA            complement(join(1031..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,21790..21911,
+                     22049..22133,25610..25709,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36102,
+                     39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699763.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(21868..21911))
+     CDS             complement(join(21868..21911,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514571.1"
                      /note="transcript_id=ENST00000699763.1"
-     mRNA            join(complement(38883..38991),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7866),
-                     complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7866,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36102,38883..38991))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699821.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7866),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7866,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514622.1"
                      /note="transcript_id=ENST00000699821.1"
-                     /db_xref="RefSeq_mRNA:NM_001322009"
-     mRNA            join(complement(39073..39149),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17288..17696),complement(16835..17198),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17198,17288..17696,19876..20031,
+                     22049..22133,25610..25709,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39149))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699764.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17288..17696),complement(17159..17198))
+     CDS             complement(join(17159..17198,17288..17696,19876..20031,
+                     22049..22133,25610..25709,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514572.1"
                      /note="transcript_id=ENST00000699764.1"
-     mRNA            join(complement(39073..39160),complement(35968..36102),
-                     complement(34048..34134),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(7664..7833),complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7833,12900..13067,
+                     16835..17696,19876..20031,22049..22133,27402..27499,
+                     29184..29351,32529..32712,34048..34134,35968..36102,
+                     39073..39160))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699765.1"
-     CDS             join(complement(34048..34082),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(22133..22133))
+     CDS             complement(join(22133,27402..27499,29184..29351,
+                     32529..32712,34048..34082))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514573.1"
                      /note="transcript_id=ENST00000699765.1"
-     mRNA            join(complement(39073..39198),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7866),
-                     complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7866,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39198))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699766.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7866),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7866,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514574.1"
                      /note="transcript_id=ENST00000699766.1"
-                     /db_xref="RefSeq_mRNA:NM_001322014"
-     mRNA            join(complement(39073..39198),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7790),
-                     complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7790,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39198))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699767.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7750..7790))
+     CDS             complement(join(7750..7790,8672..8772,12900..13067,
+                     16835..17696,19876..20031,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514575.1"
                      /note="transcript_id=ENST00000699767.1"
-     mRNA            join(complement(39073..39198),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(7664..7790),complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7790,12900..13067,
+                     16835..17696,19876..20031,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39198))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699768.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(7664..7790),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7790,12900..13067,
+                     16835..17696,19876..20031,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514576.1"
                      /note="transcript_id=ENST00000699768.1"
-     mRNA            join(complement(39073..39206),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(1033..3618))
+     mRNA            complement(join(1033..3618,7664..7833,8672..8772,
+                     12900..13067,19876..20031,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39206))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699820.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(13012..13067))
+     CDS             complement(join(13012..13067,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514621.1"
                      /note="transcript_id=ENST00000699820.1"
-     mRNA            join(complement(39073..39124),complement(36397..36563),
-                     complement(35968..36107),complement(34048..34134),
-                     complement(33766..33868),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,36397..36563,
+                     39073..39124))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699838.1"
-     CDS             join(complement(39073..39095),complement(36397..36563),
-                     complement(36031..36107))
+     CDS             complement(join(36031..36107,36397..36563,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514636.1"
                      /note="transcript_id=ENST00000699838.1"
-     mRNA            join(complement(39073..39142),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32524..32712),complement(29184..29299),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29299,32524..32712,
+                     33766..33868,34048..34134,35968..36102,39073..39142))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699916.1"
-     CDS             join(complement(32524..32660),complement(29184..29299),
-                     complement(27462..27499))
+     CDS             complement(join(27462..27499,29184..29299,32524..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514684.1"
                      /note="transcript_id=ENST00000699916.1"
-     mRNA            join(complement(39073..39160),complement(36378..36563),
-                     complement(35968..36107),complement(34048..34134),
-                     complement(33766..33868),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,36378..36563,
+                     39073..39160))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699839.1"
-     CDS             join(complement(39073..39095),complement(36378..36563),
-                     complement(35968..36107),complement(34048..34134),
-                     complement(33766..33868),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,36378..36563,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514637.1"
                      /note="transcript_id=ENST00000699839.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30942..31066),
-                     complement(29184..29299),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29299,30942..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699917.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514685.1"
                      /note="transcript_id=ENST00000699917.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30942..31066),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,30942..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699918.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514686.1"
                      /note="transcript_id=ENST00000699918.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30807..31066),
-                     complement(29184..29302),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29302,30807..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699919.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514687.1"
                      /note="transcript_id=ENST00000699919.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30807..31066),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(2718..3618))
+     mRNA            complement(join(2718..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,30807..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699920.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514688.1"
                      /note="transcript_id=ENST00000699920.1"
-     mRNA            join(complement(39073..39107),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30942..31066),
-                     complement(29184..29302),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29302,30942..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36102,
+                     39073..39107))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699822.1"
-     CDS             join(complement(32529..32660),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514623.1"
                      /note="transcript_id=ENST00000699822.1"
-     mRNA            join(complement(39073..39140),complement(34048..34134),
-                     complement(33819..33868),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33819..33868,34048..34134,39073..39140))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699823.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514624.1"
                      /note="transcript_id=ENST00000699823.1"
                      /db_xref="CCDS:CCDS87474"
-     mRNA            join(complement(39073..39140),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30940..31066),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,30940..31066,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39140))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699824.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514625.1"
                      /note="transcript_id=ENST00000699824.1"
-     mRNA            join(complement(39073..39140),complement(35968..36102),
-                     complement(34048..34134),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     34048..34134,35968..36102,39073..39140))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699837.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514635.1"
                      /note="transcript_id=ENST00000699837.1"
                      /db_xref="CCDS:CCDS87474"
-     mRNA            join(complement(39073..39151),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36102,39073..39151))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699825.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514626.1"
                      /note="transcript_id=ENST00000699825.1"
-                     /db_xref="RefSeq_mRNA:NM_001322010"
-     mRNA            join(complement(39073..39160),complement(34048..34134),
-                     complement(33766..33868),complement(32529..32712),
-                     complement(29184..29302),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29302,32529..32712,
+                     33766..33868,34048..34134,39073..39160))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699826.1"
-     CDS             join(complement(32529..32660),complement(29288..29302))
+     CDS             complement(join(29288..29302,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514627.1"
                      /note="transcript_id=ENST00000699826.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7790),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7790,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699951.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(22133..22133))
+     CDS             complement(join(22133,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514706.1"
                      /note="transcript_id=ENST00000699951.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(3317..3618))
+     mRNA            complement(join(3317..3618,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699952.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(3618..3618))
+     CDS             complement(join(3618,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514707.1"
                      /note="transcript_id=ENST00000699952.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699827.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514628.1"
                      /note="transcript_id=ENST00000699827.1"
-     mRNA            join(complement(39073..39200),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(21790..21911),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3317..3618))
+     mRNA            complement(join(3317..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,21790..21911,
+                     22049..22133,25610..25709,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39200))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699828.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(21868..21911))
+     CDS             complement(join(21868..21911,22049..22133,25610..25709,
+                     27402..27499,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514629.1"
                      /note="transcript_id=ENST00000699828.1"
-     mRNA            join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17163..17696),complement(7664..7790),
-                     complement(3323..3618))
+     mRNA            complement(join(3323..3618,7664..7790,17163..17696,
+                     19876..20031,22049..22133,25610..25709,27402..27499,
+                     29184..29351,32529..32712,33766..33868,34048..34134,
+                     35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000406569.8"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17163..17696),complement(7750..7790))
+     CDS             complement(join(7750..7790,17163..17696,19876..20031,
+                     22049..22133,25610..25709,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514464.1"
                      /note="transcript_id=ENST00000406569.8"
-     mRNA            join(complement(39073..39173),complement(34048..34134),
-                     complement(33766..33868),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3323..3618))
+     mRNA            complement(join(3323..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,39073..39173))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000642292.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000495524.1"
                      /note="transcript_id=ENST00000642292.1"
                      /db_xref="CCDS:CCDS87474"
-                     /db_xref="RefSeq_mRNA:NM_001322004"
-     mRNA            join(complement(39073..39151),complement(35968..36102),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3350..3618))
+     mRNA            complement(join(3350..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36102,39073..39151))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000642456.1"
-     CDS             join(complement(32529..32660),complement(29184..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000493814.1"
                      /note="transcript_id=ENST00000642456.1"
                      /db_xref="CCDS:CCDS87474"
-     mRNA            join(complement(39073..39117),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29302),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(16835..17696),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3437..3618))
+     mRNA            complement(join(3437..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29302,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39117))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000643595.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29288..29302))
+     CDS             complement(join(29288..29302,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000494497.1"
                      /note="transcript_id=ENST00000643595.1"
-     mRNA            join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     mRNA            complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000382321.5"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(12900..13067),
-                     complement(8672..8772),complement(7664..7833),
-                     complement(3475..3618))
+     CDS             complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000371758.4"
                      /note="transcript_id=ENST00000382321.5"
-     mRNA            join(complement(39073..39118),complement(35968..36107),
-                     complement(34048..34134),complement(32529..32712),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(16835..17696),
-                     complement(12900..13067),complement(8672..8772),
-                     complement(7664..7833),complement(3475..3618))
+     mRNA            complement(join(3475..3618,7664..7833,8672..8772,
+                     12900..13067,16835..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,32529..32712,
+                     34048..34134,35968..36107,39073..39118))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000644110.2"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(32660..32712))
+     CDS             complement(join(32660..32712,34048..34134,35968..36107,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000496392.2"
                      /note="transcript_id=ENST00000644110.2"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(17017..17696))
+     mRNA            complement(join(17017..17696,19876..20031,22049..22133,
+                     25610..25709,29184..29351,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699953.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(25620..25709))
+     CDS             complement(join(25620..25709,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514708.1"
                      /note="transcript_id=ENST00000699953.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29299),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(17017..17696))
+     mRNA            complement(join(17017..17696,19876..20031,22049..22133,
+                     25610..25709,29184..29299,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699954.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29288..29299))
+     CDS             complement(join(29288..29299,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514709.1"
                      /note="transcript_id=ENST00000699954.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29302),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(17017..17696))
+     mRNA            complement(join(17017..17696,19876..20031,22049..22133,
+                     25610..25709,29184..29302,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699929.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29288..29302))
+     CDS             complement(join(29288..29302,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514694.1"
                      /note="transcript_id=ENST00000699929.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29292..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17017..17696))
+     mRNA            complement(join(17017..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29292..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699930.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29292..29351),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17017..17696))
+     CDS             complement(join(17017..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29292..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514695.1"
                      /note="transcript_id=ENST00000699930.1"
-     mRNA            join(complement(39073..39118),complement(35968..36102),
-                     complement(34048..34134),complement(33819..33868),
-                     complement(32529..32712),complement(30942..31066),
-                     complement(29184..29351),complement(27402..27499),
-                     complement(25610..25709),complement(22049..22133),
-                     complement(19876..20031),complement(17602..17696))
+     mRNA            complement(join(17602..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29351,30942..31066,
+                     32529..32712,33819..33868,34048..34134,35968..36102,
+                     39073..39118))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699829.1"
-     CDS             join(complement(32529..32660),complement(30980..31066))
+     CDS             complement(join(30980..31066,32529..32660))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514630.1"
                      /note="transcript_id=ENST00000699829.1"
-     mRNA            join(complement(39073..39163),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29348),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17602..17696))
+     mRNA            complement(join(17602..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29348,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39163))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699840.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29348),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17602..17696))
+     CDS             complement(join(17602..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29348,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514638.1"
                      /note="transcript_id=ENST00000699840.1"
-     mRNA            join(complement(39073..39175),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(22049..22133),
-                     complement(21790..21911),complement(19876..20031),
-                     complement(17602..17696))
+     mRNA            complement(join(17602..17696,19876..20031,21790..21911,
+                     22049..22133,27402..27499,29184..29351,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39175))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699932.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29351),
-                     complement(27402..27499),complement(22133..22133))
+     CDS             complement(join(22133,27402..27499,29184..29351,
+                     32529..32712,33766..33868,34048..34134,35968..36107,
+                     39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514696.1"
                      /note="transcript_id=ENST00000699932.1"
-     mRNA            join(complement(39073..39201),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29184..29299),
-                     complement(27402..27499),complement(25610..25709),
-                     complement(22049..22133),complement(19876..20031),
-                     complement(17602..17696))
+     mRNA            complement(join(17602..17696,19876..20031,22049..22133,
+                     25610..25709,27402..27499,29184..29299,32529..32712,
+                     33766..33868,34048..34134,35968..36107,39073..39201))
                      /gene="ENSG00000122512.17"
                      /standard_name="ENST00000699830.1"
-     CDS             join(complement(39073..39095),complement(35968..36107),
-                     complement(34048..34134),complement(33766..33868),
-                     complement(32529..32712),complement(29288..29299))
+     CDS             complement(join(29288..29299,32529..32712,33766..33868,
+                     34048..34134,35968..36107,39073..39095))
                      /gene="ENSG00000122512.17"
                      /protein_id="ENSP00000514631.1"
                      /note="transcript_id=ENST00000699830.1"
 ORIGIN
-        1 GTCACCCAGG CTGGAGTGCA GTGGCACAGT CTTGGCTCAC TGCAACCTTC CGGGTTCAAG
-       61 TGATTCTTCT GCCCTAGCCT CCCAAGTAGT TGGGATTACA GGTGCCTGCA ACCACTCCCG
-      121 GCTAATTTTT GTATTTTTAG TAGAGCCAGG GTTTCACCAT GTTGCCCAGG CTGGTCTCAA
-      181 ACTCCTAACC TCAGGTGATC CGCCCGCCTC GGCCTCCCAA AAGTGCTGGG GTTACAGGCG
-      241 TGAGCCACCG CGCCCGGCCA AGCCTTCTCG CTTCCTTCCA ACACCCTTGC TCCTTCCCGC
-      301 CCCCGACTAC TGTCTCAGCG AAGCCGCCCC TGGGTCCCCT AGCCCAAGGT GCTCTCACCT
-      361 CTAAATTTAG AGGGGCCTTT ACTACGAGCT TTTCGGTCTT CTGTCAGTGA TCTACAAATA
-      421 AGTGAACTAC AAATCAAGCC AATTTCGTTT CTCAGTGCGT TTCCTAATGT TTCCTCTGTT
-      481 CTCCTGGGCT TAAGGAGAGG CCATCTCTCT CCTGTGTCTA CGGTGAGCCG GGAAGAATCG
-      541 GCTCCCTGCA CTGGTCTGCC CGGCCTAGGC CCTCCTCGCC CATCACGCAC GTGCTCGGGT
-      601 CCTGGGAGGC CGCGTCAGTC CGGCCGGGAA GGAGCAGGAC CCAGTCGCCA TGGCTGTCCC
-      661 GGCGTACGCA GGACCGCGGC CTGGGGCGCT CACCTCGCTC CAGGAGCCCA GAGACCTCGC
-      721 CGGGCTCGGG CTGAGGTGTT GCCGGGCTCT CGGCGTCCCA GACCCGGCTC CGGTCTCCAG
-      781 GCAACCGCGG ACGCCGCCAG GCCCACCCTG TGCTCTTAAA GGGGCCGCGC GCCAGCGCCA
-      841 AGCAGGTGTC CCGCCCTTGC TGGTCCTGAA GGCCGGGGGA AAGGCTGGAC GCTGGAGGCA
-      901 GCAGGCCAGG GTTTTCCCAG CTCTGCTAAC TGCTTCATCA TAAAATAGGA ATAACGCAGG
-      961 CATTAGTTTT CCATTGCTGC CGCAAACAAA TTACCATAAA TTTAGTGGTT CGAAGCAACA
-     1021 CAAATTTATT ACCCTACAGT ATGTAAATTA GTCCCACAGT GCTGGTTCCT TCCAGAGGCT
-     1081 GAGGGAGAGA ATGCGTTTTC TTGCCTTTTC CAGCTTTTCC AGAAGCGGTC CCCAACCTTT
-     1141 TTGGCACCAG AGACCGGTTT CGCGGAACAC AATTTTTCCA TGGATTGGGG TCGGGGAGGG
-     1201 ATGGTTTCAG GACGATTCAA GTGCATTGCA TTTATTGTGC ACTTTATTTC TACTATTATT
-     1261 ACATTGTAAC ATATAATTAA ATAATTCTAC AACTCACCAT CACAGAGACT CAGTGGGAGC
-     1321 CCTGAGCTTG TTTTCCTGCA ACTAGACAGC CCCATCTGGG GGTGACGGGA GACAGTGACA
-     1381 GATCATCAGG CATCAGATTC TCATAAGGAG CGTGCAACCT ACATCCCTCG TGTGTGCAGT
-     1441 TCACAATAGG GCTCGTGCTG CTATGAGAAT CTAATGCCCA CCGCTGATGT GACAGGAGGC
-     1501 GGAGCTCGGG TGGTAACGCC AGCGACGGGG AGTGGCTATA AATACAGATG AAGCTTCGCT
-     1561 GGCTTGCCGG CCCCTAACCT GCTGTGCACC CCACTTCCTA ATAGGCCATG GACCACTACT
-     1621 GGTCTGTGTC CGGAGTGTTG GAATCCCTGT TCTAGAGACT GCTTGCAATC CTTGACTAGT
-     1681 GGTACCTCCT TCCATCTCCA AAACCAGCAA GACAGCCTCT CTCTGGCCAG CAGGGAAAGG
-     1741 TCTCCACCTT TGAAGGACTC ACCCAATGGA CTGGGCCCAC CCAGACAATC CAGGATAATC
-     1801 TCTCTGTTGC AAGATCCTTA ACTCAGCCAG GCATGATGGC TCACACCTGT AATCCCAGCA
-     1861 CTTTGGGAGG CCGAGGCGGT CGGATCACCT GAGGTCAGGA GTTCGAGACC AGCCTGGTCA
-     1921 ACATGGTGAA ACCCTGTCTC TACTAAAAAT ACAAAAATTA GCCAGTATGG TTCTGGACAC
-     1981 CTGTAATCCC AGCTACTCGG GAGGCTGAGG TGGGAGAATC ACTTGAACCT GGGAGGCAGA
-     2041 GGCTGCAGTG AGCTGAGATC ATGCTATTGA ACTCCAGCCT GGGCAACAAG AGCGAAACTT
-     2101 CATCTCAAAG AAAAAAAAAA AAAAGATCCT TCACTCAATC ACACCTGCCG AGTCCCTTCT
-     2161 GCCACGTGAG GCAGCGTGGT CACAGGTTCT GGGGATTAGG ACACAGCTGT CTTGGGGGCT
-     2221 GTTATCCTGC CACAGCTCCC AATCTGGAGA GTTCATAAGT GGGATCCTGC AGACCACGCC
-     2281 AGCACAGTGC CAGACACGAT GGCACAGTGA CTACTGTACT GCCTCCTCCA TCTGAGGGAT
-     2341 TCTAAAGCAG GAAGGGGAGC CGCCCACAGT CTGGAGAAGG GGTGGGGGCA GCAGGGGGAG
-     2401 CCACATCTGT CATCTCTGGG CCCCCAAGAG GGCATCTTTA CTTCCATTTT CAGCCAAGTT
-     2461 CAAACAGGAC AAGGTTCCAT GAAAACTATT TGAAAAGACA GACAGGGATT CTTATATTCC
-     2521 CAGAACCATT CAAGGCCAGT AACTGGAATG TTCTACAGTT CACATCCTGA GGAAACCAAA
-     2581 TCACAGCATC AAATTATGGG AAATCAAACT CTTTTTGTTC CCCTGCGAGG ACAGCATTTT
-     2641 GCGACCTTGG CCGCACAGAG GAATGTTTCA AATAGTGACC CCTGTCCCAT CCAGTCATTT
-     2701 TCTTCCAGCC GGGCAGAGAA TCCCCCGTGT TTAAAAATTT AATGTGAATC AGGGCTGAGA
-     2761 ATCACTAACT GAAAAGGACC CTACTTTTAA ATTTATGAAA TTAAACAAAG ATGAATTTAA
-     2821 TTATCATTAA GGGTTGAAAG TTATAGACTA AACTATGTCC AGCCAGAGCA GAGGCCTGAG
-     2881 TAACTTCCAA AGTGGTTTGG TTTTTTTTTT TTTGTTTTGT TTTGTTTTGT TTTTTGAGAC
-     2941 ACAGTCTTGT TCTATCTCAC CCAGGCTGGA GCGCAGTGGC GCAATCTCGG TTCACTGCAA
-     3001 CCTCCGTCTC CCGGGTTCAA GCGATTCTCC TGCCTCAGCC TCCTGGGTAG CGGGGATTAC
-     3061 AGGCATGCGC CAGCACACCT GGCTAATTTT GTATTTTTAG TAGAGGCAGG GTTTCTCCAT
-     3121 GTTGGTCAGG CTGGTCTCGA ACTTCTGATC TCAGGTGATC CGCCGGCCTC GGCCTCCCAA
-     3181 AGTGCTGCGA TCACAGGCAT GAGCCACCAT GCCCAGCCCA AGTGTTCTTA TTTTTATAAA
-     3241 ATGTGTTCTT GCCTGGACAC ACACACACGA GCGCATGCAA ACATAGAGAA AAAAAATTTG
-     3301 CAAGCAATGC TCCATCTGGT TTGAAAAGGT TCTCAAGATC ACTTTTAAAT GGGTGTGATG
-     3361 TGTATTTTTT TTAAGTAGCA GGTTCATTTT AAAACAAAAA AGGTTAGTGA AGACTCTGTC
-     3421 TTTCAAAACA TAAAAATCTG CGATAAAACC AATTATTCCA TACAGTGACT ACGGTCAGTT
-     3481 CTGAGAAATG ACACCCAGGT TGGCGATGTG TCTCATGGTT GGCCTTCCAT GGGGACAGTT
-     3541 CCAGGGGTGG TCCATCTCCC CCATGTGGGT GATCAGTTTC TTCATCTCGC TTGTGTTAAG
-     3601 AGCAGTCCCA ATCATCACCT GAGTGTGAGA CACAATGGTT CAACGTTTTA GTAGTTTTTT
-     3661 GACGTCAGAA TGGCAGCTCT TCAGAAGCAT TCTTCTCTAA AATAAGGCTG GACAAGATTA
-     3721 CAGCTCAAAA ACTACCTTCC CTGAAAAACC TTCCCCCAGA GAAGCCTAGG TTCTAGATCT
-     3781 CAGCCCTCCA CCCTTCTGTG AAATCAGGCT CCTTGTGGCT CCTTCAAGGT GGCACCGCCT
-     3841 CCACTCCAGA CGCCGACCAC ACCTGTCTCA GCAGCCACCC TGCCCTCTCA CCCTGGCAGG
-     3901 TGCAGCAGCC TCCCAGCAGG CCTCCCTGCC CCACTGCGAC CCCTCCGAGC CGCTCTCCAC
-     3961 TCAGCAGCCA GTGATTACTT TTAAAGGGCT GTCAGGTTAT TCATTCCACT TCACAGCTCT
-     4021 CCCCCTCACC TGAATAAAAG CCCCCGTCTG TCCCCTGACT TGGCCCTCGC TGGGCTGTGC
-     4081 CTGCACCCCC ACCTCCAAGC ACGAATGCCT CCCTTCCTCA CCCCAGCTGC ACTGCTACTC
-     4141 CCTTCCTCTT GCACAGGCCC ATCACGCAAA CACCTGCCTT GGGACTGTGG CACTCCCGGG
-     4201 ACCCTCTCCC CCAATGGGTG CAGGCGTCAC TCCCCCTCTG TCGAGCTCCG ACCTGCTGCC
-     4261 CATAGCACTC CAGCCCTGGC CCTGCTGCCT CCCTGCCATG GGTCCTCTGA CAGGAAGGAG
-     4321 AGGACACAAG CCTGAAGCCC AATGTCACCT TCTTTCTTCC TGCAGCACCC TGAGGGCTCG
-     4381 CCATGTGCCA AGCACAGTCA GAAGGCTGGG GTGACAGCAG GTTGGAGAAG GACAGACAAT
-     4441 CAACAAGTCA ACAGAGAACC AAGACAGGTG GCACCAGGCG AGGCGGCCTG CTCAGGTGTG
-     4501 GGGATGGGGT GAAGGGTGAC GGTGGCAAAC CCAGGTAGAG AGGAGAGTAG GGAGAAAGGG
-     4561 TGTAAGGCAG GGAGGAGACT GAGGCGAGCG TGGAACTGGA AGGCAGCTAC ATGGCTGGAA
-     4621 GCTACATGGT GGGGAGATGG GGCTGGAAGG GTGGGCAGGG CTCAAAGCAG GAGCCTCCTG
-     4681 GGCAGGCAGT GACAACACCG GAGATGGACG GGTAGGCCAG GGCGAGAGGG AAGGAGCAGC
-     4741 CTGTGGTTCC CCGGGCCACT GAGTCACACT AAACTCAGGA CATCAAAACT GCCCGGCTAT
-     4801 GAGCTCAGCT CCACGCTCTC ACTCACAGAC TCCAAGACTG GAAGATCCAT ATTATGTCTT
-     4861 TTATTTTGGT GAGGTCAGGG GTGGTGGAGA GACTCTGTCT CCCAGGCTGG AATGCAATGG
-     4921 TGCGATCTCA GCTCACTGCA ACTCCGCCTC CCAGATTCAA GCAATTCTCC CGCTTCAGCC
-     4981 TCCCGAGTAG CTGGGATTAC AGGCGCCCAC CACCATGCCC AGCTAATTTT CGTACTTTTA
-     5041 GTAGGGATGG GGTTTCACCA TGTTGGCCAA GCTGGTCTCA AATTCCTGAC CTCAGGTGAT
-     5101 CAACCCACCT CCGCCTTCCA AAGTGCTGGG ATTACAGGTG TGAGCCACCA CGCCCAGCCC
-     5161 CTATTAGGTC TTTATCCAAG AAACACTGTG GCTAGAAGTC AGACTCTGGG CCCTCTTCTA
-     5221 ATTAAACTCT GCCCTTGAGT CATTTCATCT AATCTCATGG CTGTAAATTA CACCTGAAGC
-     5281 TCACACAGCA GGCTCCATCC CACCCACTCC CCACGTGGCC CCCAGCTGCT GCTCTCCTCA
-     5341 GCGGCCGCAG CCACCGCACC CCTTCCAGTC TGTTCTCTCT CCAGCAGCTG CAATCACGGG
-     5401 ACTCCTTCCC GTCTGTTCTC TCCAGTGGCT CGTGCCACAC ACAGCACAGA CCCCCAGGGT
-     5461 CTAGGTATGA CCGGCAACAC TCTACGTGGC TGTCCTCTGG ACGCCGCTCT GCTCACTCCC
-     5521 TTCCCCTCTC CAGGGACACA ATCAGCCTCT GGCTTCAGTC TTGCTACTTC CTTCGCTTGG
-     5581 AAAGTTCTTA CCCAAGAGGG CTCCATTCTA CCTTTTTTTT TTTTTTTTTT GAGACAAGGT
-     5641 CTTACTCTGT CACCCAGGCT GGAGTGCAGT TGCGTGATGT TGGCTCATTG TAACCTCGAC
-     5701 CTCCCTGGCT CAAGTGATCC TCCCACCTCA GCCTCCTGAG TAGCTGTGAC TACAGGCACA
-     5761 TGCCACCACA CCTGGCTAAT CTTTTAATTT TTTGTACACA TGGGGTCTGC CTGTGTTGCC
-     5821 CAGGCTGGTC TCTTAACTCC TGGCCTCAAG CAATCCTCCT GCCTTGGCCT CCCAAAATGC
-     5881 TGGGATTACA CGTGTGAGCC ACCATGCCTG GCTTCCATCC CACCTTTTAG ATGGCAGCTG
-     5941 AGATGCCACC TGCCCAGATG CCATTCCCTG ACCACCATCT CACCTGGTCA CCATGTTTTT
-     6001 CTCTTGTCAT TTCCTGCCCC AAAACGCTGT TTTAGGCCAG GTGCGGTGGC TCACGCCTGT
-     6061 AATCCCAGCA CTTTGGGAGA CCAAGGCGGG CAGATCATGA GGTCAGGAGA TCAACACCAG
-     6121 CCTGACCAAC ATGGTGAAAC CCCATCTCTA TTAAAAATAT AAAAATTAGC CAGGTGTGGT
-     6181 GGGTGCCTGT AGTCCCAGCT ACTTGGGAGG CTGAGGCAGG AGAATCGCTT GAACCTGGGA
-     6241 GGCGGAGGTT GCAGTGAGCT GAGATCACAT CACTGCACTC CAGCCTAGTA ACAGAGCGAG
-     6301 ACTCCGTCTC AAAAACAGAC AAAGAAAAAT GCTGTTTGAA TCTCTTGACT GTGCTTACTG
-     6361 GCATCTAATG CGTGTCATTT ATTTGTGGTG ATGCCTATTT CTCCCCACTG TCTGCTCCAC
-     6421 AGGGGCAGGG GCTGCAGCCG CCTTGTTACC TCTGTGTCCC GAGCACCTGG AGCAGGGCGG
-     6481 GCCCCACATC AGGGGCTCAA GGAGCACCTG CTGAATAAAT AAAGGAATGG CGTCCTGGCC
-     6541 CTTCCCAGTG GCCAGCTGAT ACACAGTCAC TTTTCTTGGA CATCAGGCTA ATCCCCACTG
-     6601 CAGGCAGAAC CACTGCTGCC ACCTTCCCAC ACCAACCGAA GCAGCGGCAG TGACGCCACG
-     6661 TGCAATGACA ACCACGGCAC CCCGTGAAGC ACCTGCTGCC TCGATGACTC TGCAGAATCG
-     6721 TGTCCAATGT CGCCGAGTCC TGGCAGCAGC AAATCTTTAT CTCCCAATGT TGTTATGACC
-     6781 CATAAGGTCC ATAGACGAAC AAGGTACCTC AAACGCTAAC TGCGTTGGAG TCAACCAAAG
-     6841 CTCGGAGATA GAATACTGGC CGGGCCAGGC ACAGTGGCTC ATGCCTGTAA TTCCAGCACT
-     6901 TTGGGAGGCT GAGACAAGGG GCAAAAGGAG ACCATGTTTC TACAAAAAAT TTAAAAATTA
-     6961 GCTGGGCATG GTGGTGCATG CCTGTGGTCA CAACTACTTG GGAGACAGAG AGAGGAGGAT
-     7021 CGCTTCAGCC TGGTACGTCA AGGCTGCAGT GAGCTGTGAT TGTGCCACTG CACTCCAGCC
-     7081 TGGGGGACAG AGGGAGAATC TGTCTAAAAA AAAAAAAAAG AAGAATTCTG GGTTTTTTTT
-     7141 GTTTTTTTGA GACGGAGTCT CGCTCTGTCG CCCAGGTTGG AGTGCAGTGG TATGAACTTG
-     7201 GCTCACTGCA AGTTCCGCCT TCTGGGTTCA CGCCATTCTC CTGCCTCAGC CTCCCGAGTA
-     7261 GCTGGGACTA TAGGCGCCCG ACACCACGCC CGGCTAATTT TTTTGTATTT TTAGTAGAGA
-     7321 CGGGCTTTCA CCATGTTAGC CAGGATGGTC TCGATCTCCT GAACTCGTGA TCCGCCCGCC
-     7381 TCAGCTTCCC AAAGTGCTGG GATTAGAGGC TTGAGCCACC ATGCCCGGCC AAGAATACTG
-     7441 CTTAACAGAG GTAACAAAAG AGCAATAATT ATGAGTTCAA GGTCACAGAG AACGCAGACG
-     7501 ACACAGATGC TCAGCTACGA CGCTGCACGT AGCTCTCTGT GTAAAATGAC CCCTGGCAAT
-     7561 CACAAAGGCG TTTACAACCT TGACCAAATC AGGAGCTGGG CTGAGACCTT CCTCGACTGC
-     7621 AAGCTTGAGC AGCTGAGCTG ACAGCCAGGC TTTCTTTACT TACCGACTTC CGGCAGGCTC
-     7681 TGGAGGCAAA CATCTGCTTG ACTCGGGAAG GCCGGCACAT GACCCCAGGG CTGTCGCTCA
-     7741 GCATGAAGAT CAGTTCATCG ACGTCCTGGG GTCCGAAGGT CCAGTTTTTA CTAGTTGGCA
-     7801 AGGAAATCAG TTTAGCCCTT TCAGTGACTG GAGCTAAAAG AATACAATTT TGAGAAAAAT
-     7861 CCATGACTTG ACAAACACGT TTCACTTGAA AGCTACTTAG GATGAACATC TGAGGCCGGG
-     7921 CGTGGTGGCT CACGCCTGTA ATCCCTGCAC TTTGGGAGGC TGAGGCCAGC GGATCATGAG
-     7981 GTCAGGAGAT ACAGACCATC CTGGCTAACA TGGTGAAACC CCGTCTCTAC TAAAAAATAG
-     8041 AAAAAATTAG CTGGGTGTGG TGGCAGGCAC CTGTAGTCCC AGCTACTCGG GAGGCTGAGG
-     8101 CAGGAGAATG GTGTGAACCT GGGAGGCGGA GCTTGCAGTG AGCCGAGATC GGCACCACTG
-     8161 CGCTCCAGCC TGGGCGACAG AGCAAGACTC CATCTCAGAA AAAAAAAAAG TGAACACCTG
-     8221 AAAGAGAGGA AACTCACAAA ATGCTTTTTG GAGGAACTTT TTAATCTTTT ATAAAATTAA
-     8281 AAAAAACTGG TCTATATGAC CTGAAAGATT ATTCCCAGCT CTAAAAAGAC AAGAATCTAT
-     8341 AGTTCTGATT TTTTTTTTTT TTTGAGACAG AGTTTCACTC TTGTTGCCCA GGCTGGAGTG
-     8401 CAGTGACGTG ATCTCGGCTC ACTGCAACCT CCACCTCCCG GGTTCAAGCG ATTCTCCCAC
-     8461 CTCAGCCTCC TGAGTAGCTG GGATTACAGG CACCCGCCAC CACGCCCGGC TACTTTTTGT
-     8521 ATTTTCAGTA GAGATGGGGT TTCACCATGT TAGCCAGGCT GGTCTCAAAC TCCTGACCTC
-     8581 AGGCGATCTG CCCGCCTTGG CCTCCCAGAG TGCTGGGATT ACAGACGTGA GCCACCACAC
-     8641 CCAGCCGCTA TAGTTCTAAT TAATAACTTA CCATTTTCAT CGATAACAAA ATCAAAGCCA
-     8701 TTCTTTCTAA ATATTTCCAG ATTTTCTATC AGAACAGCTT CATTAACAGC AGTTAAGTTG
-     8761 AGAGTCTGAG GTCTGAAAAA CACAAAAATG ATTCAAACCA TATCCTGAAG TCAAACATTT
-     8821 AGCTTTACAG CAGAAATGAA ATGAAAACAA CAATACTGTA TTTTGAATTC ATGTCAAAAT
-     8881 AACAACACAA ATAACAACAC TACTCAGCTA AGTGTCACAA AACTTCCTGA GAAGTTCCTT
-     8941 TTAATTTTCT CTTTCTTAAA GTTCTTTTTA GAAGTTAAAG TAGCTACAGG CCAGGTGCGG
-     9001 TGGCTCACGC CTGTAATCTC AGCACTTTAG GAGCCCGAGG CAGGCAGATC TCTTGAGGCC
-     9061 AGGAGTTTGA GACCGGCCTG GTCAACACAG CGAAACACTC TCTCTACTAA AAATATAAAA
-     9121 ATTAGGCCAG GCATGGTGGC GCACGCCTGT AGTCCCAGCT ACTTGGGAGG CTTAGGCATG
-     9181 AGATTCGTTT GAACCCAGGA GGGAGGCAGA GGTTGTAGTG AGAGCCAAGA TCACGCCACT
-     9241 GTACTCCAGC CTGGGCGACA CAACAAGACT CTGTCTCAAA AAAAAAAAAA AAAAAAAAAC
-     9301 ACCCATAAAA ACAAAAATTA GCTGGAAGTG GTGGCTCATG CCTGTAATCC CAGCTACTCG
-     9361 GGAGGCTGAG GCACTAGAAT TGCTTGAACC CAGGAGGTGG AGGTTGCAGT GAGCCAAGAT
-     9421 CACACCACTG CACTCCAGCC TGGGCAACAG GGCAAGACTC TGTCTCAAAA AAAAAAAAAA
-     9481 AGTTCAAGTA GCTACAAAAG TAGTTTGCTT TTTCCTCAGC CTGCCACGCC AATGACTCCC
-     9541 ACTTTTTCTG AATCCTTTCC TTAAGGATAA CAGTATCACA AAAATGCTAT TTTTCCTCCT
-     9601 TCTAATACAG AATTTGAAAC ACTGGGTTAG GTCATTGCCA GCATTTGTAA ACAGAATGAA
-     9661 CAGACAGCTT TTATTTTGCT ATCCTGTTCC TTCCTCTGCC TGTATTATAT CTCCATCCCT
-     9721 CTCTCCTCCT GGATTTACTG TTTGTTTTTT TTTAACCTTT CGTTATTTTT TTCAAAGATA
-     9781 GAGACAGGGT CTCACTATGT TGCCCAGGCT GCTCTCAAAC TCCTGGGCTC AAGCGATCCT
-     9841 TCCACTTCAG CCTCCCAAAG TGCTGGGATT ACGAGTGTGA GCCACTGCAT CTGGTCCTGA
-     9901 GTGCTGGATA AGACAAACAC TGCTCAAGGC AGGAGACAGC TGGTGAGCAA ACACAGGCTT
-     9961 GGTCCTGGAG CCAACAGATT ACCGGGGAAG AAAGACGTTG AGCAAATACT CAGGCAAGTC
-    10021 GATTATGATG AGAAACGACA GGAAGGTCAG GAAGAAAAAG CAGCCAGTGT CATAGAGAGA
-    10081 CTTCACCCTG GGGTCAGGAA GTGACCTTTG AGCTGAGTCC GGGGATAAGA GAGTTAATCA
-    10141 GGTAACGGGG GAGAAGTGGG TGCAGGGTGC AGGACAAGTA TTCTAGACAG GGACAACAAT
-    10201 CTGTGCCAAG CCCCAGGATG GACCGCTGAT GTTTGCAGAG CCACACATAA AGATATCCTT
-    10261 CATTCTGCTT AGTGGCCACA TAGGGATTCA TCAGGCCTGC CAAGGGAAAA AGAAAGACAG
-    10321 CCAGAGAGGC TTGAGTACAG GGAACAAGGG GAAGACGAAC GGGAAAAGCT ACAGAGGTCA
-    10381 ACAGGGCCAC CCTACACAGG GGCTGGCAGG GCAGGGTGGA ACTGGGTCTT TATCCTTTAA
-    10441 TCTTGAAGTG TGGTCCATCT GGGACCCTAA GTGGTCTGTG ATTACCTGGG CCAACTTGAA
-    10501 ATGTCACAGA TGAGAGGTTA TCTTTGCCGA ATGGCTAAAA AATACAAGAC CTCAGCCGGG
-    10561 CATGGTGGCT CACACCTGTA ATCCCAGCAC TTTGGGAGGC TGAGGTTGGT GGATCACCTG
-    10621 AGGTCAGGAG TTCAAGACCA GCCTGACAAA CATGGCAAAA CTCCCTATCT ATTAAAAATC
-    10681 CAAAAATTAG CCAGGTGTGG TGGCGGGTGC CTGTAATCCC AGCTACTCGG GAGGCTGAGG
-    10741 CAGGAGAATC ACTTGAACCC GAGAGGCAGA GGTTGCAGTA AGCCGAGATC ACATCACTGC
-    10801 ACTCCAGTAT GGGCGAAAGA GTGAAACTCT GTCTCAAAAA CACAAAAACA AAAAACCTCT
-    10861 ATTAAGAGGA ACAGGGAAGG GATATAAAGT AGCTTACTAA ATGTCTATTA TTACCATTGC
-    10921 CTCCTACTGA GAATAAAAAC AATTCACGCA TTCCACAGGA GAGTACTCAG CAAACTACAC
-    10981 AGGAGAGTAC TCAGCAAACT ACACAGGAGA GTACTCAGTA AACTACACAG GAGAGTACTC
-    11041 AGCAAACTAC ACAGGTTCAG TGGTACATTT CTCCATGTGG GATCTACTTG TTGGGATCTG
-    11101 AGTTTACTTC ACTACGTGGT TTAATTTCCC ACACGAAAAT CCATGACCTC TTCTTCTAAC
-    11161 TTTGCTGAAG ACAAGACTTT GGTTTTACAT GATACTATCA CACCTGACCT TTGTGAAGTA
-    11221 GTCAGGGTAA AACATTCCAG TTTGGCCGAG GAGAGAGAAA TACCAAATTC TGCAGTGACT
-    11281 ATCTTAAAAT AATTTTTAAA TTTTATTTTA TTTTATTTAT TAATTTATTT GTGAGACAGA
-    11341 GTCTCACTGT CTCACTCTGT CACCCAGGCT GGAGAGCTGT GCAGTGGCAC GATCATGGCA
-    11401 GCCTCAATCT CCTGGGCTCA AACGATCCTC CCACCTCAGC CTCCCGAATA GCTGGGACCA
-    11461 CAGGCACACA CCATCAAGTC TGACTAATTT TTTACATTTG TTGTAGAGAC AAGGTTTCAC
-    11521 CATGATGCCC AGGCTGGTCT CAAACTCCTA AGCTCGAGGG ATCTGCCTGC CTCAGCCTCC
-    11581 CAAAGCTCTG GGATTACAGG CGTGTGCCCC TGCATCCAAC CTGCAGTGAC TATCTGACTT
-    11641 CTGATTACTC TACTGTCAAT CAACACTGGC GCACAGGCTG TCTGTCTTTC TGAACACACA
-    11701 CATTCCATAC ACTATGCATA CTAATACTCC ATACTATCAA TTGCCCTCAT CAGAAGGATC
-    11761 TTCTGGCTAA CCAGTGATCA ACATTTTTAA TAGCGAAAAA TACCTGATAC TTAGAGAACA
-    11821 TGTTAACCAC GTGAACTGGG GCAGGTTACT CAACCTCTCT GCATGTGCCT CAGTTTTATC
-    11881 GCTTGTGGAA TGGTGATGGT AACAGTAACA ACCCCATAGG TTTTTGAGGA TTAAAGGAAC
-    11941 TAATACACAT ACATTATTTC AACAGTGCCT GGCAGATTCT AGGCACTGAA TAAATGGTAA
-    12001 CTATCACTAT TATGTAAAAA GTATAAAAAT CTGCTATATG AATACTTATG GAAAAATACA
-    12061 TATATACATA TAGACACACA TATAAACTAT TAGGTCTCTT TTTTTTTTTG AGATAGAATC
-    12121 TCGCTCTGTC ACCCAGGCTG GAGTGCAGTG GTGCGATCTC GGCTCACTGC AACCTCTGTC
-    12181 TCCCAGGTTC AAGCGATTCT CCTACCTCAG TCTCCTGAGT AGCTGGAATT ACAGGCGTGC
-    12241 ACTGCCATGC CCAGCTAATT TTTTGTATTT TTATTTTTTA TCATTATTAT TATTTTTTGA
-    12301 GACGGAGTTT CACTCTTGTT GCCCAGGCTG GAGTGCGATG GCACGAACTC GGCTCGCTGC
-    12361 AAACTCCGCC TCCCGGGTTC AAGCGATTCT CCTGCCTCAG CCTCCCAAGT AGCTGGGACT
-    12421 ACAGGCGCCC GCCACCACGC CTGGCTAATT TTGTATTTTT AGTAGAGACA GGTCTCACCA
-    12481 TGTTGGTCAG GCTGGTCTCG AACTCCCGAC CTGAAGTGAT CTGCCCACCT CGGCCTCCCA
-    12541 AAGTGCCGGG ATTATAGGCG TGAGCCACCG TGCCTGGCCT TTTTGTATTT TTAGTAGAGG
-    12601 CGGGGTTTCA CCACGTTGGC CAGGCTGGTC TCCAACTCCT GACCTCAGGT GATCTGCCTG
-    12661 CCTCGGCCTC CCAAAGTGCT GGGATTACAG GTGTGAGGCA CCGCGCCTGG CCAACTAGAT
-    12721 ATTTTTTATT TTTTACACCC CTCCTTCCTA GATCTCTTCT TTTTTAAAGT AGATACAAGG
-    12781 TCTTGCTGTG TTGTCCGGGC TGGTCTCAAA CTCCTGGCCT CTTGTGATCC TCCTGCCTTG
-    12841 GCCTCTATTA GATCTTCAAT TTGAGGGGGA GTCTGGGAAT GAACACTAAA CACACTCACG
-    12901 CTATGAGCCT CTGCCCCTGG AGCACGGTGT GCTGCTGCAG CATCTCGAAG TTATACTTCT
-    12961 CGTCCGTGGC ATGCTGGTCC ACTATGAAGA TATCCTCATT CAGTTTGGTT ATTATAAATC
-    13021 CCAGGTTAAA CTGACCAATG ATTTCCATTT CTGCAAACAT CGTTTTACTG CAGGTAGAAA
-    13081 ATGTTAATTA TCAGACATTT TACAAGATTA TTTTTCTGAT TATGTTATAG AACACTGTAA
-    13141 TAAAAAAAAA GTCAAACAAT ACAAAAACAA AATAAAGTCC CTAGCCATCC CGCTTTCTTT
-    13201 TTTTTTGAAA CAGAGTCTCG TTCTGTCACC CAGGCTACAG TGCAATGGCA CAATCTTGGC
-    13261 TCACTGCAAC CTCCACCTCC CGGGTTCGAG TGATTCTTCT GCCTCAGCCT CCTGAGTAGC
-    13321 TGGGATTACA GGTGCGCCAC CATGCCCAGC TAATTTTTGT ATTTTTAGTA GAGACAGAGT
-    13381 TCCACCATGT TGGTCAGGCT GGTCTCGAAC TCCTGACCTC ATGATCTGCC CGCCTTGGCC
-    13441 TCCCAAAGTG CTGGGATTAC AGGCGTGAGC CACTGCGTTC GGCTTAACCA TCCCACTTTC
-    13501 TAAAGATAAC ATTAATTATT CATTCATCCA ACTCTCCGGA GAAGACATCA GTTGCTACTA
-    13561 TTAACGATTT AAATGGAATA TATCCTTCTA GACCCTTGTC TCCATATATA ATTTTTTTTA
-    13621 ATTTTAAAAA ACAAAAATGG AATCTTAATT CTCCATTCTG TCATCACTTA ATGCATCTGA
-    13681 AACAAGTTTT CAGACCTGTA CACATAGATC TACTTCATTA TTTTTTCTTT TTTTTTTTCT
-    13741 TTTAAGACGG AGTCTCACTC TCTGTTGCCC AGGCTGGACT GCAGTGGCGT GACCGTGGCT
-    13801 CACTGCAACC TGCGCCTCCC AGGTTCGAGC GATTCTCCTG CCTCAGCCTC CCGAGTAGCT
-    13861 GGGACTACAG GCATGCACCG CCAAGCCCGG CTAATTTTTT TATTTTTAGT AGAGACAAGG
-    13921 TTTCACCATG TTGGCTAGGC TGGTCTTGAA CTCCCGACCT CAAGTGATCC ACCTGCCTCG
-    13981 GCCTCCCAAA GTGCTGGGAT TACAGGCGTG AGCCACCGCA CCTGGCCTAC TTCATTCTTT
-    14041 TTAATGGCCA CATAGGAATT CATTGCATGG ATGTACCATA ATTTGTCTGA CAAATCCCCT
-    14101 ACTAAAGGAC ATTTCAGTTG TTTCCAATTT CAATAGCGCA CTCAAAGCTG CAACAAATAC
-    14161 TTCTGTGCAT AAACCTACTC ATCTGTGGGT GCATTTCCGT GAGACAGACG CTAGAGGGAG
-    14221 AACTACATAT GTACTTCTTG ACGGGAAATC TGTGAAAAGT CACACTCCCA CCAATGGTGT
-    14281 GTAAGAGCAC CTTTCTGCCA ATGCTGGATA TCAATCCTTC TCATCTTTGC CAGGCCCACC
-    14341 ACTGGGTCCT TTGCGGGTGG CTTCAACATC TAATGTCATT AAATACTAAC TTAGTCAATC
-    14401 TGGACAAAAG ACAGACACCA CCGCTAACCT TCACACGAGA AATTGACACT GTCATTCTCA
-    14461 GTCCCACACA ATTAAATCCG GTGAAAATGG ATTTTCCGCA GTATCAGCGC GGTGATGACA
-    14521 AGAAATGGCT CTGTTAAAGC AGCCATGGAC GTTTTCTGGT TCTCACCTGG TGGCCTGAGC
-    14581 TGAGGATGAA AGCAGCTGTA ATGTAATCCC AGCACTTTGG GAAGACAAGG TGGGCAGATC
-    14641 ATTTGAGGTT GGGAGTTCAA GACCAGCCTG GCCAACATGG TGAAACCCCA TCTCTACTAA
-    14701 AAATAAAAAA ATTAGCCAGG CATGGTGGTG GACACCTGTA CTCCCAGCTA CTTGGGAAAC
-    14761 GAAGGCAGAA GAATCGTTTG AACCCGGGAG GCAGAGCTTG CAGTGAGCTG AGATCGTGCC
-    14821 AGTGCACTCC AGCCTGGGCG AAAGAGTGAG ACTCTTGTCT CAAAAAAAAA ACAAAGGAGC
-    14881 TGATATTGTT GTTTCTTTCT ATAAGTGCTC CAGGAAGACC CGGTCCCATG CCACCATGCT
-    14941 CGTCACCATC ACAATCAACC ACAGGGGACA GTTTGGTGAA CTGTGAGACC TCCACATGGC
-    15001 ATGGATTACT GAGCCCACAT TTCCTATGGT GAGGGGCTCC ACACAGAGCT CAAATCCAAG
-    15061 TCATAACCAA ACCAGTCCCC AAATCCTATC TTTGAGGGTC TGTTTCCTGG TACCAATTCC
-    15121 AGATCAGGCA GAGTGCAATC AATCAAGAGA CAAAAACCAC ACCAGTGATT TTAACAGGGA
-    15181 CTTTTTTTTT TAAGACAGGG TCTTGCTCTG TCACCCAGGC TGGAGTGCAA TGGCATGATC
-    15241 ATAGCTCACT GCAGCCTCAA ACTCCTGGGC TCAAGTGAGC CTCCTGCCTC AGCCCCCTGA
-    15301 GTACCTGGGA CTACAGGCGT ACAGCAATGT ACTTAGCTAA TTTTTTTTTT TTTTTTTTTT
-    15361 TTTTAGAGAT GGGGCCTCAT TATATTGCCC AGGCTGGTCT CAAACTCCTA GCCTCAAGTG
-    15421 ATTCTCCTGC CTCAGCCTCC CAAAGTGCTG GAATTACAAG GTGTGCACCA CCATGTTAGG
-    15481 CCTGAGGAGG AAAAATGTAT AATAAGGCAT TACACAAACT AGTAAAAGGT GGTTAACTAC
-    15541 TATGCTAAGA AATACAGGAA TGGAAAATGC TACTATCCTA GGGAAGAGGG AGAGTCCTCA
-    15601 GAAAAGGAAC TCTTTTTTTC TTTTTTCTTT TTCTTTTTTT TTTTTTTGAG ATGGAGTTCG
-    15661 CTCTTGTTGC CCAGGCTGGA GTGCAATGGT GCAATCTCGG CTCACCACAA CCTCCACCTC
-    15721 CCGGGTTCAA GCAATTCTCC TGCCTCAGCC TCCCAAGTAG CTGGGATTAC AGGCATGCAC
-    15781 CACCATATCC CACTAATTTT GCATTTTTAG TAGAGAAAAG GTTTCTCCAT GTTGGTCAGC
-    15841 CTGGTCTCGA ACTCCCAACC TCAGGTGATC CACCCACCTC AGCCTCCCAA AGTGCTGGGA
-    15901 TTACAGGCAT GAGCCACCAT GCCCAGCAGA AAAGGAACTC TTGTAAGAGG CTCCTACCCA
-    15961 CTCAGGCTGA GTTTCAGACC TCCTTGGAGC AGGAGTGGCC GCAGCCTGCT GGATGGAGAG
-    16021 AAGCTGCCAG AGTGAGTGAT GACACAGGAA CTCCTGCCGC ACAGGAGGGA AGGAAAAGAA
-    16081 CATCCCAGAA GCATCCCAGA TGCCAGCACA AATACCACCT CCCCTGGCGC CGATCCCAGG
-    16141 CTCTCCCAGG AATTGTCTGA ATATGCCCTG GTTCCCAGTA CATAGATAAT CTGCTCAAAA
-    16201 GCTGGTGCTG GCCTAAAAGA CCCAAGTCTT CCATGTGTTT GGAGTCTGTG TCCTGCCACA
-    16261 GAGAACAGGA TCTGGCCAGG CGCAGATGCC GGAATTACAA CTGCGCACTA CCGCGCCCAG
-    16321 CCAATTTTAT TGTAGAGACG AGGTCTCCCT ATGTTGTCCA GGCTGGTCTT GAACTCCTGG
-    16381 GCTCAAGTGA TCCTCCCTCC TTGGCTTGGC CTCCCAAAGT ACTGGGATTA CAGGTGTGAG
-    16441 CCACCACACC TAGCCTCAAA ATACTCTTAA GAAAAAACTT TACCTGGCCG GGTGTGGTGG
-    16501 CTCACACCTG TAATCCCAGC ACTTTGGGAG GCCAAGGTGG CTGGATCACC TGAAGTCAGG
-    16561 AGTTCGAGAC CAGCCCAGCC AACATGGTGA AACCCTGTTT CCACCAAAAA TATAAAAATT
-    16621 AGCCAGGCAT GGTGGCGTGC ACCTGTAATC CCAGCTACTC AGGAGGCTGA GGCAGGAGAA
-    16681 ACGCTTGAAC CCGGGAGGTG GAGGCTGCAG TGAGCCAAGA TCATGCCACT GCATTCCAGC
-    16741 CTGCGCAACA GAGCAAGACT CTGTCTCAAA AAAATAAAAA ATAAAAATAA AAATTTTAGA
-    16801 TAAAAAGAGA AAAAGTAAAA AATTAAAACT TTACCTTATC TCTTTTCTTA GTTCATCTTC
-    16861 GGCTGCTTGA TTTTCTCCAG GACAAATCTT TGCCCTAAAC TTCCTGTAAT TCTGTTCCCC
-    16921 TTCACTTTGC TGTGCTTCAT GATGTAACTG CTTTATTCGT TTAGCTAAAG AACTCATAGA
-    16981 AAAGTCCAGG GGCACAACTT TCTTATTAAT TTTCACAGCT ACATCAACCT GAGAGGCTGA
-    17041 CATGTCCTGA GTATTTACTA ACTTTTGACA AATGTCAGAA CTGGAAAGAA TTTCTTCTTT
-    17101 TTTAAAACGC TTTGTGTTTG GGGTTGCGAG ATTAGTTGGC TGAGGCAAAA CTCGAAATTT
-    17161 ACATCCGGTA TCTTCCTGGT TTGAATGGCA GTCCACATCT GAAAAAGAGT CGTCAGTTTT
-    17221 AGGCGCTTTC TCCTGAGAGT CCACATGTTC CTGCGAGCCC CTGTCCCCTG GGGAGCTGGC
-    17281 CGCATACTCG CTGCTGCAGT GACTGCCCGT GTCTGGGATG CTGAACCCCT CAGAATCCAC
-    17341 GGAAGTGCTG CCGTGCCCCG AGTCCTTCTC CACCTCCGCT CTGTCCGTAG GGTCACTGGG
-    17401 TCCGTGACTG GAACTCACTG CCTCTTTCTG AGGTCTCAGG ACGCCTTTGT CAGAGATGGC
-    17461 ACCTGAAGTG CTAGAAGACA GCATACCCCT TTTCTGTCCT AGAGGGCTCC TTCTTGGTTC
-    17521 TGGAGTCTTT GGGCTGTGAG GCTTGTTCTC TGTTGTGTGA CGAAGAGAAA AGGCCTCTCG
-    17581 CAGTCTGGAA ATGGACACGT CTTTTTTTTC TTCTCCAGTC CTTAATGAAG GGGATTGATC
-    17641 CTGCTTTTCT ACCATGGGCT TTTCCAAATC CGCTGCATGC ATTTTTATTA AGTTACCTAA
-    17701 GCAAACGTGG ACGGAGAAGA GGGTCAGGGA CTATCCTGAA ATGGTGAGAG GACGTGCTTA
-    17761 TGTGAACAGA TACTTCACAA AAGAGGAGAT CCACATGCTA ATTACACAGA TGAACACAGT
-    17821 TCAATGTTCA AAATAAAACT ATAATATGGG CCAGGTGTGG TGGCTTACGC CTGTTATCCC
-    17881 AGCACTTTAG GAGGCCAAGG CAGGGGGATC ACATGAGGCT AGGAGTTCAG GACTGGTCTG
-    17941 GACAACATGG TAAAACCCTG TTTCTACTAA AAATACAAAA ATTAGCCGGG TGTGGTGGCA
-    18001 TATCTGTCAT CCCAGCTACT TGGGAGGCTG AGGCACGAGA ATCCCTTTAG CCCGGGAGGC
-    18061 AGAGGTTGCA GTGAGCCAAG ATGCCACCAC TGCTCTCCAG CCTGGGTGAC AGAGCAACAC
-    18121 TCTGTCTCAA AAAAAAAAAA AAAAAAAAAA AAAACCACAA CACAATGCAA TATGGCCATA
-    18181 TACTCACCAG AATGGTAAAA TTAAAAAAAC AACAAATGCT CACAAAGATC AGGATCAAGA
-    18241 GGAATGCCTG AATACCTCTG GTAGGAATGA ACCTGGTACA GCTGCTTTGA AAAGTTCTCT
-    18301 GGGAATACCT CCTAAATCTG AATGTATGCA CACCTGCAAC CCAGCATAGC TACTCCTATC
-    18361 AGAAGTGCCT ATTGGCCGGC ACAGTGGCTC ACGCCTGTAA TCCTAGCCCT TTGAGGTCAG
-    18421 GAGTTCAAGA CCAGCCTGAC CAACATGGTG AAACCTCATC TCTACTAAAA ATACAAAAAA
-    18481 AAAATTAGCA GGGCATAGTG GAATGCACTT ATAATCCCAG CTACTAGGGA GAATGAGAAT
-    18541 GAGGCAGGAG AATCACTTGA ACCTGGAAGG CAGGGTTGCA GCGAGCCAAG ATCACTCCAC
-    18601 TGCACTCCAG CCTGGGCGAC AGAGTGAGAC TCCCTCTCAA AAAAAAGAAA GAAGTGCCTA
-    18661 TCTATGCTCG TCAAAAAGAC GTGGATGAGG ATGTTCATGA CAGCATTCTT CATTATAGCC
-    18721 CCAAACTGGA AACAATTCAA ATATTCACAA ATGATGATAT CTGACTATAA TGGAACACTG
-    18781 TATAGCGAAC GAATAAATGA ATTTTGCCAC ATGACTTGGG TGAATCTCAC AAACAAAATA
-    18841 ATGAGAGAAA GAAACAAATC ACAGAAAAGG ACAGACTGAA TAACTTCAAA TTAAAAACAG
-    18901 ATTAAACTAT ACCGTTTTGG GTTTTTTTTG TTTGTTTGTC TGTTTTTTTG AGACGGAGTC
-    18961 TCGCTTTGTC ACCCAGGCTG GAGTGCAGTG GCACAATCTT GGCTCACTGC AAGCCCCTCC
-    19021 TCCCGGGTTC ACGCCATTCT CCTGAGTCAG CCTCCTGAGT AGCTGGGACT ACAGGCGCCC
-    19081 GCCACCACGC CCGGCTAATT TTTTGTATTT TTAGTAGAGA CAGAGTTTCA CCGTGTTAGA
-    19141 TAGTCTCGAT CTCCTGACCT CGTGAGCCGC CCGCCTTGGC CTCCCAAAGT ACTGGGATTA
-    19201 CAAGCATGAG CCGCTGCGCC TGGCCTAAAT TCTACTGTTA GAAGTCAGGA AATCCCAGCA
-    19261 TTTTCAGAGG CCAAGGCTAG AGGACTGCTT GAGCTCAAGA GTTTGAGACC AGCCTGGGCA
-    19321 TCATGGAGAA ACCCCATCTC TAATGACAAT ACAAACATTA GCCAGGTGTG GTGGTGGGCG
-    19381 CCTGTAATCC CAGCTACTCA GGAGGCTGAG GCAGGAGAAT CTCTTGAACG TGGGAGGCTT
-    19441 CAAGGTTGCA GTGAGCTGAG ATCGCATCAT TGCACTCCAG CCTGGGTGAC AAGAGCGAAA
-    19501 CTCCATCTCA AAAAAACAGA CATGACAAGG GAGTTAAAAA TGCAGTCACT GCAGACTTCT
-    19561 TCTAATCATA TATCTTATAT GACTTCATCC GTTTACAGTT TACAAAAAAC TAGAGGTACT
-    19621 TGGAGGCAGC TACTTGGGAG GCTGAGGCAG GAAGATGGCC TGAGCCCAGG AGTGTGATGC
-    19681 TGCAGTGAGC TACAATGGCA CCACTGCAGT CCAGCCTGGG TGACAGAGCA AGTCCCTGTC
-    19741 TCAAAAAAGA ATTAAAAATG ATAAAATAAT ATAAGAGACT TTGTTTTCAT GTCAAAAAAA
-    19801 AGTTTACTTG GAAAAAATAA GGAAACACAT TAGCTAAAAG CTTTAGAAGC TGTTTGTACA
-    19861 CTGTATTTTT CTTACCTTCA ACATCCAGCA GTGGCTGCTG ACTGACATTT AGCTTGTTGA
-    19921 CATCACTATC AAACATTCCT ATCAAAGAGG TCTTTAAAAC TGCCAACAAA AGCTTTTCCT
-    19981 CTTGTAGCAA AATTTGCCTT TTATCTGGAG TAACATTGAT ATCAACGCAT TCTAAGGCAA
-    20041 AAAAGAAAAC ATATTTATTA TGTTTAAATT CACTTTTATT TTATTTATTA ATTATTATTT
-    20101 TCAGACAGCG TCTCACTCTG TCGCCTAGGC TGGAGTGCAG TGGCGCGATC TCAGCTCACT
-    20161 GCAACCTCCG CCTCCTGGGT TCAAGTGATT CTCCCTGCCT CAGCCTCCGA AGTAGCTAGG
-    20221 ATTACAGGCA AGTGCCACCA CACTGGCTAA TTTTTGTATT TTTAGTAGAG ATGGGGTTTC
-    20281 ACCGTGTTGG CCAGGCTGGT CTCGAACTCA CAACCTCAAG TGATCCACCC GCCTTGGCCT
-    20341 CCCAAAGTTC TGGGATTACA GGCGTGAGCC ACCGCGCCCA GCCAAATTCA CTTTTAACAA
-    20401 TAGAAATTTC CCCATCTATT ATTTCATTCA CTTGTATTTA TCACAAGTGC TATTAAAAAC
-    20461 ATTACAGTGT CCAGGTTAAG ATTCATAAGT TATGAAATCA GCTTTTTCAA ATAAATGAGC
-    20521 AAAAGACAAT TTTTGAATAG ACAAAATACG GAAGGGCTTA ATTAGGTAAA TTGTTAAAGG
-    20581 AAAAGCAAAT AAACACATAA AAATAATTTT AAATATGCAA ACTAAAATAA GATATTTTAA
-    20641 TCCCCTACTG AATTTAGCTT AACAATTATA ATACCTAGTA CATTATAGGT AGGTGTGTAA
-    20701 ATTGGTACAT CTAGAACACA ATACAGAAAA AGCCTTAAAA TGATCATATT CACTGACCCA
-    20761 GTAATTCTAC TCCCGGCAAT TTATATTCAG AATAATTAAA GATGTAGGCT GAGTGCAGTG
-    20821 GCTCACACCC TGTAATCCCA GCACTTTGGG AGGCTGAGAC GAACAGATAA GTTAAGGTCA
-    20881 GGAGTTCAAG ACCAGCCTGG CCAACATGGC GAAACCCCGT CTCTACTAAA AACACAAAAA
-    20941 ATTAGTCAGG CATGGTGGCA GGTGCCTGTA ATCCGTGCTA CTCAGGAGGC TGAGGCGGGA
-    21001 GAATCGCTTG AACTCAGGAA TCGGAGGTTA CAGTGAGCTG ATATTACACC ACTGCACTCC
-    21061 AGCTTGGGAG ACAGAGCAAG ACTCTGTCTC AAAAAATATC TAATAATAAA GATGCAGATA
-    21121 ATGATTTAAT TATAAGGAAA GTATTTATAA TTTCCAAAAA CTAAAAACAA TTTAATTTTG
-    21181 AAAAATTTAA AAATTAAAAT ACCAAACTAT AACCATGCAT TGGAATATAA TTCACCTATT
-    21241 AAAACCACAT TTCTGATCAA TTTCTAATAA CATGGAAAAG AAAACATTCA CATCTAAGGA
-    21301 TAAAGAGCAG TATACAAAAT TATTTTCTCA TCCCAAAGAA TATGGGAGTA GGGGAGAGAG
-    21361 AGAGAAAGAG AGAGAGGACA GAAGATATTT TTTAAGGTAT GTACATATGT GTTTCTAAGT
-    21421 ATCTAGAAAA AATACTCAAT TACAATAAAC CAAAATTTTA ACAATCAGAA AAAAAAATCT
-    21481 ATATGAAATG AATTATTTAT GAAATTAGGA AGAACATTTC ATCTACTTTC TCCCTTGGTT
-    21541 GACATTAAAA AAAATTACAT TTTCCTAACA ATATAATTAA CATAGTCTCA AGTAGAAAGC
-    21601 GGGAACTCTG TTTAAAAAAA AAAAAAATTA TAGGGCCAGG CACGGTGGCT CATGCCTGTA
-    21661 ATCCCAGCAC TTTGGGAGGC CAAGACGGGC AGATCACGAG GTCAGGAGAT CGAGACCATC
-    21721 CTGGCTAACA CGGTGAAACC CTGTCTCTAC TAAAAATACA AAAAATTAGC CAGGTGTGGT
-    21781 GGCACGCACC TGTAGTCCCA GCTACTTGGG AGGCTGAGTC AGGAGAATCG CTTGAACCCG
-    21841 GGAGGCAGAG GTTGCAGTGA GCCGAGATCA CGCCACCACA CTCCAGCCTG GGTGACAGAG
-    21901 CAAGACCCCG TCTCAAAAAA AAACAAAAAC AAAAAACTTA CATGACCATA AATTGTTATC
-    21961 TCATTCCAGT CATAGCAGAG CTGTAGAATT TCATTTTATT CTTTGAGGCA TTAGTCACTA
-    22021 GTTGTACTGA AATGCCAATG GAACTTACCT GAATCAACAG AAATGTTAAG AACAACAAAT
-    22081 GGATACTGGT GTCGATTATA CATGTGGTAG ACCTCATTCA CGAGTCTGCA GACCTGCACA
-    22141 AAATACAAGG AGTAGAAAAG AATAAATGAC AAATGTTCCC AGCCCCCCGC ATTCTAACAA
-    22201 CATTCTATTC TAACCAACCA GCATGTTCTT AGAAGGGGAT ACTTTTTTGT TTTTTTTTTT
-    22261 TTTGAGTCAA GGTCTCGCCT TGTCACAGCC TGGAGTGCAG TGGAGCAATC ATGGCTCACT
-    22321 GCAGCCTCAA CCTCCCAGGC TCAAGTGATC CTCCTGTGTC AGCCTGACAT GTAACTTGGA
-    22381 TTACAGGCAG GATTTTTTTT TCTTTTTTTT TTTCAACGGA GTCTCGCTCT TGTTACCCAG
-    22441 ACTGGAGTGT AATGGCACGA TCTTGGCTCA CTGCAACCTC TGCCTCCGGG GCTCAAGTGA
-    22501 TTATCCTGAC TCAGCCTCCA GAGTAGCTGG GATTACAGGC ACACGCCACC ATGACCAGAT
-    22561 AATTTTTGTG TTTTTAGTAG AGATGGGGTT TCACCATGTT GGCCAGGCTG GTCTCGAACT
-    22621 CCTGACCTCA GTTGATCCGC CCGCCTCAAC CTCCCAAAGT GCTGGGATTA TAGGCGTAAG
-    22681 CCACTACACC TGGCCTAAGG ATACATTTTT TTAACAGCTT TACTGAGATA TGACTAACAT
-    22741 GGAATAAACT ACACATATTT AAAGTGTGCA ATTTCATAAG TTTTGACATA TACACAAACA
-    22801 CCTGTGAAAC TATCCCCACA ATCAAGATAA TGAATATATC CATCACCAAA AGTTTCCTCA
-    22861 CAATCTCAAA GTGATATTTC TCTAATCATA GATTCCTAAA ACTGAATATT TTTCCAACTT
-    22921 AAAGTTGCTC TATGAGAAAT TCTAGTGAAA TGCAAGTGCA GCTTAAATGT TCATAAAACA
-    22981 TATTCAATGT ACATAGAAAA GTATCTATGA CATTAAAATG TCATTAGAAA TAAACCAAAA
-    23041 TATCACATTA TTAATAGTTA TAATTAATAA TTATGAATCC ATCACACTAT AGGTTAAAAA
-    23101 ATTTAGAAGT TCAACCACAT CTGGCAGATT ACAAGCAAAC TCTAAAGCAT CATTGAAAAA
-    23161 CAGGGGCTGG GAGCGGTGGC TCACGCCTGT AATCCCAGCA CTTTGGGAGG TCAAGGCAGG
-    23221 TGGATTGCCT GAGCTCAGGA GTTCTTGACT AGCCTGGGCA ACACAGTGAA ACCCCATCTC
-    23281 TACTCAAATA CAAAAAATTA GCCAGGCATG GCAGCATGTG CCTATAATCC CAGCTACTTG
-    23341 AGAGGCTGAG GCAGGAGAAT TGCTTGAACC TGGGAGGGAG AGCTTGCAGT GAGCCAAGAT
-    23401 CACGTCACTG CACTCTAGCC TGGGCGACAG AGCTAGACTC CGTCTCAAAA AAAAAAAAAA
-    23461 AAAAAAGAAA GAAAGAAAAA AAAACAAAAT ATTACTGAGG TACAATGTGT TGCTAAGATA
-    23521 CAAACTCAAA AAACCCATGT CATCATATCA AGATGATCAA TTTAAATCTG AGGCAGAAGT
-    23581 AATCTGAGCC CTTATTTTCC TAGGAAAATA GAAAGAAGAG AAAATATAGA AATCTATAGA
-    23641 AAATATAGAA ACCATGGGCC GGGCGCGGTG GCTCATGCCT GTAATCCCAG CACTTTGGGA
-    23701 GACAGAGGCG GGTGGATCAC GAGGTCAGGA GTTCGAGACC AGCCTGGCCA ATGTGGTGAA
-    23761 ACCCCGTATC TACTAAAAAT ACAAAAATTA GCCGGGTGTG GTGATGCGTG CCTGTAGTCC
-    23821 TAGCTACTAG AGAGGCTGGG GCAGGAGAAT GGCGTGAACC TGGGAGGCGG TGCTTGCAGT
-    23881 GAGCAGAGAT CATGCCACTG CACTCCAGCC TGGGGGTGAC AGAGCGAGAC TCTGTCTCAA
-    23941 AAAAAAAAAA AAAAAAAAAA AAAGGAAATA TAGAAACCAT GTAATCAGTC TATACTGAAA
-    24001 GGTGACATAG AATGTTATAA AATGTTTAGT TTCTTCAAAT AGTTTTAGTT TTTACAATAA
-    24061 TAAATATACT GGTAATATGT GTTTATATAT TTATGTATCT ATACACACAA CACATATAAT
-    24121 GTATATATGC AGATACAAAC ACACTCACGT ATATGCAATT TAAAAAACTA TACAGAGGCC
-    24181 AGGCGCGGTG GTTCACGCCT GTAATCCCAG CACTTCGGGA GGCCAAGGCA GGCAGATCAC
-    24241 GAGGTCAGGA TTTCAAGACC ATCCTGGCCA CATGGTGAAA TTCCGTCTCT ACTAAAGACA
-    24301 CAAAAACTTA GCCGGGCGTG GTGGCGCGCG CCTGTAATCC CAGCTACTTG GGAGGCTGAG
-    24361 GCAGGAGAAT CGCTTGAACT CGGGAGGTGG AGGTTGCAGT GAGCCAAAAT CGCACCATTG
-    24421 CACTCCAGAC TGGCCAACAG GGCGAGACTC CATCTCAAAA AAAAACCCAA AAAACAACAA
-    24481 CAAAAAAAAC TGTACACAGA TAGATGCGCT CCTTAACTTA TGATAGGGTT ATGTCCTGAT
-    24541 AAACCCATAA GTTAAAAATA TTGTATCTGC TGGGCGCGGT GGCTCACACC TGTAATTCCA
-    24601 GCACTTTGGG AGGCCGAGGT GGGCGGATCA CGAGGTCAGG AGATCAAAAC CATCCTGGCT
-    24661 AACAAGGTGA AACCCCGTCT CTACTAAAAA TACAAAAAAA AATTAACCAG GCGTGGTGGC
-    24721 AGGCACCTGT AGTCCCAGCT ACTCGGGAGG CTGAGGCAGG AGAATGGCGT GAACCTGGGA
-    24781 GGCGGAGCTT GCAGTGAGCC GAGACCACGC CACTGCACTC CAGCCTGGGT GACAAACAAG
-    24841 ACTCCGTCTC AGAAAAAAAA AAAGAAAGAA AAGAAAATAC TGTATGTCAA AAATGCCTTT
-    24901 GTGATAACCT AACCTACTGA ATGTCCCATC TCAGCCTTGC CTCAGAATAC TTACATAGTC
-    24961 TATAGGCAAA ATAACCTATT TTATAATAAA ATGTTGAATA TCTTCTGTAA TTTATTGAAT
-    25021 ACTATACCGA AAAACAATGG TTCAATAGGT ACTTGAAGTA TGGTATCTAC TGCAAAAAAT
-    25081 AACTTCTGCA ACAAGGTAAA GTAGTAGAAA AAAATATATA TATATTTTTT TGAAACACAG
-    25141 TCTCGCTCTG TCACCCAGGC TGGAGTGCAG TGGCATAATC TCGGCTTACT GCAAGCTCCA
-    25201 TCTCCCAGGT TCAAGTGATC CTCCTGCCTC AGCCTCCCAT GTAGCTGGGA TTACAGGCGT
-    25261 GGAACACCAT GCCTGGTTAT TTTTTGTATT TTAGTAGAGA CGGGGTTTTG TCATGTTGGC
-    25321 CAGGCTGGTC TCGAACTCCT GGCCTCAGGC AATCCACCCG CCTCGGCCTC CCAAAGTGCT
-    25381 GGGATTACAG GCATGAGCCA CTGCGCCCGG ACAGAAAAGT CTTCAGTTGA AACATCTGAA
-    25441 GCTGGGGGCC ATCTGCGGTA GACTTCTGTA AATGCACAAA ATAAGATAAT GTTAAAGCCA
-    25501 TGTTTCTCAA AGTCCCGAGC TCCACGTAAA CTGCCTATTA TCAGAAAAAA GTTATCAATT
-    25561 AAAAGTCAAA GGCATAAAGA ACAAACTAAC ACAAAAAAAT TTTAAATACC TTTGCTGGGT
-    25621 CACAAGGCCG CCGGTTGATA AAGAAAAACT GTCTGTCTGT TGAACTCCTT CCAACTCCAT
-    25681 GCGTGCATTG TGAAATGAAA CCTGAGATGC TATTCAACAT TAATATGGTA AGGGCAGGAT
-    25741 TCCAGAGTGA AAGGGATTAG AAATACGATC ACATGGCACA TTCTTAAAGT GAAATGAAAA
-    25801 CAAAACACCA GGTGACATGC TGATAAGGAT CACTATTGCA GTTCACGGGT ATCTGTGCTC
-    25861 CAAATCTTGA TGAGTCATCA AAGAACCAAA CCTTCTGGAA TATTCTAAAG CTCCTACAGT
-    25921 CAACCAATGC ACCACAGGTG ATGCAGTGCG TCCAAAACTG ATGTGTTGCA GCTCTCCTTA
-    25981 CCCTTCCTGA TAAATCCTCA GCCTCTGTAA GTGGGTCTCG CTTCAAATGC ATTCTCAGAA
-    26041 CCTCCGTGCT GCCACCCCTG GTTTGTCAAT GAAGTCTAAC CACTTGTGCT CAGAATTTTG
-    26101 CCCACATTCC CTCCCCTTTC AAAACCTCCC GGGTAGGACG CTTATATCTC ATGTCTTGGT
-    26161 AAAGCGCTTG CTTCACATGA GACCCACCCC AGGGATACCG GCATTTCCAG AAGAACACCA
-    26221 CCTTCACATA AAGACATAAA GCTCCATGTT TACCATTTCA GGCATAAGCC AAAAGCAAGT
-    26281 GGAGGAAGAG TAAGAAATAT AGATCTCAAG GCAACAAACA AACAAACAAA AAGAAATACA
-    26341 GATCTTAGGC TGGGTGTGGT GGCTCATGCC TGTAATTCCA GAGCCTTGAG AGGCCAAGGT
-    26401 GGGTGGATCA CCTGAGGTCA GGAGTTCAAG ACCAGCCTGG GCAACATGGC GAAACCCCGT
-    26461 CTCCACTAAA AATACAAAAA ATCAGCCGGG CATGGTGGTG AACACCTGTA GTCCCAGCTT
-    26521 CTCGGAAGGC TGAGGCAGGA GTATCGCTTG AACCTGGGAG GCAGAGGTTG CAGGGAGGCA
-    26581 GAGGTTGCAG TGAGCCAAGA TCACGGCACT GCACTGCAGC CTAGGCAACA AAGCAAGACT
-    26641 CCATCTCAAA GCTAAAAAAA AAAAAAATAT ATATATATAT ATATATATAC ACACAGATAG
-    26701 ATAGATATCT TTACAGGACC AATCCTATTT ATGGAAGTGT CTATTTTCTT ATACGAAAAG
-    26761 TAATGACACT GAACTGCCTT CATCAGATGC CAGGAAAGTC AAAATCATTT AAAATGATAA
-    26821 AATAATTTAC AAGTTAGTCT AACTAAACAG AGCCTTAAAG AAGACCTGCT CAACAGAAAA
-    26881 CCACCTGAAA TATACCACTT ACTCAAAACA TGGTTTGAAT TAAGCAACTG ACTCCTTTGT
-    26941 ATAAATCATC TTTCTTAGCC ACAGCATTGC TCACAGTTTT ATAAAGGACA TAAAAAACTA
-    27001 TTATCCCTAG CCAGGCGTGG TGGCTCATGC CTGTAATCCC AGCACTTTGG GACACCAAGG
-    27061 TGGGCGGATC ATCTGAGGTC AGGAGTTCGA GACCAGCCTG GCCAACATGG TGAAACCCCG
-    27121 TCTCTACTAA AAATACAAAA TTAGCCGGGT GTGGTGGCAC GTGCCTGTAA TCCCAGCTAC
-    27181 TCAGGAGGCT GAGGCAGGAG AATTGCTTGA ACTCAGGAGG TAGAGGTTGC AGTGAGCCAA
-    27241 GATAGCACCA TTGCACTCCA GCCTGGGCAA CAAAGCAAGA CTCCGTCTCA AGAAAAAAAA
-    27301 AAAAAGACAC GAAACTATTA GCCTTAGAAT CACTATCTTT AAAAAAAAAG CTCTCAGGAT
-    27361 AAAATGTTCA ATTGTAGTTC TCTTGCCAGC AATCTACTTA CTAAAAAAGA TTATGCAGAG
-    27421 CATCGGAACA GCTCAAACCG TACTCTTCAC ACACGGAGTC ACTAGGGGGC AGCTGAACAA
-    27481 AAGGAATGAG GCTTTGCAAC TGAAAAAAAA AAAAAAAAAT TCACAGTTAC TTCCTAATAA
-    27541 AGACAGAGTG GACTTAATCT GTTTTCTTTC TTAGTCAAGC TATTGACATT ACAAGCGCAA
-    27601 AAAAAATTAA AAGAATCTTT TGTTTTGTTT TGTTTTTTGA GACAGGGTCT CCCTCTATTG
-    27661 CCCAGGCTGG AGTACAATGG CTCAATCATA CCTCACTGCA ATGTCAAACT CGTGGGTTCA
-    27721 AGCAATCCTC CTGCGTCAGC CTGTCGAGTG AGTAGCTGGG ACTACAGGTG CACACCACCA
-    27781 CACCTGGCTA ATTTTTTAAT TTTTTTGTAG AGATGGGATC TTGCCGTGTT ATCCAAGCTG
-    27841 GTCTTAAATT CCTGGGCTCA AGCGATTCTC CCACCTCAAA ATTGTTGGCC GGGTGGTTCA
-    27901 AACACATAAT CCCAACAGTT TCCTCTCCCA GAGTGCTGGG ATTACATGTG TGAGCCGTGG
-    27961 GAACAACAAT TTTGATTTTA TGATATAAGA AAGATGAAAC AAGTACCTAC TTATTCAGAA
-    28021 CCCACACATT GCCCACAATA ACTTATATTT TTTTCAGAGA GAGAGTGAAA AGACGCAGTA
-    28081 TACGAGTGTC TCTGGAAGAA TAAAATGAAA CACATTCAGC TCTCAAACAT CAATTTTTGT
-    28141 GATAGGTACT TTGTTTTTTT TTTTTTTTTT TTCCTGGGAT GGTGTCTTGC TCTCTCGCCC
-    28201 AGGCTGCAGT GCAGTGGTGC AATCTCAGCT CACTGCAACC TCCATCTCCC GGGTTCCAGC
-    28261 GACTCTCCTG CCTCAGCCTC CTGAGTAGCT GGGATTACAG GTGCCTGCCA CCACGAACAG
-    28321 ATAATTTTTG TATTTTTAGT AGAGATGGGG TTTCACCATA TTGATCAGGC TGGTCTCAAA
-    28381 CTCCTGACCT CGTGATCCGC CCACCTCAGC CTCCCAAAGT GCTGGGATTA CAGACGTGAG
-    28441 CCACTGCGCC GGGCCTTGTG ATAGGCACTT TAAAAATCAA TTCTTAATCT GGGCGCAGTG
-    28501 GCTCACGTCT GTAATCCCAG CACTTTGGGA GGCCGAGGCA GGCGGATCAC TAGAGGTCAG
-    28561 GAGTTCGAGG CCAGTCTGGC CAACAAGATG AAACCCCATC TCTACTAAAA ATACAAAAAA
-    28621 TTAGCTGGGC CTGGTGGCAT GTGCCTGTAA TCCCAGCTAC TCAGGAGGCT AAGGTAGGAG
-    28681 AATTGCTTCA ACGCGGGAGG CAGAGGTTGC AGTGAGCCAA GATGGCGCCA CTGCACTCCA
-    28741 ACCTGGGCAA CAGAGCAAGA CTCCAGCTCA AAAAAAAAAA AAACCGGCCG GGCTTGGTGG
-    28801 CTCACACCTG TAATCCCAGC ACTTTGGGAG GCCGAGGCTG GTGGATCACG AGGTCAGGAA
-    28861 TTCGAGACCA GCCTGGCCAA CACGGTGAAA CCCCGTCTCT ACTAAAGATA CAAAAAATTA
-    28921 GCCTGGCGTA GTGGAGCATG CTTGTAATCC CACTACTCGG GAGGCTGAGG CAGGAGAATT
-    28981 GCTTGAATCT GGGAGGCGGA GGTTGCAGTG AGCCAAGACA ACACCACTGC ACTCCAGCCT
-    29041 GGGCAGCAGT GCGAGACTCC CTCTCAAAAA AAAAAAAAAA ATCAATTCTA AGATTTTATT
-    29101 CTCCATTCTA CTGGAAGGGA CAATGGAAAC CCGCTATAAT CACTAGAGCA ATAAGAGGCG
-    29161 TTGAAGTAAC CGGCCATCAC TACCTGCTTC TGCCCAAACA CAGAGCCGAT ATTTTCCTTT
-    29221 ATGCTGGGGC TTCCACCTGT GCATACCACA GGCTGTCGTT TTCCTTGTCC AAGCTGATTG
-    29281 GTGCAACTTA CACGGATGCC TGCTGAAATG ATACAGTATG CATGTAAGAC CTGGACCATT
-    29341 TTGGCATACT CCTGTTTAAA AAACACAAAC ACAATATTCT ACATTACTTT AATATTATAG
-    29401 GAATTACACA GCTCAAGTTA CAACATCCAA CGCAAGGTTC TCACATCATC GCACAAATCA
-    29461 AGGGAAGCAC TGTTGACAGA ATGATCTGTA AAGAGGTGTC TTCCTATATT CTACAGAAAG
-    29521 GAACGCAGAG CTTTTGGCTC CTGGTCACAG TCCTCTCACT TCCCAATGTG CCATGCATCC
-    29581 TGGTAAAACA ACTAAAAAGT ACAGCCTGTA ATCCCAGCTA CTCAGGAGGC TGAGGGCAGG
-    29641 AGGATCACTT GAGACCAGGA GTTCAAGACC AGCCTGGGCA ACACAGCAAG ACCCTGTCTC
-    29701 TACAAAAAAT TTAAAAAAAA AATTAGCCGG GCGTCATGGC ATGTGCCTGT AGTCACAGCT
-    29761 ACTGAGGAGG CTGAGGTGGG AGGATCGCTT GAGCCTAGGA GTTCAAGGCT GCAGTGAGCC
-    29821 ATGATTGCAC CACTGCACTC CAGCCTCGGT GACAGAGTGA GGCCCTATCT CTAAAAATGA
-    29881 AAATTAAAAA ACTGAAACGT ACATTGTGTT TGATTTTATA ATCTCTCCTT TTGAAATGTA
-    29941 TCTTCGTATA ATAGAAACAC TGGCACAAGC ATTTTGGTAT GCAAAGAGAT ACACAAAAAT
-    30001 GTTCACTGAA ACAATCTCTA TGAACAAACA GAAACAACCT AAGCAAGCAT CATTGAGGAG
-    30061 TTGATTAATT ATGGTATAGC CATAGCGCAG CAGAATGACA ACAAATAAGG CAGTGTGCAC
-    30121 CGACTAAAAA AGACAATCAC AATATGCTAA GTAAAAAGTC AGTTATAGGG CCAGGCATGA
-    30181 TGGTTCACAC CTGTAATCCC AGCACTTTGG GAGGCTGAGG CGGGAGGATC ACTTGAGCCC
-    30241 ACGAGTTCGA GACCTGCCTG GGCAACACAG AAGGACCCAT CTCTACAAAA AAAACAAAAA
-    30301 TTAGCCGGGC ATGGTAGCAC GGGCCTGGAG TCCCAGCTAC TTGGGAGGCT GAAGTGGGAA
-    30361 GATTCATTGA GCCTGGGAGA TCATGGCTGC GGTAAGCTGA GATTGTGCCA CTACATCCCA
-    30421 GCCTAGGTGA GAGAGCAAGA CCCTGTCTCA ATTAAAAAAA AAAAAAAAAA AAAAATACAA
-    30481 CTTTCAACCA CATACAATTC TGTATTACTT GCATGTTGTA CATTCTATAT TACTTGCTTT
-    30541 CATTATATTA ACTTATGAAT TTATCTTGAA AATTATTCCA ACAGTTATAA ACACATGAAA
-    30601 TTAAAAGCAG CCTGAAAAGA TATACAAACT GTAAATAACA GTTATCTCTG ACAAATAGAA
-    30661 GTTCTACATT CCTGTATTCT GCTAAGGCAC TAATTTTTTT ACCATAAGAT ACAAAAAAAG
-    30721 AGTAAGTTTT CTCTACTTTA GAAAATTTAA ATTTGTGAAA AAATGTAATA AAGTTAAAAT
-    30781 TAGCAGCCAA GTGCAGTGGC TCACACCTGT AATCCCAGCA CTTTGGGAGG CTGAGGCAGG
-    30841 TGGATCACTT GAGGTCAGGG GTGCAAGACC AGGCTAGCCA ACATGGTGAA ACTCCATCTC
-    30901 TACTAAAAAT ACAAAAATTA GCTGGGCGTG GTGGCGCACA CCTATAATCC CAGCTACTCG
-    30961 AGAGGCTGAG GCAGGAGAAT CACTTGAACC CAGGAGGTGG AGGTTGCAGT GAGCCGAGAT
-    31021 CGCACCACTG CACTCCAGCC TGGGCGACAG AGTGAGAAGA CTCCATCTAA AAAAAAAGAA
-    31081 AGTTAAAATT AGCACCAAAT GCTTTACAAG TAAAAAAAGT TTTTAGCTGC ATATGTTTAA
-    31141 GTAACTTTTT AGATTATGAA AAACACACAT ACAAAATGGG AAGGCACAAA GAAGACAGCA
-    31201 AAAACTGCAT GAGATCTCAC ATCCAAGGAT AACTGCTGAG AACATGAAAG TGCCGAGTCT
-    31261 TCCAGCCTTT ATACTATACA CATTTAGGCT TGTTGTTTTG TTTTCACAAA ATTGTAATCA
-    31321 AATAATACAG ACAGTTCTAT AATCTGCTTT TTAAACACAA CGACTATATA ACATTTAGCT
-    31381 ATTTTCATTT GCATTCAAAT TCATAAGGGT TCTAATAGCT CATTTCTCAG AAAACCAAGA
-    31441 GAAATATTCT TTTTTTTTTT TTTTTGAGAT GGGGTCTGGC TCTGTGCCCA GGCTGGAGTG
-    31501 CAATAGCTTG ATCTCGGCTC ACCGCAACCT CTGCCTCCCG GATTCCAGCG ATTCTCCTGC
-    31561 CTCAGCCTCC CAAGGAGCTG GGACTACAGG CACATGCCAC CATGCCCAGC TAATTTTTGT
-    31621 ATTTTTAGTA GAGATGGGGT TTCACCAGTT TGGCCAGGAT GGCTTTGATC TCTTGACCTC
-    31681 GTGATCCACC CGCCTCAGCC TCCCAAAGTG CTGGGATTAC AGGTGTGAGC CACTGTGCCT
-    31741 GGCCGAGAAA TATTCTTATT AAAATATAAG TACATAAGGC CAGGCATGGT GGCTCAGGCC
-    31801 TGTAATCCCA GCACTTTGAG AGGCCAAGGT GGGCAGATCA CCTGAGGTCA GGAATTCGAG
-    31861 ACCAGCCTGG CCAGCCTGGA CAACATGGTG AAACCCCGTC TCTACTAAAA ATACAAAAAT
-    31921 TAGCCAGCTG TGGTGGTACA CGCCTGTAAT TGCAGCTACT CAGAAGGCTG AGGCAGGAGA
-    31981 ATCGCTTGAA CTCAGGAGGT GGAGGTTGCA GTGAACCAAG ATCGCGCCAC CGCACTCCAG
-    32041 CCAGGGCGCC AAAGAGAAAC TCCATCTCAA AAAAAGATAA AAATAAAAAA TAAAAAATAT
-    32101 ATATATATGT ATATATATTT TTCCAGACAG GATCTTATTC TGTCTCCCAG TCTTAAGTGC
-    32161 AGTGGCGCAA TCATAGCTCA CTGCAGCCTC AAGTTCCTGG GCTCAAGTGA TCCTCCCACT
-    32221 TCAGCCTCCC AAGTAGCTGG AACTACAGGT ACATGTCACC ATGCCCAGTA AATTTTTTTT
-    32281 TAAAATTTTT CATAGAGACA GGGTCTCACT GTGTTGCCCA GTCCTAATAA ACACTATGTG
-    32341 ATGAAAAGAA AAAAGTAAAT CATCCTAAAG TTAAGTCTTT AATGTTAAAT CTTTAATGAG
-    32401 AAATGCAAAT AAAGCATTTC TCAATAATTT ATGGGAAGAG AATCAACTGA AGAATAAACA
-    32461 TCTTTAGTAA ATCTTTTGCT CATGTGCATT AACCAATACT CTTGAAAACC AGGATTAATT
-    32521 TACTGTACCT TCTTAATATT CCTTTGAAAT TCCTTATGGC GCACAGGTAG TGTGGAAAAT
-    32581 AACTGCTGCA CGCTGACTGT GGTCCCTCTG GGGCGGGGGT AGGGGGTTTT CTGGATAATT
-    32641 TTCCCATTGT GATCAAACAT CAGTCGAGTT CCAACCTTCG CCGATGCGTG GCAGGTAGAA
-    32701 ATGGTGACAT CGCTGTGAGA GAATACCAGG CATGGTGTGT TCAGTGAGAG ACCCATGATG
-    32761 TTGGGCACTG ACTACTCTTT TCTTCACTTG CTTTTCTCTC AAAATTTTCT TAAAAAGCTG
-    32821 ACGATCCCTC TGAGATAATC AAGATCTAAA TGGTTGAGGA GTCATCATAA AATCTAAGGT
-    32881 TTGGCATCTA AAAGACAGTG AGACAGAGAG CACTAAACAT GCTTTGCTTT GATAAAAGCT
-    32941 TTGATTTCGT TTTTCAGGTT GAACTGCAAA ACCATAAATG ATCTTAAGAT TTATTTATTC
-    33001 ACAAACACAG ATTTGTTTTG TTATTACTCT TCGAACAAAT TTTTTTTAAA GAATCTAACA
-    33061 AATATTATAA TTAAAATGTA TATGTAGGGC AGAGCGTGGT GGCTCATGCC TGTTATCCCA
-    33121 GCACTTTGGG AGGCCAAGGC AGGCAGATCA CTTGAGGCCA GGAGTTTGAG ACCAGCCTAG
-    33181 GCAACATGGT GAAATCCCAT CTCTACTAAA AATACAAAAA TTAGCCAGGA GTGGTGGTGC
-    33241 ATGCCTATAG TACCAGCTCC TCAGGAGGCT CAGGCACGAG AATCACTTGA ACCTGGAAGG
-    33301 CAGAGATTGC AGTGAGCCGA GACTGTGCCA CTGCACTCCA GCCTGGGTGA CAAAGAGAGA
-    33361 CTCTGTCTAA AAAAAAAAAA AGATATATAT ATATATATAT AATTATTTAT AAAAATTTCA
-    33421 TATCTGTGCT ATAATTAAAT AGTGCTTTGG TGAAATGTTT CCCTAAAAAT TGATAATGAA
-    33481 AACCAATGGT AACTATCATT TATTATCTAC ATGTTAGGTT AAAATTGAGA ATTACTGTTT
-    33541 TAATAAGGGT AACCATCTTT TTAACAATAC TATTTGCTTC ATTTCATTCA TTTATTGCTC
-    33601 ACATTTCAGA AGTACTATGA CTTAGATTGG CAGCGAGACA AAACAGAATT CAGAAGCTAG
-    33661 AAGTTGAGAT GTTGAGATAG AAAACTGAAA ATAATAATGA TTCCAATTAA TTTTCAGAGA
-    33721 GGTTTCTCTA AGGGGTCAAG TGAGTGGATA AAAATATTGT ATCACCTCAG TGCACAAAGT
-    33781 GAGCTCAGAG CTTCCCCCCG AAAGCCAAAA GTTTCAACCT GAGTTAGGTC GGCAAACTCT
-    33841 TGAATCTTAG ATGTGTGATG TTTCAGAGCT GAAAGAGAGT GTAAAGTAAG GACTAAGATA
-    33901 TCTCAAGTGC TATAACAACA AAATATACAT GATATCTAGT AACTGGCTTT AAAAAACTGT
-    33961 TTTTGCATTT CCCAAGACAG TGTTACTCAA AATTCTGAGA CATGTGACCC AATTATTTTA
-    34021 TAATAGGATT AGAAAAAGTC AACTTACTTA AGCCTTCGAA GTTTTCTTCT TCTACCCCAC
-    34081 ATCCATTGTC TGAAACTTCA ATAAGATCCA CTCCATAGTC CTTAAGCTTT AGATCTAGAA
-    34141 AGTTTAAAAT ATTTACATAT TTATTAAAAA CGGACCCATG CTATCAGTTT TTATATTGAC
-    34201 ATTATTTATA ACATATGCAA ATTTAAGAGT CATAACTATA CCTTTAGTTA AACATACTAG
-    34261 TGTCATTTTG TATATTTCAT TGTTATAAAG TCCTTTCTGG CTATTTACTA GCCCAGACTA
-    34321 AATAGTTTAG CTTTTTCTTT CTTTCCTCTT TTTTTTTCCC TAGGCTAGTG AAGTGAAGCA
-    34381 GTTGGAGTGG AGAAGGAACA AAAAAAATCT GTAACTGGTG GTGATCAATT AGCTGTAAAC
-    34441 CGCGTTGCAC TTTGACCATC CTTTTCTTTT GAAAGAAATA ATTTTAACAT ACCCAATAAA
-    34501 GAGAACGGGG ACCGGGTGCA GTGGTTCATG CCTGTAATTC CAGCACTTTG GGAGGCCAAA
-    34561 GCGAGCAGAT CACCTGAGGT CAGGAGTTCG AGACCAGCCT GACCAACATG GAGAAACCCT
-    34621 GTCTCTACTA AAAATACAAA ATTAGCCAGG CTTGGTGGCG CATGCCTGTC ATCCCAGCTA
-    34681 CTCAGGAAGC TGAGGCAGGA GAATCACTTG AACCCAGGAG GTGGAGGTTG CAGTGAGCCG
-    34741 AGATCGTGCC ATTGCACTAT AGCCTGGGCA ACAAGAGCAA AACTCTATCT CAAAAAAAAA
-    34801 AAAAAAAAGA GAATGGGTTC TGGAATCAGA CTTCCTGGAT CCTATTTTAT CAGCTTTATA
-    34861 ATCTCAAAAA AAGGAAATTT CCTATCCCCT AATTTCCTCA TTTGTAAAAT AGAGAATAAT
-    34921 AAGTTCTATC TCATAAAGTT ATTCTGCAGA TTAATAATTC TTTGGTTTTT TTTATTTTAT
-    34981 TATTCTTTTC TTTTCTTTTG AGATGGAGTT TTGCTCGTCA CCCAGGCTGG AGTGCAGTGG
-    35041 TACGATCTTG GCTCACTGCA GCCTCCACCT CCCAGGTTCA AGCAATTCTC CTCCTTCAGC
-    35101 GTCCTGAGGA GCTGAGATTA CAGCCATGCA CCACCACATC TGGCTAATTT TTGTATTTTT
-    35161 AGTAGAGACA GGGTTTCATC ATGTTGGTTA GGCTGGTCTA GAACTCCTGA CCTCAAATGA
-    35221 TCAGCCCCCC TCAGCCTCCC AAAGTGCTGG TATTACAGAT GTGAGCCACT ACTCCAGCCC
-    35281 TATTTTGTTT TATGTTTTTG AGATGGAATC TTGCTCTGTC CCCAGGCTGG CATGCAGTGG
-    35341 CACGATCTCG GCTTACTGCA ACCTCCGTCT CTCGGCTTCA AGCAATTCTC GTGCCTCAGT
-    35401 GTCCCAAGTA GCTGGGATTA CAGGCTTCTG CCACCAGGTC CAGCTAATTT TTGTATTTTT
-    35461 AGTAGAGACA GAGTTTCACC ACTTTGGACA GGCTGGTCTC GAACTCCTGA CCTCAGGTAT
-    35521 CCACCCGCCT TGGCCTCCCA AAGTGCTGGG ATTACAGGCG TGAGCCACTA TGCCTGGCCT
-    35581 ACTTTATTTT TCAATAGAGA CAAGGTCTCA CCATGTTGGC CAGGTTGGTC TTGAACTCTT
-    35641 GGCCTCAAGC AATTCCCCCA CCTCGGCCTC TCAAAGGGCT AGGATTATAG GCGTGAGACA
-    35701 CCACGCCCAG CTGTTCTGCA AATTAAATAT TTCTGTGCAA TTCTTAGCAT AACACCTGCC
-    35761 TGGCACACCG TAAGAACACA ATAAAAGCTG TTATTATTAT TACTACCTAG CTAAGTACTA
-    35821 GGCACATAAT AGGTGCTAAC TTCAACTTAA AAATAATAAT TTATTACTAC ATCAACACTT
-    35881 GATAGTCTTA TTTCAATAAC AAATGTTTCT TAACTACAAC AACATTCACA GATCATTTCT
-    35941 TGTGGCTTAA AACTCTCCCA AACTTACCAA TATTAGTGGC ACCAGCATCC AGACTGTTTT
-    36001 CTACTAACTC CTTTACCGCA GTGCTTAGAC TCAGTACCAC CTGCCCAGAG CAAATCTGAT
-    36061 GGACTGACTT CCGATCAATA GGTTTGATGG CCTTAGCAGG TTCTGTACTA GAGAAATCAG
-    36121 TTACAAGAAA CAAATCAAGT ATTCAGCTAT ATATTTTCAT CCTGATTTTA ACTGTGGGAA
-    36181 ATGACTCAAC ACTGTAAATA ATTTATGGGT CTAATCTATT CATTTATTAT ATTAGCAAAT
-    36241 ACATTTATTA TATCCAGAAA TAGAAACACT GTTTTACAAT CCTTAAACAT GTACCCAAAA
-    36301 TACTTCTGGA TAGATACTTC AAATTCAACA GATCCTTACT ATCTAATTAT ACTAAGATCC
-    36361 ACATGGAGAA AACATACATT GTATCTCTCA AATTACCAAA ATCTTTGGCA ACAATGGTGT
-    36421 CTTCTTTCTT GAAAAGTGAA AGCATGGCTG GCTGTGGTGG CTCATGCCTG TAATCCCAGC
-    36481 ACTTTGGGAA GCAGAGATGG GTGGATAACT TGAGGTCAGG AGTTCGACAC CAGCCTGGCC
-    36541 AACACGGTGA AACCCCGTCT TTACTAAAAA TACAAAAAAT TAGCCAGGCA TGGTGGTGGG
-    36601 CACCTGTAAT CCTAGCTACT CAGGAGGCTG AGGCAGGAGA ATCGCTTAAA TCCAGGAGGC
-    36661 GGAGGTTGCA GTGAGCTGAG ATTGCGGCAT TGCACTCCAG CCTGGGCAAC GAGCAAAAAA
-    36721 AAAAATGAAA GTAACATAAT TTCCCAACAT AATTAGAAAA ACCAACAGTA TGCTGGGAAA
-    36781 TACACAATGT TTAAGTCAAA ATCATCTCAG AAATTGGGTA CCAGTTATAT AACTATTCCT
-    36841 TATACACAGT TGCCTTTGAT ACCCCACTCC AAACTGAAGC TGCCAGCTGC TGTCTTAGCA
-    36901 AAGACCCTCA AAGCTCTTGC TGTACTAGCT TTAAGAGTTT TATAAAGGTT TTATCTCCCC
-    36961 TTATTCCCTG CTCCAATACA TCCTCCACTC TATCACCAGA GCTATTTTTG AAATCACAAA
-    37021 TCTGGTCAAA TAATTTTTCT GCTTAAAAAT TTACTAGTGC CCCACTTCCT ACTATATGAA
-    37081 AGTTAAAATT TAGTCATCAT TGGGGCCAAA ACTACCTTCT TTTCAGAATC TCTCTAATCC
-    37141 TTTCCCTTCA TCAAGTCCCC TACATTATTA TTATTATTAT TATTATTATT GTTATTATTG
-    37201 TTATTATTTG AGACAGAGTC TCACCCCGTT GCCTATGCTA GAGGGCAATG GCATGAGCTC
-    37261 AGCTCACTGC AACCTCCGCC TCCCAGGTTC AAGCGATTCT CCTATCTCAG CCTCCCAAGT
-    37321 AGCTGGGATT ACAGGCGCCC ACCATCACAC CCAGCTAATT TTTGTGTTTT TAGAAGAGAT
-    37381 AGGGTTTCAC CATGTTGGCC AGGCTGGTCT CGAACTCCTG ACCTCAGGTG ATCCGCCTGC
-    37441 CTCGGCCTCC CAAAGTGCTA GGATTACAGG GGACCGCAAC CAGCCATCCC CTATATTGTA
-    37501 GCACAGTGAA CAACTGTCCT GAACATCACA AGCTCTTTGA GACACTACAG TGTATAAGCA
-    37561 GGTCTCTGTC TAAACCGCTC TCCTCTTCCT CCTCTGCCCA AACAATGTCT GCTCAAAGAA
-    37621 TGTATCCCGT GTGTTCATTA ACTTAGCAAT TTCCAGCAAA CAGTTTAATT GATAACTTGT
-    37681 TAAGAGAAGG CAGGAAACCT CCATGAAAGA GAAATCACTG GGTATTTCCT ACAGCATTTA
-    37741 ACACATCGTA GGCCTTTAAT AAACCCTTCT GAAATAAACA AACCTCTTTA CTCTTCATTC
-    37801 CACCTTGCTA AGAATCTCAC CTAAGTCTGT CTACCATGTG AAACTGCAGA TGACCTCACA
-    37861 GAAAATGGAA AGAAGTATCT CTAAAAATAA GTTTATTTGG CAGCACACTA TAGGCTACAG
-    37921 GTCCACTTCT GATTTTTTTT TTTTTTTTTT TTTGAGACCG AGTCTTGCTG CGTTGCCCAG
-    37981 GCCGGACTGC AGTGGCACGA TCTCAGCTCA CTGCAACCTC CGCCTCCTGG GTTCCAGCGA
-    38041 TTCTCCTGCC TCAGCCTCCA AAGTAGCTAG GATTACAGGC TCCCGCCATC ATGCCCAGTT
-    38101 AATTTTTGTA TTTTTAGTAG AAACGGATTT CACCATGTTG GCCAGGCTGG TCATGAACTC
-    38161 CTGACTTCAT GATCCACCCG CCTTGGCCTC CCAAAGTGCT GGGATTATAG GCGTGAGTCA
-    38221 CCGCTCTCGG CCCACTTCAG ATATTTATTT TGAGGAGGGA GCGCATTTAG ACACAGACCC
-    38281 CAAATTTATT TAAATGTCTC AATACATTTA AATGTAGTTA CCTAAATATA TCTAATATAT
-    38341 TTAAATGCAG AGAGCAAATT TGCGTTTACA AATCTGACAT GGAATGCAAA TGTGCTAGCC
-    38401 AAGATTCGGT GTAGCTTACC AGCCAGAAAT CACACATCCT AACAGGTAGA AACGTATTGC
-    38461 ATTTTTAAAA ACTGCGCAGC TATGCAAATA AGGATGTGTC TGGACGCTCT ACCGTCCCCA
-    38521 AAATAACCTT AATTTTTTAA AAAGGCCAGG CACGGTGCAT CATGCCTTTA ATTCCAGCAC
-    38581 TTTGAGGGGC CAAGGCGGGC GGATTGCTTG AGCTCAGGCG TTCGAGACCA GCCTGGGCAA
-    38641 CGCAGCGAAA TCCCCGTCTC TACAAAAAAA AATTAAAAAT AAAATACTAT AAAAATAAAA
-    38701 ATAAAAGGGG AGAGAGAACA GGTAGAAAGG AAATGCATTC AGTCTATGGG GATTTCACGC
-    38761 TCCCGCTTCA AGTCCACGGC CCTGTGATGG GATGTGGGCA AGGCCTGTCT GGGACAGGCC
-    38821 GAACCCAACT CCTCACAGGG CCGAATCCTT TGCCCGCAGC CCAGGACCCC GAAGGAGCTT
-    38881 GCCTCGGCCT CAAGGCGCAC CCAAGGGGCA CGAGATCGCT GCAACACTGA GGTCGCCACT
-    38941 CCGGGGCCTC CAGGGGGCTG CCTCGCCACG CGCCTCGGCC ATGTTCCCCC CATTTCCAGG
-    39001 GAGGTTGGAA TGCCGTGGGT CTCAAAGAGG GCGCGCGAGA GGGGACACCG GAAGACTGCG
-    39061 AGCCCCGCTC ACCTCGAGCT CTCAGCTCGC TCCATGGATG CAACACCCGA TCCGCCTCGG
-    39121 GGACTGGGAA AGTTCCCTCC AGGGCTCCCA CAGGCGCTCC GCCTCCTGAA CTCCCATTGG
-    39181 CTGCTTTCGA CGTTGTGCTC CACCCTTTCC GGGCGGGGCG GCAAAAATAC TTCCCGTCTC
-    39241 TCCTTTTCGC CTATTGGCTC TGTCAAAGGT CGACTTCGTG ACGTCAAAGA GCCTGGGCCA
-    39301 ATCAGAGCAC ACCGGACTGC GTTTTCCCGA ACGCCCGCAG CAGGGTCAGA AGGGAGGTGG
-    39361 CCGGTCTCCG TCGTGACCTC TGACGGTTTC TGAGCGTTGG CCTTTGGCAC GCGCTACCCC
-    39421 CTTTTGCTTT GGTTCTGCCA TGCCGATGTA CCAGGTAAAG CCCTATCACG GGGGCGGCGC
-    39481 GCCTCTCCGT GTGGAGCTTC CCACCTGCAT GTACCGGCTC CCCAACGTGC ACGGCAGGAG
-    39541 CTACGGCCCA GCGCCGGGCG CTGGCCACGT GCAGGTAGGA GCGCGGGGCC CCCCGCCCAG
-    39601 TGCGCACGCG CGGCGACCGG CTGCTGGCCC GGGTCCCCCC AGGCCGGAGC GAGCGCGTCC
-    39661 CAACCGGTTC ACGGCCCCAC CCCGGCATCT GTGCCGGCCG GCCAGGGACT CACTCAGACT
-    39721 TTTATGTTTT AAAAGATTTA TCCAGGCCGG GCGCCGTGGC TCACGCCTGT AATCCCAGCA
-    39781 CTTTGGGAGG CCGAGGCGGG CGGATCACCT GAGGTCAGGA GTTCGAGACT AGCCTGGCCA
-    39841 ACATGGTAAA ACCTCGTCTC TACTAAAAAT ACAGAAATTG GCCGGGTGTG GTGAGGCGCC
-    39901 TGTAATCCCA GCTACTCGGG AGGCTGAGGC AGGAGAATCG TTTGAACCCT GGAGGCGGAG
-    39961 TTTGCAGTGA GCTGAGATCG AGCCATTGCA CTCGAGCCTG GGCAACAAGA GCTAAACTCT
-    40021 ATCTCAAAAA AAAAAAAAAA AAAAAAAAAA ATATATATAT ATATATATGT ATGTATCTTT
-    40081 CCAGGTCGGG CGCGGTGGTT CACGCCTGGA GTCTCAGCGC TTTGGGAGAC TGAGGCGGGA
-    40141 GGATCAATTG AATCCCAAGA GTTTGAGACC ACTCTCAGCA ACATAGCGAG ACCCTTGTCT
-    40201 CTATTT
+        1 gtcacccagg ctggagtgca gtggcacagt cttggctcac tgcaaccttc cgggttcaag
+       61 tgattcttct gccctagcct cccaagtagt tgggattaca ggtgcctgca accactcccg
+      121 gctaattttt gtatttttag tagagccagg gtttcaccat gttgcccagg ctggtctcaa
+      181 actcctaacc tcaggtgatc cgcccgcctc ggcctcccaa aagtgctggg gttacaggcg
+      241 tgagccaccg cgcccggcca agccttctcg cttccttcca acacccttgc tccttcccgc
+      301 ccccgactac tgtctcagcg aagccgcccc tgggtcccct agcccaaggt gctctcacct
+      361 ctaaatttag aggggccttt actacgagct tttcggtctt ctgtcagtga tctacaaata
+      421 agtgaactac aaatcaagcc aatttcgttt ctcagtgcgt ttcctaatgt ttcctctgtt
+      481 ctcctgggct taaggagagg ccatctctct cctgtgtcta cggtgagccg ggaagaatcg
+      541 gctccctgca ctggtctgcc cggcctaggc cctcctcgcc catcacgcac gtgctcgggt
+      601 cctgggaggc cgcgtcagtc cggccgggaa ggagcaggac ccagtcgcca tggctgtccc
+      661 ggcgtacgca ggaccgcggc ctggggcgct cacctcgctc caggagccca gagacctcgc
+      721 cgggctcggg ctgaggtgtt gccgggctct cggcgtccca gacccggctc cggtctccag
+      781 gcaaccgcgg acgccgccag gcccaccctg tgctcttaaa ggggccgcgc gccagcgcca
+      841 agcaggtgtc ccgcccttgc tggtcctgaa ggccggggga aaggctggac gctggaggca
+      901 gcaggccagg gttttcccag ctctgctaac tgcttcatca taaaatagga ataacgcagg
+      961 cattagtttt ccattgctgc cgcaaacaaa ttaccataaa tttagtggtt cgaagcaaca
+     1021 caaatttatt accctacagt atgtaaatta gtcccacagt gctggttcct tccagaggct
+     1081 gagggagaga atgcgttttc ttgccttttc cagcttttcc agaagcggtc cccaaccttt
+     1141 ttggcaccag agaccggttt cgcggaacac aatttttcca tggattgggg tcggggaggg
+     1201 atggtttcag gacgattcaa gtgcattgca tttattgtgc actttatttc tactattatt
+     1261 acattgtaac atataattaa ataattctac aactcaccat cacagagact cagtgggagc
+     1321 cctgagcttg ttttcctgca actagacagc cccatctggg ggtgacggga gacagtgaca
+     1381 gatcatcagg catcagattc tcataaggag cgtgcaacct acatccctcg tgtgtgcagt
+     1441 tcacaatagg gctcgtgctg ctatgagaat ctaatgccca ccgctgatgt gacaggaggc
+     1501 ggagctcggg tggtaacgcc agcgacgggg agtggctata aatacagatg aagcttcgct
+     1561 ggcttgccgg cccctaacct gctgtgcacc ccacttccta ataggccatg gaccactact
+     1621 ggtctgtgtc cggagtgttg gaatccctgt tctagagact gcttgcaatc cttgactagt
+     1681 ggtacctcct tccatctcca aaaccagcaa gacagcctct ctctggccag cagggaaagg
+     1741 tctccacctt tgaaggactc acccaatgga ctgggcccac ccagacaatc caggataatc
+     1801 tctctgttgc aagatcctta actcagccag gcatgatggc tcacacctgt aatcccagca
+     1861 ctttgggagg ccgaggcggt cggatcacct gaggtcagga gttcgagacc agcctggtca
+     1921 acatggtgaa accctgtctc tactaaaaat acaaaaatta gccagtatgg ttctggacac
+     1981 ctgtaatccc agctactcgg gaggctgagg tgggagaatc acttgaacct gggaggcaga
+     2041 ggctgcagtg agctgagatc atgctattga actccagcct gggcaacaag agcgaaactt
+     2101 catctcaaag aaaaaaaaaa aaaagatcct tcactcaatc acacctgccg agtcccttct
+     2161 gccacgtgag gcagcgtggt cacaggttct ggggattagg acacagctgt cttgggggct
+     2221 gttatcctgc cacagctccc aatctggaga gttcataagt gggatcctgc agaccacgcc
+     2281 agcacagtgc cagacacgat ggcacagtga ctactgtact gcctcctcca tctgagggat
+     2341 tctaaagcag gaaggggagc cgcccacagt ctggagaagg ggtgggggca gcagggggag
+     2401 ccacatctgt catctctggg cccccaagag ggcatcttta cttccatttt cagccaagtt
+     2461 caaacaggac aaggttccat gaaaactatt tgaaaagaca gacagggatt cttatattcc
+     2521 cagaaccatt caaggccagt aactggaatg ttctacagtt cacatcctga ggaaaccaaa
+     2581 tcacagcatc aaattatggg aaatcaaact ctttttgttc ccctgcgagg acagcatttt
+     2641 gcgaccttgg ccgcacagag gaatgtttca aatagtgacc cctgtcccat ccagtcattt
+     2701 tcttccagcc gggcagagaa tcccccgtgt ttaaaaattt aatgtgaatc agggctgaga
+     2761 atcactaact gaaaaggacc ctacttttaa atttatgaaa ttaaacaaag atgaatttaa
+     2821 ttatcattaa gggttgaaag ttatagacta aactatgtcc agccagagca gaggcctgag
+     2881 taacttccaa agtggtttgg tttttttttt tttgttttgt tttgttttgt tttttgagac
+     2941 acagtcttgt tctatctcac ccaggctgga gcgcagtggc gcaatctcgg ttcactgcaa
+     3001 cctccgtctc ccgggttcaa gcgattctcc tgcctcagcc tcctgggtag cggggattac
+     3061 aggcatgcgc cagcacacct ggctaatttt gtatttttag tagaggcagg gtttctccat
+     3121 gttggtcagg ctggtctcga acttctgatc tcaggtgatc cgccggcctc ggcctcccaa
+     3181 agtgctgcga tcacaggcat gagccaccat gcccagccca agtgttctta tttttataaa
+     3241 atgtgttctt gcctggacac acacacacga gcgcatgcaa acatagagaa aaaaaatttg
+     3301 caagcaatgc tccatctggt ttgaaaaggt tctcaagatc acttttaaat gggtgtgatg
+     3361 tgtatttttt ttaagtagca ggttcatttt aaaacaaaaa aggttagtga agactctgtc
+     3421 tttcaaaaca taaaaatctg cgataaaacc aattattcca tacagtgact acggtcagtt
+     3481 ctgagaaatg acacccaggt tggcgatgtg tctcatggtt ggccttccat ggggacagtt
+     3541 ccaggggtgg tccatctccc ccatgtgggt gatcagtttc ttcatctcgc ttgtgttaag
+     3601 agcagtccca atcatcacct gagtgtgaga cacaatggtt caacgtttta gtagtttttt
+     3661 gacgtcagaa tggcagctct tcagaagcat tcttctctaa aataaggctg gacaagatta
+     3721 cagctcaaaa actaccttcc ctgaaaaacc ttcccccaga gaagcctagg ttctagatct
+     3781 cagccctcca cccttctgtg aaatcaggct ccttgtggct ccttcaaggt ggcaccgcct
+     3841 ccactccaga cgccgaccac acctgtctca gcagccaccc tgccctctca ccctggcagg
+     3901 tgcagcagcc tcccagcagg cctccctgcc ccactgcgac ccctccgagc cgctctccac
+     3961 tcagcagcca gtgattactt ttaaagggct gtcaggttat tcattccact tcacagctct
+     4021 ccccctcacc tgaataaaag cccccgtctg tcccctgact tggccctcgc tgggctgtgc
+     4081 ctgcaccccc acctccaagc acgaatgcct cccttcctca ccccagctgc actgctactc
+     4141 ccttcctctt gcacaggccc atcacgcaaa cacctgcctt gggactgtgg cactcccggg
+     4201 accctctccc ccaatgggtg caggcgtcac tccccctctg tcgagctccg acctgctgcc
+     4261 catagcactc cagccctggc cctgctgcct ccctgccatg ggtcctctga caggaaggag
+     4321 aggacacaag cctgaagccc aatgtcacct tctttcttcc tgcagcaccc tgagggctcg
+     4381 ccatgtgcca agcacagtca gaaggctggg gtgacagcag gttggagaag gacagacaat
+     4441 caacaagtca acagagaacc aagacaggtg gcaccaggcg aggcggcctg ctcaggtgtg
+     4501 gggatggggt gaagggtgac ggtggcaaac ccaggtagag aggagagtag ggagaaaggg
+     4561 tgtaaggcag ggaggagact gaggcgagcg tggaactgga aggcagctac atggctggaa
+     4621 gctacatggt ggggagatgg ggctggaagg gtgggcaggg ctcaaagcag gagcctcctg
+     4681 ggcaggcagt gacaacaccg gagatggacg ggtaggccag ggcgagaggg aaggagcagc
+     4741 ctgtggttcc ccgggccact gagtcacact aaactcagga catcaaaact gcccggctat
+     4801 gagctcagct ccacgctctc actcacagac tccaagactg gaagatccat attatgtctt
+     4861 ttattttggt gaggtcaggg gtggtggaga gactctgtct cccaggctgg aatgcaatgg
+     4921 tgcgatctca gctcactgca actccgcctc ccagattcaa gcaattctcc cgcttcagcc
+     4981 tcccgagtag ctgggattac aggcgcccac caccatgccc agctaatttt cgtactttta
+     5041 gtagggatgg ggtttcacca tgttggccaa gctggtctca aattcctgac ctcaggtgat
+     5101 caacccacct ccgccttcca aagtgctggg attacaggtg tgagccacca cgcccagccc
+     5161 ctattaggtc tttatccaag aaacactgtg gctagaagtc agactctggg ccctcttcta
+     5221 attaaactct gcccttgagt catttcatct aatctcatgg ctgtaaatta cacctgaagc
+     5281 tcacacagca ggctccatcc cacccactcc ccacgtggcc cccagctgct gctctcctca
+     5341 gcggccgcag ccaccgcacc ccttccagtc tgttctctct ccagcagctg caatcacggg
+     5401 actccttccc gtctgttctc tccagtggct cgtgccacac acagcacaga cccccagggt
+     5461 ctaggtatga ccggcaacac tctacgtggc tgtcctctgg acgccgctct gctcactccc
+     5521 ttcccctctc cagggacaca atcagcctct ggcttcagtc ttgctacttc cttcgcttgg
+     5581 aaagttctta cccaagaggg ctccattcta cctttttttt tttttttttt gagacaaggt
+     5641 cttactctgt cacccaggct ggagtgcagt tgcgtgatgt tggctcattg taacctcgac
+     5701 ctccctggct caagtgatcc tcccacctca gcctcctgag tagctgtgac tacaggcaca
+     5761 tgccaccaca cctggctaat cttttaattt tttgtacaca tggggtctgc ctgtgttgcc
+     5821 caggctggtc tcttaactcc tggcctcaag caatcctcct gccttggcct cccaaaatgc
+     5881 tgggattaca cgtgtgagcc accatgcctg gcttccatcc caccttttag atggcagctg
+     5941 agatgccacc tgcccagatg ccattccctg accaccatct cacctggtca ccatgttttt
+     6001 ctcttgtcat ttcctgcccc aaaacgctgt tttaggccag gtgcggtggc tcacgcctgt
+     6061 aatcccagca ctttgggaga ccaaggcggg cagatcatga ggtcaggaga tcaacaccag
+     6121 cctgaccaac atggtgaaac cccatctcta ttaaaaatat aaaaattagc caggtgtggt
+     6181 gggtgcctgt agtcccagct acttgggagg ctgaggcagg agaatcgctt gaacctggga
+     6241 ggcggaggtt gcagtgagct gagatcacat cactgcactc cagcctagta acagagcgag
+     6301 actccgtctc aaaaacagac aaagaaaaat gctgtttgaa tctcttgact gtgcttactg
+     6361 gcatctaatg cgtgtcattt atttgtggtg atgcctattt ctccccactg tctgctccac
+     6421 aggggcaggg gctgcagccg ccttgttacc tctgtgtccc gagcacctgg agcagggcgg
+     6481 gccccacatc aggggctcaa ggagcacctg ctgaataaat aaaggaatgg cgtcctggcc
+     6541 cttcccagtg gccagctgat acacagtcac ttttcttgga catcaggcta atccccactg
+     6601 caggcagaac cactgctgcc accttcccac accaaccgaa gcagcggcag tgacgccacg
+     6661 tgcaatgaca accacggcac cccgtgaagc acctgctgcc tcgatgactc tgcagaatcg
+     6721 tgtccaatgt cgccgagtcc tggcagcagc aaatctttat ctcccaatgt tgttatgacc
+     6781 cataaggtcc atagacgaac aaggtacctc aaacgctaac tgcgttggag tcaaccaaag
+     6841 ctcggagata gaatactggc cgggccaggc acagtggctc atgcctgtaa ttccagcact
+     6901 ttgggaggct gagacaaggg gcaaaaggag accatgtttc tacaaaaaat ttaaaaatta
+     6961 gctgggcatg gtggtgcatg cctgtggtca caactacttg ggagacagag agaggaggat
+     7021 cgcttcagcc tggtacgtca aggctgcagt gagctgtgat tgtgccactg cactccagcc
+     7081 tgggggacag agggagaatc tgtctaaaaa aaaaaaaaag aagaattctg ggtttttttt
+     7141 gtttttttga gacggagtct cgctctgtcg cccaggttgg agtgcagtgg tatgaacttg
+     7201 gctcactgca agttccgcct tctgggttca cgccattctc ctgcctcagc ctcccgagta
+     7261 gctgggacta taggcgcccg acaccacgcc cggctaattt ttttgtattt ttagtagaga
+     7321 cgggctttca ccatgttagc caggatggtc tcgatctcct gaactcgtga tccgcccgcc
+     7381 tcagcttccc aaagtgctgg gattagaggc ttgagccacc atgcccggcc aagaatactg
+     7441 cttaacagag gtaacaaaag agcaataatt atgagttcaa ggtcacagag aacgcagacg
+     7501 acacagatgc tcagctacga cgctgcacgt agctctctgt gtaaaatgac ccctggcaat
+     7561 cacaaaggcg tttacaacct tgaccaaatc aggagctggg ctgagacctt cctcgactgc
+     7621 aagcttgagc agctgagctg acagccaggc tttctttact taccgacttc cggcaggctc
+     7681 tggaggcaaa catctgcttg actcgggaag gccggcacat gaccccaggg ctgtcgctca
+     7741 gcatgaagat cagttcatcg acgtcctggg gtccgaaggt ccagttttta ctagttggca
+     7801 aggaaatcag tttagccctt tcagtgactg gagctaaaag aatacaattt tgagaaaaat
+     7861 ccatgacttg acaaacacgt ttcacttgaa agctacttag gatgaacatc tgaggccggg
+     7921 cgtggtggct cacgcctgta atccctgcac tttgggaggc tgaggccagc ggatcatgag
+     7981 gtcaggagat acagaccatc ctggctaaca tggtgaaacc ccgtctctac taaaaaatag
+     8041 aaaaaattag ctgggtgtgg tggcaggcac ctgtagtccc agctactcgg gaggctgagg
+     8101 caggagaatg gtgtgaacct gggaggcgga gcttgcagtg agccgagatc ggcaccactg
+     8161 cgctccagcc tgggcgacag agcaagactc catctcagaa aaaaaaaaag tgaacacctg
+     8221 aaagagagga aactcacaaa atgctttttg gaggaacttt ttaatctttt ataaaattaa
+     8281 aaaaaactgg tctatatgac ctgaaagatt attcccagct ctaaaaagac aagaatctat
+     8341 agttctgatt tttttttttt tttgagacag agtttcactc ttgttgccca ggctggagtg
+     8401 cagtgacgtg atctcggctc actgcaacct ccacctcccg ggttcaagcg attctcccac
+     8461 ctcagcctcc tgagtagctg ggattacagg cacccgccac cacgcccggc tactttttgt
+     8521 attttcagta gagatggggt ttcaccatgt tagccaggct ggtctcaaac tcctgacctc
+     8581 aggcgatctg cccgccttgg cctcccagag tgctgggatt acagacgtga gccaccacac
+     8641 ccagccgcta tagttctaat taataactta ccattttcat cgataacaaa atcaaagcca
+     8701 ttctttctaa atatttccag attttctatc agaacagctt cattaacagc agttaagttg
+     8761 agagtctgag gtctgaaaaa cacaaaaatg attcaaacca tatcctgaag tcaaacattt
+     8821 agctttacag cagaaatgaa atgaaaacaa caatactgta ttttgaattc atgtcaaaat
+     8881 aacaacacaa ataacaacac tactcagcta agtgtcacaa aacttcctga gaagttcctt
+     8941 ttaattttct ctttcttaaa gttcttttta gaagttaaag tagctacagg ccaggtgcgg
+     9001 tggctcacgc ctgtaatctc agcactttag gagcccgagg caggcagatc tcttgaggcc
+     9061 aggagtttga gaccggcctg gtcaacacag cgaaacactc tctctactaa aaatataaaa
+     9121 attaggccag gcatggtggc gcacgcctgt agtcccagct acttgggagg cttaggcatg
+     9181 agattcgttt gaacccagga gggaggcaga ggttgtagtg agagccaaga tcacgccact
+     9241 gtactccagc ctgggcgaca caacaagact ctgtctcaaa aaaaaaaaaa aaaaaaaaac
+     9301 acccataaaa acaaaaatta gctggaagtg gtggctcatg cctgtaatcc cagctactcg
+     9361 ggaggctgag gcactagaat tgcttgaacc caggaggtgg aggttgcagt gagccaagat
+     9421 cacaccactg cactccagcc tgggcaacag ggcaagactc tgtctcaaaa aaaaaaaaaa
+     9481 agttcaagta gctacaaaag tagtttgctt tttcctcagc ctgccacgcc aatgactccc
+     9541 actttttctg aatcctttcc ttaaggataa cagtatcaca aaaatgctat ttttcctcct
+     9601 tctaatacag aatttgaaac actgggttag gtcattgcca gcatttgtaa acagaatgaa
+     9661 cagacagctt ttattttgct atcctgttcc ttcctctgcc tgtattatat ctccatccct
+     9721 ctctcctcct ggatttactg tttgtttttt tttaaccttt cgttattttt ttcaaagata
+     9781 gagacagggt ctcactatgt tgcccaggct gctctcaaac tcctgggctc aagcgatcct
+     9841 tccacttcag cctcccaaag tgctgggatt acgagtgtga gccactgcat ctggtcctga
+     9901 gtgctggata agacaaacac tgctcaaggc aggagacagc tggtgagcaa acacaggctt
+     9961 ggtcctggag ccaacagatt accggggaag aaagacgttg agcaaatact caggcaagtc
+    10021 gattatgatg agaaacgaca ggaaggtcag gaagaaaaag cagccagtgt catagagaga
+    10081 cttcaccctg gggtcaggaa gtgacctttg agctgagtcc ggggataaga gagttaatca
+    10141 ggtaacgggg gagaagtggg tgcagggtgc aggacaagta ttctagacag ggacaacaat
+    10201 ctgtgccaag ccccaggatg gaccgctgat gtttgcagag ccacacataa agatatcctt
+    10261 cattctgctt agtggccaca tagggattca tcaggcctgc caagggaaaa agaaagacag
+    10321 ccagagaggc ttgagtacag ggaacaaggg gaagacgaac gggaaaagct acagaggtca
+    10381 acagggccac cctacacagg ggctggcagg gcagggtgga actgggtctt tatcctttaa
+    10441 tcttgaagtg tggtccatct gggaccctaa gtggtctgtg attacctggg ccaacttgaa
+    10501 atgtcacaga tgagaggtta tctttgccga atggctaaaa aatacaagac ctcagccggg
+    10561 catggtggct cacacctgta atcccagcac tttgggaggc tgaggttggt ggatcacctg
+    10621 aggtcaggag ttcaagacca gcctgacaaa catggcaaaa ctccctatct attaaaaatc
+    10681 caaaaattag ccaggtgtgg tggcgggtgc ctgtaatccc agctactcgg gaggctgagg
+    10741 caggagaatc acttgaaccc gagaggcaga ggttgcagta agccgagatc acatcactgc
+    10801 actccagtat gggcgaaaga gtgaaactct gtctcaaaaa cacaaaaaca aaaaacctct
+    10861 attaagagga acagggaagg gatataaagt agcttactaa atgtctatta ttaccattgc
+    10921 ctcctactga gaataaaaac aattcacgca ttccacagga gagtactcag caaactacac
+    10981 aggagagtac tcagcaaact acacaggaga gtactcagta aactacacag gagagtactc
+    11041 agcaaactac acaggttcag tggtacattt ctccatgtgg gatctacttg ttgggatctg
+    11101 agtttacttc actacgtggt ttaatttccc acacgaaaat ccatgacctc ttcttctaac
+    11161 tttgctgaag acaagacttt ggttttacat gatactatca cacctgacct ttgtgaagta
+    11221 gtcagggtaa aacattccag tttggccgag gagagagaaa taccaaattc tgcagtgact
+    11281 atcttaaaat aatttttaaa ttttatttta ttttatttat taatttattt gtgagacaga
+    11341 gtctcactgt ctcactctgt cacccaggct ggagagctgt gcagtggcac gatcatggca
+    11401 gcctcaatct cctgggctca aacgatcctc ccacctcagc ctcccgaata gctgggacca
+    11461 caggcacaca ccatcaagtc tgactaattt tttacatttg ttgtagagac aaggtttcac
+    11521 catgatgccc aggctggtct caaactccta agctcgaggg atctgcctgc ctcagcctcc
+    11581 caaagctctg ggattacagg cgtgtgcccc tgcatccaac ctgcagtgac tatctgactt
+    11641 ctgattactc tactgtcaat caacactggc gcacaggctg tctgtctttc tgaacacaca
+    11701 cattccatac actatgcata ctaatactcc atactatcaa ttgccctcat cagaaggatc
+    11761 ttctggctaa ccagtgatca acatttttaa tagcgaaaaa tacctgatac ttagagaaca
+    11821 tgttaaccac gtgaactggg gcaggttact caacctctct gcatgtgcct cagttttatc
+    11881 gcttgtggaa tggtgatggt aacagtaaca accccatagg tttttgagga ttaaaggaac
+    11941 taatacacat acattatttc aacagtgcct ggcagattct aggcactgaa taaatggtaa
+    12001 ctatcactat tatgtaaaaa gtataaaaat ctgctatatg aatacttatg gaaaaataca
+    12061 tatatacata tagacacaca tataaactat taggtctctt tttttttttg agatagaatc
+    12121 tcgctctgtc acccaggctg gagtgcagtg gtgcgatctc ggctcactgc aacctctgtc
+    12181 tcccaggttc aagcgattct cctacctcag tctcctgagt agctggaatt acaggcgtgc
+    12241 actgccatgc ccagctaatt ttttgtattt ttatttttta tcattattat tattttttga
+    12301 gacggagttt cactcttgtt gcccaggctg gagtgcgatg gcacgaactc ggctcgctgc
+    12361 aaactccgcc tcccgggttc aagcgattct cctgcctcag cctcccaagt agctgggact
+    12421 acaggcgccc gccaccacgc ctggctaatt ttgtattttt agtagagaca ggtctcacca
+    12481 tgttggtcag gctggtctcg aactcccgac ctgaagtgat ctgcccacct cggcctccca
+    12541 aagtgccggg attataggcg tgagccaccg tgcctggcct ttttgtattt ttagtagagg
+    12601 cggggtttca ccacgttggc caggctggtc tccaactcct gacctcaggt gatctgcctg
+    12661 cctcggcctc ccaaagtgct gggattacag gtgtgaggca ccgcgcctgg ccaactagat
+    12721 attttttatt ttttacaccc ctccttccta gatctcttct tttttaaagt agatacaagg
+    12781 tcttgctgtg ttgtccgggc tggtctcaaa ctcctggcct cttgtgatcc tcctgccttg
+    12841 gcctctatta gatcttcaat ttgaggggga gtctgggaat gaacactaaa cacactcacg
+    12901 ctatgagcct ctgcccctgg agcacggtgt gctgctgcag catctcgaag ttatacttct
+    12961 cgtccgtggc atgctggtcc actatgaaga tatcctcatt cagtttggtt attataaatc
+    13021 ccaggttaaa ctgaccaatg atttccattt ctgcaaacat cgttttactg caggtagaaa
+    13081 atgttaatta tcagacattt tacaagatta tttttctgat tatgttatag aacactgtaa
+    13141 taaaaaaaaa gtcaaacaat acaaaaacaa aataaagtcc ctagccatcc cgctttcttt
+    13201 ttttttgaaa cagagtctcg ttctgtcacc caggctacag tgcaatggca caatcttggc
+    13261 tcactgcaac ctccacctcc cgggttcgag tgattcttct gcctcagcct cctgagtagc
+    13321 tgggattaca ggtgcgccac catgcccagc taatttttgt atttttagta gagacagagt
+    13381 tccaccatgt tggtcaggct ggtctcgaac tcctgacctc atgatctgcc cgccttggcc
+    13441 tcccaaagtg ctgggattac aggcgtgagc cactgcgttc ggcttaacca tcccactttc
+    13501 taaagataac attaattatt cattcatcca actctccgga gaagacatca gttgctacta
+    13561 ttaacgattt aaatggaata tatccttcta gacccttgtc tccatatata atttttttta
+    13621 attttaaaaa acaaaaatgg aatcttaatt ctccattctg tcatcactta atgcatctga
+    13681 aacaagtttt cagacctgta cacatagatc tacttcatta ttttttcttt ttttttttct
+    13741 tttaagacgg agtctcactc tctgttgccc aggctggact gcagtggcgt gaccgtggct
+    13801 cactgcaacc tgcgcctccc aggttcgagc gattctcctg cctcagcctc ccgagtagct
+    13861 gggactacag gcatgcaccg ccaagcccgg ctaatttttt tatttttagt agagacaagg
+    13921 tttcaccatg ttggctaggc tggtcttgaa ctcccgacct caagtgatcc acctgcctcg
+    13981 gcctcccaaa gtgctgggat tacaggcgtg agccaccgca cctggcctac ttcattcttt
+    14041 ttaatggcca cataggaatt cattgcatgg atgtaccata atttgtctga caaatcccct
+    14101 actaaaggac atttcagttg tttccaattt caatagcgca ctcaaagctg caacaaatac
+    14161 ttctgtgcat aaacctactc atctgtgggt gcatttccgt gagacagacg ctagagggag
+    14221 aactacatat gtacttcttg acgggaaatc tgtgaaaagt cacactccca ccaatggtgt
+    14281 gtaagagcac ctttctgcca atgctggata tcaatccttc tcatctttgc caggcccacc
+    14341 actgggtcct ttgcgggtgg cttcaacatc taatgtcatt aaatactaac ttagtcaatc
+    14401 tggacaaaag acagacacca ccgctaacct tcacacgaga aattgacact gtcattctca
+    14461 gtcccacaca attaaatccg gtgaaaatgg attttccgca gtatcagcgc ggtgatgaca
+    14521 agaaatggct ctgttaaagc agccatggac gttttctggt tctcacctgg tggcctgagc
+    14581 tgaggatgaa agcagctgta atgtaatccc agcactttgg gaagacaagg tgggcagatc
+    14641 atttgaggtt gggagttcaa gaccagcctg gccaacatgg tgaaacccca tctctactaa
+    14701 aaataaaaaa attagccagg catggtggtg gacacctgta ctcccagcta cttgggaaac
+    14761 gaaggcagaa gaatcgtttg aacccgggag gcagagcttg cagtgagctg agatcgtgcc
+    14821 agtgcactcc agcctgggcg aaagagtgag actcttgtct caaaaaaaaa acaaaggagc
+    14881 tgatattgtt gtttctttct ataagtgctc caggaagacc cggtcccatg ccaccatgct
+    14941 cgtcaccatc acaatcaacc acaggggaca gtttggtgaa ctgtgagacc tccacatggc
+    15001 atggattact gagcccacat ttcctatggt gaggggctcc acacagagct caaatccaag
+    15061 tcataaccaa accagtcccc aaatcctatc tttgagggtc tgtttcctgg taccaattcc
+    15121 agatcaggca gagtgcaatc aatcaagaga caaaaaccac accagtgatt ttaacaggga
+    15181 cttttttttt taagacaggg tcttgctctg tcacccaggc tggagtgcaa tggcatgatc
+    15241 atagctcact gcagcctcaa actcctgggc tcaagtgagc ctcctgcctc agccccctga
+    15301 gtacctggga ctacaggcgt acagcaatgt acttagctaa tttttttttt tttttttttt
+    15361 ttttagagat ggggcctcat tatattgccc aggctggtct caaactccta gcctcaagtg
+    15421 attctcctgc ctcagcctcc caaagtgctg gaattacaag gtgtgcacca ccatgttagg
+    15481 cctgaggagg aaaaatgtat aataaggcat tacacaaact agtaaaaggt ggttaactac
+    15541 tatgctaaga aatacaggaa tggaaaatgc tactatccta gggaagaggg agagtcctca
+    15601 gaaaaggaac tctttttttc ttttttcttt ttcttttttt tttttttgag atggagttcg
+    15661 ctcttgttgc ccaggctgga gtgcaatggt gcaatctcgg ctcaccacaa cctccacctc
+    15721 ccgggttcaa gcaattctcc tgcctcagcc tcccaagtag ctgggattac aggcatgcac
+    15781 caccatatcc cactaatttt gcatttttag tagagaaaag gtttctccat gttggtcagc
+    15841 ctggtctcga actcccaacc tcaggtgatc cacccacctc agcctcccaa agtgctggga
+    15901 ttacaggcat gagccaccat gcccagcaga aaaggaactc ttgtaagagg ctcctaccca
+    15961 ctcaggctga gtttcagacc tccttggagc aggagtggcc gcagcctgct ggatggagag
+    16021 aagctgccag agtgagtgat gacacaggaa ctcctgccgc acaggaggga aggaaaagaa
+    16081 catcccagaa gcatcccaga tgccagcaca aataccacct cccctggcgc cgatcccagg
+    16141 ctctcccagg aattgtctga atatgccctg gttcccagta catagataat ctgctcaaaa
+    16201 gctggtgctg gcctaaaaga cccaagtctt ccatgtgttt ggagtctgtg tcctgccaca
+    16261 gagaacagga tctggccagg cgcagatgcc ggaattacaa ctgcgcacta ccgcgcccag
+    16321 ccaattttat tgtagagacg aggtctccct atgttgtcca ggctggtctt gaactcctgg
+    16381 gctcaagtga tcctccctcc ttggcttggc ctcccaaagt actgggatta caggtgtgag
+    16441 ccaccacacc tagcctcaaa atactcttaa gaaaaaactt tacctggccg ggtgtggtgg
+    16501 ctcacacctg taatcccagc actttgggag gccaaggtgg ctggatcacc tgaagtcagg
+    16561 agttcgagac cagcccagcc aacatggtga aaccctgttt ccaccaaaaa tataaaaatt
+    16621 agccaggcat ggtggcgtgc acctgtaatc ccagctactc aggaggctga ggcaggagaa
+    16681 acgcttgaac ccgggaggtg gaggctgcag tgagccaaga tcatgccact gcattccagc
+    16741 ctgcgcaaca gagcaagact ctgtctcaaa aaaataaaaa ataaaaataa aaattttaga
+    16801 taaaaagaga aaaagtaaaa aattaaaact ttaccttatc tcttttctta gttcatcttc
+    16861 ggctgcttga ttttctccag gacaaatctt tgccctaaac ttcctgtaat tctgttcccc
+    16921 ttcactttgc tgtgcttcat gatgtaactg ctttattcgt ttagctaaag aactcataga
+    16981 aaagtccagg ggcacaactt tcttattaat tttcacagct acatcaacct gagaggctga
+    17041 catgtcctga gtatttacta acttttgaca aatgtcagaa ctggaaagaa tttcttcttt
+    17101 tttaaaacgc tttgtgtttg gggttgcgag attagttggc tgaggcaaaa ctcgaaattt
+    17161 acatccggta tcttcctggt ttgaatggca gtccacatct gaaaaagagt cgtcagtttt
+    17221 aggcgctttc tcctgagagt ccacatgttc ctgcgagccc ctgtcccctg gggagctggc
+    17281 cgcatactcg ctgctgcagt gactgcccgt gtctgggatg ctgaacccct cagaatccac
+    17341 ggaagtgctg ccgtgccccg agtccttctc cacctccgct ctgtccgtag ggtcactggg
+    17401 tccgtgactg gaactcactg cctctttctg aggtctcagg acgcctttgt cagagatggc
+    17461 acctgaagtg ctagaagaca gcatacccct tttctgtcct agagggctcc ttcttggttc
+    17521 tggagtcttt gggctgtgag gcttgttctc tgttgtgtga cgaagagaaa aggcctctcg
+    17581 cagtctggaa atggacacgt cttttttttc ttctccagtc cttaatgaag gggattgatc
+    17641 ctgcttttct accatgggct tttccaaatc cgctgcatgc atttttatta agttacctaa
+    17701 gcaaacgtgg acggagaaga gggtcaggga ctatcctgaa atggtgagag gacgtgctta
+    17761 tgtgaacaga tacttcacaa aagaggagat ccacatgcta attacacaga tgaacacagt
+    17821 tcaatgttca aaataaaact ataatatggg ccaggtgtgg tggcttacgc ctgttatccc
+    17881 agcactttag gaggccaagg cagggggatc acatgaggct aggagttcag gactggtctg
+    17941 gacaacatgg taaaaccctg tttctactaa aaatacaaaa attagccggg tgtggtggca
+    18001 tatctgtcat cccagctact tgggaggctg aggcacgaga atccctttag cccgggaggc
+    18061 agaggttgca gtgagccaag atgccaccac tgctctccag cctgggtgac agagcaacac
+    18121 tctgtctcaa aaaaaaaaaa aaaaaaaaaa aaaaccacaa cacaatgcaa tatggccata
+    18181 tactcaccag aatggtaaaa ttaaaaaaac aacaaatgct cacaaagatc aggatcaaga
+    18241 ggaatgcctg aatacctctg gtaggaatga acctggtaca gctgctttga aaagttctct
+    18301 gggaatacct cctaaatctg aatgtatgca cacctgcaac ccagcatagc tactcctatc
+    18361 agaagtgcct attggccggc acagtggctc acgcctgtaa tcctagccct ttgaggtcag
+    18421 gagttcaaga ccagcctgac caacatggtg aaacctcatc tctactaaaa atacaaaaaa
+    18481 aaaattagca gggcatagtg gaatgcactt ataatcccag ctactaggga gaatgagaat
+    18541 gaggcaggag aatcacttga acctggaagg cagggttgca gcgagccaag atcactccac
+    18601 tgcactccag cctgggcgac agagtgagac tccctctcaa aaaaaagaaa gaagtgccta
+    18661 tctatgctcg tcaaaaagac gtggatgagg atgttcatga cagcattctt cattatagcc
+    18721 ccaaactgga aacaattcaa atattcacaa atgatgatat ctgactataa tggaacactg
+    18781 tatagcgaac gaataaatga attttgccac atgacttggg tgaatctcac aaacaaaata
+    18841 atgagagaaa gaaacaaatc acagaaaagg acagactgaa taacttcaaa ttaaaaacag
+    18901 attaaactat accgttttgg gttttttttg tttgtttgtc tgtttttttg agacggagtc
+    18961 tcgctttgtc acccaggctg gagtgcagtg gcacaatctt ggctcactgc aagcccctcc
+    19021 tcccgggttc acgccattct cctgagtcag cctcctgagt agctgggact acaggcgccc
+    19081 gccaccacgc ccggctaatt ttttgtattt ttagtagaga cagagtttca ccgtgttaga
+    19141 tagtctcgat ctcctgacct cgtgagccgc ccgccttggc ctcccaaagt actgggatta
+    19201 caagcatgag ccgctgcgcc tggcctaaat tctactgtta gaagtcagga aatcccagca
+    19261 ttttcagagg ccaaggctag aggactgctt gagctcaaga gtttgagacc agcctgggca
+    19321 tcatggagaa accccatctc taatgacaat acaaacatta gccaggtgtg gtggtgggcg
+    19381 cctgtaatcc cagctactca ggaggctgag gcaggagaat ctcttgaacg tgggaggctt
+    19441 caaggttgca gtgagctgag atcgcatcat tgcactccag cctgggtgac aagagcgaaa
+    19501 ctccatctca aaaaaacaga catgacaagg gagttaaaaa tgcagtcact gcagacttct
+    19561 tctaatcata tatcttatat gacttcatcc gtttacagtt tacaaaaaac tagaggtact
+    19621 tggaggcagc tacttgggag gctgaggcag gaagatggcc tgagcccagg agtgtgatgc
+    19681 tgcagtgagc tacaatggca ccactgcagt ccagcctggg tgacagagca agtccctgtc
+    19741 tcaaaaaaga attaaaaatg ataaaataat ataagagact ttgttttcat gtcaaaaaaa
+    19801 agtttacttg gaaaaaataa ggaaacacat tagctaaaag ctttagaagc tgtttgtaca
+    19861 ctgtattttt cttaccttca acatccagca gtggctgctg actgacattt agcttgttga
+    19921 catcactatc aaacattcct atcaaagagg tctttaaaac tgccaacaaa agcttttcct
+    19981 cttgtagcaa aatttgcctt ttatctggag taacattgat atcaacgcat tctaaggcaa
+    20041 aaaagaaaac atatttatta tgtttaaatt cacttttatt ttatttatta attattattt
+    20101 tcagacagcg tctcactctg tcgcctaggc tggagtgcag tggcgcgatc tcagctcact
+    20161 gcaacctccg cctcctgggt tcaagtgatt ctccctgcct cagcctccga agtagctagg
+    20221 attacaggca agtgccacca cactggctaa tttttgtatt tttagtagag atggggtttc
+    20281 accgtgttgg ccaggctggt ctcgaactca caacctcaag tgatccaccc gccttggcct
+    20341 cccaaagttc tgggattaca ggcgtgagcc accgcgccca gccaaattca cttttaacaa
+    20401 tagaaatttc cccatctatt atttcattca cttgtattta tcacaagtgc tattaaaaac
+    20461 attacagtgt ccaggttaag attcataagt tatgaaatca gctttttcaa ataaatgagc
+    20521 aaaagacaat ttttgaatag acaaaatacg gaagggctta attaggtaaa ttgttaaagg
+    20581 aaaagcaaat aaacacataa aaataatttt aaatatgcaa actaaaataa gatattttaa
+    20641 tcccctactg aatttagctt aacaattata atacctagta cattataggt aggtgtgtaa
+    20701 attggtacat ctagaacaca atacagaaaa agccttaaaa tgatcatatt cactgaccca
+    20761 gtaattctac tcccggcaat ttatattcag aataattaaa gatgtaggct gagtgcagtg
+    20821 gctcacaccc tgtaatccca gcactttggg aggctgagac gaacagataa gttaaggtca
+    20881 ggagttcaag accagcctgg ccaacatggc gaaaccccgt ctctactaaa aacacaaaaa
+    20941 attagtcagg catggtggca ggtgcctgta atccgtgcta ctcaggaggc tgaggcggga
+    21001 gaatcgcttg aactcaggaa tcggaggtta cagtgagctg atattacacc actgcactcc
+    21061 agcttgggag acagagcaag actctgtctc aaaaaatatc taataataaa gatgcagata
+    21121 atgatttaat tataaggaaa gtatttataa tttccaaaaa ctaaaaacaa tttaattttg
+    21181 aaaaatttaa aaattaaaat accaaactat aaccatgcat tggaatataa ttcacctatt
+    21241 aaaaccacat ttctgatcaa tttctaataa catggaaaag aaaacattca catctaagga
+    21301 taaagagcag tatacaaaat tattttctca tcccaaagaa tatgggagta ggggagagag
+    21361 agagaaagag agagaggaca gaagatattt tttaaggtat gtacatatgt gtttctaagt
+    21421 atctagaaaa aatactcaat tacaataaac caaaatttta acaatcagaa aaaaaaatct
+    21481 atatgaaatg aattatttat gaaattagga agaacatttc atctactttc tcccttggtt
+    21541 gacattaaaa aaaattacat tttcctaaca atataattaa catagtctca agtagaaagc
+    21601 gggaactctg tttaaaaaaa aaaaaaatta tagggccagg cacggtggct catgcctgta
+    21661 atcccagcac tttgggaggc caagacgggc agatcacgag gtcaggagat cgagaccatc
+    21721 ctggctaaca cggtgaaacc ctgtctctac taaaaataca aaaaattagc caggtgtggt
+    21781 ggcacgcacc tgtagtccca gctacttggg aggctgagtc aggagaatcg cttgaacccg
+    21841 ggaggcagag gttgcagtga gccgagatca cgccaccaca ctccagcctg ggtgacagag
+    21901 caagaccccg tctcaaaaaa aaacaaaaac aaaaaactta catgaccata aattgttatc
+    21961 tcattccagt catagcagag ctgtagaatt tcattttatt ctttgaggca ttagtcacta
+    22021 gttgtactga aatgccaatg gaacttacct gaatcaacag aaatgttaag aacaacaaat
+    22081 ggatactggt gtcgattata catgtggtag acctcattca cgagtctgca gacctgcaca
+    22141 aaatacaagg agtagaaaag aataaatgac aaatgttccc agccccccgc attctaacaa
+    22201 cattctattc taaccaacca gcatgttctt agaaggggat acttttttgt tttttttttt
+    22261 tttgagtcaa ggtctcgcct tgtcacagcc tggagtgcag tggagcaatc atggctcact
+    22321 gcagcctcaa cctcccaggc tcaagtgatc ctcctgtgtc agcctgacat gtaacttgga
+    22381 ttacaggcag gatttttttt tctttttttt tttcaacgga gtctcgctct tgttacccag
+    22441 actggagtgt aatggcacga tcttggctca ctgcaacctc tgcctccggg gctcaagtga
+    22501 ttatcctgac tcagcctcca gagtagctgg gattacaggc acacgccacc atgaccagat
+    22561 aatttttgtg tttttagtag agatggggtt tcaccatgtt ggccaggctg gtctcgaact
+    22621 cctgacctca gttgatccgc ccgcctcaac ctcccaaagt gctgggatta taggcgtaag
+    22681 ccactacacc tggcctaagg atacattttt ttaacagctt tactgagata tgactaacat
+    22741 ggaataaact acacatattt aaagtgtgca atttcataag ttttgacata tacacaaaca
+    22801 cctgtgaaac tatccccaca atcaagataa tgaatatatc catcaccaaa agtttcctca
+    22861 caatctcaaa gtgatatttc tctaatcata gattcctaaa actgaatatt tttccaactt
+    22921 aaagttgctc tatgagaaat tctagtgaaa tgcaagtgca gcttaaatgt tcataaaaca
+    22981 tattcaatgt acatagaaaa gtatctatga cattaaaatg tcattagaaa taaaccaaaa
+    23041 tatcacatta ttaatagtta taattaataa ttatgaatcc atcacactat aggttaaaaa
+    23101 atttagaagt tcaaccacat ctggcagatt acaagcaaac tctaaagcat cattgaaaaa
+    23161 caggggctgg gagcggtggc tcacgcctgt aatcccagca ctttgggagg tcaaggcagg
+    23221 tggattgcct gagctcagga gttcttgact agcctgggca acacagtgaa accccatctc
+    23281 tactcaaata caaaaaatta gccaggcatg gcagcatgtg cctataatcc cagctacttg
+    23341 agaggctgag gcaggagaat tgcttgaacc tgggagggag agcttgcagt gagccaagat
+    23401 cacgtcactg cactctagcc tgggcgacag agctagactc cgtctcaaaa aaaaaaaaaa
+    23461 aaaaaagaaa gaaagaaaaa aaaacaaaat attactgagg tacaatgtgt tgctaagata
+    23521 caaactcaaa aaacccatgt catcatatca agatgatcaa tttaaatctg aggcagaagt
+    23581 aatctgagcc cttattttcc taggaaaata gaaagaagag aaaatataga aatctataga
+    23641 aaatatagaa accatgggcc gggcgcggtg gctcatgcct gtaatcccag cactttggga
+    23701 gacagaggcg ggtggatcac gaggtcagga gttcgagacc agcctggcca atgtggtgaa
+    23761 accccgtatc tactaaaaat acaaaaatta gccgggtgtg gtgatgcgtg cctgtagtcc
+    23821 tagctactag agaggctggg gcaggagaat ggcgtgaacc tgggaggcgg tgcttgcagt
+    23881 gagcagagat catgccactg cactccagcc tgggggtgac agagcgagac tctgtctcaa
+    23941 aaaaaaaaaa aaaaaaaaaa aaaggaaata tagaaaccat gtaatcagtc tatactgaaa
+    24001 ggtgacatag aatgttataa aatgtttagt ttcttcaaat agttttagtt tttacaataa
+    24061 taaatatact ggtaatatgt gtttatatat ttatgtatct atacacacaa cacatataat
+    24121 gtatatatgc agatacaaac acactcacgt atatgcaatt taaaaaacta tacagaggcc
+    24181 aggcgcggtg gttcacgcct gtaatcccag cacttcggga ggccaaggca ggcagatcac
+    24241 gaggtcagga tttcaagacc atcctggcca catggtgaaa ttccgtctct actaaagaca
+    24301 caaaaactta gccgggcgtg gtggcgcgcg cctgtaatcc cagctacttg ggaggctgag
+    24361 gcaggagaat cgcttgaact cgggaggtgg aggttgcagt gagccaaaat cgcaccattg
+    24421 cactccagac tggccaacag ggcgagactc catctcaaaa aaaaacccaa aaaacaacaa
+    24481 caaaaaaaac tgtacacaga tagatgcgct ccttaactta tgatagggtt atgtcctgat
+    24541 aaacccataa gttaaaaata ttgtatctgc tgggcgcggt ggctcacacc tgtaattcca
+    24601 gcactttggg aggccgaggt gggcggatca cgaggtcagg agatcaaaac catcctggct
+    24661 aacaaggtga aaccccgtct ctactaaaaa tacaaaaaaa aattaaccag gcgtggtggc
+    24721 aggcacctgt agtcccagct actcgggagg ctgaggcagg agaatggcgt gaacctggga
+    24781 ggcggagctt gcagtgagcc gagaccacgc cactgcactc cagcctgggt gacaaacaag
+    24841 actccgtctc agaaaaaaaa aaagaaagaa aagaaaatac tgtatgtcaa aaatgccttt
+    24901 gtgataacct aacctactga atgtcccatc tcagccttgc ctcagaatac ttacatagtc
+    24961 tataggcaaa ataacctatt ttataataaa atgttgaata tcttctgtaa tttattgaat
+    25021 actataccga aaaacaatgg ttcaataggt acttgaagta tggtatctac tgcaaaaaat
+    25081 aacttctgca acaaggtaaa gtagtagaaa aaaatatata tatatttttt tgaaacacag
+    25141 tctcgctctg tcacccaggc tggagtgcag tggcataatc tcggcttact gcaagctcca
+    25201 tctcccaggt tcaagtgatc ctcctgcctc agcctcccat gtagctggga ttacaggcgt
+    25261 ggaacaccat gcctggttat tttttgtatt ttagtagaga cggggttttg tcatgttggc
+    25321 caggctggtc tcgaactcct ggcctcaggc aatccacccg cctcggcctc ccaaagtgct
+    25381 gggattacag gcatgagcca ctgcgcccgg acagaaaagt cttcagttga aacatctgaa
+    25441 gctgggggcc atctgcggta gacttctgta aatgcacaaa ataagataat gttaaagcca
+    25501 tgtttctcaa agtcccgagc tccacgtaaa ctgcctatta tcagaaaaaa gttatcaatt
+    25561 aaaagtcaaa ggcataaaga acaaactaac acaaaaaaat tttaaatacc tttgctgggt
+    25621 cacaaggccg ccggttgata aagaaaaact gtctgtctgt tgaactcctt ccaactccat
+    25681 gcgtgcattg tgaaatgaaa cctgagatgc tattcaacat taatatggta agggcaggat
+    25741 tccagagtga aagggattag aaatacgatc acatggcaca ttcttaaagt gaaatgaaaa
+    25801 caaaacacca ggtgacatgc tgataaggat cactattgca gttcacgggt atctgtgctc
+    25861 caaatcttga tgagtcatca aagaaccaaa ccttctggaa tattctaaag ctcctacagt
+    25921 caaccaatgc accacaggtg atgcagtgcg tccaaaactg atgtgttgca gctctcctta
+    25981 cccttcctga taaatcctca gcctctgtaa gtgggtctcg cttcaaatgc attctcagaa
+    26041 cctccgtgct gccacccctg gtttgtcaat gaagtctaac cacttgtgct cagaattttg
+    26101 cccacattcc ctcccctttc aaaacctccc gggtaggacg cttatatctc atgtcttggt
+    26161 aaagcgcttg cttcacatga gacccacccc agggataccg gcatttccag aagaacacca
+    26221 ccttcacata aagacataaa gctccatgtt taccatttca ggcataagcc aaaagcaagt
+    26281 ggaggaagag taagaaatat agatctcaag gcaacaaaca aacaaacaaa aagaaataca
+    26341 gatcttaggc tgggtgtggt ggctcatgcc tgtaattcca gagccttgag aggccaaggt
+    26401 gggtggatca cctgaggtca ggagttcaag accagcctgg gcaacatggc gaaaccccgt
+    26461 ctccactaaa aatacaaaaa atcagccggg catggtggtg aacacctgta gtcccagctt
+    26521 ctcggaaggc tgaggcagga gtatcgcttg aacctgggag gcagaggttg cagggaggca
+    26581 gaggttgcag tgagccaaga tcacggcact gcactgcagc ctaggcaaca aagcaagact
+    26641 ccatctcaaa gctaaaaaaa aaaaaaatat atatatatat atatatatac acacagatag
+    26701 atagatatct ttacaggacc aatcctattt atggaagtgt ctattttctt atacgaaaag
+    26761 taatgacact gaactgcctt catcagatgc caggaaagtc aaaatcattt aaaatgataa
+    26821 aataatttac aagttagtct aactaaacag agccttaaag aagacctgct caacagaaaa
+    26881 ccacctgaaa tataccactt actcaaaaca tggtttgaat taagcaactg actcctttgt
+    26941 ataaatcatc tttcttagcc acagcattgc tcacagtttt ataaaggaca taaaaaacta
+    27001 ttatccctag ccaggcgtgg tggctcatgc ctgtaatccc agcactttgg gacaccaagg
+    27061 tgggcggatc atctgaggtc aggagttcga gaccagcctg gccaacatgg tgaaaccccg
+    27121 tctctactaa aaatacaaaa ttagccgggt gtggtggcac gtgcctgtaa tcccagctac
+    27181 tcaggaggct gaggcaggag aattgcttga actcaggagg tagaggttgc agtgagccaa
+    27241 gatagcacca ttgcactcca gcctgggcaa caaagcaaga ctccgtctca agaaaaaaaa
+    27301 aaaaagacac gaaactatta gccttagaat cactatcttt aaaaaaaaag ctctcaggat
+    27361 aaaatgttca attgtagttc tcttgccagc aatctactta ctaaaaaaga ttatgcagag
+    27421 catcggaaca gctcaaaccg tactcttcac acacggagtc actagggggc agctgaacaa
+    27481 aaggaatgag gctttgcaac tgaaaaaaaa aaaaaaaaat tcacagttac ttcctaataa
+    27541 agacagagtg gacttaatct gttttctttc ttagtcaagc tattgacatt acaagcgcaa
+    27601 aaaaaattaa aagaatcttt tgttttgttt tgttttttga gacagggtct ccctctattg
+    27661 cccaggctgg agtacaatgg ctcaatcata cctcactgca atgtcaaact cgtgggttca
+    27721 agcaatcctc ctgcgtcagc ctgtcgagtg agtagctggg actacaggtg cacaccacca
+    27781 cacctggcta attttttaat ttttttgtag agatgggatc ttgccgtgtt atccaagctg
+    27841 gtcttaaatt cctgggctca agcgattctc ccacctcaaa attgttggcc gggtggttca
+    27901 aacacataat cccaacagtt tcctctccca gagtgctggg attacatgtg tgagccgtgg
+    27961 gaacaacaat tttgatttta tgatataaga aagatgaaac aagtacctac ttattcagaa
+    28021 cccacacatt gcccacaata acttatattt ttttcagaga gagagtgaaa agacgcagta
+    28081 tacgagtgtc tctggaagaa taaaatgaaa cacattcagc tctcaaacat caatttttgt
+    28141 gataggtact ttgttttttt tttttttttt ttcctgggat ggtgtcttgc tctctcgccc
+    28201 aggctgcagt gcagtggtgc aatctcagct cactgcaacc tccatctccc gggttccagc
+    28261 gactctcctg cctcagcctc ctgagtagct gggattacag gtgcctgcca ccacgaacag
+    28321 ataatttttg tatttttagt agagatgggg tttcaccata ttgatcaggc tggtctcaaa
+    28381 ctcctgacct cgtgatccgc ccacctcagc ctcccaaagt gctgggatta cagacgtgag
+    28441 ccactgcgcc gggccttgtg ataggcactt taaaaatcaa ttcttaatct gggcgcagtg
+    28501 gctcacgtct gtaatcccag cactttggga ggccgaggca ggcggatcac tagaggtcag
+    28561 gagttcgagg ccagtctggc caacaagatg aaaccccatc tctactaaaa atacaaaaaa
+    28621 ttagctgggc ctggtggcat gtgcctgtaa tcccagctac tcaggaggct aaggtaggag
+    28681 aattgcttca acgcgggagg cagaggttgc agtgagccaa gatggcgcca ctgcactcca
+    28741 acctgggcaa cagagcaaga ctccagctca aaaaaaaaaa aaaccggccg ggcttggtgg
+    28801 ctcacacctg taatcccagc actttgggag gccgaggctg gtggatcacg aggtcaggaa
+    28861 ttcgagacca gcctggccaa cacggtgaaa ccccgtctct actaaagata caaaaaatta
+    28921 gcctggcgta gtggagcatg cttgtaatcc cactactcgg gaggctgagg caggagaatt
+    28981 gcttgaatct gggaggcgga ggttgcagtg agccaagaca acaccactgc actccagcct
+    29041 gggcagcagt gcgagactcc ctctcaaaaa aaaaaaaaaa atcaattcta agattttatt
+    29101 ctccattcta ctggaaggga caatggaaac ccgctataat cactagagca ataagaggcg
+    29161 ttgaagtaac cggccatcac tacctgcttc tgcccaaaca cagagccgat attttccttt
+    29221 atgctggggc ttccacctgt gcataccaca ggctgtcgtt ttccttgtcc aagctgattg
+    29281 gtgcaactta cacggatgcc tgctgaaatg atacagtatg catgtaagac ctggaccatt
+    29341 ttggcatact cctgtttaaa aaacacaaac acaatattct acattacttt aatattatag
+    29401 gaattacaca gctcaagtta caacatccaa cgcaaggttc tcacatcatc gcacaaatca
+    29461 agggaagcac tgttgacaga atgatctgta aagaggtgtc ttcctatatt ctacagaaag
+    29521 gaacgcagag cttttggctc ctggtcacag tcctctcact tcccaatgtg ccatgcatcc
+    29581 tggtaaaaca actaaaaagt acagcctgta atcccagcta ctcaggaggc tgagggcagg
+    29641 aggatcactt gagaccagga gttcaagacc agcctgggca acacagcaag accctgtctc
+    29701 tacaaaaaat ttaaaaaaaa aattagccgg gcgtcatggc atgtgcctgt agtcacagct
+    29761 actgaggagg ctgaggtggg aggatcgctt gagcctagga gttcaaggct gcagtgagcc
+    29821 atgattgcac cactgcactc cagcctcggt gacagagtga ggccctatct ctaaaaatga
+    29881 aaattaaaaa actgaaacgt acattgtgtt tgattttata atctctcctt ttgaaatgta
+    29941 tcttcgtata atagaaacac tggcacaagc attttggtat gcaaagagat acacaaaaat
+    30001 gttcactgaa acaatctcta tgaacaaaca gaaacaacct aagcaagcat cattgaggag
+    30061 ttgattaatt atggtatagc catagcgcag cagaatgaca acaaataagg cagtgtgcac
+    30121 cgactaaaaa agacaatcac aatatgctaa gtaaaaagtc agttataggg ccaggcatga
+    30181 tggttcacac ctgtaatccc agcactttgg gaggctgagg cgggaggatc acttgagccc
+    30241 acgagttcga gacctgcctg ggcaacacag aaggacccat ctctacaaaa aaaacaaaaa
+    30301 ttagccgggc atggtagcac gggcctggag tcccagctac ttgggaggct gaagtgggaa
+    30361 gattcattga gcctgggaga tcatggctgc ggtaagctga gattgtgcca ctacatccca
+    30421 gcctaggtga gagagcaaga ccctgtctca attaaaaaaa aaaaaaaaaa aaaaatacaa
+    30481 ctttcaacca catacaattc tgtattactt gcatgttgta cattctatat tacttgcttt
+    30541 cattatatta acttatgaat ttatcttgaa aattattcca acagttataa acacatgaaa
+    30601 ttaaaagcag cctgaaaaga tatacaaact gtaaataaca gttatctctg acaaatagaa
+    30661 gttctacatt cctgtattct gctaaggcac taattttttt accataagat acaaaaaaag
+    30721 agtaagtttt ctctacttta gaaaatttaa atttgtgaaa aaatgtaata aagttaaaat
+    30781 tagcagccaa gtgcagtggc tcacacctgt aatcccagca ctttgggagg ctgaggcagg
+    30841 tggatcactt gaggtcaggg gtgcaagacc aggctagcca acatggtgaa actccatctc
+    30901 tactaaaaat acaaaaatta gctgggcgtg gtggcgcaca cctataatcc cagctactcg
+    30961 agaggctgag gcaggagaat cacttgaacc caggaggtgg aggttgcagt gagccgagat
+    31021 cgcaccactg cactccagcc tgggcgacag agtgagaaga ctccatctaa aaaaaaagaa
+    31081 agttaaaatt agcaccaaat gctttacaag taaaaaaagt ttttagctgc atatgtttaa
+    31141 gtaacttttt agattatgaa aaacacacat acaaaatggg aaggcacaaa gaagacagca
+    31201 aaaactgcat gagatctcac atccaaggat aactgctgag aacatgaaag tgccgagtct
+    31261 tccagccttt atactataca catttaggct tgttgttttg ttttcacaaa attgtaatca
+    31321 aataatacag acagttctat aatctgcttt ttaaacacaa cgactatata acatttagct
+    31381 attttcattt gcattcaaat tcataagggt tctaatagct catttctcag aaaaccaaga
+    31441 gaaatattct tttttttttt tttttgagat ggggtctggc tctgtgccca ggctggagtg
+    31501 caatagcttg atctcggctc accgcaacct ctgcctcccg gattccagcg attctcctgc
+    31561 ctcagcctcc caaggagctg ggactacagg cacatgccac catgcccagc taatttttgt
+    31621 atttttagta gagatggggt ttcaccagtt tggccaggat ggctttgatc tcttgacctc
+    31681 gtgatccacc cgcctcagcc tcccaaagtg ctgggattac aggtgtgagc cactgtgcct
+    31741 ggccgagaaa tattcttatt aaaatataag tacataaggc caggcatggt ggctcaggcc
+    31801 tgtaatccca gcactttgag aggccaaggt gggcagatca cctgaggtca ggaattcgag
+    31861 accagcctgg ccagcctgga caacatggtg aaaccccgtc tctactaaaa atacaaaaat
+    31921 tagccagctg tggtggtaca cgcctgtaat tgcagctact cagaaggctg aggcaggaga
+    31981 atcgcttgaa ctcaggaggt ggaggttgca gtgaaccaag atcgcgccac cgcactccag
+    32041 ccagggcgcc aaagagaaac tccatctcaa aaaaagataa aaataaaaaa taaaaaatat
+    32101 atatatatgt atatatattt ttccagacag gatcttattc tgtctcccag tcttaagtgc
+    32161 agtggcgcaa tcatagctca ctgcagcctc aagttcctgg gctcaagtga tcctcccact
+    32221 tcagcctccc aagtagctgg aactacaggt acatgtcacc atgcccagta aatttttttt
+    32281 taaaattttt catagagaca gggtctcact gtgttgccca gtcctaataa acactatgtg
+    32341 atgaaaagaa aaaagtaaat catcctaaag ttaagtcttt aatgttaaat ctttaatgag
+    32401 aaatgcaaat aaagcatttc tcaataattt atgggaagag aatcaactga agaataaaca
+    32461 tctttagtaa atcttttgct catgtgcatt aaccaatact cttgaaaacc aggattaatt
+    32521 tactgtacct tcttaatatt cctttgaaat tccttatggc gcacaggtag tgtggaaaat
+    32581 aactgctgca cgctgactgt ggtccctctg gggcgggggt agggggtttt ctggataatt
+    32641 ttcccattgt gatcaaacat cagtcgagtt ccaaccttcg ccgatgcgtg gcaggtagaa
+    32701 atggtgacat cgctgtgaga gaataccagg catggtgtgt tcagtgagag acccatgatg
+    32761 ttgggcactg actactcttt tcttcacttg cttttctctc aaaattttct taaaaagctg
+    32821 acgatccctc tgagataatc aagatctaaa tggttgagga gtcatcataa aatctaaggt
+    32881 ttggcatcta aaagacagtg agacagagag cactaaacat gctttgcttt gataaaagct
+    32941 ttgatttcgt ttttcaggtt gaactgcaaa accataaatg atcttaagat ttatttattc
+    33001 acaaacacag atttgttttg ttattactct tcgaacaaat tttttttaaa gaatctaaca
+    33061 aatattataa ttaaaatgta tatgtagggc agagcgtggt ggctcatgcc tgttatccca
+    33121 gcactttggg aggccaaggc aggcagatca cttgaggcca ggagtttgag accagcctag
+    33181 gcaacatggt gaaatcccat ctctactaaa aatacaaaaa ttagccagga gtggtggtgc
+    33241 atgcctatag taccagctcc tcaggaggct caggcacgag aatcacttga acctggaagg
+    33301 cagagattgc agtgagccga gactgtgcca ctgcactcca gcctgggtga caaagagaga
+    33361 ctctgtctaa aaaaaaaaaa agatatatat atatatatat aattatttat aaaaatttca
+    33421 tatctgtgct ataattaaat agtgctttgg tgaaatgttt ccctaaaaat tgataatgaa
+    33481 aaccaatggt aactatcatt tattatctac atgttaggtt aaaattgaga attactgttt
+    33541 taataagggt aaccatcttt ttaacaatac tatttgcttc atttcattca tttattgctc
+    33601 acatttcaga agtactatga cttagattgg cagcgagaca aaacagaatt cagaagctag
+    33661 aagttgagat gttgagatag aaaactgaaa ataataatga ttccaattaa ttttcagaga
+    33721 ggtttctcta aggggtcaag tgagtggata aaaatattgt atcacctcag tgcacaaagt
+    33781 gagctcagag cttccccccg aaagccaaaa gtttcaacct gagttaggtc ggcaaactct
+    33841 tgaatcttag atgtgtgatg tttcagagct gaaagagagt gtaaagtaag gactaagata
+    33901 tctcaagtgc tataacaaca aaatatacat gatatctagt aactggcttt aaaaaactgt
+    33961 ttttgcattt cccaagacag tgttactcaa aattctgaga catgtgaccc aattatttta
+    34021 taataggatt agaaaaagtc aacttactta agccttcgaa gttttcttct tctaccccac
+    34081 atccattgtc tgaaacttca ataagatcca ctccatagtc cttaagcttt agatctagaa
+    34141 agtttaaaat atttacatat ttattaaaaa cggacccatg ctatcagttt ttatattgac
+    34201 attatttata acatatgcaa atttaagagt cataactata cctttagtta aacatactag
+    34261 tgtcattttg tatatttcat tgttataaag tcctttctgg ctatttacta gcccagacta
+    34321 aatagtttag ctttttcttt ctttcctctt tttttttccc taggctagtg aagtgaagca
+    34381 gttggagtgg agaaggaaca aaaaaaatct gtaactggtg gtgatcaatt agctgtaaac
+    34441 cgcgttgcac tttgaccatc cttttctttt gaaagaaata attttaacat acccaataaa
+    34501 gagaacgggg accgggtgca gtggttcatg cctgtaattc cagcactttg ggaggccaaa
+    34561 gcgagcagat cacctgaggt caggagttcg agaccagcct gaccaacatg gagaaaccct
+    34621 gtctctacta aaaatacaaa attagccagg cttggtggcg catgcctgtc atcccagcta
+    34681 ctcaggaagc tgaggcagga gaatcacttg aacccaggag gtggaggttg cagtgagccg
+    34741 agatcgtgcc attgcactat agcctgggca acaagagcaa aactctatct caaaaaaaaa
+    34801 aaaaaaaaga gaatgggttc tggaatcaga cttcctggat cctattttat cagctttata
+    34861 atctcaaaaa aaggaaattt cctatcccct aatttcctca tttgtaaaat agagaataat
+    34921 aagttctatc tcataaagtt attctgcaga ttaataattc tttggttttt tttattttat
+    34981 tattcttttc ttttcttttg agatggagtt ttgctcgtca cccaggctgg agtgcagtgg
+    35041 tacgatcttg gctcactgca gcctccacct cccaggttca agcaattctc ctccttcagc
+    35101 gtcctgagga gctgagatta cagccatgca ccaccacatc tggctaattt ttgtattttt
+    35161 agtagagaca gggtttcatc atgttggtta ggctggtcta gaactcctga cctcaaatga
+    35221 tcagcccccc tcagcctccc aaagtgctgg tattacagat gtgagccact actccagccc
+    35281 tattttgttt tatgtttttg agatggaatc ttgctctgtc cccaggctgg catgcagtgg
+    35341 cacgatctcg gcttactgca acctccgtct ctcggcttca agcaattctc gtgcctcagt
+    35401 gtcccaagta gctgggatta caggcttctg ccaccaggtc cagctaattt ttgtattttt
+    35461 agtagagaca gagtttcacc actttggaca ggctggtctc gaactcctga cctcaggtat
+    35521 ccacccgcct tggcctccca aagtgctggg attacaggcg tgagccacta tgcctggcct
+    35581 actttatttt tcaatagaga caaggtctca ccatgttggc caggttggtc ttgaactctt
+    35641 ggcctcaagc aattccccca cctcggcctc tcaaagggct aggattatag gcgtgagaca
+    35701 ccacgcccag ctgttctgca aattaaatat ttctgtgcaa ttcttagcat aacacctgcc
+    35761 tggcacaccg taagaacaca ataaaagctg ttattattat tactacctag ctaagtacta
+    35821 ggcacataat aggtgctaac ttcaacttaa aaataataat ttattactac atcaacactt
+    35881 gatagtctta tttcaataac aaatgtttct taactacaac aacattcaca gatcatttct
+    35941 tgtggcttaa aactctccca aacttaccaa tattagtggc accagcatcc agactgtttt
+    36001 ctactaactc ctttaccgca gtgcttagac tcagtaccac ctgcccagag caaatctgat
+    36061 ggactgactt ccgatcaata ggtttgatgg ccttagcagg ttctgtacta gagaaatcag
+    36121 ttacaagaaa caaatcaagt attcagctat atattttcat cctgatttta actgtgggaa
+    36181 atgactcaac actgtaaata atttatgggt ctaatctatt catttattat attagcaaat
+    36241 acatttatta tatccagaaa tagaaacact gttttacaat ccttaaacat gtacccaaaa
+    36301 tacttctgga tagatacttc aaattcaaca gatccttact atctaattat actaagatcc
+    36361 acatggagaa aacatacatt gtatctctca aattaccaaa atctttggca acaatggtgt
+    36421 cttctttctt gaaaagtgaa agcatggctg gctgtggtgg ctcatgcctg taatcccagc
+    36481 actttgggaa gcagagatgg gtggataact tgaggtcagg agttcgacac cagcctggcc
+    36541 aacacggtga aaccccgtct ttactaaaaa tacaaaaaat tagccaggca tggtggtggg
+    36601 cacctgtaat cctagctact caggaggctg aggcaggaga atcgcttaaa tccaggaggc
+    36661 ggaggttgca gtgagctgag attgcggcat tgcactccag cctgggcaac gagcaaaaaa
+    36721 aaaaatgaaa gtaacataat ttcccaacat aattagaaaa accaacagta tgctgggaaa
+    36781 tacacaatgt ttaagtcaaa atcatctcag aaattgggta ccagttatat aactattcct
+    36841 tatacacagt tgcctttgat accccactcc aaactgaagc tgccagctgc tgtcttagca
+    36901 aagaccctca aagctcttgc tgtactagct ttaagagttt tataaaggtt ttatctcccc
+    36961 ttattccctg ctccaataca tcctccactc tatcaccaga gctatttttg aaatcacaaa
+    37021 tctggtcaaa taatttttct gcttaaaaat ttactagtgc cccacttcct actatatgaa
+    37081 agttaaaatt tagtcatcat tggggccaaa actaccttct tttcagaatc tctctaatcc
+    37141 tttcccttca tcaagtcccc tacattatta ttattattat tattattatt gttattattg
+    37201 ttattatttg agacagagtc tcaccccgtt gcctatgcta gagggcaatg gcatgagctc
+    37261 agctcactgc aacctccgcc tcccaggttc aagcgattct cctatctcag cctcccaagt
+    37321 agctgggatt acaggcgccc accatcacac ccagctaatt tttgtgtttt tagaagagat
+    37381 agggtttcac catgttggcc aggctggtct cgaactcctg acctcaggtg atccgcctgc
+    37441 ctcggcctcc caaagtgcta ggattacagg ggaccgcaac cagccatccc ctatattgta
+    37501 gcacagtgaa caactgtcct gaacatcaca agctctttga gacactacag tgtataagca
+    37561 ggtctctgtc taaaccgctc tcctcttcct cctctgccca aacaatgtct gctcaaagaa
+    37621 tgtatcccgt gtgttcatta acttagcaat ttccagcaaa cagtttaatt gataacttgt
+    37681 taagagaagg caggaaacct ccatgaaaga gaaatcactg ggtatttcct acagcattta
+    37741 acacatcgta ggcctttaat aaacccttct gaaataaaca aacctcttta ctcttcattc
+    37801 caccttgcta agaatctcac ctaagtctgt ctaccatgtg aaactgcaga tgacctcaca
+    37861 gaaaatggaa agaagtatct ctaaaaataa gtttatttgg cagcacacta taggctacag
+    37921 gtccacttct gatttttttt tttttttttt tttgagaccg agtcttgctg cgttgcccag
+    37981 gccggactgc agtggcacga tctcagctca ctgcaacctc cgcctcctgg gttccagcga
+    38041 ttctcctgcc tcagcctcca aagtagctag gattacaggc tcccgccatc atgcccagtt
+    38101 aatttttgta tttttagtag aaacggattt caccatgttg gccaggctgg tcatgaactc
+    38161 ctgacttcat gatccacccg ccttggcctc ccaaagtgct gggattatag gcgtgagtca
+    38221 ccgctctcgg cccacttcag atatttattt tgaggaggga gcgcatttag acacagaccc
+    38281 caaatttatt taaatgtctc aatacattta aatgtagtta cctaaatata tctaatatat
+    38341 ttaaatgcag agagcaaatt tgcgtttaca aatctgacat ggaatgcaaa tgtgctagcc
+    38401 aagattcggt gtagcttacc agccagaaat cacacatcct aacaggtaga aacgtattgc
+    38461 atttttaaaa actgcgcagc tatgcaaata aggatgtgtc tggacgctct accgtcccca
+    38521 aaataacctt aattttttaa aaaggccagg cacggtgcat catgccttta attccagcac
+    38581 tttgaggggc caaggcgggc ggattgcttg agctcaggcg ttcgagacca gcctgggcaa
+    38641 cgcagcgaaa tccccgtctc tacaaaaaaa aattaaaaat aaaatactat aaaaataaaa
+    38701 ataaaagggg agagagaaca ggtagaaagg aaatgcattc agtctatggg gatttcacgc
+    38761 tcccgcttca agtccacggc cctgtgatgg gatgtgggca aggcctgtct gggacaggcc
+    38821 gaacccaact cctcacaggg ccgaatcctt tgcccgcagc ccaggacccc gaaggagctt
+    38881 gcctcggcct caaggcgcac ccaaggggca cgagatcgct gcaacactga ggtcgccact
+    38941 ccggggcctc cagggggctg cctcgccacg cgcctcggcc atgttccccc catttccagg
+    39001 gaggttggaa tgccgtgggt ctcaaagagg gcgcgcgaga ggggacaccg gaagactgcg
+    39061 agccccgctc acctcgagct ctcagctcgc tccatggatg caacacccga tccgcctcgg
+    39121 ggactgggaa agttccctcc agggctccca caggcgctcc gcctcctgaa ctcccattgg
+    39181 ctgctttcga cgttgtgctc caccctttcc gggcggggcg gcaaaaatac ttcccgtctc
+    39241 tccttttcgc ctattggctc tgtcaaaggt cgacttcgtg acgtcaaaga gcctgggcca
+    39301 atcagagcac accggactgc gttttcccga acgcccgcag cagggtcaga agggaggtgg
+    39361 ccggtctccg tcgtgacctc tgacggtttc tgagcgttgg cctttggcac gcgctacccc
+    39421 cttttgcttt ggttctgcca tgccgatgta ccaggtaaag ccctatcacg ggggcggcgc
+    39481 gcctctccgt gtggagcttc ccacctgcat gtaccggctc cccaacgtgc acggcaggag
+    39541 ctacggccca gcgccgggcg ctggccacgt gcaggtagga gcgcggggcc ccccgcccag
+    39601 tgcgcacgcg cggcgaccgg ctgctggccc gggtcccccc aggccggagc gagcgcgtcc
+    39661 caaccggttc acggccccac cccggcatct gtgccggccg gccagggact cactcagact
+    39721 tttatgtttt aaaagattta tccaggccgg gcgccgtggc tcacgcctgt aatcccagca
+    39781 ctttgggagg ccgaggcggg cggatcacct gaggtcagga gttcgagact agcctggcca
+    39841 acatggtaaa acctcgtctc tactaaaaat acagaaattg gccgggtgtg gtgaggcgcc
+    39901 tgtaatccca gctactcggg aggctgaggc aggagaatcg tttgaaccct ggaggcggag
+    39961 tttgcagtga gctgagatcg agccattgca ctcgagcctg ggcaacaaga gctaaactct
+    40021 atctcaaaaa aaaaaaaaaa aaaaaaaaaa atatatatat atatatatgt atgtatcttt
+    40081 ccaggtcggg cgcggtggtt cacgcctgga gtctcagcgc tttgggagac tgaggcggga
+    40141 ggatcaattg aatcccaaga gtttgagacc actctcagca acatagcgag acccttgtct
+    40201 ctattt
 //
-
