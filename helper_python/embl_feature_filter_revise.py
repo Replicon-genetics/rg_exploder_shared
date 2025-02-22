@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="embl_feature_filter_revise.py"
-ProgverDate="20-Feb-2024"
+ProgverDate="21-Feb-2024"
 '''
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
@@ -160,7 +160,8 @@ def modify_mane_select_key(mane_select_found,mane_select_id,mane_select_id_key,s
         key_found=False
         for key in sorted_list:
             #print("key %s; value %s"%(key,sorted_mRNA_transcript_list[key]))
-            if key==mane_select_id:
+            mod_key=mane_select_id+"m"
+            if key==mane_select_id or key==mod_key :
                 key_found=True
                 new_key=mane_select_id_key
                 sorted_list[new_key] = sorted_list.pop(key)
