@@ -1,14 +1,20 @@
-LOCUS       13 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 13 GRCh37 partial sequence 32888611..32974805 reannotated
-            via EnsEMBL
+LOCUS       13                         0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 13 GRCh37 partial sequence
+            32888611..32974805 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:13:32888611:32974805:1
 VERSION     chromosome:GRCh37:13:32888611:32974805:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..86195
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..85195
-                     /gene=ENSG00000139618.10
+                     /gene="ENSG00000139618.10"
                      /locus_tag="BRCA2"
                      /note="breast cancer 2, early onset [Source:HGNC
                      Symbol;Acc:1101]"

@@ -1,14 +1,20 @@
-LOCUS       7 0 bp DNA HTG 17-AUG-2022
-DEFINITION  Homo sapiens chromosome 7 GRCh37 partial sequence 6011870..6049756 reannotated via
-            EnsEMBL
+LOCUS       7                          0 bp    DNA              HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 7 GRCh37 partial sequence 6011870..6049756
+            reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:7:6011870:6049756:1
 VERSION     chromosome:GRCh37:7:6011870:6049756:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..37887
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            complement(1001..36887)
-                     /gene=ENSG00000122512.10
+                     /gene="ENSG00000122512.10"
                      /locus_tag="PMS2"
                      /note="PMS2 postmeiotic segregation increased 2 (S.
                      cerevisiae) [Source:HGNC Symbol;Acc:9122]"

@@ -1,14 +1,20 @@
-LOCUS       16 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence 68770128..68870451 reannotated
-            via EnsEMBL
+LOCUS       16                         0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence
+            68770128..68870451 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:16:68770128:68870451:1
 VERSION     chromosome:GRCh37:16:68770128:68870451:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..100324
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..99324
-                     /gene=ENSG00000039068.14
+                     /gene="ENSG00000039068.14"
                      /locus_tag="CDH1"
                      /note="cadherin 1, type 1, E-cadherin (epithelial)
                      [Source:HGNC Symbol;Acc:1748]"

@@ -1,14 +1,20 @@
-LOCUS       11 0 bp DNA HTG 1-MAR-2022
-DEFINITION  Homo sapiens chromosome 11 GRCh37 partial sequence 108092211..108240829
-            reannotated via EnsEMBL
+LOCUS       11                         0 bp    DNA              HTG 01-JAN-1980
+DEFINITION  Homo sapiens chromosome 11 GRCh37 partial sequence
+            108092211..108240829 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:11:108092211:108240829:1
 VERSION     chromosome:GRCh37:11:108092211:108240829:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..148619
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..147619
-                     /gene=ENSG00000149311.13
+                     /gene="ENSG00000149311.13"
                      /locus_tag="ATM"
                      /note="ataxia telangiectasia mutated [Source:HGNC
                      Symbol;Acc:795]"

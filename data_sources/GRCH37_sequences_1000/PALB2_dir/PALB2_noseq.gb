@@ -1,14 +1,20 @@
-LOCUS       16 0 bp DNA HTG 17-AUG-2022
-DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence 23613488..23653631 reannotated
-            via EnsEMBL
+LOCUS       16                         0 bp    DNA              HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 16 GRCh37 partial sequence
+            23613488..23653631 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:16:23613488:23653631:1
 VERSION     chromosome:GRCh37:16:23613488:23653631:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..40144
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            complement(1001..39144)
-                     /gene=ENSG00000083093.5
+                     /gene="ENSG00000083093.5"
                      /locus_tag="PALB2"
                      /note="partner and localizer of BRCA2 [Source:HGNC
                      Symbol;Acc:26144]"

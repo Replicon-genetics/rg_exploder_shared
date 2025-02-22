@@ -1,14 +1,20 @@
-LOCUS       11 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 11 GRCh37 partial sequence 125494036..125547150
-            reannotated via EnsEMBL
+LOCUS       11                         0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 11 GRCh37 partial sequence
+            125494036..125547150 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:11:125494036:125547150:1
 VERSION     chromosome:GRCh37:11:125494036:125547150:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..53115
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..52115
-                     /gene=ENSG00000149554.8
+                     /gene="ENSG00000149554.8"
                      /locus_tag="CHEK1"
                      /note="checkpoint kinase 1 [Source:HGNC Symbol;Acc:1925]"
 ORIGIN

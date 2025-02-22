@@ -1,14 +1,20 @@
-LOCUS       10 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 10 GRCh37 partial sequence 89621870..89732687 reannotated
-            via EnsEMBL
+LOCUS       10                         0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 10 GRCh37 partial sequence
+            89621870..89732687 reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:10:89621870:89732687:1
 VERSION     chromosome:GRCh37:10:89621870:89732687:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..110818
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..109818
-                     /gene=ENSG00000171862.5
+                     /gene="ENSG00000171862.5"
                      /locus_tag="PTEN"
                      /note="phosphatase and tensin homolog [Source:HGNC
                      Symbol;Acc:9588]"

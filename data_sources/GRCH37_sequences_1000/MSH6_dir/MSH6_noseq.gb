@@ -1,14 +1,20 @@
-LOCUS       2 0 bp DNA HTG 27-FEB-2022
-DEFINITION  Homo sapiens chromosome 2 GRCh37 partial sequence 47921669..48038240 reannotated
-            via EnsEMBL
+LOCUS       2                          0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 2 GRCh37 partial sequence 47921669..48038240
+            reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:2:47921669:48038240:1
 VERSION     chromosome:GRCh37:2:47921669:48038240:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..116572
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            1001..115572
-                     /gene=ENSG00000116062.10
+                     /gene="ENSG00000116062.10"
                      /locus_tag="MSH6"
                      /note="mutS homolog 6 [Source:HGNC Symbol;Acc:7329]"
 ORIGIN

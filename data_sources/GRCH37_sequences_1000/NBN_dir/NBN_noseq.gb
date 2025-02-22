@@ -1,14 +1,20 @@
-LOCUS       8 0 bp DNA HTG 17-AUG-2022
-DEFINITION  Homo sapiens chromosome 8 GRCh37 partial sequence 90944564..91016456 reannotated
-            via EnsEMBL
+LOCUS       8                          0 bp    DNA              HTG 17-AUG-2022
+DEFINITION  Homo sapiens chromosome 8 GRCh37 partial sequence 90944564..91016456
+            reannotated via EnsEMBL.
 ACCESSION   chromosome:GRCh37:8:90944564:91016456:1
 VERSION     chromosome:GRCh37:8:90944564:91016456:1
+KEYWORDS    .
+SOURCE      human
+  ORGANISM  Homo sapiens
+            .
+COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
+            filtered using embl_feature_filter_revise.py on 2025 February 21.
 FEATURES             Location/Qualifiers
      source          1..71893
                      /organism="Homo sapiens"
                      /db_xref="taxon:9606"
      gene            complement(1001..70893)
-                     /gene=ENSG00000104320.9
+                     /gene="ENSG00000104320.9"
                      /locus_tag="NBN"
                      /note="nibrin [Source:HGNC Symbol;Acc:7652]"
 ORIGIN
