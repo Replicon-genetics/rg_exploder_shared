@@ -1,0 +1,23 @@
+LOCUS       7                          0 bp    DNA              HTG 27-FEB-2022
+DEFINITION  Homo sapiens chromosome 7 GRCh37 partial sequence 74187309..74204659
+            reannotated via EnsEMBL.
+ACCESSION   chromosome:GRCh37:7:74187309:74204659:1
+VERSION     chromosome:GRCh37:7:74187309:74204659:1
+COMMENT     additional annotation by Replicon Genetics Mar-2022
+FEATURES             Location/Qualifiers
+     source          1..17351
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            1001..16351
+                     /gene="ENSG00000158517.9"
+                     /locus_tag="NCF1"
+                     /note="neutrophil cytosolic factor 1 [Source:HGNC
+                     Symbol;Acc:7660]"
+
+     variation       12302..12339
+                     /replace="CATTCACAAGCTCCTGGACGGCTGGTGGGTCATCAGGT/-"
+                     /db_xref="RG001:000026"
+                     /comment="RG:EB0204;NM_000265.6:c.765_800+2del38"
+                     /global_range="GRCh37:7:74199610:74199647:1"
+ORIGIN
+//

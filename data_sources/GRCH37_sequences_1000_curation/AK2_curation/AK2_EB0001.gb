@@ -1,0 +1,27 @@
+LOCUS       1                          0 bp    DNA              HTG 12-AUG-2022
+DEFINITION  Homo sapiens chromosome 1 GRCh37 partial sequence 33472585..33547597
+            reannotated via EnsEMBL.
+ACCESSION   chromosome:GRCh37:1:33472585:33547597:1
+VERSION     chromosome:GRCh37:1:33472585:33547597:1
+COMMENT     additional annotation by Replicon Genetics Aug-2022
+
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     source          1..75013
+                     /organism="Homo sapiens"
+                     /db_xref="taxon:9606"
+     gene            complement(1001..74013)
+                     /gene="ENSG00000004455.12"
+                     /locus_tag="AK2"
+                     /note="adenylate kinase 2 [Source:HGNC Symbol;Acc:362]"
+     variation       7584..7585
+                     /replace="GG/G"
+                     /db_xref="dbSNP:rs1553151177"
+                     /db_xref="clinvar:18254"
+                     /comment="RG:EB0001; NM_001625.4(AK2):c.453del(p.Tyr152fs)"
+                     /comment="RG:GRCh37:1:33480168:33480169:1"
+ORIGIN
+//

@@ -1,0 +1,26 @@
+{
+    "Reference_sequences": {
+        "PTEN": {
+            "Release": "Ensembl Release 75 (Variation data updated April 2021)",
+            "Retrieval_date": "27-FEB-2022",
+            "Region": "GRCh37:10:89621870:89732687:1",
+            "Locus_range": "1001:109818",
+            "is_join_complement": false,
+            "LRG_id": "311",
+            "Ensembl_id": "ENSG00000171862.5",
+            "mRNA": {
+                "PTEN-371953": "ENST00000371953.3"
+            },
+            "mRNA_join": {
+                "PTEN-371953": "1001:2436,31913:31997,63401:63445,68934:68977,70901:71139,90006:90147,95741:95907,98782:99006,103175:109818"
+            },
+            "CDS_join": {
+                "PTEN-371953": "2358:2436,31913:31997,63401:63445,68934:68977,70901:71139,90006:90147,95741:95907,98782:99006,103175:103360"
+            },
+            "MANE_Select": {
+                "version": "v0.95",
+                "mRNA": "PTEN-380152(MANE_Select)"
+            }
+        }
+    }
+}
