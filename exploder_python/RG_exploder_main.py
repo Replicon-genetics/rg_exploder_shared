@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_30_6.py"
-ProgverDate="03-Feb-2025"
+Progver="RG_exploder_main_31_0.py"
+ProgverDate="22-Feb-2025"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
