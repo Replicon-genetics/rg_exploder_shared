@@ -2,7 +2,7 @@
 #rootapplicationdir="/Users/caryodonnell/Documents/repositories/snowlizardz/rg_exploder/"
 rootapplicationdir="/Users/caryodonnell/Documents/repositories/rg_exploder_shared/"
 #rootapplicationdir="/Users/caryodonnell/Desktop/Replicon/"
-rootdatadir=$rootapplicationdir"data_sources/"
+
 rootprogdir=$rootapplicationdir"exploder_python/"
 
 
