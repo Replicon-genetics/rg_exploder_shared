@@ -1384,7 +1384,7 @@ export default {
       this.geneList[this.selectedGene].Ensembl_id.split(".")[0]
       )
     },
-    ensembl_transcriptURLtxt: function() {
+    ensembl_transcriptURLtxt1: function() {
       if (this.selectedTranscript == this.jsonConfig.stringconstants.empty_transcript_name){
          return (
           this.geneList[this.selectedGene].Ensembl_id.split(".")[0]
@@ -1393,6 +1393,33 @@ export default {
       else {
         return(
           this.jsonConfig.Reference_sequences[this.selectedGene]["mRNA"][this.selectedTranscript].split(".")[0]
+        )
+      }
+    },
+    ensembl_transcriptURLtxt: function() {
+      if (this.selectedTranscript == this.jsonConfig.stringconstants.empty_transcript_name){
+         return (
+          this.geneList[this.selectedGene].Ensembl_id.split(".")[0]
+         )
+        }
+      else {
+
+        var urltarget=this.jsonConfig.stringconstants.GRCh38_txt
+        var transid=this.jsonConfig.Reference_sequences[this.selectedGene]["mRNA"][this.selectedTranscript].split(".")[0]
+        if  (this.tbv_GRChver_txt=="GRCh37"){
+        // Special case where Ensembl transcript id not present in GRCh37, only in GRCh38, indicated by 'm'
+        // Exists for AK2 ENST00000672715m.1 - hand edited into the data file AK2_locseq.gb for this application
+        if (transid.includes("m"))
+        {
+          transid = transid.slice(0, -1); 
+          var urltarget=this.jsonConfig.stringconstants.GRCh38_txt + ':' + transid
+        }
+        else {
+          var urltarget=transid
+        }
+      }
+        return(
+          urltarget
         )
       }
     },
