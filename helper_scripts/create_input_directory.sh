@@ -68,7 +68,7 @@ then
     cd $modlocus
 
     ln -s ../../$curdir/$modlocus$curation/ .
-    ln -s $modlocus$curation/*.gb .
+    ln -s $modlocus$curation/$modlocus*.gb .
     ln -s $modlocus$curation/$modlocus$jsonfile .
     /bin/mv $modlocus$noseq $modlocus$hap0
     cd $pw
