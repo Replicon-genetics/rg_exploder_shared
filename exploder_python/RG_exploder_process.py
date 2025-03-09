@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Progver="RG_exploder_process2"
-#ProgverDate="12-Feb-2025"
+#ProgverDate="09-Mar-2025"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
 '''
@@ -447,7 +447,7 @@ def purl_features(seqdonor,vardonor):
     local_offset_diff=vardonor_begin-seqdonor_begin
 
     seqdonor_end=int(seqdonor.abs_end)
-    vardonor_index=get_varfeature_index(vardonor)
+    vardonor_index=get_varfeature_index(vardonor) # Comes back sorted: highest position first
      
    # print("vardonor_begin %s; seqdonor_begin %s; seqdonor_end %s"%(vardonor_begin,seqdonor_begin,seqdonor_end))
 
@@ -803,7 +803,7 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
 
     add_mut_features=[]
     save_mut_features=[]
-    ref_var_index=get_varfeature_index(refseqdonor)
+    ref_var_index=get_varfeature_index(refseqdonor) # Comes back sorted: highest position first
 
     # This section needs correcting for it to be used. Never evaluates to < 1
     # if len(ref_var_index) < 1:
@@ -820,7 +820,7 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
             return_message+=update_journal(" No gap features in reference to merge with %s"%mutlabel)
     else:
         return_message+=update_journal(" Merging gap features from %s with variant features from %s"%(RG_globals.bio_parameters["target_transcript_name"]["label"],mutlabel))
-        mut_var_index=get_varfeature_index(mutseqrecipient)
+        mut_var_index=get_varfeature_index(mutseqrecipient) # Comes back sorted: highest position first
         for mutidx in mut_var_index:
             mask=False
             # This became such a large block of code that it was moved to get_mutref_olap() to improve the clarity of this loop
@@ -942,14 +942,14 @@ def merge_seqvar_records(refseqdonor,mutseqrecipient,mutlabel):
 def get_varfeature_index(seq_record):
     #print("At get_varfeature_index")
     #print("seq_record.id %s"%seq_record.id)
-    var_feature_index,feature_index,source_gene_index=filter_varfeature_index(seq_record)
+    var_feature_index,feature_index,source_gene_index=filter_varfeature_index(seq_record) # var_feature_index comes back sorted: highest position first
     #print("At get_varfeature_index %s"%var_feature_index)
     return var_feature_index
 # end of get_varfeature_index(seq_record)
 
 def get_varfeatures(SeqRec):
     #Returns a list of all the filtered variants
-    var_feature_index=get_varfeature_index(SeqRec) # Comes back ordered
+    var_feature_index=get_varfeature_index(SeqRec) # Comes back sorted: highest position first
     features=[]
     for (index) in var_feature_index:
        features.append(SeqRec.features[index])
@@ -962,7 +962,7 @@ def get_filtered_features(seq_record,total):
     Total is Boolean: if True, all the features are returned
                       if False only the non-variant features are returned
     '''
-    var_feature_index,other_feature_index,source_gene_index=filter_varfeature_index(seq_record)
+    var_feature_index,other_feature_index,source_gene_index=filter_varfeature_index(seq_record) # var_feature_index comes back sorted: highest position first
     features=[]
     for (index) in source_gene_index:
         features.append(seq_record.features[index])
@@ -975,87 +975,11 @@ def get_filtered_features(seq_record,total):
 # end of get_filtered_features(seq_record):
 
 def get_source_gene_features(seq_record,locus_name):
-    var_feature_index,feature_index,source_gene_index=filter_varfeature_index(seq_record)
+    var_feature_index,feature_index,source_gene_index=filter_varfeature_index(seq_record) # var_feature_index comes back sorted: highest position first
     features=[]
     for (index) in source_gene_index:
         features.append(seq_record.features[index])
     return features
-
-def filter_all_features(seq_record,target_loc,with_var):
-    wanted_features=['source','gene','mRNA','CDS']
-    wanted_CDS_db_xref=['CCDS:']
-    '''
-    a) For each feature, check it's one we want to keep
-    b) For each item in the variants table, list positions of wanted ones
-    '''
-    #print("At filter_varfeature_index")
-    #print("seq_record.id %s"%seq_record.id)
-    #print("seq_record.features %s"%seq_record.features)
-
-    found_locus=False
-    features=[]
-    '''
-    source_feature_index=[]
-    gene_feature_index=[]
-    mRNA_feature_index=[]
-    CDS_feature_index=[]
-    '''
-    
-    out_index_count=0
-    #target_locus_match="'"+RG_globals.target_locus+"'"
-    target_locus_match="'"+target_loc+"'"
-    
-    for (index, feature) in enumerate(seq_record.features):
-        feature=seq_record.features[index]
-        if any(x in feature.type for x in wanted_features): 
-            if feature.type == 'source':
-                #source_feature_index.append(out_index_count)
-                features.append(feature); out_index_count+=1
-            elif feature.type == 'gene':
-                for key in feature.qualifiers:
-                    if key=='locus_tag': # Matching the feature groupings to the desired locus, otherwise
-                        locus_txt=str(feature.qualifiers.get(key))
-                        if target_locus_match in locus_txt:
-                            #print("feature.type %s, key %s, value %s; target_locus_match %s"%(feature.type,key,locus_txt,target_locus_match))
-                            found_locus=True
-                        else:
-                            found_locus=False
-                if found_locus:
-                    #print("feature.type %s: feature %s"%(feature.type,feature))
-                    #gene_feature_index.append(out_index_count)
-                    features.append(feature); out_index_count+=1
-                # print("seq_record.features[index]%s "%seq_record.features[index])
-            elif found_locus:
-                if feature.type == 'mRNA':
-                    #mRNA_feature_index.append(out_index_count)
-                    features.append(feature); out_index_count+=1
-                    #print("feature.type %s; feature %s"%(feature.type,feature))
-                else: #feature.type == 'CDS':
-                    new_feature=copy.copy(feature)
-                    new_CDS_qualifiers= {}   
-                    qualifiers=str(feature.qualifiers)
-                    #print("feature.type: %s; qualifiers %s"%(feature.type,qualifiers))                    
-                    for key in feature.qualifiers:
-                        if key !='translation':
-                            if key== 'db_xref':
-                                new_xrefs=[]
-                                for item in feature.qualifiers.get(key):                                
-                                    if any(x in item for x in wanted_CDS_db_xref):
-                                        new_xrefs.append(item)
-                                if len(new_xrefs) > 0:
-                                    new_CDS_qualifiers.update({key:new_xrefs}) 
-                            else:
-                                new_CDS_qualifiers.update({key:feature.qualifiers.get(key)})  
-                    new_feature.qualifiers=new_CDS_qualifiers
-                    #CDS_feature_index.append(out_index_count)
-                    features.append(new_feature); out_index_count+=1 
-    if with_var:
-        varindex=get_varfeature_index(seq_record)# Comes back sorted
-        for (index) in varindex:
-            features.append(seq_record.features[index])
-    #return features,source_feature_index,gene_feature_index,mRNA_feature_index,CDS_feature_index
-    return features
-# end of filter_all_features(seq_record,with_var)
 
 def filter_varfeature_index(seq_record):
     #Grab each item in the variants table and list positions of wanted ones
@@ -1083,7 +1007,8 @@ def filter_varfeature_index(seq_record):
                 # print("seq_record.features[index]%s "%seq_record.features[index])
         else:
             feature_index.append(index)
-    varfeat_index=order_featindex(varfeat_index,seq_record,True)
+    varfeat_index=order_featindex(varfeat_index,seq_record,True) # Last place Boolean parameter: True means to sort in reverse direction;
+                                                                 # Reverse feature sort is needed for fragmentation, but not in all cases
     return varfeat_index,feature_index,source_gene_index
 # end of filter_varfeature_index(seq_record)
 
@@ -1174,7 +1099,6 @@ def order_featstart(feature_list,direction):
             if f1end < f1start:
                 f1start=f1end
         return f1start
-
     feature_list.sort(key=get_featkey,reverse=direction)
     #sorted_feature_list=sorted(feature_list,key=get_featkey)
     #print("SORTING featstart")
@@ -1309,7 +1233,7 @@ def set_seqrec_absolutes2(seq_record):
     # based on mashup_gb10.modify_seq_record5(seq_record) - called during read_refmutrecord, after muts have been processed
     # therefore after get_absolute_pairs has been prev called
     #  Adds extra feature qualifiers - stating absolute position of feature start and feature end
-    for index in get_varfeature_index(seq_record):
+    for index in get_varfeature_index(seq_record):  # Comes back sorted: highest position first
         varfeats= get_varfeats2(seq_record.features[index])
 
         feat_start=int(varfeats['feat_start'])
