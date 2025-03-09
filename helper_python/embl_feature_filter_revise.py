@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="embl_feature_filter_revise.py"
-ProgverDate="21-Feb-2024"
+ProgverDate="09-Mar-2024"
 '''
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
@@ -9,19 +9,18 @@ b) A file with the target locus, variant features, omits sequence. {locus}_var.g
 c) A file with the target locus, mRNA features, variant features and sequence. {locus}_filtered.gb
 
 And constitutively:
-d) A file with the target locus, no variants, no sequence {locus}_noseq.gb - this is the hap0 file for the main application
+d) A file with the target locus, no variants, no sequence {locus}_noseq.gb - this is the {locus}_000000.gb file for the main application
 e) A file with the transcript ids in json format   {locus}_transcripts.json - contributor to config.json file
 
 Unwanted only in that these features (primarily the database cross-reference
-definitions, but also CDS, misc_RNA and exons) are unnecessary for the Replicon
-variants-processing applications.
+definitions, but also CDS, misc_RNA and exons) are unnecessary for the variants-processing applications.
 The prime interests are:
    the mRNA join features to identify specific transcripts.
    the "variations" features, with dbsnp ids
 
-This uses BioPython to produce the same output as embl_feature_filter7.py
+This uses BioPython to produce (almost) the same output as embl_feature_filter8.py
 
-####### NB: the command-line option -c supresses CDS inclusion######
+####### NB: the command-line option -c supresses CDS inclusion in the {locus}_transcripts.json file ######
 
 
 '''
@@ -480,39 +479,36 @@ def read_seqrecord(infile,embl_or_genbank):
     from RG_exploder_globals import Seq_Format,Seq_IO_file_ext # CONSTANTS: defines Genbank or Embl as file format; path to refseq file
     global Seq_Format,Seq_IO_file_ext
 
-def write_gb_features(SeqRec,out_file,readmetxt,style):
+
+
+
+def write_gb_features2(SeqRec,varfeats,out_file,readmetxt,style):
+    # Derived from RG_exploder_main.py.write_gb_features 
     Outfilepath=""
     print("out_file %s; style %s"%(out_file,style))
-    '''
-    When style is "vars" or "noseq":
-    a) Clips the sequence to 0 nucleotide and retains the filtered variants list to write out a truncated variant-features-only Genbank file
-    b) Save a copy of the variants for each source in the run. Keep these with output.
 
-    otherwise:
-    c) saves original file to output directory unchanged (apart from python reformating of location numbering for inserts),
-       but filtered to remove non-target loci, and other unwanted stuff such as CDS translation
-
-    '''
-
-    # Several fields in SeqRec.annotations seems to be ignored by SeqIO.write, so 'date' always comes out as '01-JAN-1980'
+    # Several fields in SeqRec.annotations seem to be ignored by SeqIO.write, so 'date' always comes out as '01-JAN-1980'
     # I have tried!
     # Any COMMENT fields, likewise.
-    if style == "full": # Point to the full sequence record - the unchanged mutseq
-        CopySeqRec=SeqRec
-    elif style=="ref":
-        CopySeqRec=embl_filter_record_novars(SeqRec,target_locus)#  Comes back without variants
-        #CopySeqRec=remove_varfeatures(SeqRec)#  Doesn't work
-    else:
-        # Style is "short" or "long", so ...
+    # "full" and "ref" contain the sequence; "ref" omits variants
+
+    if style=="ref": #  Without variants
+        CopySeqRec=copy.copy(SeqRec)
+    elif style == "full": # Full sequence record including variants
+        CopySeqRec=copy.copy(SeqRec)
+        for item in varfeats:
+            CopySeqRec.features.append(item) 
+    elif style == "noseq" or style == "vars":
         #Take clipped sequence and only the base annotations into a new sequence record
         CopySeqRec=RG_process.modify_seq_in_record(SeqRec.seq[0:0],SeqRec)
-        if style =="vars":
-            #Add the filtered-variant features only -> the mutseq
-            CopySeqRec.features=RG_process.get_varfeatures(SeqRec) # But calling RG_process outside main 
-            #CopySeqRec.features=RG_process.embl_filter_get_varfeatures(SeqRec,target_locus)
-        if style =="noseq":
-            CopySeqRec.features=RG_process.get_source_gene_features(SeqRec,target_locus) # But calling RG_process outside main 
-            
+        CopySeqRec.features=RG_process.get_source_gene_features(SeqRec,target_locus) # Overwrites all features with basic
+        if style == "vars": #  With variants
+            for item in varfeats:
+                CopySeqRec.features.append(item)
+    else:
+        print("Invalid parameter %s for write_gb_features2"%style)
+        exit()
+             
     out_gbfile="%s%s"%(Outfilepath,out_file)
     update_journal(" Writing %s"%out_file)
     gbout = RG_io.open_write(out_gbfile)
@@ -522,10 +518,8 @@ def write_gb_features(SeqRec,out_file,readmetxt,style):
     gbout.write(out_data)
     out_handle.close()
     gbout.close()
-    #if readmetxt !="no":
-    #   update_outfilestring("%s %s"%(out_file,readmetxt))
     return
-# end of write_gb_features(SeqRec,out_file,readmetxt,style)
+# end of write_gb_features2(SeqRec,out_file,readmetxt,style)
 
 # ================================ 
 #           This is it             
@@ -548,41 +542,102 @@ def get_joinstring(in_feature_location):
         out_joinstring+=str(ibegin)+":"+end+","
     return out_joinstring[:-1]
 
-
-def embl_filter_record(SeqRec,locus_tag):
-    CopySeqRec=copy.deepcopy(SeqRec)
-    CopySeqRec.features=RG_process.filter_all_features(SeqRec,locus_tag,True)# Overwrite the features
-    #print("CopySeqRec.annotations %s"%CopySeqRec.annotations)
+def modify_annotations(annotations):
     unwanted_annotations=['keywords','taxonomy']
     new_annotations={}
-
-    for (key) in CopySeqRec.annotations:
+    for (key) in annotations:
         #print("key %s, CopySeqRec.annotations.get(key) %s"%(key,CopySeqRec.annotations.get(key)))
         if any(x in key for x in unwanted_annotations):
             pass
         elif key=='comment':
-            comments=str(CopySeqRec.annotations.get(key))
+            comments=str(annotations.get(key))
             newcomment=comments[:comments.find(")")+1]+", then filtered using "+Progver+" on "+ this_date +"."
             new_annotations.update({key:newcomment})
         else:
             #print("passing: key %s, CopySeqRec.annotations.get(key) %s"%(key,CopySeqRec.annotations.get(key)))
-            new_annotations.update({key:CopySeqRec.annotations.get(key)})
-    CopySeqRec.annotations =new_annotations          
+            new_annotations.update({key:annotations.get(key)})         
+    return new_annotations
+
+
+def embl_filter_record(SeqRec,locus_tag):
+    CopySeqRec=copy.deepcopy(SeqRec)
+    CopySeqRec.features=filter_all_features(SeqRec,locus_tag,True)# Overwrite the features; True retains variants
+    CopySeqRec.annotations =modify_annotations(CopySeqRec.annotations)         
     return CopySeqRec
 
 def embl_filter_record_novars(SeqRec,locus_tag):
     CopySeqRec=copy.deepcopy(SeqRec)
-    CopySeqRec.features=RG_process.filter_all_features(SeqRec,locus_tag,False)# 
+    CopySeqRec.features=filter_all_features(SeqRec,locus_tag,False)# Overwrite the features; False omits variants
+    CopySeqRec.annotations =modify_annotations(CopySeqRec.annotations)  
     return CopySeqRec
 
-def remove_varfeatures(SeqRec):
-    #Removes variants features from record
-    CopySeqRec=copy.deepcopy(SeqRec)
-    var_feature_index=RG_process.get_varfeature_index(CopySeqRec) # Comes back ordered
-    for (index) in var_feature_index:
-       CopySeqRec.features.pop(index)
-    return CopySeqRec
-# end of get_varfeatures(SeqRec)
+
+def filter_all_features(seq_record,target_loc,with_var):
+    wanted_features=['source','gene','mRNA','CDS']
+    wanted_CDS_db_xref=['CCDS:']
+    '''
+    a) For each feature, check it's one we want to keep
+    b) For each item in the variants table, list positions of wanted ones
+    '''
+    #print("At filter_varfeature_index")
+    #print("seq_record.id %s"%seq_record.id)
+    #print("seq_record.features %s"%seq_record.features)
+
+    found_locus=False
+    features=[]
+    
+    out_index_count=0
+    #target_locus_match="'"+RG_globals.target_locus+"'"
+    target_locus_match="'"+target_loc+"'"
+    
+    for (index, feature) in enumerate(seq_record.features):
+        feature=seq_record.features[index]
+        if any(x in feature.type for x in wanted_features): 
+            if feature.type == 'source':
+                features.append(feature); out_index_count+=1
+            elif feature.type == 'gene':
+                for key in feature.qualifiers:
+                    if key=='locus_tag': # Matching the feature groupings to the desired locus, otherwise
+                        locus_txt=str(feature.qualifiers.get(key))
+                        if target_locus_match in locus_txt:
+                            #print("feature.type %s, key %s, value %s; target_locus_match %s"%(feature.type,key,locus_txt,target_locus_match))
+                            found_locus=True
+                        else:
+                            found_locus=False
+                if found_locus:
+                    #print("feature.type %s: feature %s"%(feature.type,feature))
+                    features.append(feature); out_index_count+=1
+                # print("seq_record.features[index]%s "%seq_record.features[index])
+            elif found_locus:
+                if feature.type == 'mRNA':
+                    features.append(feature); out_index_count+=1
+                    #print("feature.type %s; feature %s"%(feature.type,feature))
+                else: #feature.type == 'CDS':
+                    new_feature=copy.copy(feature)
+                    new_CDS_qualifiers= {}   
+                    qualifiers=str(feature.qualifiers)
+                    #print("feature.type: %s; qualifiers %s"%(feature.type,qualifiers))                    
+                    for key in feature.qualifiers:
+                        if key !='translation':
+                            if key== 'db_xref':
+                                new_xrefs=[]
+                                for item in feature.qualifiers.get(key):                                
+                                    if any(x in item for x in wanted_CDS_db_xref):
+                                        new_xrefs.append(item)
+                                if len(new_xrefs) > 0:
+                                    new_CDS_qualifiers.update({key:new_xrefs}) 
+                            else:
+                                new_CDS_qualifiers.update({key:feature.qualifiers.get(key)})  
+                    new_feature.qualifiers=new_CDS_qualifiers
+                    features.append(new_feature); out_index_count+=1 
+    if with_var:
+        varindex=RG_process.get_varfeature_index(seq_record)# Comes back sorted: highest position first
+        for (index) in varindex:
+            features.append(seq_record.features[index])
+    #return features,source_feature_index,gene_feature_index,mRNA_feature_index,CDS_feature_index
+    return features
+# end of filter_all_features(seq_record,with_var)
+
 
 def make_files():
     global mRNA_transcript_list,mRNA_join_list,CDS_join_list,grchver,source_mapping,last_generange,is_join_complement,ensembl_geneid,r_date,empty_string,found_locus
@@ -599,7 +654,10 @@ def make_files():
         #wanted_transcript_qualifiers=['gene','note','standard_name']
         target_locus_match="'"+target_locus+"'"
         print("target_locus:%s"%target_locus)
-        NewRec=embl_filter_record(SEQ_record,target_locus) # Clean it up to this target_locus
+        NewRec=embl_filter_record_novars(SEQ_record,target_locus) # Clean it up to this target_locus
+        varfeatures=RG_process.get_varfeatures(SEQ_record) # Features in featstart highest to lowest order because calls order_featindex(varfeat_index,seq_record,True) - reverses
+        varfeatures=RG_process.order_featstart(varfeatures,False)  # Puts var features in featstart order (lowest to highest)
+        
         #print("NewRec: %s"%(NewRec))
         #print("NewRec.id %s"%(NewRec.id))
         ##print("NewRec.Description: %s"%(NewRec.description))
@@ -693,6 +751,8 @@ def make_files():
                             if truncated_transcript_id == truncated_CDS_transcript_name:
                                 CDS_joinstring=get_joinstring(feature.location)
                                 CDS_join_list.update({mRNA_key:CDS_joinstring})
+            elif feature.type !="variation":
+                print("Unexpected feature %s"%feature)
         
         #print("mRNA_transcript_list:%s"%mRNA_transcript_list)
         #print("mRNA_join_list:%s"%mRNA_join_list)
@@ -700,14 +760,15 @@ def make_files():
         #    print("CDS_join_list:%s"%mRNA_join_list)
         make_transcriptconstants()
         if found_locus:
-            if outreffile != empty_string:
-                write_gb_features(NewRec,outreffile,"","full")
+            if outfeatfile != empty_string: # "_locseq.gb" 
+                write_gb_features2(NewRec,varfeatures,outfeatfile,"","ref") # Don't understand why, if this goes after "full", it includes variants
+            if outreffile != empty_string: # "_filtered.gb"
+                write_gb_features2(NewRec,varfeatures,outreffile,"","full")
             if outnoseqfile != empty_string:
-                write_gb_features(NewRec,outnoseqfile,"","noseq")
-            if outvarfile != empty_string:
-                write_gb_features(NewRec,outvarfile,"","vars")
-            if outfeatfile != empty_string:
-                write_gb_features(NewRec,outfeatfile,"","ref")
+                write_gb_features2(NewRec,varfeatures,outnoseqfile,"","noseq")
+            if outvarfile != empty_string: # "_filtervar.gb"
+                write_gb_features2(NewRec,varfeatures,outvarfile,"","vars")
+
     else:
         exit()
 
