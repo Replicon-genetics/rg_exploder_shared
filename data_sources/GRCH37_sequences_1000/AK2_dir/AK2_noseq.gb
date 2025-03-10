@@ -8,7 +8,7 @@ SOURCE      human
   ORGANISM  Homo sapiens
             .
 COMMENT     This sequence was annotated by Ensembl (www.ensembl.org), then
-            filtered using embl_feature_filter_revise.py on 2025 February 22.
+            filtered using embl_feature_filter_revise.py on 2025 March 10.
 FEATURES             Location/Qualifiers
      source          1..75013
                      /organism="Homo sapiens"
