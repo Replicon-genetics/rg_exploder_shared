@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_31_0.py"
-ProgverDate="22-Feb-2025"
+Progver="RG_exploder_main_31_1.py"
+ProgverDate="16-Mar-2025"
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
@@ -159,8 +159,7 @@ def initialise_flags_output_configs():
     from RG_exploder_globals import bio_parameters # A sledgehammer
     global bio_parameters
 
-    from RG_exploder_globals import is_fastacigar_out,is_onefrag_out,is_muts_only,is_frg_paired_end,is_flip_strand,is_duplex,is_frg_label,is_journal_subs,is_mutate_ref,is_fastq_random,is_make_exome,is_trim_to_gene,is_exome_paired_end,is_pair_monitor
-    #global is_fastacigar_out,is_onefrag_out,is_muts_only,is_frg_label,is_journal_subs,is_mutate_ref,is_make_exome
+    from RG_exploder_globals import is_fastacigar_out,is_onefrag_out,is_muts_only,is_frg_paired_end,is_flip_strand,is_duplex,is_frg_label,is_journal_subs,is_mutate_ref,is_fastq_random,is_make_exome,is_trim_to_gene,is_exome_paired_end,is_pair_monitor,is_reads_upper
 
     from RG_exploder_globals import is_show_infilepath  
     global is_show_infilepath # Not intended for GUI module modification
@@ -470,7 +469,6 @@ def read_refseqrecord(embl_or_genbank):
     # Deliberately made to look like read_mutrecord before calling read_seqrecord - allows hiding of full filepath
     ingb_file=in_ref_src+Seq_IO_file_ext
     SEQ_record,exists = read_seqrecord(ingb_file,embl_or_genbank,Ref_file_name,in_ref_src_title)
-
     if not exists:
         program_exit("%s file %s not found"%(in_ref_src_title,ingb_file))
     elif len(SEQ_record.seq) < 1:
@@ -1407,7 +1405,6 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         msgtxt_mvs=" Insert: %s polarity %s, %smatches definition %s polarity +1, gen: %s, loc: %s, var: %s"%(replace,seq_polarity,matchtxt,insert_string,mod_abs_end,feat_end+1+feat_trim,feat_end+1)
         
         # End of verification check for insert string match/mis-match 
-
         VSeq[feat_start:feat_start]=replace
         cigarbox=RG_process.fill_cigar(cigarbox,feat_start,feat_start,"I",len(replace))
         #end of local function do_insert()
@@ -1534,7 +1531,6 @@ def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox):
         if not matchvardef:
             msgtxt_mvs="*** WARNING: %s ***"%msgtxt_mvs
         journals_update(msgtxt_mvs)
-        
     return VSeq,cigarbox
 # end of def MutateVarSeq(VSeq,seq_polarity,this_feature,cigarbox)
 #==================================================================
@@ -1630,6 +1626,9 @@ def make_allvars_in_one_seq(SeqRec,label):
     cigarbox=[len(VarSeq),len(VarSeq)]
     for (index) in RG_process.get_varfeature_index(SeqRec): # Progressively adds each feature to VarSeq and cigarbox
         VarSeq,cigarbox=MutateVarSeq(VarSeq,SeqRec.polarity,SeqRec.features[index],cigarbox)
+  
+    if not RG_globals.is_reads_upper: # Invert case for Vseq: all uppercase into lower, all lower case into upper 
+        VarSeq=(str(VarSeq)).swapcase()
 
     RG_process.pad_cigarbox(cigarbox)# Important - modifies cigarbox!!
     
@@ -1731,9 +1730,7 @@ def generate_multisource_all_frags(RefRec,mutrecs,fraglen):
             #   Generated_Fragcount+=1 # Yes: that's +2 for if RG_globals.is_duplex == True
             ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(item.cigarbox,item.mutbox,
                                                                              start,fraglen) # Calculate the CIGAR before trimming the sequence
-            #if not RG_globals.is_muts_only or (RG_globals.is_muts_only and RG_process.is_mut_cigar(fwd_cigar_label)) : shortens to ...
-            if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) : # Only fragment if RG_globals.is_muts_only is False
-                                                                                        # or when the fwd_cigar_label includes a variant
+            if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) : # Only fragment if RG_globals.is_muts_only is False; or when the fwd_cigar_label includes a variant
                 trimseq=item.seq[start:end]  # item.seq[start:end] trims the mutseq to get the fragment
                 mutlabel_count+=1
                 # Ideally would assign item.Saved_Fragcount+=1 - but this cannot be done in generate_multisource_random_frags, so not doing here
@@ -1957,7 +1954,8 @@ def generate_multisource_random_frags(RefRec,mutrecs,fraglen,fragdepth):
             #    or, when it's true, when the fwd_cigar_label includes a variant
             # This was originally split into two conditional tests to avoid calling RG_process.is_mut_cigar unnecessarily,
             # but code changes to the first were repeatedly omitted in the second conditional, so reduced to this simpler alternative
-            if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) :
+            #if not RG_globals.is_muts_only or (RG_globals.is_muts_only and RG_process.is_mut_cigar(fwd_cigar_label)) : # shortens to ...
+            if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) : # Only fragment if RG_globals.is_muts_only is False; or when the fwd_cigar_label includes a variant
                 trimseq=mutrecs[mutrec_index].seq[start:end] # Trim the sequence to get a fragment
                 mutfragcount[mutrec_index]+=1
                 Saved_Fragcount+=1
@@ -2016,10 +2014,9 @@ def generate_multisource_paired_frags(RefRec,mutrecs,fraglen,fragdepth):
         nonlocal Generated_Fragcount,Saved_Fragcount,saved_unpaired
         Generated_Fragcount+=1
         ref_offset,fwd_cigar_label,rev_cigar_label=RG_process.get_trimmed_cigars(mutrecs[mutrec_index].cigarbox,mutrecs[mutrec_index].mutbox,seq_start,fraglen)
-        if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
+        if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label) : # Only fragment if RG_globals.is_muts_only is False; or when the fwd_cigar_label includes a variant
             if not is_tworeads: # We have an unpaired read
                 saved_unpaired+=1
-        #if not RG_globals.is_muts_only or RG_process.is_mut_cigar(fwd_cigar_label):
             mutfragcount[mutrec_index]+=1
             if last_Saved_Fragcount==Saved_Fragcount: # Not incremented from previous pair or singleton
                 Saved_Fragcount+=1             
