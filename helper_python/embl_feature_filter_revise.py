@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 Progver="embl_feature_filter_revise.py"
-ProgverDate="09-Mar-2024"
+ProgverDate="09-Mar-2025"
 '''
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
