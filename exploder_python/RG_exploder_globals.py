@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_11"
-#Prg_verDate="26-Aug-2024"
-# © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
+#Prg_verDate="16-Mar-2025"
+# © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
 
 import time  # Used in getime()
 import json
@@ -325,7 +325,7 @@ def set_diagnostic_configs():
     global is_mutate_ref,is_make_exome,is_trim_to_gene
     global is_fastq_random
     global is_show_infilepath
-    global MaxVarPos,is_htm_journal
+    global MaxVarPos,is_htm_journal,is_reads_upper
     global config_in_data
     
     diagnostic_vars=config_in_data["diagnostic_vars"]
@@ -342,6 +342,7 @@ def set_diagnostic_configs():
     is_show_infilepath=diagnostic_vars["is_show_infilepath"]
     is_htm_journal=diagnostic_vars["is_htm_journal"]
     MaxVarPos=diagnostic_vars["MaxVarPos"]
+    is_reads_upper=diagnostic_vars["is_reads_upper"]
 
 # end of set_diagnostic_configs()
 

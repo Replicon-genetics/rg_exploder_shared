@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="20-Feb-2025"
+#Prg_verDate="16-Mar-2025"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
@@ -388,15 +388,15 @@ def set_diagnostic_defaults():
                           # It is not available as a user-selectable option
     
     global is_mutate_ref
-    is_mutate_ref= False  # ''' To include the variants defined in the Refseq file included within the Reference sequence set: is_mutate_ref= True
-                          # ''' Variants in Refseq file should not include inserts or deletions where hap1, hap2 are to be mutated further:
-                          # ''' as all positions will be incorrect.
-                          #  User-config default should be False
+    is_mutate_ref= False  #  To include the variants defined in the Refseq file included within the Reference sequence set: is_mutate_ref= True
+                          #  Variants in Refseq file should NOT include inserts or deletions where any haplotype variants are to be introduced
+                          #  as all position-definitions resulting will be incorrect.
+                          #  User-config default should therefore be False
                           #  This has potential for re-use as a feature - but more development and testing work needed
                           #  Jan-2022 - is_mutate_ref not used as originally intended with make_ref_varseq() deprecated
 
     global is_fastq_random  # When set to True, this implements an all-positions random in FASTQ output
-    is_fastq_random= True   # Qualmin==Qualmax is default, and much faster than real random
+    is_fastq_random= True   # With Qualmin==Qualmax, random is NOT used despite this setting
     #is_fastq_random= False # When False it implements a faster "slice" routine than a random: using random strings cut at a random position, but this is still slower than Qualmin==Qualmax
 
     global is_show_infilepath
@@ -414,7 +414,11 @@ def set_diagnostic_defaults():
                      #     File ... RG_exploder_process.py", line 756, in get_absolute_position
                      #     abs_pos=seq_record.offset+seq_record.strand_mod*seqpos
                      #     AttributeError: 'SeqRecord' object has no attribute 'offset'
-                     
+
+
+    global is_reads_upper # FASTA reads output case
+    #is_reads_upper = True  # FASTA are in upper case; when is_vars_to_lower is true inserts & SNP are lower case
+    is_reads_upper = False  # FASTA are in lower case; when is_vars_to_lower is true inserts & SNP are upper case    
 
 
 # end of set_diagnostic_defaults()
@@ -434,7 +438,8 @@ def make_diagnostic_vars():
         "is_fastq_random":is_fastq_random,
         "is_show_infilepath":is_show_infilepath,
         "is_htm_journal":is_htm_journal,
-        "MaxVarPos":MaxVarPos
+        "MaxVarPos":MaxVarPos,
+        "is_reads_upper":is_reads_upper
         }
 #print("diagnostic_vars %s"%diagnostic_vars)
 #end of make_diagnostic_vars()
@@ -514,6 +519,7 @@ def set_gui_vars_defaults():
 
     is_vars_to_lower=False  # is_vars_to_lower=True: Variant nucleotides (SNVs and Inserts) are converted to lower case, in contrast to the rest of the upper-case seqeunce
                             # is_vars_to_lower=False: all fragment-nucleotides are shown in upper case
+                            # Note interaction with is_reads_upper which switches these around when is_reads_upper=False
 
     global is_fasta_out,is_fastq_out,is_sam_out,is_mut_out
     is_fasta_out=True # is_fasta_out = True creates a FASTA output of the fragmented mutated sequences.
@@ -535,7 +541,11 @@ def set_gui_vars_defaults():
 # end of set_gui_vars_defaults()
 
 def make_bio_parameters_configs():
-    global bio_parameters,ReadsList,read_annotation,variants_header,empty_transcript_name
+    global bio_parameters,ReadsList,read_annotation,variants_header,empty_transcript_name,is_reads_upper
+    if is_reads_upper:
+        case_subs="lower"
+    else:
+        case_subs="upper"
     bio_parameters={
         "target_locus":{
             "label": empty_transcript_name,
@@ -695,7 +705,7 @@ def make_bio_parameters_configs():
             "value": is_fastacigar_out
             },
         "is_vars_to_lower": {
-            "label": "- Substitutions in lower case",
+            "label": "- Substitutions in %s case"%case_subs,
             "value": is_vars_to_lower
             },
         "is_journal_subs": {
@@ -907,5 +917,5 @@ if __name__ == "__main__":
     pygui_outfilepathroot=outfilepathroot  
     print("\nCreating %s for genome build version %s\n"%(config_file_output,GRCH_dataset))
     process_file_configs_python()
-    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_use_TKinter':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n 'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s\n 'is_exome_paired_end':%s\n 'is_pair_monitor':%s"
-          %(exploder_root,is_use_TKinter,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER,is_exome_paired_end,is_pair_monitor))
+    print(" \nDid you set the following correctly before running?:\n 'exploder_root':%s\n 'is_use_TKinter':%s\n 'GRCh_dataset':%s\n 'CustomerIDText':%s\n'DatasetIDText': %s\n 'MAINVER':%s\n 'DATEVER':%s\n 'is_exome_paired_end':%s\n 'is_pair_monitor':%s\n 'is_reads_upper':%s"
+          %(exploder_root,is_use_TKinter,GRCH_dataset,CustomerIDText,DatasetIDText,MAINVER,DATEVER,is_exome_paired_end,is_pair_monitor,is_reads_upper))
