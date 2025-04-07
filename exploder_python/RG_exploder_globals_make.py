@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="16-Mar-2025"
+#Prg_verDate="07-Apr-2025"
 # This creates the config.json file from all the contributing input directories 
 '''
 © author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
@@ -417,8 +417,8 @@ def set_diagnostic_defaults():
 
 
     global is_reads_upper # FASTA reads output case
-    #is_reads_upper = True  # FASTA are in upper case; when is_vars_to_lower is true inserts & SNP are lower case
-    is_reads_upper = False  # FASTA are in lower case; when is_vars_to_lower is true inserts & SNP are upper case    
+    is_reads_upper = True    # True:  FASTA sequence in upper case; inserts & SNP are lower case
+    #is_reads_upper = False  # False: FASTA sequence in lower case; inserts & SNP are upper case    
 
 
 # end of set_diagnostic_defaults()
