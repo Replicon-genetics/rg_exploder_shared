@@ -2,7 +2,7 @@
 Progver="RG_exploder_main_31_1.py"
 ProgverDate="16-Mar-2025"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
 These variants are then split into mutiple shorter fragments.
 Output can be made to SAM, fasta & fastq files
@@ -21,7 +21,7 @@ a) Deprecation of 'generic_dna' in MutableSeq and SeqRecord
 b) sequence.reverse_complement() change to sequence.reverse_complement(inplace=True)
 c) Uses extra module import Biopython_fix to modulate
 
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024
+© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
 '''
 # =================================================
 # python_imports
@@ -2249,7 +2249,7 @@ def splice_a_sequence2(seq_record,target_loc,splice_trigger):
     ''' Where "splice_trigger" matches the specific feature field (eg: mRNA, CDS) this creates a feature field of "skip_trigger" (eg:"gap")  '''
     ''' "skip_trigger" is used in MutateVarSeq to introduce a deletion in addition to the usual deletion triggers. '''
     ''' Prior to the actual mutation the object get_mutref_olap is used to identify clashes between these skips and variant definition.'''
-    ''' If a splice-extension value is set via RG_globals.Exome_extend, any splice is extended in each direction eg: -3/+3 added to the splice position  '''
+    ''' If a splice-extension value is set via RG_globals.Exome_extend, any splice is extended in each direction eg: -3/+3 added to the start/end splice positions  '''
     ''' Any feature changes are stored in extra_record_features, not seq_record.features because of the Python passing rules which will change the original'''
     ''' Features are to be merged into REFSEQ on return and then into mut sequences feature tables when calling MutateVarSeq'''
     ''' The spliced sequence is created here, and also passed back as a separate value, not by a change to seq_record.seq  '''
