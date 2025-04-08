@@ -2,7 +2,7 @@
 
 Python code for generating synthetic sequence data; Synthetic DNASEQ or RNASEQ reads
 
-This repository https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, shell scripts, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. Further documents are also included eg: Maintenance guide for using the maintenance tools in folders helper_python & helper_scripts.
+This repository https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, shell scripts, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. Further documents are also included eg: Maintenance guide for using the maintenance tools in folders helper_python & helper_scripts. It is a tidied-up version of the development repository at https://github.com/snowlizardz/rg_exploder
 
 The main objective of the repository is to share this with selected people, or for placement the Public Domain as read-only when permissions are suitably set.
 
