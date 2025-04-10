@@ -24,6 +24,7 @@ sharenotesdir=$sharedocsdir"development_notes/"
 
 sharemaintdir=$sharedocsdir"maintenance_guides/"
 sharegenedatacurdir=$sharemaintdir"Gene_data_curation/"
+sharepresentationdir=$sharedocsdir"presentations/"
 
 sharepyodidedir=$rootsharedir"pyodide/"
 sharewebdistdir=$rootsharedir"webdist/"
@@ -53,6 +54,9 @@ cp -p $devnotesdir"exploder_issues_log.ods" $sharenotesdir$same
 cp -p $devgenedatacurdir"Replicon-specified_variations.ods" $sharegenedatacurdir$same
 cp -p $devmaintdir"Synthetic_Reads_Generator_webApp_updating."* $sharemaintdir$same
 cp -p $devmaintdir"Data_management."* $sharemaintdir$same
+
+
+cp -p $devpresentationdir"simulation5odp.odp" $sharepresentationdir$same
 
 cp -p $prodpyodidedir"copy_build_to_webdist.sh" $sharepyodidedir$same
 cp -p $prodpyodidedir"delete_old_build.sh" $sharepyodidedir$same
