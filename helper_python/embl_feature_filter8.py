@@ -2,6 +2,33 @@
 Progver="embl_feature_filter8.py"
 ProgverDate="21-Feb-2024"
 '''
+
+This reads in Genbank format files as part of the pre-processing required to run the RG_exploder_*.py suite.
+Consider using embl_feature_filter_revise.py instead
+
+Copyright © 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ; Cary O'Donnell 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see the original repository at
+    https://github.com/snowlizardz/rg_exploder_shared, or the licences at <https://www.gnu.org/licenses/>.
+
+
+    Contact: syrgenreads@gmail.com
+
+Created using python3 and BioPython
+
+
+Longer description:
 This processes the {locus}_Ensembl_download.gz file to eliminate unwanted items from the feature table
 creating, optionally
 a) A file with the target locus, mRNA features and sequence. {locus}_locseq.gb - this is the reference sequence for main application 

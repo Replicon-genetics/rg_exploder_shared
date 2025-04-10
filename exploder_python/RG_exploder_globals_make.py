@@ -1,9 +1,28 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="07-Apr-2025"
-# This creates the config.json file from all the contributing input directories 
+#Prg_verDate="10-Apr-2025"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+This module creates the config.json file from all the contributing input directories and is part of the data-preparation. 
+Copyright © 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ; Cary O'Donnell 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see the original repository at
+    https://github.com/snowlizardz/rg_exploder_shared, or the licences at <https://www.gnu.org/licenses/>.
+
+
+    Contact: syrgenreads@gmail.com
+
+Created using python3 and BioPython
 '''
 import sys
 import json
@@ -164,7 +183,7 @@ def make_out_data():
 # ==========================
 def set_string_defaults():
     global CopyrightText
-    CopyrightText="Copyright © Replicon Genetics & Cary O'Donnell 2021-2025. All rights reserved."
+    CopyrightText="Copyright © Replicon Genetics & Cary O'Donnell 2021-2025. Available under GNU Affero General Public License version 3"
     #There are several ways of declaring polarity so we define the known ones and use as needed
     global seq_polarity_plus,seq_polarity_minus,seq_polarity_none
     seq_polarity_plus="1"; seq_polarity_minus="-1";seq_polarity_none="0"

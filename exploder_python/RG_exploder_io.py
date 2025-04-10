@@ -1,6 +1,29 @@
 # Progver="RG_exploder_io.py"
 # ProgverDate="18-Feb-2022"
-# This io module is replaced in the pyodide version with something completely different.
+# 
+
+'''
+This io module is replaced in the pyodide version with something completely different.
+An original version provided, under contract to Replicon Genetics, by Raven Bioseciences
+
+Copyright © 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ; Cary O'Donnell 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see the original repository at
+    https://github.com/snowlizardz/rg_exploder_shared, or the licences at <https://www.gnu.org/licenses/>.
+
+    Contact: syrgenreads@gmail.com
+'''
 
 from pathlib import Path
 

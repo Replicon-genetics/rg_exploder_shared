@@ -1,12 +1,40 @@
 #!/usr/local/bin/python3
 Progver="mash_json.py"
 ProgverDate="13-Feb-2025"
-# This merges the content of all the individual {locus}_transcrupts.json files in directories below the current directory
-# into a single file loci.json. It is a source for RG_exploder_globals_make.py to create config.json
-# which in turn is a source of variable values required to run RG_exploder_main.py
-# with a bit more development work, the need for loci.json can be eliminated,
-# at the cost of more reads from the input directory. But as this was set up for running from AWS,
-# it was envisaged that this would keep reads down.
+
+'''
+This merges the content of multuple {locus}_transcrupts.json files as part of the pre-processing required to run the RG_exploder_*.py suite.
+Consider using embl_feature_filter_revise.py instead
+
+Copyright © 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ; Cary O'Donnell 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see the original repository at
+    https://github.com/snowlizardz/rg_exploder_shared, or the licences at <https://www.gnu.org/licenses/>.
+
+
+    Contact: syrgenreads@gmail.com
+
+Created using python3 and BioPython
+
+Longer description:
+This merges the content of all the individual {locus}_transcrupts.json files in directories below the current directory
+into a single file loci.json. It is a source for RG_exploder_globals_make.py to create config.json
+which in turn is a source of variable values required to run RG_exploder_main.py
+with a bit more development work, the need for loci.json can be eliminated,
+at the cost of more reads from the input directory. But as this was set up for running from AWS,
+it was envisaged that this would keep reads down.
+'''
 import json
 from datetime import date
 import RG_exploder_io as RG_io

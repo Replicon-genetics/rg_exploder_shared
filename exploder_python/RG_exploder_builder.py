@@ -2,8 +2,29 @@
 Progver="RG_exploder_builder.py"
 ProgverDate="25-Aug-2024"
 '''
-© author: Cary O'Donnell for Replicon Genetics 2020, 2021, 2022, 2023, 2024
+This module provides the "Create a new {gene} Haplotype Variant functionality to RG_exploder_gui.py
 
+Copyright © 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ; Cary O'Donnell 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program. If not, see the original repository at
+    https://github.com/snowlizardz/rg_exploder_shared, or the licences at <https://www.gnu.org/licenses/>.
+
+    Contact: syrgenreads@gmail.com
+
+Created using python3 and BioPython
+
+================================
     The code in the section "Could be in another module" were once part of RG_exploder_gui.py code,
     but moved to RG_main when these sections starting calling RG_main objects.
     
