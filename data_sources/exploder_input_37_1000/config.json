@@ -1,8 +1,8 @@
 {
     "stringconstants": {
         "DatasetIDText": "Demo GRCh37",
-        "CustomerIDText": "Public v.31_0, Feb 2025",
-        "CopyrightText": "Copyright \u00a9 Replicon Genetics & Cary O'Donnell 2021-2025. All rights reserved.",
+        "CustomerIDText": "Public v.31_2, Apr 2025",
+        "CopyrightText": "Copyright \u00a9 Replicon Genetics & Cary O'Donnell 2021-2025. Available under GNU Affero General Public License version 3",
         "seq_polarity_plus": "1",
         "seq_polarity_minus": "-1",
         "seq_polarity_none": "0",
@@ -75,7 +75,8 @@
         "is_fastq_random": true,
         "is_show_infilepath": false,
         "is_htm_journal": true,
-        "MaxVarPos": 0
+        "MaxVarPos": 0,
+        "is_reads_upper": true
     },
     "admin_constants": {
         "NormaliseUpper": 1000,
