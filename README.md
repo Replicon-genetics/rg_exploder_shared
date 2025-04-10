@@ -12,6 +12,6 @@ The same Python code, data etc are behind a Vue.js implementation at https://rep
 
 Code and documentation was developed between September 2018 to March 2025 by Cary O'Donnell, originally for Replicon Genetics, a company set up by Dr Gillian Ellison and Jane Theaker in 2018, but de-registered in 2023. IP is claimed by them and Cary O'Donnell. No AI-generation tools were used at any point.
 
-Advice on improving access or other feedback is welcome; please email syrgenreads@gmail.com
+Advice on improving access, offers on collaboration, or other feedback is welcome; please email syrgenreads@gmail.com
 
 Cary O'Donnell 10th April 2025
