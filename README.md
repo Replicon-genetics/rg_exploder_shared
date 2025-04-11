@@ -2,7 +2,7 @@
 
 Python code for generating synthetic sequence data; synthetic DNASEQ or RNASEQ reads
 
-This repository at https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. If you want to know why this is useful, take a look at https://repliconevaluation.com/about/ 
+This repository at https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. If you want to know why this is useful, take a look at https://repliconevaluation.com/about/ ; repliconevaluation.com redirects to replicongenomics.com, at least until September 2025.
 
 In /exploder_python there's a Tkinter GUI to generate the reads; /data_sources holds the pre-processed genomic data; /documents include a maintenance guide for pre-processing new genomic data using the maintenance scripts in folders /helper_python & /helper_scripts. There's also a presentation document explaining concept and implementation: simulation5odp.odp
 
