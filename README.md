@@ -10,7 +10,7 @@ The main objective of the repository is for placement in the Public Domain as fr
 
 The same Python code, data etc are behind a Vue.js implementation at https://repliconevaluation.wordpress.com/replicon-genetics (second version released May 2021). The full source for building the Vue.js implementation is held at https://github.com/Replicon-genetics/rg_exploder. A subset of critical definition files is present in this current repository: folders /pyodide /vue_source and /webdist 
 
-Code and documentation was developed between September 2018 to March 2025 by Cary O'Donnell, originally for Replicon Genetics, a company set up by Dr Gillian Ellison and Jane Theaker in 2018, but de-registered in 2023. IP is claimed by them and Cary O'Donnell. No AI-generation tools were used at any point.
+Code and documentation was developed between September 2018 to March 2025 by Cary O'Donnell, originally for Replicon Genetics, a company set up by Dr Gillian Ellison and Jane Theaker in 2018, but de-registered in 2023; IP is claimed by those named. No AI-generation tools were used at any point.
 
 Advice on improving access, offers on collaboration, or other feedback is welcome; please email syrgenreads@gmail.com
 
