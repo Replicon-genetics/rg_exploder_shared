@@ -14,7 +14,7 @@
 //
 //    You should have received a copy of the GNU Affero General Public License
 //    along with this program. If not, see the original repository at
-//    https://github.com/snowlizardz/rg_exploder_shared, or the licences at <https://www.gnu.org/licenses/>.
+//    https://github.com/snowlizardz/rg_exploder_shared, or the licences at https://www.gnu.org/licenses/.
 //
 //    Contact: syrgenreads@gmail.com
 
