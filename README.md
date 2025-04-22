@@ -11,7 +11,8 @@ This code here is in the Public Domain as free software, as defined by https://w
 <b>Getting started</b><br>
 In <a href="https://github.com/Replicon-genetics/rg_exploder_shared/tree/main/exploder_python">/exploder_python</a>:<br>
 a) Execute the Python module <a href="https://github.com/Replicon-genetics/rg_exploder_shared/blob/main/exploder_python/RG_exploder_globals_make.py">RG_exploder_globals_make.py</a> to set the correct output filepath. This needs to be done only once, or after changing input-data sets.<br>
-b) Execute the Python <a href="https://docs.python.org/3/library/tkinter.html">Tkinter</a> GUI module <a href="https://github.com/Replicon-genetics/rg_exploder_shared/blob/main/exploder_python/RG_exploder_gui.py">RG_exploder_gui.py</a>
+b) Not visible in the repository are two required folders: /data_sources/exploder_output_38_1000 and /data_sources/exploder_output_37_1000 ; if not present, please create them!<br>
+c) Execute the Python <a href="https://docs.python.org/3/library/tkinter.html">Tkinter</a> GUI module <a href="https://github.com/Replicon-genetics/rg_exploder_shared/blob/main/exploder_python/RG_exploder_gui.py">RG_exploder_gui.py</a>
 
 <b>Dependencies</b><br>
 The Python modules require <a href="https://biopython.org/">Biopython</a>, with <a href="https://pillow.readthedocs.io/en/stable/">Pillow(PIL)</a> to support the <a href="https://docs.python.org/3/library/tkinter.html">Tkinter</a> GUI. There may be an X11 dependency on some platforms.
@@ -29,4 +30,4 @@ Code and documentation was developed between September 2018 to March 2025 by Car
 
 Advice on improving access, offers on collaboration, or other feedback is welcome; please email syrgenreads@gmail.com
 
-Cary O'Donnell 18th April 2025
+Cary O'Donnell 22nd April 2025
