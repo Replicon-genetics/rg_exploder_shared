@@ -3,7 +3,7 @@
 <b>Summary</b><br>
 Python code for generating synthetic sequence data; synthetic DNASEQ or RNASEQ reads, using either a <a href="https://docs.python.org/3/library/tkinter.html">Tkinter</a> or <a href="https://vuejs.org/">Vue.js</a> Graphical User Interface<br><br>
 <b>What is this for?</b><br>
-This repository at https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. An explanation of why this is useful is at https://repliconevaluation.com/about/  Note that repliconevaluation.com redirects to replicongenomics.com, at least until September 2025.
+This repository at https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. An explanation of why this is useful is at https://replicongenetics.com/about/ 
 
 <b>Licence conditions</b><br>
 This code here is in the Public Domain as free software, as defined by https://www.fsf.org/ , specifically the  <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL-3.0 license</a>. This repository is a tidied-up subset of the development repository at https://github.com/snowlizardz/rg_exploder (currently private).
@@ -30,4 +30,4 @@ Code and documentation was developed between September 2018 to March 2025 by Car
 
 Advice on improving access, offers on collaboration, or other feedback is welcome; please email syrgenreads@gmail.com
 
-Cary O'Donnell 22nd April 2025
+Cary O'Donnell 22nd April 2025; 4th March 2026
