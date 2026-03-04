@@ -1,7 +1,7 @@
 # rg_exploder_shared
 
 <b>Summary</b><br>
-Python code for generating synthetic sequence data; synthetic DNASEQ or RNASEQ reads, using either a <a href="https://docs.python.org/3/library/tkinter.html">Tkinter</a> or <a href="https://vuejs.org/">Vue.js</a> Graphical User Interface<br><br>
+Python code for generating synthetic sequence data; synthetic DNASEQ or RNASEQ reads, using either a <a href="https://docs.python.org/3/library/tkinter.html">Tkinter</a> or <a href="https://vuejs.org/">Vue.js</a> Graphical User Interface. A browser implementation of the Vue.js version is documented at <a href="https://replicongenetics.com/">https://replicongenetics.com</a><br><br>
 <b>What is this for?</b><br>
 This repository at https://github.com/snowlizardz/rg_exploder_shared/ holds Python code, data and metadata for the fragmentation of DNA sequences intended to emulate NGS style sequencing reads. An explanation of why this is useful is at https://replicongenetics.com/about/ 
 
