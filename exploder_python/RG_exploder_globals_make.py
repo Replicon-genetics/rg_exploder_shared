@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 #Prg_ver="RG_exploder_globals_make
-#Prg_verDate="10-Apr-2025"
+#Prg_verDate="18-Feb-2025"
 '''
 This module creates the config.json file from all the contributing input directories and is part of the data-preparation. 
 Copyright © 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 ; Cary O'Donnell 
@@ -234,9 +234,10 @@ def set_string_defaults():
     #lrg_view_url="http://ftp.ebi.ac.uk/pub/databases/lrgex/"
     lrg_view_url="https://www.ensembl.org/Homo_sapiens/LRG/Summary?lrg=LRG_"
 
-    help_url="https://repliconevaluation.wordpress.com/replicon-genetics" # The help page
-    about_url="https://repliconevaluation.wordpress.com/about" # The about page
-    more_url="https://repliconevaluation.wordpress.com/more" # The more page
+    help_url="https://repliconevaluation.wordpress.com" # This is the unredirected home page; currently redirected to replicongenetics.com;
+                                                        # should DNS or Wordpress subscriptions cease, links will revert to this free, with-adverts, page
+    about_url="%s/about"%help_url # The about page; ditto
+    more_url="%s/more"%help_url # The more page; ditto
 
     global spaceman
     #spaceman="\t"   # Space separator in Fastaheader is a tab
@@ -797,7 +798,7 @@ def set_Reference_sequences_configs_public3(custtext):
         GRCH_dataset=region.split(":")[0]
         DatasetIDText="Demo %s"%GRCH_dataset
         main_exists,line2,line3=main_file_read(MAINFILE)
-        # Get the MAINVER and DATEVER directly from the main python code 
+        # Get the MAINVER and DATEVER directly from Progver and ProgverDate vaues set at head of RG_exploder_main.py
         if main_exists:
             date=line3.split('"')[1]
             DATEVER=date.split("-")[1]+" "+date.split("-")[2]
