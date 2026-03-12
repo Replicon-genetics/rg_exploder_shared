@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-Progver="RG_exploder_main_31_2.py"
-ProgverDate="10-Apr-2025"
+Progver="RG_exploder_main_31_4.py"
+ProgverDate="12-Mar-2026"
 '''
 This module reads in Genbank format files and uses any variant feature definitions to create those variants from the reference sequence.
 These variants are then split into mutiple shorter fragments.
